@@ -3,7 +3,7 @@ import 'dart:convert';
 import 'package:foodhero/example/model/product_model.dart';
 
 class Http {
-  static String baseurl = "http://192.168.182.50/api/";
+  static String baseurl = "http://192.168.182.61/api/";
 
   // post
   static postProduct(Map pdata) async {
