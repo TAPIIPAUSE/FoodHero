@@ -1,18 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:foodhero/pages/consumed_food.dart';
-import 'package:foodhero/pages/dashboard.dart';
-import 'package:foodhero/pages/edit_food.dart';
-import 'package:foodhero/pages/household.dart';
-import 'package:foodhero/pages/interorganization.dart';
-import 'package:foodhero/pages/organization.dart';
-import 'package:foodhero/pages/user_profile.dart';
-import 'package:go_router/go_router.dart';
-
-import 'package:foodhero/pages/add_food.dart';
-import 'package:foodhero/pages/inventory.dart';
-import 'package:foodhero/pages/login.dart';
-import 'package:foodhero/pages/notifications.dart';
-import 'package:foodhero/pages/register.dart';
 
 void main() {
   runApp(const MainApp());
@@ -109,8 +95,12 @@ class MainApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp.router(
-      routerConfig: _router,
+    return const MaterialApp(
+      home: Scaffold(
+        body: Center(
+          child: Text('Hello World!'),
+        ),
+      ),
     );
   }
 }
