@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:foodhero/pages/add_food.dart';
-import 'package:foodhero/pages/edit_food.dart';
 import 'package:go_router/go_router.dart';
 
 class Inventory extends StatelessWidget {
