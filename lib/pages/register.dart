@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:foodhero/fonts.dart';
 import 'package:foodhero/theme.dart';
 import 'package:go_router/go_router.dart';
 
@@ -21,6 +22,8 @@ class _RegisterState extends State<Register> {
       decoration: const InputDecoration(
         labelText: 'User name',
         hintText: 'Enter your user name',
+        labelStyle: TextStyle(color: Colors.black),
+        hintStyle: TextStyle(color: Colors.black),
       ),
       // maxLength: 10,
       validator: (String? value) {
@@ -40,6 +43,8 @@ class _RegisterState extends State<Register> {
       decoration: const InputDecoration(
         labelText: 'Email',
         hintText: 'Enter your email',
+        labelStyle: TextStyle(color: Colors.black),
+        hintStyle: TextStyle(color: Colors.black),
       ),
       validator: (String? value) {
         if (value == null || value.isEmpty) {
@@ -64,6 +69,8 @@ class _RegisterState extends State<Register> {
       decoration: const InputDecoration(
         labelText: 'Password',
         hintText: 'Enter your password',
+        labelStyle: TextStyle(color: Colors.black),
+        hintStyle: TextStyle(color: Colors.black),
       ),
       keyboardType: TextInputType.visiblePassword,
       validator: (String? value) {
@@ -92,78 +99,81 @@ class _RegisterState extends State<Register> {
     // Check if the keyboard is open
     final isKeyboardOpen = MediaQuery.of(context).viewInsets.bottom > 0;
 
-    return Scaffold(
-      backgroundColor: AppTheme.lightGreen.primaryColor, //!
-      body: Center(
-        child: Form(
-          key: _formKey,
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              const SizedBox(
-                height: 10,
-              ),
-              const Text(
-                "Food Hero",
-                style: TextStyle(), //!
-              ),
-              Image.network(
-                'https://i.pinimg.com/564x/d1/ed/60/d1ed607602fa36a4f40873cd3d2bbf5d.jpg',
-                height: isKeyboardOpen ? 50 : 100,
-                width: isKeyboardOpen ? 50 : 100,
-              ),
-              Container(
-                padding: const EdgeInsets.all(24),
-                // color: Colors.amber,
-                width: screenWidth * 1.0, // 100% of screen width
-                height: screenHeight * 0.5, // 50% of screen height
-                decoration: BoxDecoration(
-                  color: AppTheme.softBlue.primaryColor, // Background color
-                  borderRadius: const BorderRadius.only(
-                    topLeft: Radius.circular(30),
-                    topRight: Radius.circular(30),
-                  ), // Set rounded corners
-                ),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: [
-                    _buildName(),
-                    _buildEmail(),
-                    _buildPassword(),
-                    // const SizedBox(height: 100),
-                    ElevatedButton(
-                      onPressed: () {
-                        if (!_formKey.currentState!.validate()) {
-                          return;
-                        }
-                        _formKey.currentState?.save();
-                        print(_name);
-                        print(_email);
-                        print(_password);
+    final ButtonStyle buttonstyle = ElevatedButton.styleFrom(
+        backgroundColor: AppTheme.softRed,
+        foregroundColor: Colors.black,
+        textStyle: FontsTheme.hindBold_20()); // Text color
+    final ButtonStyle backbuttonstyle = IconButton.styleFrom(
+        backgroundColor: AppTheme.greenMainTheme,
+        foregroundColor: Colors.white); // Text color
 
-                        context.go('/inventory'); //! Navigate to the home route
-                      },
-                      child: const Text(
-                        "Submit",
-                        style: TextStyle(color: Colors.green, fontSize: 16),
-                      ),
-                    ),
-                    if (!isKeyboardOpen)
-                      IconButton(
-                        onPressed: () => context.go('/inventory'),
-                        icon: const Icon(Icons.arrow_back),
-                      ),
-                  ],
+    return Scaffold(
+      backgroundColor: AppTheme.lightGreenBackground, //!
+      body: SafeArea(
+        child: Center(
+          child: Form(
+            key: _formKey,
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  "Food Hero",
+                  style: FontsTheme.mouseMemoirs_64(
+                      fontSize: isKeyboardOpen ? 0 : 64), //!app name
                 ),
-              )
-            ],
+                Image.asset(
+                  'assets/fhlogo.png',
+                  height: isKeyboardOpen ? 0 : 150,
+                  width: isKeyboardOpen ? 0 : 150,
+                ),
+                Container(
+                  padding: const EdgeInsets.all(24),
+                  width: screenWidth * 1.0, // 100% of screen width
+                  height: screenHeight * 0.6, // 50% of screen height
+                  decoration: const BoxDecoration(
+                    color: AppTheme.softBlue, // Background color
+                    borderRadius: BorderRadius.only(
+                      topLeft: Radius.circular(30),
+                      topRight: Radius.circular(30),
+                    ), // Set rounded corners
+                  ),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      _buildName(),
+                      _buildEmail(),
+                      _buildPassword(),
+                      ElevatedButton(
+                        onPressed: () {
+                          if (!_formKey.currentState!.validate()) {
+                            return;
+                          }
+                          _formKey.currentState?.save();
+                          print(_name);
+                          print(_email);
+                          print(_password);
+
+                          context.go('/inventory'); //! Navigate to the ???
+                        },
+                        style: buttonstyle,
+                        child: const Text(
+                          "Register",
+                        ),
+                      ),
+                      if (!isKeyboardOpen)
+                        IconButton(
+                            onPressed: () => context
+                                .go('/inventory'), //! Navigate to the ???
+                            icon: const Icon(Icons.arrow_back_ios_new),
+                            style: backbuttonstyle),
+                    ],
+                  ),
+                )
+              ],
+            ),
           ),
         ),
       ),
     );
-    // const Scaffold(
-    //   backgroundColor: Color.fromRGBO(197, 255, 245, 100),
-    //   body: Text("Register"),
-    // );
   }
 }
