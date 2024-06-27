@@ -25,7 +25,6 @@ class _RegisterState extends State<Register> {
         labelStyle: TextStyle(color: Colors.black),
         hintStyle: TextStyle(color: Colors.black),
       ),
-      // maxLength: 10,
       validator: (String? value) {
         if (value == null || value.isEmpty) {
           return 'Please enter your user name';
@@ -50,10 +49,7 @@ class _RegisterState extends State<Register> {
         if (value == null || value.isEmpty) {
           return 'Please enter your email';
         }
-
-        if (!RegExp(
-                r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$')
-            .hasMatch(value)) {
+        if (!RegExp(r'^[^@]+@[^@]+\.[^@]+$').hasMatch(value)) {
           return 'Please enter a valid email';
         }
         return null;
@@ -77,9 +73,7 @@ class _RegisterState extends State<Register> {
         if (value == null || value.isEmpty) {
           return 'Please enter your password';
         }
-
-        //! แปลกๆๆ
-        if (!RegExp(r'.{8,}').hasMatch(value)) {
+        if (value.length < 8) {
           return 'Password must be at least 8 characters';
         }
         return null;
@@ -92,84 +86,86 @@ class _RegisterState extends State<Register> {
 
   @override
   Widget build(BuildContext context) {
-    // Get screen size
     final screenWidth = MediaQuery.of(context).size.width;
     final screenHeight = MediaQuery.of(context).size.height;
-
-    // Check if the keyboard is open
     final isKeyboardOpen = MediaQuery.of(context).viewInsets.bottom > 0;
 
-    final ButtonStyle buttonstyle = ElevatedButton.styleFrom(
+    final ButtonStyle buttonStyle = ElevatedButton.styleFrom(
         backgroundColor: AppTheme.softRed,
         foregroundColor: Colors.black,
-        textStyle: FontsTheme.hindBold_20()); // Text color
-    final ButtonStyle backbuttonstyle = IconButton.styleFrom(
+        textStyle: FontsTheme.hindBold_20());
+    final ButtonStyle backButtonStyle = IconButton.styleFrom(
         backgroundColor: AppTheme.greenMainTheme,
-        foregroundColor: Colors.white); // Text color
+        foregroundColor: Colors.white);
 
     return Scaffold(
-      backgroundColor: AppTheme.lightGreenBackground, //!
+      backgroundColor: AppTheme.lightGreenBackground,
       body: SafeArea(
         child: Center(
-          child: Form(
-            key: _formKey,
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text(
-                  "Food Hero",
-                  style: FontsTheme.mouseMemoirs_64(
-                      fontSize: isKeyboardOpen ? 0 : 64), //!app name
-                ),
-                Image.asset(
-                  'assets/fhlogo.png',
-                  height: isKeyboardOpen ? 0 : 150,
-                  width: isKeyboardOpen ? 0 : 150,
-                ),
-                Container(
-                  padding: const EdgeInsets.all(24),
-                  width: screenWidth * 1.0, // 100% of screen width
-                  height: screenHeight * 0.6, // 50% of screen height
-                  decoration: const BoxDecoration(
-                    color: AppTheme.softBlue, // Background color
-                    borderRadius: BorderRadius.only(
-                      topLeft: Radius.circular(30),
-                      topRight: Radius.circular(30),
-                    ), // Set rounded corners
-                  ),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: [
-                      _buildName(),
-                      _buildEmail(),
-                      _buildPassword(),
-                      ElevatedButton(
-                        onPressed: () {
-                          if (!_formKey.currentState!.validate()) {
-                            return;
-                          }
-                          _formKey.currentState?.save();
-                          print(_name);
-                          print(_email);
-                          print(_password);
-
-                          context.go('/inventory'); //! Navigate to the ???
-                        },
-                        style: buttonstyle,
-                        child: const Text(
-                          "Register",
+          child: SingleChildScrollView(
+            child: Form(
+              key: _formKey,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: [
+                  Text(
+                    "Food Hero",
+                    style: FontsTheme.mouseMemoirs_64(
+                        // fontSize: isKeyboardOpen ? 0 : 64
                         ),
-                      ),
-                      if (!isKeyboardOpen)
-                        IconButton(
-                            onPressed: () => context
-                                .go('/inventory'), //! Navigate to the ???
-                            icon: const Icon(Icons.arrow_back_ios_new),
-                            style: backbuttonstyle),
-                    ],
                   ),
-                )
-              ],
+                  Image.asset(
+                    'assets/fhlogo.png',
+                    height: isKeyboardOpen ? 0 : 150,
+                    width: isKeyboardOpen ? 0 : 150,
+                  ),
+                  Container(
+                    padding: const EdgeInsets.symmetric(horizontal: 24),
+                    width: screenWidth,
+                    height: screenHeight * 0.6,
+                    decoration: const BoxDecoration(
+                      color: AppTheme.softBlue,
+                      borderRadius: BorderRadius.only(
+                        topLeft: Radius.circular(30),
+                        topRight: Radius.circular(30),
+                      ),
+                    ),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: [
+                        Column(
+                          children: [
+                            _buildName(),
+                            _buildEmail(),
+                            _buildPassword(),
+                          ],
+                        ),
+                        ElevatedButton(
+                          onPressed: () {
+                            if (!_formKey.currentState!.validate()) {
+                              return;
+                            }
+                            _formKey.currentState?.save();
+                            print(_name);
+                            print(_email);
+                            print(_password);
+
+                            context.go('/inventory');
+                          },
+                          style: buttonStyle,
+                          child: const Text("Register"),
+                        ),
+                        if (!isKeyboardOpen)
+                          IconButton(
+                            onPressed: () => context.go('/inventory'),
+                            icon: const Icon(Icons.arrow_back_ios_new),
+                            style: backButtonStyle,
+                          ),
+                      ],
+                    ),
+                  )
+                ],
+              ),
             ),
           ),
         ),
