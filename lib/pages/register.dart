@@ -69,6 +69,7 @@ class _RegisterState extends State<Register> {
         hintStyle: TextStyle(color: Colors.black),
       ),
       keyboardType: TextInputType.visiblePassword,
+      obscureText: true,
       validator: (String? value) {
         if (value == null || value.isEmpty) {
           return 'Please enter your password';
@@ -106,7 +107,7 @@ class _RegisterState extends State<Register> {
             child: Form(
               key: _formKey,
               child: Column(
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
                     "Food Hero",
@@ -114,10 +115,16 @@ class _RegisterState extends State<Register> {
                         // fontSize: isKeyboardOpen ? 0 : 64
                         ),
                   ),
+                  const SizedBox(
+                    height: 20,
+                  ),
                   Image.asset(
                     'assets/fhlogo.png',
                     height: isKeyboardOpen ? 0 : 150,
                     width: isKeyboardOpen ? 0 : 150,
+                  ),
+                  const SizedBox(
+                    height: 20,
                   ),
                   Container(
                     padding: const EdgeInsets.symmetric(horizontal: 24),
