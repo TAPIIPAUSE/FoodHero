@@ -5,7 +5,7 @@ import 'package:foodhero/pages/dashboard.dart';
 import 'package:foodhero/pages/edit_food.dart';
 import 'package:foodhero/pages/household.dart';
 import 'package:foodhero/pages/interorganization.dart';
-import 'package:foodhero/pages/inventory.dart';
+import 'package:foodhero/pages/inventory/inventory.dart';
 import 'package:foodhero/pages/login.dart';
 import 'package:foodhero/pages/notifications.dart';
 import 'package:foodhero/pages/organization.dart';
