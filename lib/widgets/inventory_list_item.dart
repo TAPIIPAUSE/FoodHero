@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:foodhero/theme.dart';
+import 'package:go_router/go_router.dart';
 import 'package:percent_indicator/percent_indicator.dart';
 
 class InventoryListItem extends StatelessWidget {
@@ -22,50 +23,54 @@ class InventoryListItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        Container(
-          padding: const EdgeInsets.all(5.0),
-          decoration: BoxDecoration(
-            color: AppTheme.softBlue,
-            borderRadius: BorderRadius.circular(10.0),
-          ),
-          child: Padding(
-            padding: const EdgeInsets.symmetric(vertical: 5.0),
-            child: Row(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: <Widget>[
-                Expanded(
-                  flex: 2,
-                  child: ClipRRect(
-                    borderRadius: BorderRadius.circular(
-                        10.0), // Adjust the value as needed
-                    child: Image.asset(
-                      thumbnail.toString(),
-                      fit: BoxFit.cover,
-                      width: MediaQuery.of(context).size.width * 0.2,
-                      height: MediaQuery.of(context).size.height * 0.1,
+    return GestureDetector(
+      onTap: () => context.go('/consumed_food'),
+      child: Column(
+        children: [
+          Container(
+            padding: const EdgeInsets.all(5.0),
+            decoration: BoxDecoration(
+              color: AppTheme.softBlue,
+              borderRadius: BorderRadius.circular(10.0),
+            ),
+            child: Padding(
+              padding: const EdgeInsets.symmetric(vertical: 5.0),
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  Expanded(
+                    flex: 2,
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(
+                          10.0), // Adjust the value as needed
+                      child: Image.asset(
+                        thumbnail.toString(),
+                        fit: BoxFit.cover,
+                        width: MediaQuery.of(context).size.width * 0.1,
+                        height: MediaQuery.of(context).size.height * 0.12,
+                      ),
                     ),
                   ),
-                ),
-                Expanded(
-                  flex: 3,
-                  child: _FoodDetail(
-                    foodname: foodname,
-                    expiry: expiry,
-                    progessbar: progressbar,
-                    consumeing: consuming,
-                    remaining: remaining,
+                  Expanded(
+                    flex: 3,
+                    child: _FoodDetail(
+                      foodname: foodname,
+                      expiry: expiry,
+                      progessbar: progressbar,
+                      consumeing: consuming,
+                      remaining: remaining,
+                    ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
           ),
-        ),
-        const SizedBox(
-          height: 10,
-        ),
-      ],
+          const SizedBox(
+            height: 10,
+          ),
+        ],
+      ),
     );
   }
 }
