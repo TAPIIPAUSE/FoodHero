@@ -76,10 +76,16 @@ class _ChooseCategoryState extends State<ChooseCategory> {
                   itemBuilder: (context, index) {
                     return GestureDetector(
                       onTap: () {
+                        String selectedFoodType =
+                            foodTypes[index % foodTypes.length];
+                        context.go('/inventory/$selectedFoodType');
                         // _updateSelectedCategory(
                         // foodTypes[index % foodTypes.length]);
-                        context.go('/inventory/$selectedCategory',
-                            extra: foodTypes[index]);
+                        // context.go('/dashboard');
+                        // context.go(
+                        // '/inventory/foodTypes[index % foodTypes.length]');
+                        // context.go('/inventory/${foodTypes[index]}');
+                        // extra: foodTypes[index]);
                       },
                       child: Container(
                         decoration: BoxDecoration(
@@ -112,7 +118,10 @@ class _ChooseCategoryState extends State<ChooseCategory> {
               Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: IconButton(
-                  onPressed: () => context.go('/inventory'),
+                  onPressed: () {
+                    // context.go('/inventory');
+                    Navigator.of(context).pop();
+                  },
                   icon: const Icon(Icons.arrow_back_ios_new),
                   style: backButtonStyle,
                 ),

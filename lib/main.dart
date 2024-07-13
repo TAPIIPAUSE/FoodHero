@@ -5,6 +5,7 @@ import 'package:foodhero/pages/dashboard.dart';
 import 'package:foodhero/pages/edit_food.dart';
 import 'package:foodhero/pages/household.dart';
 import 'package:foodhero/pages/interorganization.dart';
+import 'package:foodhero/pages/inventory/category.dart';
 import 'package:foodhero/pages/inventory/inventory.dart';
 import 'package:foodhero/pages/login.dart';
 import 'package:foodhero/pages/notifications.dart';
@@ -24,12 +25,23 @@ final GoRouter _router = GoRouter(
     GoRoute(
       path: '/',
       builder: (BuildContext context, GoRouterState state) {
+        return const Register();
       },
       routes: <RouteBase>[
         GoRoute(
-          path: 'inventory',
+          path: 'inventory/:foodCategory',
           builder: (BuildContext context, GoRouterState state) {
-            return const Inventory();
+            final foodCategory =
+                state.pathParameters['foodCategory'] ?? 'all food';
+            return Inventory(
+              initialFoodCategory: foodCategory,
+            );
+          },
+        ),
+        GoRoute(
+          path: 'category',
+          builder: (BuildContext context, GoRouterState state) {
+            return const ChooseCategory();
           },
         ),
         GoRoute(

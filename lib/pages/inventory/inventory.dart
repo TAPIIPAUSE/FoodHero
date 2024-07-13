@@ -1,12 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:foodhero/fonts.dart';
-import 'package:foodhero/pages/inventory/inventory_list_item.dart';
+import 'package:foodhero/pages/inventory/category.dart';
+import 'package:foodhero/widgets/inventory_list_item.dart';
 import 'package:foodhero/theme.dart';
 import 'package:go_router/go_router.dart';
 import 'package:percent_indicator/percent_indicator.dart';
+import 'package:textwrap/textwrap.dart';
 
 class Inventory extends StatefulWidget {
-  const Inventory({super.key});
+  final String initialFoodCategory;
+  const Inventory({super.key, this.initialFoodCategory = 'all food'});
 
   @override
   State<Inventory> createState() => _InventoryState();
@@ -14,6 +17,7 @@ class Inventory extends StatefulWidget {
 
 class _InventoryState extends State<Inventory> {
   int _selectedIndex = 0;
+  late String foodCategory;
 
   void _onItemTapped(int index) {
     setState(() {
@@ -22,9 +26,19 @@ class _InventoryState extends State<Inventory> {
   }
 
   @override
+  void initState() {
+    super.initState();
+    foodCategory = widget.initialFoodCategory;
+  }
+
+  @override
   Widget build(BuildContext context) {
-    final screenHeight = MediaQuery.of(context).size.height;
+    // final screenHeight = MediaQuery.of(context).size.height;
     final screenWidth = MediaQuery.of(context).size.width;
+
+    double radius = screenWidth * 0.1;
+    double lineWidth = screenWidth * 0.01;
+    double fontSize = screenWidth * 0.03;
 
     return Scaffold(
       backgroundColor: AppTheme.lightGreenBackground,
@@ -78,34 +92,65 @@ class _InventoryState extends State<Inventory> {
                         '- Lettuce expire in 2 days',
                         style: FontsTheme.hind_15(color: Colors.white),
                       ),
+                      Text(
+                        '- Tomatos expire tomorrow',
+                        style: FontsTheme.hind_15(color: Colors.white),
+                      ),
+                      Text(
+                        fill(
+                            '- Lettuce expire in 2 days gkgkglh;hlg;g;glhlg;ghh;g;gk',
+                            width: 50),
+                        style: FontsTheme.hind_15(color: Colors.white),
+                      ),
                     ],
                   ),
-                  CircularPercentIndicator(
-                    radius: 30.0,
-                    lineWidth: 5.0,
-                    animation: true,
-                    percent: 0.7,
-                    center: const Text(
-                      "70%",
-                      style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          fontSize: 10.0,
-                          color: AppTheme.softOrange),
+                  Padding(
+                    padding: const EdgeInsets.only(right: 15),
+                    child: CircularPercentIndicator(
+                      radius: radius,
+                      lineWidth: lineWidth,
+                      animation: true,
+                      percent: 0.7,
+                      center: Text(
+                        "70%",
+                        style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: fontSize,
+                            color: AppTheme.softOrange),
+                      ),
+                      footer: Column(
+                        children: [
+                          Text(
+                            "Another",
+                            style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                fontSize: fontSize,
+                                color: AppTheme.softOrange),
+                          ),
+                          Text(
+                            "Another",
+                            style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                fontSize: fontSize,
+                                color: AppTheme.softOrange),
+                          ),
+                          Text(
+                            "Another",
+                            style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                fontSize: fontSize,
+                                color: AppTheme.softOrange),
+                          ),
+                        ],
+                      ),
+                      circularStrokeCap: CircularStrokeCap.round,
+                      backgroundColor: AppTheme.softBrightGreen,
+                      progressColor: AppTheme.softOrange,
                     ),
-                    footer: const Text(
-                      "Another",
-                      style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          fontSize: 10.0,
-                          color: AppTheme.softOrange),
-                    ),
-                    circularStrokeCap: CircularStrokeCap.round,
-                    backgroundColor: AppTheme.softBrightGreen,
-                    progressColor: AppTheme.softOrange,
                   ),
-                  const SizedBox(
-                    height: 10,
-                  ),
+                  // const SizedBox(
+                  //   height: 0.1,
+                  // ),
                 ],
               ),
               Text(
@@ -130,9 +175,68 @@ class _InventoryState extends State<Inventory> {
             //   topRight: Radius.circular(30),
             // ),
           ),
-          child: const Column(
+          child: Column(
+            // mainAxisAlignment: MainAxisAlignment.center,
+            // crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              InventoryListItem(
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Row(
+                    children: [
+                      const Text(
+                        "Refrigerator",
+                        style: TextStyle(color: Colors.white),
+                      ),
+                      IconButton(
+                          onPressed: () => context.go('/inventory'),
+                          icon: const Icon(Icons.switch_left_rounded),
+                          color: Colors.white)
+                    ],
+                  ),
+                  Container(
+                    margin: const EdgeInsets.only(left: 10.0),
+                    padding: const EdgeInsets.all(5.0),
+                    decoration: BoxDecoration(
+                      color: AppTheme.softGreen,
+                      borderRadius: BorderRadius.circular(10.0),
+                    ),
+                    child: Column(
+                      children: [
+                        GestureDetector(
+                          onTap: () {
+                            context.go('/category');
+                          },
+                          child: Text(
+                            foodCategory,
+                            // "{$foodCategory}",
+                            style: FontsTheme.hind_15(),
+                          ),
+                        ),
+                        // Row(
+                        //   children: [
+                        //     IconButton(
+                        //       onPressed: () => context.go('/category'),
+                        //       icon: const Icon(Icons.swipe_down_alt),
+                        //     ),
+                        //     IconButton(
+                        //       onPressed: () => context.go('/inventory'),
+                        //       icon: const Icon(Icons.circle_outlined),
+                        //     ),
+                        //     IconButton(
+                        //         onPressed: () => context.go('/inventory'),
+                        //         icon: const Icon(Icons.swipe_up_alt)),
+                        //   ],
+                        // )
+                      ],
+                    ),
+                  )
+                ],
+              ),
+              const SizedBox(
+                height: 10,
+              ),
+              const InventoryListItem(
                 thumbnail: "assets/banana.jpg",
                 foodname: 'Banana',
                 expiry: '2 weeks',
@@ -140,7 +244,7 @@ class _InventoryState extends State<Inventory> {
                 consuming: 5,
                 remaining: 5,
               ),
-              InventoryListItem(
+              const InventoryListItem(
                 thumbnail: "assets/tomatoes.jpg",
                 foodname: 'Tomatos',
                 expiry: '3 days left',
@@ -148,7 +252,7 @@ class _InventoryState extends State<Inventory> {
                 consuming: 5,
                 remaining: 7,
               ),
-              InventoryListItem(
+              const InventoryListItem(
                 thumbnail: "assets/apples.jpg",
                 foodname: 'Apple',
                 expiry: '3 days left',
@@ -156,7 +260,7 @@ class _InventoryState extends State<Inventory> {
                 consuming: 5,
                 remaining: 7,
               ),
-              InventoryListItem(
+              const InventoryListItem(
                 thumbnail: "assets/banana.jpg",
                 foodname: 'Banana',
                 expiry: '2 weeks',
@@ -164,7 +268,7 @@ class _InventoryState extends State<Inventory> {
                 consuming: 5,
                 remaining: 5,
               ),
-              InventoryListItem(
+              const InventoryListItem(
                 thumbnail: "assets/tomatoes.jpg",
                 foodname: 'Tomatos',
                 expiry: '3 days left',
@@ -172,7 +276,7 @@ class _InventoryState extends State<Inventory> {
                 consuming: 5,
                 remaining: 7,
               ),
-              InventoryListItem(
+              const InventoryListItem(
                 thumbnail: "assets/apples.jpg",
                 foodname: 'Apple',
                 expiry: '3 days left',
