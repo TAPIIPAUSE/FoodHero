@@ -322,14 +322,14 @@ class _InventoryState extends State<Inventory> {
                       backgroundColor: AppTheme.greenMainTheme,
                       foregroundColor: Colors.white,
                       onTap: () {
-                        print("shearch");
+                        context.go('/searchitem');
                       }),
                   SpeedDialChild(
                       child: const Icon(Icons.filter_alt_rounded),
                       backgroundColor: AppTheme.greenMainTheme,
                       foregroundColor: Colors.white,
                       onTap: () {
-                        print("sort");
+                        context.go('/register');
                       }),
                   SpeedDialChild(
                       child: const Icon(Icons.history_rounded),

@@ -7,6 +7,7 @@ import 'package:foodhero/pages/household.dart';
 import 'package:foodhero/pages/interorganization.dart';
 import 'package:foodhero/pages/inventory/category.dart';
 import 'package:foodhero/pages/inventory/inventory.dart';
+import 'package:foodhero/pages/inventory/search/search_item.dart';
 import 'package:foodhero/pages/login.dart';
 import 'package:foodhero/pages/notifications.dart';
 import 'package:foodhero/pages/organization.dart';
@@ -45,6 +46,12 @@ final GoRouter _router = GoRouter(
           },
         ),
         GoRoute(
+          path: 'searchitem',
+          builder: (BuildContext context, GoRouterState state) {
+            return const SearchItem();
+          },
+        ),
+        GoRoute(
           path: 'login',
           builder: (BuildContext context, GoRouterState state) {
             return login();
@@ -77,7 +84,7 @@ final GoRouter _router = GoRouter(
         GoRoute(
           path: 'wasted_food',
           builder: (BuildContext context, GoRouterState state) {
-            return const wasted_food();
+            return const WastedFood();
           },
         ),
         GoRoute(
