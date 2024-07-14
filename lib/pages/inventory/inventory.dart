@@ -4,6 +4,7 @@ import 'package:foodhero/fonts.dart';
 import 'package:foodhero/theme.dart';
 import 'package:foodhero/widgets/inventory_dropdown.dart';
 import 'package:foodhero/widgets/inventory_list_item.dart';
+import 'package:foodhero/widgets/sort_dropdown.dart';
 import 'package:go_router/go_router.dart';
 import 'package:percent_indicator/percent_indicator.dart';
 import 'package:textwrap/textwrap.dart';
@@ -329,7 +330,76 @@ class _InventoryState extends State<Inventory> {
                       backgroundColor: AppTheme.greenMainTheme,
                       foregroundColor: Colors.white,
                       onTap: () {
-                        context.go('/register');
+                        showModalBottomSheet(
+                          context: context,
+                          builder: (context) {
+                            return const SingleChildScrollView(
+                              padding: EdgeInsets.all(20),
+                              child: Column(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Text('Date added'),
+                                      SortDropdownMenu(sortlist: [
+                                        'Ascending',
+                                        'Descending'
+                                      ]),
+                                    ],
+                                  ),
+                                  Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Text('Expiration date'),
+                                      SortDropdownMenu(sortlist: [
+                                        'Ascending',
+                                        'Descending'
+                                      ]),
+                                    ],
+                                  ),
+                                  Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Text('Remaining'),
+                                      SortDropdownMenu(sortlist: [
+                                        'Ascending',
+                                        'Descending'
+                                      ]),
+                                    ],
+                                  ),
+                                  Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Text('Alphabet'),
+                                      SortDropdownMenu(sortlist: [
+                                        'Ascending',
+                                        'Descending'
+                                      ]),
+                                    ],
+                                  ),
+                                  Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Text('Quantity'),
+                                      SortDropdownMenu(sortlist: [
+                                        'Ascending',
+                                        'Descending'
+                                      ]),
+                                    ],
+                                  ),
+                                ],
+                              ),
+                            );
+                          },
+                        );
+                        // context.go('');
                       }),
                   SpeedDialChild(
                       child: const Icon(Icons.history_rounded),
