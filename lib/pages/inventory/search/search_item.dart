@@ -59,7 +59,7 @@ class _SearchItemState extends State<SearchItem> {
         title: const Text("Search item"),
         backgroundColor: AppTheme.greenMainTheme,
         leading: BackButton(
-          onPressed: () => context.go('/inventory/all food'),
+          onPressed: () => context.go('/inventory/All food'),
         ),
       ),
       body: SingleChildScrollView(
@@ -120,7 +120,7 @@ class _SearchItemState extends State<SearchItem> {
                   formKey.currentState?.save();
                   print(fooditem);
 
-                  context.go('/inventory/all food');
+                  context.go('/inventory/All food');
                 },
                 // style: buttonStyle,
                 child: const Text("search"),

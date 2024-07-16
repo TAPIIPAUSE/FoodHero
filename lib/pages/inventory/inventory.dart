@@ -2,11 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 import 'package:foodhero/fonts.dart';
 import 'package:foodhero/theme.dart';
+import 'package:foodhero/widgets/circle_progressbar.dart';
 import 'package:foodhero/widgets/inventory_dropdown.dart';
 import 'package:foodhero/widgets/inventory_list_item.dart';
 import 'package:foodhero/widgets/sort_dropdown.dart';
 import 'package:go_router/go_router.dart';
-import 'package:percent_indicator/percent_indicator.dart';
 import 'package:textwrap/textwrap.dart';
 
 class Inventory extends StatefulWidget {
@@ -20,6 +20,11 @@ class Inventory extends StatefulWidget {
 class _InventoryState extends State<Inventory> {
   int _selectedIndex = 0;
   late String foodCategory;
+  final List<Segment> segments = [
+    Segment(value: 26, color: AppTheme.greenMainTheme, label: "On Time"),
+    Segment(value: 4, color: AppTheme.softOrange, label: "Nearly Expired"),
+    Segment(value: 70, color: AppTheme.softRedCancleWasted, label: "Wasted"),
+  ];
 
   void _onItemTapped(int index) {
     setState(() {
@@ -37,10 +42,7 @@ class _InventoryState extends State<Inventory> {
   Widget build(BuildContext context) {
     // final screenHeight = MediaQuery.of(context).size.height;
     final screenWidth = MediaQuery.of(context).size.width;
-
-    double radius = screenWidth * 0.1;
-    double lineWidth = screenWidth * 0.01;
-    double fontSize = screenWidth * 0.03;
+    final progressBar = PrimerCircularProgressBar(segments: segments);
 
     return Scaffold(
       backgroundColor: AppTheme.lightGreenBackground,
@@ -81,86 +83,31 @@ class _InventoryState extends State<Inventory> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            'Today 3 July 2024',
-                            style: FontsTheme.mouseMemoir_30(
-                                color: AppTheme.softGreen),
-                          ),
-                          Text(
-                            'Things you should eat today:',
-                            style: FontsTheme.hind_15(color: Colors.white),
-                          ),
-                          Text(
-                            '- Tomatos expire tomorrow',
-                            style: FontsTheme.hind_15(color: Colors.white),
-                          ),
-                          Text(
-                            '- Lettuce expire in 2 days',
-                            style: FontsTheme.hind_15(color: Colors.white),
-                          ),
-                          Text(
-                            '- Tomatos expire tomorrow',
-                            style: FontsTheme.hind_15(color: Colors.white),
-                          ),
-                          Text(
-                            fill(
-                                '- Lettuce expire in 2 days gkgkglh;hlg;g;glhlg;ghh;g;gk',
-                                width: 50),
-                            style: FontsTheme.hind_15(color: Colors.white),
-                          ),
-                        ],
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.only(right: 15),
-                        child: CircularPercentIndicator(
-                          radius: radius,
-                          lineWidth: lineWidth,
-                          animation: true,
-                          percent: 0.7,
-                          center: Text(
-                            "70%",
-                            style: TextStyle(
-                                fontWeight: FontWeight.bold,
-                                fontSize: fontSize,
-                                color: AppTheme.softOrange),
-                          ),
-                          footer: Column(
-                            children: [
-                              Text(
-                                "Another",
-                                style: TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: fontSize,
-                                    color: AppTheme.softOrange),
-                              ),
-                              Text(
-                                "Another",
-                                style: TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: fontSize,
-                                    color: AppTheme.softOrange),
-                              ),
-                              Text(
-                                "Another",
-                                style: TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: fontSize,
-                                    color: AppTheme.softOrange),
-                              ),
-                            ],
-                          ),
-                          circularStrokeCap: CircularStrokeCap.round,
-                          backgroundColor: AppTheme.softBrightGreen,
-                          progressColor: AppTheme.softOrange,
-                        ),
-                      ),
-                    ],
+                  Text(
+                    'Today 3 July 2024',
+                    style: FontsTheme.mouseMemoir_30(color: AppTheme.softGreen),
+                  ),
+                  Text(
+                    'Things you should eat today:',
+                    style: FontsTheme.hind_15(color: Colors.white),
+                  ),
+                  Text(
+                    '- Tomatos expire tomorrow',
+                    style: FontsTheme.hind_15(color: Colors.white),
+                  ),
+                  Text(
+                    '- Lettuce expire in 2 days',
+                    style: FontsTheme.hind_15(color: Colors.white),
+                  ),
+                  Text(
+                    '- Tomatos expire tomorrow',
+                    style: FontsTheme.hind_15(color: Colors.white),
+                  ),
+                  Text(
+                    fill(
+                        '- Lettuce expire in 2 days gkgkglh;hlg;g;glhlg;ghh;g;gk',
+                        width: 50),
+                    style: FontsTheme.hind_15(color: Colors.white),
                   ),
                   Text(
                     'Yogurt should be eaten before the next 3 days',
@@ -170,6 +117,10 @@ class _InventoryState extends State<Inventory> {
                     'Yogurt should be eaten before the next 3 days',
                     style: FontsTheme.hind_15(color: Colors.white),
                   ),
+                  const SizedBox(
+                    height: 20,
+                  ),
+                  Center(child: progressBar),
                 ],
               ),
             ),
@@ -181,24 +132,10 @@ class _InventoryState extends State<Inventory> {
                 borderRadius: BorderRadius.all(Radius.circular(20)),
               ),
               child: Column(
-                // mainAxisAlignment: MainAxisAlignment.center,
-                // crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      // Row(
-                      //   children: [
-                      //     const Text(
-                      //       "Refrigerator",
-                      //       style: TextStyle(color: Colors.white),
-                      //     ),
-                      //     IconButton(
-                      //         onPressed: () {},
-                      //         icon: const Icon(Icons.switch_left_rounded),
-                      //         color: Colors.white)
-                      //   ],
-                      // ),
                       const InventoryDropdownMenu(),
                       Container(
                         margin: const EdgeInsets.only(left: 10.0),
@@ -213,9 +150,18 @@ class _InventoryState extends State<Inventory> {
                               onTap: () {
                                 context.go('/category');
                               },
-                              child: Text(
-                                foodCategory,
-                                style: FontsTheme.hind_15(),
+                              child: Row(
+                                children: [
+                                  Text(
+                                    foodCategory,
+                                    style: FontsTheme.hind_15(),
+                                  ),
+                                  IconButton(
+                                    onPressed: () => context.go('/category'),
+                                    icon: const Icon(
+                                        Icons.arrow_drop_down_rounded),
+                                  ),
+                                ],
                               ),
                             ),
                             // Row(
@@ -333,13 +279,13 @@ class _InventoryState extends State<Inventory> {
                         showModalBottomSheet(
                           context: context,
                           builder: (context) {
-                            return const SingleChildScrollView(
-                              padding: EdgeInsets.all(20),
+                            return SingleChildScrollView(
+                              padding: const EdgeInsets.all(20),
                               child: Column(
                                 mainAxisAlignment:
                                     MainAxisAlignment.spaceBetween,
                                 children: [
-                                  Row(
+                                  const Row(
                                     mainAxisAlignment:
                                         MainAxisAlignment.spaceBetween,
                                     children: [
@@ -350,7 +296,7 @@ class _InventoryState extends State<Inventory> {
                                       ]),
                                     ],
                                   ),
-                                  Row(
+                                  const Row(
                                     mainAxisAlignment:
                                         MainAxisAlignment.spaceBetween,
                                     children: [
@@ -361,7 +307,7 @@ class _InventoryState extends State<Inventory> {
                                       ]),
                                     ],
                                   ),
-                                  Row(
+                                  const Row(
                                     mainAxisAlignment:
                                         MainAxisAlignment.spaceBetween,
                                     children: [
@@ -372,7 +318,7 @@ class _InventoryState extends State<Inventory> {
                                       ]),
                                     ],
                                   ),
-                                  Row(
+                                  const Row(
                                     mainAxisAlignment:
                                         MainAxisAlignment.spaceBetween,
                                     children: [
@@ -383,7 +329,7 @@ class _InventoryState extends State<Inventory> {
                                       ]),
                                     ],
                                   ),
-                                  Row(
+                                  const Row(
                                     mainAxisAlignment:
                                         MainAxisAlignment.spaceBetween,
                                     children: [
@@ -394,6 +340,11 @@ class _InventoryState extends State<Inventory> {
                                       ]),
                                     ],
                                   ),
+                                  ElevatedButton(
+                                      onPressed: () {
+                                        context.go('/inventory/All food');
+                                      },
+                                      child: const Text("search")),
                                 ],
                               ),
                             );

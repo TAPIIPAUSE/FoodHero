@@ -157,7 +157,7 @@ class _RegisterState extends State<Register> {
                             print(_email);
                             print(_password);
 
-                            context.go('/inventory/all food');
+                            context.go('/inventory/All food');
                           },
                           style: buttonStyle,
                           child: const Text("Register"),
