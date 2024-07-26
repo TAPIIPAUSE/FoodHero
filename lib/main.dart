@@ -1,4 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:foodhero/pages/addFoodDetails.dart';
+import 'package:foodhero/pages/foodDetails.dart';
+import 'package:foodhero/pages/household.dart';
+import 'package:foodhero/pages/login_regis.dart';
 import 'package:foodhero/theme.dart';
 
 void main() {
@@ -10,13 +14,11 @@ class MainApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp(
-      home: Scaffold(
-        body: Center(
-          child: Text('Hello World!'),
-          
-        ),
-      ),
+    return MaterialApp(
+      //home: login_regis(),
+      //home: addFoodDetails(),
+      //home: foodDetails(),
+      home: household(),
     );
   }
 }
