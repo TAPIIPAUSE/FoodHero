@@ -106,7 +106,7 @@ final GoRouter _router = GoRouter(
           },
         ),
         GoRoute(
-          path: 'inter_organization',
+          path: 'inter_org',
           builder: (BuildContext context, GoRouterState state) {
             return const InterOrganization();
           },

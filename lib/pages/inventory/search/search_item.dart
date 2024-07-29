@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:foodhero/widgets/select_category.dart';
+import 'package:foodhero/widgets/inventory/select_category.dart';
 import 'package:foodhero/theme.dart';
 import 'package:go_router/go_router.dart';
 

@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 import 'package:foodhero/fonts.dart';
 import 'package:foodhero/theme.dart';
-import 'package:foodhero/widgets/circle_progressbar.dart';
-import 'package:foodhero/widgets/inventory_dropdown.dart';
-import 'package:foodhero/widgets/inventory_list_item.dart';
-import 'package:foodhero/widgets/sort_dropdown.dart';
+import 'package:foodhero/widgets/inventory/circle_progressbar.dart';
+import 'package:foodhero/widgets/inventory/inventory_dropdown.dart';
+import 'package:foodhero/widgets/inventory/inventory_list_item.dart';
+import 'package:foodhero/widgets/inventory/sort_dropdown.dart';
 import 'package:go_router/go_router.dart';
 import 'package:textwrap/textwrap.dart';
 
