@@ -22,6 +22,7 @@ class InterOrganization extends StatefulWidget {
 }
 
 class _InterOrganizationState extends State<InterOrganization> {
+  String selectedValue = 'Inter';
   // pie data
   int touchedIndex = -1;
   final List<ChartData> chartData = [
@@ -34,6 +35,64 @@ class _InterOrganizationState extends State<InterOrganization> {
 
   @override
   Widget build(BuildContext context) {
+    return Scaffold(
+      backgroundColor: AppTheme.lightGreenBackground,
+      appBar: PreferredSize(
+          preferredSize: const Size.fromHeight(150.0),
+          child: Container(
+            color: AppTheme.greenMainTheme,
+            child: Center(
+              child: Column(
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      IconButton.filled(
+                        onPressed: () => context.go('/user_profile'),
+                        icon: const Icon(
+                          Icons.person_sharp,
+                          color: Colors.white,
+                        ),
+                      ),
+                      Text(
+                        'Dashboard',
+                        style: FontsTheme.mouseMemoirs_64(color: Colors.white),
+                      ),
+                      IconButton.filled(
+                        onPressed: () {},
+                        icon: const Icon(
+                          Icons.notifications_outlined,
+                          color: Colors.white,
+                        ),
+                      ),
+                    ],
+                  ),
+                  DropdownButton<String>(
+                    // dropdownColor: AppTheme.softYellow,
+                    underline: Container(), // Removes the default underline
+                    value: selectedValue,
+                    onChanged: (String? newValue) {
+                      setState(() {
+                        selectedValue = newValue!;
+                      });
+                    },
+                    items: <String>['Inter', 'Household', 'Organization']
+                        .map<DropdownMenuItem<String>>((String value) {
+                      return DropdownMenuItem<String>(
+                        value: value,
+                        child: Text(value),
+                      );
+                    }).toList(),
+                  ),
+                ],
+              ),
+            ),
+          )),
+      body: SingleChildScrollView(child: _buildContent()),
+    );
+  }
+
+  Widget _buildContent() {
     final screenWidth = MediaQuery.of(context).size.width;
     const totalpoint = 40500;
     const wastedpoint = 5000;
@@ -42,166 +101,413 @@ class _InterOrganizationState extends State<InterOrganization> {
         backgroundColor: AppTheme.greenMainTheme,
         foregroundColor: Colors.white);
 
-    return Scaffold(
-      backgroundColor: AppTheme.lightGreenBackground,
-      appBar: AppBar(
-        title: const Text('Dashboard'),
-        centerTitle: true,
-        backgroundColor: AppTheme.greenMainTheme,
-        titleTextStyle: FontsTheme.mouseMemoirs_64(color: Colors.white),
-        leading: IconButton.filled(
-          onPressed: () => context.go('/user_profile'),
-          icon: const Icon(
-            Icons.person_sharp,
-            color: Colors.white,
-          ),
-        ),
-        actions: [
-          IconButton.filled(
-            onPressed: () {},
-            icon: const Icon(
-              Icons.notifications_outlined,
-              color: Colors.white,
-            ),
-          ),
-        ],
-      ),
-      body: SingleChildScrollView(
-        child: Center(
-          child: Column(
-            children: [
-              Container(
-                margin: const EdgeInsets.all(5),
-                padding: const EdgeInsets.all(10),
-                width: screenWidth * 0.9,
-                decoration: const BoxDecoration(
-                  color: AppTheme.mainBlue,
-                  borderRadius: BorderRadius.all(Radius.circular(20)),
-                ),
-                child: const Center(
-                    child: Text(
-                  "Inter score board",
-                  style: TextStyle(color: Colors.white),
-                )),
-              ),
-              Container(
+    switch (selectedValue) {
+      case 'Inter':
+        return SingleChildScrollView(
+          child: Center(
+            child: Column(
+              children: [
+                Container(
+                  margin: const EdgeInsets.all(5),
                   padding: const EdgeInsets.all(10),
                   width: screenWidth * 0.9,
                   decoration: const BoxDecoration(
                     color: AppTheme.mainBlue,
                     borderRadius: BorderRadius.all(Radius.circular(20)),
                   ),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  child: const Center(
+                      child: Text(
+                    "Inter score board",
+                    style: TextStyle(color: Colors.white),
+                  )),
+                ),
+                Container(
+                    padding: const EdgeInsets.all(10),
+                    width: screenWidth * 0.9,
+                    decoration: const BoxDecoration(
+                      color: AppTheme.mainBlue,
+                      borderRadius: BorderRadius.all(Radius.circular(20)),
+                    ),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        const Icon(
+                          Icons.map_sharp,
+                          color: Colors.white,
+                        ),
+                        const Text(
+                          "Thung Khru",
+                          style: TextStyle(color: Colors.white),
+                        ),
+                        IconButton(
+                            onPressed: () {},
+                            icon: const Icon(
+                              Icons.change_circle,
+                              color: Colors.white,
+                            )),
+                      ],
+                    )),
+                Container(
+                  margin: const EdgeInsets.all(10),
+                  padding: const EdgeInsets.all(10),
+                  width: screenWidth * 0.9,
+                  decoration: const BoxDecoration(
+                    color: AppTheme.mainBlue,
+                    borderRadius: BorderRadius.all(Radius.circular(20)),
+                  ),
+                  child: Column(
                     children: [
-                      const Icon(
-                        Icons.map_sharp,
-                        color: Colors.white,
+                      Text(
+                        '${NumberFormat('#,###').format(totalpoint)} points score',
+                        style: const TextStyle(color: Colors.white),
                       ),
+                      const OrgListScore(
+                        orgname: 'KMUTT',
+                        star: true,
+                        point: 55555,
+                      ),
+                      const OrgListScore(
+                        orgname: 'CU',
+                        star: false,
+                        point: 5555555555,
+                      ),
+                      const OrgListScore(
+                        orgname: 'MU',
+                        star: false,
+                        point: 5,
+                      ),
+                      const OrgListScore(
+                        orgname: 'KMUTL',
+                        star: true,
+                        point: 5,
+                      ),
+                    ],
+                  ),
+                ),
+                Container(
+                  margin: const EdgeInsets.all(10),
+                  padding: const EdgeInsets.all(10),
+                  width: screenWidth * 0.9,
+                  decoration: const BoxDecoration(
+                    color: AppTheme.mainBlue,
+                    borderRadius: BorderRadius.all(Radius.circular(20)),
+                  ),
+                  child: Column(
+                    children: [
                       const Text(
-                        "Thung Khru",
+                        'We saved food wasted',
                         style: TextStyle(color: Colors.white),
                       ),
-                      IconButton(
-                          onPressed: () {},
-                          icon: const Icon(
-                            Icons.change_circle,
-                            color: Colors.white,
-                          )),
+                      Text(
+                        '${NumberFormat('#,###').format(wastedpoint)} grams',
+                        style: const TextStyle(color: Colors.white),
+                      ),
+                      // pie chart
+                      Container(
+                        padding: const EdgeInsets.all(10),
+                        decoration: const BoxDecoration(
+                          color: AppTheme.softBlue,
+                          borderRadius: BorderRadius.all(Radius.circular(20)),
+                        ),
+                        child: Column(
+                          children: [
+                            const Row(
+                              // crossAxisAlignment: CrossAxisAlignment.center,
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Text("Week"),
+                                Text("Month"),
+                              ],
+                            ),
+                            _buildResponsiveChartLayout(screenWidth),
+                          ],
+                        ),
+                      ),
+                      const SizedBox(
+                        height: 10,
+                      ),
+                      ElevatedButton(
+                        onPressed: () {},
+                        style: buttonStyle,
+                        child: const Text("see more"),
+                      ),
                     ],
-                  )),
-              Container(
-                margin: const EdgeInsets.all(10),
-                padding: const EdgeInsets.all(10),
-                width: screenWidth * 0.9,
-                decoration: const BoxDecoration(
-                  color: AppTheme.mainBlue,
-                  borderRadius: BorderRadius.all(Radius.circular(20)),
+                  ),
                 ),
-                child: Column(
-                  children: [
-                    Text(
-                      '${NumberFormat('#,###').format(totalpoint)} points score',
-                      style: const TextStyle(color: Colors.white),
-                    ),
-                    const OrgListScore(
-                      orgname: 'KMUTT',
-                      star: true,
-                      point: 55555,
-                    ),
-                    const OrgListScore(
-                      orgname: 'CU',
-                      star: false,
-                      point: 5555555555,
-                    ),
-                    const OrgListScore(
-                      orgname: 'MU',
-                      star: false,
-                      point: 5,
-                    ),
-                    const OrgListScore(
-                      orgname: 'KMUTL',
-                      star: true,
-                      point: 5,
-                    ),
-                  ],
-                ),
-              ),
-              Container(
-                margin: const EdgeInsets.all(10),
-                padding: const EdgeInsets.all(10),
-                width: screenWidth * 0.9,
-                decoration: const BoxDecoration(
-                  color: AppTheme.mainBlue,
-                  borderRadius: BorderRadius.all(Radius.circular(20)),
-                ),
-                child: Column(
-                  children: [
-                    const Text(
-                      'We saved food wasted',
-                      style: TextStyle(color: Colors.white),
-                    ),
-                    Text(
-                      '${NumberFormat('#,###').format(wastedpoint)} grams',
-                      style: const TextStyle(color: Colors.white),
-                    ),
-                    // pie chart
-                    Container(
-                      padding: const EdgeInsets.all(10),
-                      decoration: const BoxDecoration(
-                        color: AppTheme.softBlue,
-                        borderRadius: BorderRadius.all(Radius.circular(20)),
-                      ),
-                      child: Column(
-                        children: [
-                          const Row(
-                            // crossAxisAlignment: CrossAxisAlignment.center,
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Text("Week"),
-                              Text("Month"),
-                            ],
-                          ),
-                          _buildResponsiveChartLayout(screenWidth),
-                        ],
-                      ),
-                    ),
-                    SizedBox(
-                      height: 10,
-                    ),
-                    ElevatedButton(
-                      onPressed: () {},
-                      style: buttonStyle,
-                      child: const Text("see more"),
-                    ),
-                  ],
-                ),
-              ),
-            ],
+              ],
+            ),
           ),
-        ),
-      ),
-    );
+        );
+      case 'Household':
+        return SingleChildScrollView(
+          child: Center(
+            child: Column(
+              children: [
+                Container(
+                  margin: const EdgeInsets.all(5),
+                  padding: const EdgeInsets.all(10),
+                  width: screenWidth * 0.9,
+                  decoration: const BoxDecoration(
+                    color: AppTheme.mainBlue,
+                    borderRadius: BorderRadius.all(Radius.circular(20)),
+                  ),
+                  child: const Center(
+                      child: Text(
+                    "Household score board",
+                    style: TextStyle(color: Colors.white),
+                  )),
+                ),
+                Container(
+                    padding: const EdgeInsets.all(10),
+                    width: screenWidth * 0.9,
+                    decoration: const BoxDecoration(
+                      color: AppTheme.mainBlue,
+                      borderRadius: BorderRadius.all(Radius.circular(20)),
+                    ),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        const Icon(
+                          Icons.map_sharp,
+                          color: Colors.white,
+                        ),
+                        const Text(
+                          "Thung Khru",
+                          style: TextStyle(color: Colors.white),
+                        ),
+                        IconButton(
+                            onPressed: () {},
+                            icon: const Icon(
+                              Icons.change_circle,
+                              color: Colors.white,
+                            )),
+                      ],
+                    )),
+                Container(
+                  margin: const EdgeInsets.all(10),
+                  padding: const EdgeInsets.all(10),
+                  width: screenWidth * 0.9,
+                  decoration: const BoxDecoration(
+                    color: AppTheme.mainBlue,
+                    borderRadius: BorderRadius.all(Radius.circular(20)),
+                  ),
+                  child: Column(
+                    children: [
+                      Text(
+                        '${NumberFormat('#,###').format(totalpoint)} points score',
+                        style: const TextStyle(color: Colors.white),
+                      ),
+                      const OrgListScore(
+                        orgname: 'You',
+                        star: true,
+                        point: 55555,
+                      ),
+                      const OrgListScore(
+                        orgname: 'Member',
+                        star: false,
+                        point: 5555555555,
+                      ),
+                      const OrgListScore(
+                        orgname: 'Member',
+                        star: false,
+                        point: 5,
+                      ),
+                    ],
+                  ),
+                ),
+                Container(
+                  margin: const EdgeInsets.all(10),
+                  padding: const EdgeInsets.all(10),
+                  width: screenWidth * 0.9,
+                  decoration: const BoxDecoration(
+                    color: AppTheme.mainBlue,
+                    borderRadius: BorderRadius.all(Radius.circular(20)),
+                  ),
+                  child: Column(
+                    children: [
+                      const Text(
+                        'Your household saved food wasted',
+                        style: TextStyle(color: Colors.white),
+                      ),
+                      Text(
+                        '${NumberFormat('#,###').format(wastedpoint)} grams',
+                        style: const TextStyle(color: Colors.white),
+                      ),
+                      // pie chart
+                      Container(
+                        padding: const EdgeInsets.all(10),
+                        decoration: const BoxDecoration(
+                          color: AppTheme.softBlue,
+                          borderRadius: BorderRadius.all(Radius.circular(20)),
+                        ),
+                        child: Column(
+                          children: [
+                            const Row(
+                              // crossAxisAlignment: CrossAxisAlignment.center,
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Text("Week"),
+                                Text("Month"),
+                              ],
+                            ),
+                            _buildResponsiveChartLayout(screenWidth),
+                          ],
+                        ),
+                      ),
+                      const SizedBox(
+                        height: 10,
+                      ),
+                      ElevatedButton(
+                        onPressed: () {},
+                        style: buttonStyle,
+                        child: const Text("see more"),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+          ),
+        );
+      case 'Organization':
+        return SingleChildScrollView(
+          child: Center(
+            child: Column(
+              children: [
+                Container(
+                  margin: const EdgeInsets.all(5),
+                  padding: const EdgeInsets.all(10),
+                  width: screenWidth * 0.9,
+                  decoration: const BoxDecoration(
+                    color: AppTheme.mainBlue,
+                    borderRadius: BorderRadius.all(Radius.circular(20)),
+                  ),
+                  child: const Center(
+                      child: Text(
+                    "Organization score board",
+                    style: TextStyle(color: Colors.white),
+                  )),
+                ),
+                Container(
+                    padding: const EdgeInsets.all(10),
+                    width: screenWidth * 0.9,
+                    decoration: const BoxDecoration(
+                      color: AppTheme.mainBlue,
+                      borderRadius: BorderRadius.all(Radius.circular(20)),
+                    ),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        const Icon(
+                          Icons.map_sharp,
+                          color: Colors.white,
+                        ),
+                        const Text(
+                          "Thung Khru",
+                          style: TextStyle(color: Colors.white),
+                        ),
+                        IconButton(
+                            onPressed: () {},
+                            icon: const Icon(
+                              Icons.change_circle,
+                              color: Colors.white,
+                            )),
+                      ],
+                    )),
+                Container(
+                  margin: const EdgeInsets.all(10),
+                  padding: const EdgeInsets.all(10),
+                  width: screenWidth * 0.9,
+                  decoration: const BoxDecoration(
+                    color: AppTheme.mainBlue,
+                    borderRadius: BorderRadius.all(Radius.circular(20)),
+                  ),
+                  child: Column(
+                    children: [
+                      Text(
+                        '${NumberFormat('#,###').format(totalpoint)} points score',
+                        style: const TextStyle(color: Colors.white),
+                      ),
+                      const OrgListScore(
+                        orgname: 'You',
+                        star: true,
+                        point: 55555,
+                      ),
+                      const OrgListScore(
+                        orgname: 'Member#1',
+                        star: false,
+                        point: 5555555555,
+                      ),
+                      const OrgListScore(
+                        orgname: 'Member#2',
+                        star: false,
+                        point: 5,
+                      ),
+                      const OrgListScore(
+                        orgname: 'Member#3',
+                        star: false,
+                        point: 5,
+                      ),
+                    ],
+                  ),
+                ),
+                Container(
+                  margin: const EdgeInsets.all(10),
+                  padding: const EdgeInsets.all(10),
+                  width: screenWidth * 0.9,
+                  decoration: const BoxDecoration(
+                    color: AppTheme.mainBlue,
+                    borderRadius: BorderRadius.all(Radius.circular(20)),
+                  ),
+                  child: Column(
+                    children: [
+                      const Text(
+                        'Your organization saved food wasted',
+                        style: TextStyle(color: Colors.white),
+                      ),
+                      Text(
+                        '${NumberFormat('#,###').format(wastedpoint)} grams',
+                        style: const TextStyle(color: Colors.white),
+                      ),
+                      // pie chart
+                      Container(
+                        padding: const EdgeInsets.all(10),
+                        decoration: const BoxDecoration(
+                          color: AppTheme.softBlue,
+                          borderRadius: BorderRadius.all(Radius.circular(20)),
+                        ),
+                        child: Column(
+                          children: [
+                            const Row(
+                              // crossAxisAlignment: CrossAxisAlignment.center,
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Text("Week"),
+                                Text("Month"),
+                              ],
+                            ),
+                            _buildResponsiveChartLayout(screenWidth),
+                          ],
+                        ),
+                      ),
+                      const SizedBox(
+                        height: 10,
+                      ),
+                      ElevatedButton(
+                        onPressed: () {},
+                        style: buttonStyle,
+                        child: const Text("see more"),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+          ),
+        );
+      default:
+        return LinearProgressIndicator();
+    }
   }
 
   Widget _buildResponsiveChartLayout(double screenWidth) {
