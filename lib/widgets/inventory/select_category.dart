@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:foodhero/utils/constants.dart';
 
 class SelectFoodCategory extends StatefulWidget {
   const SelectFoodCategory({super.key});
@@ -8,14 +9,7 @@ class SelectFoodCategory extends StatefulWidget {
 }
 
 class _SelectFoodCategory extends State<SelectFoodCategory> {
-  final List<String> _items = [
-    'Cooked food',
-    'Fresh food',
-    'Frozen food',
-    'Dry food',
-    'Instant food',
-    'All food',
-  ];
+  final List<String> _items = foodCategory;
   final List<bool> _selected = List.generate(6, (_) => false);
 
   @override

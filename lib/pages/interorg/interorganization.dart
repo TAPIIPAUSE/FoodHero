@@ -2,6 +2,7 @@ import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:foodhero/fonts.dart';
 import 'package:foodhero/theme.dart';
+import 'package:foodhero/utils/constants.dart';
 import 'package:foodhero/widgets/interorg/org_listscore.dart';
 import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
@@ -22,15 +23,15 @@ class InterOrganization extends StatefulWidget {
 }
 
 class _InterOrganizationState extends State<InterOrganization> {
-  String selectedValue = 'Inter';
+  String selectedValue = inter;
   // pie data
   int touchedIndex = -1;
   final List<ChartData> chartData = [
-    ChartData('Fresh food', 25, AppTheme.softRedCancleWasted),
-    ChartData('Cooked food', 25, AppTheme.softOrange),
-    ChartData('Frozen food', 20, AppTheme.softRedBrown),
-    ChartData('Dry food', 15, AppTheme.orangeGray),
-    ChartData('Instant food', 15, AppTheme.spoiledBrown),
+    ChartData(foodTypeCooked, 25, AppTheme.softRedCancleWasted),
+    ChartData(foodTypeDry, 25, AppTheme.softOrange),
+    ChartData(foodTypeFresh, 20, AppTheme.softRedBrown),
+    ChartData(foodTypeFrozen, 15, AppTheme.orangeGray),
+    ChartData(foodTypeInstant, 15, AppTheme.spoiledBrown),
   ];
 
   @override
@@ -38,56 +39,54 @@ class _InterOrganizationState extends State<InterOrganization> {
     return Scaffold(
       backgroundColor: AppTheme.lightGreenBackground,
       appBar: PreferredSize(
-          preferredSize: const Size.fromHeight(150.0),
-          child: Container(
-            color: AppTheme.greenMainTheme,
-            child: Center(
-              child: Column(
-                children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: [
-                      IconButton.filled(
-                        onPressed: () => context.go('/user_profile'),
-                        icon: const Icon(
-                          Icons.person_sharp,
-                          color: Colors.white,
-                        ),
-                      ),
-                      Text(
-                        'Dashboard',
-                        style: FontsTheme.mouseMemoirs_64(color: Colors.white),
-                      ),
-                      IconButton.filled(
-                        onPressed: () {},
-                        icon: const Icon(
-                          Icons.notifications_outlined,
-                          color: Colors.white,
-                        ),
-                      ),
-                    ],
+        preferredSize: const Size.fromHeight(120.0),
+        child: Container(
+          color: AppTheme.greenMainTheme,
+          child: Column(
+            children: [
+              AppBar(
+                title: const Text('Dashboard'),
+                centerTitle: true,
+                backgroundColor: AppTheme.greenMainTheme,
+                titleTextStyle: FontsTheme.mouseMemoirs_64(color: Colors.white),
+                leading: IconButton.filled(
+                  onPressed: () => context.push(''),
+                  icon: const Icon(
+                    Icons.person_sharp,
+                    color: Colors.white,
                   ),
-                  DropdownButton<String>(
-                    // dropdownColor: AppTheme.softYellow,
-                    underline: Container(), // Removes the default underline
-                    value: selectedValue,
-                    onChanged: (String? newValue) {
-                      setState(() {
-                        selectedValue = newValue!;
-                      });
-                    },
-                    items: <String>['Inter', 'Household', 'Organization']
-                        .map<DropdownMenuItem<String>>((String value) {
-                      return DropdownMenuItem<String>(
-                        value: value,
-                        child: Text(value),
-                      );
-                    }).toList(),
+                ),
+                actions: [
+                  IconButton.filled(
+                    onPressed: () {},
+                    icon: const Icon(
+                      Icons.notifications_outlined,
+                      color: Colors.white,
+                    ),
                   ),
                 ],
               ),
-            ),
-          )),
+              DropdownButton<String>(
+                // dropdownColor: AppTheme.softYellow,
+                underline: Container(), // Removes the default underline
+                value: selectedValue,
+                onChanged: (String? newValue) {
+                  setState(() {
+                    selectedValue = newValue!;
+                  });
+                },
+                items: <String>[inter, hh, org]
+                    .map<DropdownMenuItem<String>>((String value) {
+                  return DropdownMenuItem<String>(
+                    value: value,
+                    child: Text(value),
+                  );
+                }).toList(),
+              ),
+            ],
+          ),
+        ),
+      ),
       body: SingleChildScrollView(child: _buildContent()),
     );
   }
@@ -102,7 +101,7 @@ class _InterOrganizationState extends State<InterOrganization> {
         foregroundColor: Colors.white);
 
     switch (selectedValue) {
-      case 'Inter':
+      case inter:
         return SingleChildScrollView(
           child: Center(
             child: Column(
@@ -117,7 +116,7 @@ class _InterOrganizationState extends State<InterOrganization> {
                   ),
                   child: const Center(
                       child: Text(
-                    "Inter score board",
+                    "$inter score board",
                     style: TextStyle(color: Colors.white),
                   )),
                 ),
@@ -215,8 +214,8 @@ class _InterOrganizationState extends State<InterOrganization> {
                               // crossAxisAlignment: CrossAxisAlignment.center,
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
-                                Text("Week"),
-                                Text("Month"),
+                                Text(week),
+                                Text(month),
                               ],
                             ),
                             _buildResponsiveChartLayout(screenWidth),
@@ -227,7 +226,7 @@ class _InterOrganizationState extends State<InterOrganization> {
                         height: 10,
                       ),
                       ElevatedButton(
-                        onPressed: () {},
+                        onPressed: () => context.push('/dashboard_inter'),
                         style: buttonStyle,
                         child: const Text("see more"),
                       ),
@@ -238,7 +237,7 @@ class _InterOrganizationState extends State<InterOrganization> {
             ),
           ),
         );
-      case 'Household':
+      case hh:
         return SingleChildScrollView(
           child: Center(
             child: Column(
@@ -253,7 +252,7 @@ class _InterOrganizationState extends State<InterOrganization> {
                   ),
                   child: const Center(
                       child: Text(
-                    "Household score board",
+                    "$hh score board",
                     style: TextStyle(color: Colors.white),
                   )),
                 ),
@@ -346,8 +345,8 @@ class _InterOrganizationState extends State<InterOrganization> {
                               // crossAxisAlignment: CrossAxisAlignment.center,
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
-                                Text("Week"),
-                                Text("Month"),
+                                Text(week),
+                                Text(month),
                               ],
                             ),
                             _buildResponsiveChartLayout(screenWidth),
@@ -358,7 +357,7 @@ class _InterOrganizationState extends State<InterOrganization> {
                         height: 10,
                       ),
                       ElevatedButton(
-                        onPressed: () {},
+                        onPressed: () => context.push('/dashboard_inter'),
                         style: buttonStyle,
                         child: const Text("see more"),
                       ),
@@ -369,7 +368,7 @@ class _InterOrganizationState extends State<InterOrganization> {
             ),
           ),
         );
-      case 'Organization':
+      case org:
         return SingleChildScrollView(
           child: Center(
             child: Column(
@@ -384,7 +383,7 @@ class _InterOrganizationState extends State<InterOrganization> {
                   ),
                   child: const Center(
                       child: Text(
-                    "Organization score board",
+                    "$org score board",
                     style: TextStyle(color: Colors.white),
                   )),
                 ),
@@ -482,8 +481,8 @@ class _InterOrganizationState extends State<InterOrganization> {
                               // crossAxisAlignment: CrossAxisAlignment.center,
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
-                                Text("Week"),
-                                Text("Month"),
+                                Text(week),
+                                Text(month),
                               ],
                             ),
                             _buildResponsiveChartLayout(screenWidth),
@@ -494,7 +493,7 @@ class _InterOrganizationState extends State<InterOrganization> {
                         height: 10,
                       ),
                       ElevatedButton(
-                        onPressed: () {},
+                        onPressed: () => context.push('/dashboard_inter'),
                         style: buttonStyle,
                         child: const Text("see more"),
                       ),
@@ -506,7 +505,7 @@ class _InterOrganizationState extends State<InterOrganization> {
           ),
         );
       default:
-        return LinearProgressIndicator();
+        return const LinearProgressIndicator();
     }
   }
 

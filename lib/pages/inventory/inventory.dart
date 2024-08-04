@@ -46,27 +46,31 @@ class _InventoryState extends State<Inventory> {
 
     return Scaffold(
       backgroundColor: AppTheme.lightGreenBackground,
-      appBar: AppBar(
-        title: const Text('Inventory'),
-        centerTitle: true,
-        backgroundColor: AppTheme.greenMainTheme,
-        titleTextStyle: FontsTheme.mouseMemoirs_64(color: Colors.white),
-        leading: IconButton.filled(
-          onPressed: () => context.go('/user_profile'),
-          icon: const Icon(
-            Icons.person_sharp,
-            color: Colors.white,
-          ),
-        ),
-        actions: [
-          IconButton.filled(
-            onPressed: () {},
+      appBar: PreferredSize(
+        preferredSize: const Size.fromHeight(
+            80.0), // Increase this value to make the AppBar taller
+        child: AppBar(
+          title: const Text('Inventory'),
+          centerTitle: true,
+          backgroundColor: AppTheme.greenMainTheme,
+          titleTextStyle: FontsTheme.mouseMemoirs_64(color: Colors.white),
+          leading: IconButton.filled(
+            onPressed: () => context.push(''),
             icon: const Icon(
-              Icons.notifications_outlined,
+              Icons.person_sharp,
               color: Colors.white,
             ),
           ),
-        ],
+          actions: [
+            IconButton.filled(
+              onPressed: () {},
+              icon: const Icon(
+                Icons.notifications_outlined,
+                color: Colors.white,
+              ),
+            ),
+          ],
+        ),
       ),
       body: SingleChildScrollView(
         child: Column(
@@ -148,7 +152,7 @@ class _InventoryState extends State<Inventory> {
                           children: [
                             GestureDetector(
                               onTap: () {
-                                context.go('/category');
+                                context.push('/category');
                               },
                               child: Row(
                                 children: [
@@ -269,7 +273,7 @@ class _InventoryState extends State<Inventory> {
                       backgroundColor: AppTheme.greenMainTheme,
                       foregroundColor: Colors.white,
                       onTap: () {
-                        context.go('/searchitem');
+                        context.push('/searchitem');
                       }),
                   SpeedDialChild(
                       child: const Icon(Icons.filter_alt_rounded),
@@ -342,7 +346,7 @@ class _InventoryState extends State<Inventory> {
                                   ),
                                   ElevatedButton(
                                       onPressed: () {
-                                        context.go('/inventory/All food');
+                                        context.push('/inventory/All food');
                                       },
                                       child: const Text("search")),
                                 ],

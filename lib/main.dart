@@ -1,19 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:foodhero/pages/add_food.dart';
-import 'package:foodhero/pages/consumed_food.dart';
-import 'package:foodhero/pages/dashboard.dart';
-import 'package:foodhero/pages/edit_food.dart';
-import 'package:foodhero/pages/household.dart';
-import 'package:foodhero/pages/interorganization.dart';
+import 'package:foodhero/pages/interorg/dashboard_inter.dart';
+import 'package:foodhero/pages/interorg/interorganization.dart';
 import 'package:foodhero/pages/inventory/category.dart';
 import 'package:foodhero/pages/inventory/inventory.dart';
 import 'package:foodhero/pages/inventory/search/search_item.dart';
-import 'package:foodhero/pages/login.dart';
 import 'package:foodhero/pages/notifications.dart';
-import 'package:foodhero/pages/organization.dart';
 import 'package:foodhero/pages/register.dart';
-import 'package:foodhero/pages/user_profile.dart';
-import 'package:foodhero/pages/wasted_food.dart';
 import 'package:go_router/go_router.dart';
 
 void main() {
@@ -52,57 +44,9 @@ final GoRouter _router = GoRouter(
           },
         ),
         GoRoute(
-          path: 'login',
-          builder: (BuildContext context, GoRouterState state) {
-            return login();
-          },
-        ),
-        GoRoute(
-          path: 'register',
-          builder: (BuildContext context, GoRouterState state) {
-            return const Register();
-          },
-        ),
-        GoRoute(
-          path: 'add_food',
-          builder: (BuildContext context, GoRouterState state) {
-            return const AddFood();
-          },
-        ),
-        GoRoute(
-          path: 'edit_food',
-          builder: (BuildContext context, GoRouterState state) {
-            return const EditFood();
-          },
-        ),
-        GoRoute(
-          path: 'consumed_food',
-          builder: (BuildContext context, GoRouterState state) {
-            return const ConsumedFood();
-          },
-        ),
-        GoRoute(
-          path: 'wasted_food',
-          builder: (BuildContext context, GoRouterState state) {
-            return const WastedFood();
-          },
-        ),
-        GoRoute(
           path: 'notification',
           builder: (BuildContext context, GoRouterState state) {
             return const Notifications();
-          },
-        ),
-        GoRoute(
-          path: 'household',
-          builder: (BuildContext context, GoRouterState state) {
-            return const Household();
-          },
-        ),
-        GoRoute(
-          path: 'organization',
-          builder: (BuildContext context, GoRouterState state) {
-            return const Organization();
           },
         ),
         GoRoute(
@@ -112,15 +56,9 @@ final GoRouter _router = GoRouter(
           },
         ),
         GoRoute(
-          path: 'dashboard',
+          path: 'dashboard_inter',
           builder: (BuildContext context, GoRouterState state) {
-            return const Dashboard();
-          },
-        ),
-        GoRoute(
-          path: 'user_profile',
-          builder: (BuildContext context, GoRouterState state) {
-            return const UserProfile();
+            return const InterDashboard();
           },
         ),
       ],

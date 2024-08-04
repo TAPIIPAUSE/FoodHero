@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:foodhero/fonts.dart';
 import 'package:foodhero/theme.dart';
+import 'package:foodhero/utils/constants.dart';
 import 'package:go_router/go_router.dart';
 
 class ChooseCategory extends StatefulWidget {
@@ -24,14 +25,7 @@ class _ChooseCategoryState extends State<ChooseCategory> {
     AppTheme.softOrange,
     AppTheme.greenMainTheme,
   ];
-  final List<String> foodTypes = [
-    'Cooked food',
-    'Fresh food',
-    'Frozen food',
-    'Dry food',
-    'Instant food',
-    'All food',
-  ];
+  final List<String> foodTypes = foodCategory;
   final List<IconData> foodTypeIcons = [
     Icons.coffee_maker_outlined,
     Icons.free_breakfast_sharp,
@@ -53,7 +47,7 @@ class _ChooseCategoryState extends State<ChooseCategory> {
         backgroundColor: AppTheme.greenMainTheme,
         titleTextStyle: FontsTheme.mouseMemoirs_64(color: Colors.white),
         leading: IconButton.filled(
-          onPressed: () => context.go('/user_profile'),
+          onPressed: () => context.push('/user_profile'),
           icon: const Icon(
             Icons.person_sharp,
             color: Colors.white,
@@ -78,7 +72,7 @@ class _ChooseCategoryState extends State<ChooseCategory> {
                       onTap: () {
                         String selectedFoodType =
                             foodTypes[index % foodTypes.length];
-                        context.go('/inventory/$selectedFoodType');
+                        context.push('/inventory/$selectedFoodType');
                       },
                       child: Container(
                         decoration: BoxDecoration(
@@ -112,7 +106,7 @@ class _ChooseCategoryState extends State<ChooseCategory> {
                 padding: const EdgeInsets.all(8.0),
                 child: IconButton(
                   onPressed: () {
-                    context.go('/inventory/$selectedCategory');
+                    context.push('/inventory/$selectedCategory');
                     Navigator.of(context).pop();
                   },
                   icon: const Icon(Icons.arrow_back_ios_new),

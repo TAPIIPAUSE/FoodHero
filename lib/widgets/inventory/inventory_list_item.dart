@@ -24,7 +24,7 @@ class InventoryListItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: () => context.go('/consumed_food'),
+      // onTap: () => context.push(''),
       child: Column(
         children: [
           Container(
