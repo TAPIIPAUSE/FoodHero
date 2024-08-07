@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:foodhero/fonts.dart';
 import 'package:foodhero/theme.dart';
 import 'package:foodhero/widgets/interorg/heatmap.dart';
+import 'package:foodhero/widgets/interorg/waste_piechart.dart';
 import 'package:go_router/go_router.dart';
 
 class InterDashboard extends StatefulWidget {
@@ -22,7 +23,7 @@ class _InterDashboardState extends State<InterDashboard> {
 
     List<Container> carouselItems = [
       Container(
-        padding: const EdgeInsets.all(10),
+        padding: const EdgeInsets.all(8),
         decoration: const BoxDecoration(
           color: AppTheme.softBlue,
           borderRadius: BorderRadius.all(Radius.circular(20)),
@@ -40,6 +41,14 @@ class _InterDashboardState extends State<InterDashboard> {
             ),
           ],
         ),
+      ),
+      Container(
+        padding: const EdgeInsets.all(10),
+        decoration: const BoxDecoration(
+          color: AppTheme.softBlue,
+          borderRadius: BorderRadius.all(Radius.circular(20)),
+        ),
+        child: const WasteBarchart(),
       )
     ];
 
@@ -82,7 +91,7 @@ class _InterDashboardState extends State<InterDashboard> {
                 autoPlay: false, // Enable auto-play
                 enlargeCenterPage: true, // Increase the size of the center item
                 enableInfiniteScroll: false, // Enable infinite scroll
-                aspectRatio: 1.1,
+                aspectRatio: 1,
                 initialPage: 1, // Set the initial page index
                 onPageChanged: (index, reason) {
                   // Optional callback when the page changes

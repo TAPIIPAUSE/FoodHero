@@ -12,6 +12,9 @@ const String inter="Inter organization";
 const String week = "Week";
 const String month = "Month";
 
+const String eaten = "Eaten";
+const String waste = "Waste";
+
 const foodCategory = [
   foodTypeCooked,
   foodTypeFresh,
