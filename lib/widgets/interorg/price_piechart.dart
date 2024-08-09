@@ -4,14 +4,14 @@ import 'package:foodhero/pages/interorg/interorganization.dart';
 import 'package:foodhero/theme.dart';
 import 'package:foodhero/utils/constants.dart';
 
-class WastePiechart extends StatefulWidget {
-  const WastePiechart({super.key});
+class PricePiechart extends StatefulWidget {
+  const PricePiechart({super.key});
 
   @override
-  State<WastePiechart> createState() => _WastePiechartState();
+  State<PricePiechart> createState() => _PricePiechartState();
 }
 
-class _WastePiechartState extends State<WastePiechart> {
+class _PricePiechartState extends State<PricePiechart> {
   int touchedIndex = -1;
   final List<ChartData> chartData = [
     ChartData(eaten, 25, AppTheme.softBrightGreen),
@@ -26,10 +26,8 @@ class _WastePiechartState extends State<WastePiechart> {
           length: 2,
           child: Scaffold(
               appBar: AppBar(
-                title: const Text("Bar chart"),
-                centerTitle: true,
                 automaticallyImplyLeading: false,
-                backgroundColor: AppTheme.softBlue,
+                // backgroundColor: AppTheme.softBlue,
                 bottom: PreferredSize(
                   preferredSize: const Size.fromHeight(10),
                   child: ClipRRect(

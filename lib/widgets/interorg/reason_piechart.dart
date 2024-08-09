@@ -4,18 +4,20 @@ import 'package:foodhero/pages/interorg/interorganization.dart';
 import 'package:foodhero/theme.dart';
 import 'package:foodhero/utils/constants.dart';
 
-class WastePiechart extends StatefulWidget {
-  const WastePiechart({super.key});
+class ReasonPiechart extends StatefulWidget {
+  const ReasonPiechart({super.key});
 
   @override
-  State<WastePiechart> createState() => _WastePiechartState();
+  State<ReasonPiechart> createState() => _ReasonPieState();
 }
 
-class _WastePiechartState extends State<WastePiechart> {
+class _ReasonPieState extends State<ReasonPiechart> {
   int touchedIndex = -1;
   final List<ChartData> chartData = [
-    ChartData(eaten, 25, AppTheme.softBrightGreen),
-    ChartData(waste, 75, AppTheme.softRedCancleWasted),
+    ChartData(forgot, 30, AppTheme.orangeGray),
+    ChartData(left, 40, AppTheme.softOrange),
+    ChartData(spoil, 15, AppTheme.softRed),
+    ChartData(oth, 15, AppTheme.softRedBrown),
   ];
 
   @override
@@ -26,10 +28,10 @@ class _WastePiechartState extends State<WastePiechart> {
           length: 2,
           child: Scaffold(
               appBar: AppBar(
-                title: const Text("Bar chart"),
-                centerTitle: true,
+                // title: const Text("Bar chart"),
+                // centerTitle: true,
                 automaticallyImplyLeading: false,
-                backgroundColor: AppTheme.softBlue,
+                backgroundColor: Colors.white,
                 bottom: PreferredSize(
                   preferredSize: const Size.fromHeight(10),
                   child: ClipRRect(
@@ -65,7 +67,7 @@ class _WastePiechartState extends State<WastePiechart> {
                 children: [
                   SizedBox(
                     height: 200,
-                    child: Column(
+                    child: Row(
                       children: [
                         const SizedBox(height: 50),
                         Expanded(child: _buildPie()),
@@ -76,15 +78,13 @@ class _WastePiechartState extends State<WastePiechart> {
                   ),
                   SizedBox(
                     height: 200,
-                    child: Column(
+                    child: Row(
                       children: [
-                        const SizedBox(height: 50),
                         Expanded(child: _buildPie()),
-                        const SizedBox(height: 50),
                         Expanded(child: _buildLegend()),
                       ],
                     ),
-                  ),
+                  )
                 ],
               ))),
     );
@@ -115,7 +115,7 @@ class _WastePiechartState extends State<WastePiechart> {
   }
 
   Widget _buildLegend() {
-    return Row(
+    return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       crossAxisAlignment: CrossAxisAlignment.start,
       children: chartData.map((data) {
@@ -133,7 +133,6 @@ class _WastePiechartState extends State<WastePiechart> {
                 '${data.name}: ${data.value.toStringAsFixed(0)}%',
                 style: const TextStyle(fontSize: 14, color: Colors.black),
               ),
-              const SizedBox(width: 16),
             ],
           ),
         );

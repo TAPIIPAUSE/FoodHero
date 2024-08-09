@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:foodhero/theme.dart';
-import 'package:go_router/go_router.dart';
 import 'package:percent_indicator/percent_indicator.dart';
 
 class InventoryListItem extends StatelessWidget {

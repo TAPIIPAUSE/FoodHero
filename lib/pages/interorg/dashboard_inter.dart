@@ -3,7 +3,10 @@ import 'package:flutter/material.dart';
 import 'package:foodhero/fonts.dart';
 import 'package:foodhero/theme.dart';
 import 'package:foodhero/widgets/interorg/heatmap.dart';
+import 'package:foodhero/widgets/interorg/price_piechart.dart';
+import 'package:foodhero/widgets/interorg/reason_piechart.dart';
 import 'package:foodhero/widgets/interorg/waste_piechart.dart';
+import 'package:foodhero/widgets/interorg/wastetype_piechart.dart';
 import 'package:go_router/go_router.dart';
 
 class InterDashboard extends StatefulWidget {
@@ -18,7 +21,7 @@ class _InterDashboardState extends State<InterDashboard> {
 
   @override
   Widget build(BuildContext context) {
-    // final screenWidth = MediaQuery.of(context).size.width;
+    final screenWidth = MediaQuery.of(context).size.width;
     // final screenHeight = MediaQuery.of(context).size.height;
 
     List<Container> carouselItems = [
@@ -48,7 +51,7 @@ class _InterDashboardState extends State<InterDashboard> {
           color: AppTheme.softBlue,
           borderRadius: BorderRadius.all(Radius.circular(20)),
         ),
-        child: const WasteBarchart(),
+        child: const WastePiechart(),
       )
     ];
 
@@ -104,6 +107,51 @@ class _InterDashboardState extends State<InterDashboard> {
               icon: const Icon(
                 Icons.keyboard_arrow_down_rounded,
                 color: AppTheme.mainBlue,
+              ),
+            ),
+            Container(
+              margin: const EdgeInsets.all(10),
+              padding: const EdgeInsets.all(10),
+              width: screenWidth * 0.9,
+              decoration: const BoxDecoration(
+                color: AppTheme.mainBlue,
+                borderRadius: BorderRadius.all(Radius.circular(20)),
+              ),
+              child: const Column(
+                children: [
+                  Text(
+                    "Type of food waste",
+                    style: TextStyle(color: Colors.white),
+                  ),
+                  WasteTypePiechart(),
+                  SizedBox(
+                    height: 10,
+                  ),
+                  Text("Price of food waste",
+                      style: TextStyle(color: Colors.white)),
+                  PricePiechart(),
+                ],
+              ),
+            ),
+            const SizedBox(
+              height: 10,
+            ),
+            Container(
+              margin: const EdgeInsets.all(10),
+              padding: const EdgeInsets.all(10),
+              width: screenWidth * 0.9,
+              decoration: const BoxDecoration(
+                color: AppTheme.mainBlue,
+                borderRadius: BorderRadius.all(Radius.circular(20)),
+              ),
+              child: const Column(
+                children: [
+                  Text(
+                    "Reason of food waste",
+                    style: TextStyle(color: Colors.white),
+                  ),
+                  ReasonPiechart(),
+                ],
               ),
             ),
           ],
