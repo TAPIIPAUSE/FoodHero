@@ -26,8 +26,6 @@ class _WastePiechartState extends State<WastePiechart> {
           length: 2,
           child: Scaffold(
               appBar: AppBar(
-                title: const Text("Bar chart"),
-                centerTitle: true,
                 automaticallyImplyLeading: false,
                 backgroundColor: AppTheme.softBlue,
                 bottom: PreferredSize(

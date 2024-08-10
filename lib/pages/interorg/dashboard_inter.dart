@@ -5,6 +5,7 @@ import 'package:foodhero/theme.dart';
 import 'package:foodhero/widgets/interorg/heatmap.dart';
 import 'package:foodhero/widgets/interorg/price_piechart.dart';
 import 'package:foodhero/widgets/interorg/reason_piechart.dart';
+import 'package:foodhero/widgets/interorg/waste_barchart.dart';
 import 'package:foodhero/widgets/interorg/waste_piechart.dart';
 import 'package:foodhero/widgets/interorg/wastetype_piechart.dart';
 import 'package:go_router/go_router.dart';
@@ -52,7 +53,22 @@ class _InterDashboardState extends State<InterDashboard> {
           borderRadius: BorderRadius.all(Radius.circular(20)),
         ),
         child: const WastePiechart(),
-      )
+      ),
+      Container(
+        padding: const EdgeInsets.all(10),
+        decoration: const BoxDecoration(
+          color: AppTheme.softBlue,
+          borderRadius: BorderRadius.all(Radius.circular(20)),
+        ),
+        child: const Column(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          children: [
+            Text("Bar chart"),
+            WasteBarchart(
+                color: AppTheme.softBlue, chart: WasteBarChartContent()),
+          ],
+        ),
+      ),
     ];
 
     return Scaffold(
@@ -103,7 +119,7 @@ class _InterDashboardState extends State<InterDashboard> {
               ),
             ),
             IconButton(
-              onPressed: () {},
+              onPressed: () => context.push('/waste_chart'),
               icon: const Icon(
                 Icons.keyboard_arrow_down_rounded,
                 color: AppTheme.mainBlue,
@@ -151,6 +167,15 @@ class _InterDashboardState extends State<InterDashboard> {
                     style: TextStyle(color: Colors.white),
                   ),
                   ReasonPiechart(),
+                  SizedBox(
+                    height: 10,
+                  ),
+                  Text(
+                    "Reason trends",
+                    style: TextStyle(color: Colors.white),
+                  ),
+                  WasteBarchart(
+                      color: AppTheme.softBlue, chart: ReasonBarChartContent()),
                 ],
               ),
             ),

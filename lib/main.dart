@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:foodhero/pages/interorg/dashboard_inter.dart';
 import 'package:foodhero/pages/interorg/interorganization.dart';
+import 'package:foodhero/pages/interorg/waste_chart.dart';
 import 'package:foodhero/pages/inventory/category.dart';
 import 'package:foodhero/pages/inventory/inventory.dart';
 import 'package:foodhero/pages/inventory/search/search_item.dart';
@@ -59,6 +60,12 @@ final GoRouter _router = GoRouter(
           path: 'dashboard_inter',
           builder: (BuildContext context, GoRouterState state) {
             return const InterDashboard();
+          },
+        ),
+        GoRoute(
+          path: 'waste_chart',
+          builder: (BuildContext context, GoRouterState state) {
+            return const WasteChart();
           },
         ),
       ],

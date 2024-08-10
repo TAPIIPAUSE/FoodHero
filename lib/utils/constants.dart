@@ -12,6 +12,27 @@ const String inter = "Inter organization";
 const String week = "Week";
 const String month = "Month";
 
+const String monday = "MON";
+const String tuesday="TUE";
+const String wednesday="WED";
+const String thursday="THU";
+const String friday="FRI";
+const String saturday="SAT";
+const String sunday="SUN";
+
+const String january = "JAN";
+const String february = "FEB";
+const String march = "MAR";
+const String april = "APR";
+const String may = "MAY";
+const String june="JUN";
+const String july="JUL";
+const String august="AUG";
+const String september="SEP";
+const String october="OCT";
+const String november="NOV";
+const String december="DEC";
+
 const String eaten = "Eaten";
 const String waste = "Waste";
 
