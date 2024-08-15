@@ -22,40 +22,6 @@ if(userRoute){
 const uri = "mongodb://127.0.0.1:27017/userAuth"; // Replace with your MongoDB URI
 const client = new MongoClient(uri); //Connect DB
 
-// Authentication Function
-async function findUserByUsername(email) {
-    await client.connect();
-    const database = client.db(uri); // Replace with your database name
-    const users = database.collection('users');
-    const foundEmail = await users.findOne({ email: email });
-    return foundEmail;
-  }
-
-
-//Passport -> library for easy authentication, passport.use (defining how do we ogin) -> localstrategy (dedault: username, password)
-passport.use(new LocalStrategy(async function(username, password, cb) {
-try {
-    const user = await findUserByUsername(username);
-    
-    if (!user) {
-    return cb(null, false, { message: 'Incorrect username or password.' });
-    }
-
-    crypto.pbkdf2(password, user.salt, 310000, 32, 'sha256', function(err, hashedPassword) {
-    if (err) {
-        return cb(err);
-    }
-    if (!crypto.timingSafeEqual(Buffer.from(user.hashed_password, 'hex'), hashedPassword)) {
-        return cb(null, false, { message: 'Incorrect username or password.' });
-    }
-    return cb(null, user);
-    });
-} catch (err) {
-    return cb(err);
-}
-}));
-
-
 
 // Utilize session -> remember me
 app.use(session({
@@ -83,10 +49,11 @@ app.use((req,res,next) => {
 
 
 
-
+// const userRouter = require("./routes/userRoute.js")
 
 // implement all route function from routes file
 app.use('/api/v1/users', userRoute)
+
 
 
 
