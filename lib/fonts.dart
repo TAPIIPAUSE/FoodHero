@@ -39,15 +39,25 @@ class FontsTheme {
     );
   }
 
-  static TextStyle mouseMemoir_30({
+  static TextStyle mouseMemoirs_30Black({
     FontWeight fontWeight = FontWeight.w400,
     double fontSize = 30,
-    Color color = const Color(0xFF000000),
+    Color color = Colors.black,
   }) {
     return GoogleFonts.mouseMemoirs(
       fontWeight: fontWeight,
       fontSize: fontSize,
-      color: color,
+    );
+  }
+
+  static TextStyle mouseMemoirs_30White({
+    FontWeight fontWeight = FontWeight.w400,
+    double fontSize = 30,
+    Color color = Colors.white,
+  }) {
+    return GoogleFonts.mouseMemoirs(
+      fontWeight: fontWeight,
+      fontSize: fontSize,
     );
   }
 
