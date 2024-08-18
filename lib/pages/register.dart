@@ -111,7 +111,7 @@ class _RegisterState extends State<Register> {
                 children: [
                   Text(
                     "Food Hero",
-                    style: FontsTheme.mouseMemoirs_64(
+                    style: FontsTheme.mouseMemoirs_64Black(
                         // fontSize: isKeyboardOpen ? 0 : 64
                         ),
                   ),

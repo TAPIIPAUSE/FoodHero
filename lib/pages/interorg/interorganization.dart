@@ -48,7 +48,7 @@ class _InterOrganizationState extends State<InterOrganization> {
                 title: const Text('Dashboard'),
                 centerTitle: true,
                 backgroundColor: AppTheme.greenMainTheme,
-                titleTextStyle: FontsTheme.mouseMemoirs_64(color: Colors.white),
+                titleTextStyle: FontsTheme.mouseMemoirs_64Black(color: Colors.white),
                 leading: IconButton.filled(
                   onPressed: () => context.push(''),
                   icon: const Icon(

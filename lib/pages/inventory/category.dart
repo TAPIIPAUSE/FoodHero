@@ -45,7 +45,7 @@ class _ChooseCategoryState extends State<ChooseCategory> {
         title: const Text('Inventory'),
         centerTitle: true,
         backgroundColor: AppTheme.greenMainTheme,
-        titleTextStyle: FontsTheme.mouseMemoirs_64(color: Colors.white),
+        titleTextStyle: FontsTheme.mouseMemoirs_64Black(color: Colors.white),
         leading: IconButton.filled(
           onPressed: () => context.push('/user_profile'),
           icon: const Icon(

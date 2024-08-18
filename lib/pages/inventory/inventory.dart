@@ -53,7 +53,7 @@ class _InventoryState extends State<Inventory> {
           title: const Text('Inventory'),
           centerTitle: true,
           backgroundColor: AppTheme.greenMainTheme,
-          titleTextStyle: FontsTheme.mouseMemoirs_64(color: Colors.white),
+          titleTextStyle: FontsTheme.mouseMemoirs_64Black(color: Colors.white),
           leading: IconButton.filled(
             onPressed: () => context.push(''),
             icon: const Icon(
@@ -89,7 +89,8 @@ class _InventoryState extends State<Inventory> {
                 children: [
                   Text(
                     'Today 3 July 2024',
-                    style: FontsTheme.mouseMemoir_30(color: AppTheme.softGreen),
+                    style: FontsTheme.mouseMemoirs_30Black(
+                        color: AppTheme.softGreen),
                   ),
                   Text(
                     'Things you should eat today:',

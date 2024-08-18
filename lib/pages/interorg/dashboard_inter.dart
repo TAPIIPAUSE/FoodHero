@@ -79,7 +79,7 @@ class _InterDashboardState extends State<InterDashboard> {
             title: const Text('Statistics'),
             centerTitle: true,
             backgroundColor: AppTheme.greenMainTheme,
-            titleTextStyle: FontsTheme.mouseMemoirs_64(color: Colors.white),
+            titleTextStyle: FontsTheme.mouseMemoirs_64Black(color: Colors.white),
             leading: IconButton.filled(
               onPressed: () => context.push(''),
               icon: const Icon(
