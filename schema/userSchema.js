@@ -5,7 +5,7 @@ import autoIncrementModelID from './counterSchema.js'; // Adjust path as necessa
 
 
 const userSchema = new mongoose.Schema({
-  userID: { type: Number, unique: true, min: 1 , index: true},
+  assigned_ID: { type: Number, unique: true, min: 1 , index: true},
   username: { type: String, required: true, unique: true },
   email: { type: String, required: true, unique: true },
   password: { type: String, required: true },
@@ -25,9 +25,9 @@ userSchema.plugin(passportLocalMongoose);
 userSchema.pre('save', async function (next) {
   if (this.isNew) {
     try {
-      console.log("This is the id before autoIncrement", this.userID)
+      console.log("This is the id before autoIncrement", this.assigned_ID)
       await autoIncrementModelID('User', this);
-      console.log("This is the id after autoIncrement:", this.userID);
+      console.log("This is the id after autoIncrement:", this.assigned_ID);
       console.log("This is the body of User after autoIncrement", this)
       next();
     } catch (error) {
