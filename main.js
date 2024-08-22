@@ -14,6 +14,7 @@ app.use(express.static('public')) //static file for hosting
 //Passport JS Tutorial
 // Routes
 import userRoute from './routes/user.js'
+import inventoryRoute from './routes/inventory.js'
 
 if(userRoute){
     console.log("Found the directory")
@@ -53,6 +54,7 @@ app.use((req,res,next) => {
 
 // implement all route function from routes file
 app.use('/api/v1/users', userRoute)
+app.use('/api/v1/inventory', inventoryRoute)
 
 
 
