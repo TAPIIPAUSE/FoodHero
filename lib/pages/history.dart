@@ -1,39 +1,39 @@
 import 'package:flutter/material.dart';
 import 'package:foodhero/fonts.dart';
 import 'package:foodhero/theme.dart';
-import 'package:foodhero/widgets/noti_list.dart';
+import 'package:foodhero/widgets/hist_list.dart';
 import 'package:go_router/go_router.dart';
 
-class Notifications extends StatefulWidget {
-  const Notifications({super.key});
+class History extends StatefulWidget {
+  const History({super.key});
 
   @override
-  State<Notifications> createState() => _NotificationsState();
+  State<History> createState() => _HistoryState();
 }
 
-class _NotificationsState extends State<Notifications> {
+class _HistoryState extends State<History> {
   final ButtonStyle backButtonStyle = IconButton.styleFrom(
       backgroundColor: AppTheme.greenMainTheme, foregroundColor: Colors.white);
   @override
   Widget build(BuildContext context) {
-    final List<Map<String, dynamic>> notifications = [
-      {'message': 'Mom joined the household', 'date': '2023-12-12'},
-      {'message': 'Dad joined the household', 'date': '2023-12-12'},
-      {'message': 'test', 'date': '2023-12-12'},
-      {'message': 'test', 'date': '2023-12-12'},
-      {'message': 'test', 'date': '2023-12-12'},
-      {'message': 'test', 'date': '2023-12-12'},
-      {'message': 'Mom joined the household', 'date': '2023-12-12'},
-      {'message': 'Dad joined the household', 'date': '2023-12-12'},
-      {'message': 'test', 'date': '2023-12-12'},
-      {'message': 'test', 'date': '2023-12-12'},
-      {'message': 'test', 'date': '2023-12-12'},
-      {'message': 'test', 'date': '2023-12-12'},
+    final List<Map<String, dynamic>> historys = [
+      {
+        'message': 'Banana was added to the inventory',
+        'dateTime': '2023-12-12 12:00:00',
+      },
+      {
+        'message': 'Apple was retrieved from the inventory',
+        'dateTime': '2023-12-12 14:30:00',
+      },
+      {
+        'message': 'Yogurt was expired',
+        'dateTime': '2023-12-12 15:45:00',
+      },
     ];
     return Scaffold(
       backgroundColor: AppTheme.lightGreenBackground,
       appBar: AppBar(
-        title: const Text("Notification"),
+        title: const Text("Item history"),
         centerTitle: true,
         backgroundColor: AppTheme.greenMainTheme,
         titleTextStyle: FontsTheme.mouseMemoirs_64White(),
@@ -47,10 +47,10 @@ class _NotificationsState extends State<Notifications> {
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children: [
-                    for (var notification in notifications)
-                      NotiList(
-                        message: notification['message'],
-                        date: DateTime.parse(notification['date']),
+                    for (var history in historys)
+                      HistoryList(
+                        message: history['message'],
+                        date: DateTime.parse(history['dateTime']),
                       ),
                   ],
                 ),

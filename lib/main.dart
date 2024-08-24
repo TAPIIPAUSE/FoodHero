@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:foodhero/pages/history.dart';
 import 'package:foodhero/pages/interorg/dashboard_inter.dart';
 import 'package:foodhero/pages/interorg/interorganization.dart';
 import 'package:foodhero/pages/interorg/waste_chart.dart';
@@ -48,6 +49,12 @@ final GoRouter _router = GoRouter(
           path: 'notification',
           builder: (BuildContext context, GoRouterState state) {
             return const Notifications();
+          },
+        ),
+        GoRoute(
+          path: 'history',
+          builder: (BuildContext context, GoRouterState state) {
+            return const History();
           },
         ),
         GoRoute(
