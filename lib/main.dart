@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:foodhero/pages/Household/household.dart';
 import 'package:foodhero/pages/interorg/dashboard_inter.dart';
 import 'package:foodhero/pages/interorg/interorganization.dart';
 import 'package:foodhero/pages/interorg/waste_chart.dart';
@@ -7,7 +8,9 @@ import 'package:foodhero/pages/inventory/inventory.dart';
 import 'package:foodhero/pages/inventory/search/search_item.dart';
 import 'package:foodhero/pages/notifications.dart';
 import 'package:foodhero/pages/register.dart';
+import 'package:foodhero/theme.dart';
 import 'package:go_router/go_router.dart';
+import 'package:foodhero/pages/foodDetails.dart';
 
 void main() {
   runApp(const MainApp());
@@ -27,9 +30,20 @@ final GoRouter _router = GoRouter(
           builder: (BuildContext context, GoRouterState state) {
             final foodCategory =
                 state.pathParameters['foodCategory'] ?? 'All food';
-            return Inventory(
-              initialFoodCategory: foodCategory,
-            );
+            return Inventory(initialFoodCategory: foodCategory);
+          },
+        ),
+
+        // GoRoute(
+        //   path: 'inventory/All food',
+        //   builder: (BuildContext context, GoRouterState state) {
+        //     return const Inventory();
+        //   },
+        // ),
+        GoRoute(
+          path: 'HouseOrga',
+          builder: (BuildContext context, GoRouterState state) {
+            return household();
           },
         ),
         GoRoute(
@@ -73,6 +87,7 @@ final GoRouter _router = GoRouter(
   ],
 );
 
+// Main app entry
 class MainApp extends StatelessWidget {
   const MainApp({super.key});
 
@@ -81,6 +96,71 @@ class MainApp extends StatelessWidget {
     return MaterialApp.router(
       routerConfig: _router,
       debugShowCheckedModeBanner: false,
+    );
+    // return MaterialApp(
+    //   // home: foodDetails(),
+    //   home: household(),
+    // );
+  }
+}
+
+// Reusable scaffold with BottomNavigationBar
+class MainScaffold extends StatelessWidget {
+  final int selectedRouteIndex;
+  final Widget child;
+
+  const MainScaffold({required this.selectedRouteIndex, required this.child});
+
+  void _onItemTapped(BuildContext context, int index) {
+    switch (index) {
+      case 0:
+        String foodCategory = 'All food';
+        context.go('/inventory/${Uri.encodeComponent(foodCategory)}');
+
+        break;
+      case 1:
+        context.go('/consumed');
+        break;
+      case 2:
+        context.go('/inter_org');
+        break;
+      case 3:
+        context.go('/HouseOrga');
+        break;
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: child,
+      bottomNavigationBar: BottomNavigationBar(
+        items: const <BottomNavigationBarItem>[
+          BottomNavigationBarItem(
+            icon: Icon(Icons.inventory),
+            label: 'Inventory',
+            backgroundColor: AppTheme.greenMainTheme,
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.confirmation_number),
+            label: 'Consumed',
+            backgroundColor: AppTheme.greenMainTheme,
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.business),
+            label: 'Inter',
+            backgroundColor: AppTheme.greenMainTheme,
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.house),
+            label: 'Household',
+            backgroundColor: AppTheme.greenMainTheme,
+          ),
+        ],
+        currentIndex: selectedRouteIndex,
+        selectedItemColor: AppTheme.lightGreenBackground,
+        onTap: (index) => _onItemTapped(context, index),
+      ),
     );
   }
 }

@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'dart:async';
 import 'package:flutter/material.dart';
+import 'package:foodhero/pages/inventory/inventory.dart';
 import 'package:foodhero/theme.dart';
 import 'package:foodhero/fonts.dart';
 import 'package:image_picker/image_picker.dart';
@@ -15,15 +16,20 @@ class _AddFoodDetailsPageState extends State<addFoodDetails> {
   String category = 'Fresh Food';
   String storageLocation = 'Refrigerator';
   DateTime expirationDate = DateTime(2024, 4, 24);
-  int quantity = 8;
-  double weight = 400; // in grams
-  double costPerPiece = 20;
+  int quantity = 1;
+  double weight = 1; // in grams
+  double costPerPiece = 0;
   double totalCost = 160;
 
   ImageProvider? _image; // Image provider for the selected image
   bool _isLoading = false; // Flag to indicate image loading state
   bool _chooseImageOption = false;
+  bool _showImageOption = false;
+  DateTime reminderDate = DateTime(2024);
 
+  String weightReduced = ''; //make it proper for the decimals
+  double allCost = 0;
+  double updateAllCost = 0;
   void _pickImage() async {
     // Implement your image picking logic here (e.g., using image_picker)
     final pickedFile =
@@ -44,7 +50,7 @@ class _AddFoodDetailsPageState extends State<addFoodDetails> {
 
   void _toggleImageOption() {
     setState(() {
-      _chooseImageOption = !_chooseImageOption;
+      _showImageOption = !_showImageOption;
     });
   }
 
@@ -155,6 +161,10 @@ class _AddFoodDetailsPageState extends State<addFoodDetails> {
         centerTitle: true,
         title: Text('Inventory'),
         titleTextStyle: FontsTheme.mouseMemoirs_64Black(),
+        shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.only(
+                bottomLeft: Radius.circular(25),
+                bottomRight: Radius.circular(25))),
         leading: IconButton(
           icon: Icon(Icons.person),
           onPressed: () {},
@@ -167,9 +177,14 @@ class _AddFoodDetailsPageState extends State<addFoodDetails> {
         ],
       ),
       body: SingleChildScrollView(
+        padding: const EdgeInsets.all(16),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
+            Icon(
+              Icons.arrow_upward_rounded,
+              size: 50,
+            ),
             Row(
               children: [
                 GestureDetector(
@@ -193,29 +208,50 @@ class _AddFoodDetailsPageState extends State<addFoodDetails> {
                               ),
                   ),
                 ),
-                Container(
-                  // add name
-                  width: 250,
-                  height: 50,
-                  margin: const EdgeInsets.only(
-                      left: 4, right: 4, top: 4, bottom: 4),
-                  decoration: BoxDecoration(
-                    border: Border.all(color: AppTheme.greenMainTheme),
-                    borderRadius: BorderRadius.circular(28),
-                    color: Colors.white,
-                  ),
+                SizedBox(
+                  //itemName
+                  width: 200,
                   child: TextField(
-                    decoration: InputDecoration(
-                      labelText: 'Item Name',
-                    ),
-                    onChanged: (value) {
-                      setState(() {
-                        itemName = value;
-                      });
-                    },
+                    style: FontsTheme.mouseMemoirs_50Black(),
+                    textAlign: TextAlign.center,
                   ),
                 ),
               ],
+            ),
+            SizedBox(height: 16),
+            //buildDropdownField('Categories', "value", Icons.local_dining),
+            buildCategoriesField("Categories", "value", Icons.arrow_drop_down),
+            buildWhereField('Add to', 'value', Icons.kitchen),
+            buildDateField('Expiration date', ''),
+            buildReminderField('30 April 2024'),
+            buildQuantityWeight(),
+            buildEachPieceField(),
+            //buildCostField(),
+
+            SizedBox(height: 16),
+            Center(
+              child: TextButton(
+                onPressed: () {},
+                child: Text(
+                  'Delete item',
+                  style: TextStyle(color: Colors.black),
+                ),
+              ),
+            ),
+            SizedBox(height: 5),
+            Center(
+              child: IconButton(
+                icon: Image.asset('assets/images/BackButton.png'),
+                iconSize: 50,
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => const Inventory(),
+                    ),
+                  );
+                },
+              ),
             ),
             SizedBox(height: 16),
             Text('Categories', style: FontsTheme.mouseMemoirs_30White()),
@@ -320,38 +356,7 @@ class _AddFoodDetailsPageState extends State<addFoodDetails> {
               ],
             ),
             SizedBox(height: 16),
-            Row(
-              children: [
-                Text(
-                  'Weight: ',
-                  style: FontsTheme.mouseMemoirs_30White(),
-                ),
-                SliderTheme(
-                  data: SliderTheme.of(context).copyWith(
-                    trackHeight: 10.0,
-                    thumbShape: SliderComponentShape.noThumb,
-                    overlayShape: RoundSliderOverlayShape(overlayRadius: 24.0),
-                    activeTrackColor: Colors.orange,
-                    inactiveTrackColor: Colors.orange[100],
-                    thumbColor: Colors.white,
-                    overlayColor: Colors.orange.withAlpha(32),
-                  ),
-                  child: Slider(
-                    value: weight,
-                    min: 50,
-                    max: 3000,
-                    divisions: 99,
-                    label: weight.toString(),
-                    onChanged: (value) {
-                      setState(() {
-                        weight = value;
-                      });
-                    },
-                  ),
-                ),
-                Text('${weight.toInt()} grams', style: FontsTheme.hind_20()),
-              ],
-            ),
+
             SizedBox(height: 16),
             Row(
               children: [
@@ -360,7 +365,8 @@ class _AddFoodDetailsPageState extends State<addFoodDetails> {
                   style: FontsTheme.mouseMemoirs_30White(),
                 ),
                 Spacer(),
-                Container( // make automatically and edit button for tell user that can edit
+                Container(
+                  // make automatically and edit button for tell user that can edit
                   width: 100,
                   child: TextField(
                     decoration: InputDecoration(
@@ -368,12 +374,19 @@ class _AddFoodDetailsPageState extends State<addFoodDetails> {
                     ),
                     keyboardType: TextInputType.number,
                     onChanged: (value) {
-                      setState(() {
-                        costPerPiece = double.tryParse(value) ?? costPerPiece;
-                        _updateTotalCost();
-                      });
+                      if (value.isNotEmpty) {
+                        setState(() {
+                          costPerPiece = double.tryParse(value) ?? costPerPiece;
+                          _updateTotalCost();
+                        });
+                      }
                     },
+                    controller:
+                        TextEditingController(text: _updateWeight().toString()),
                   ),
+                ),
+                SizedBox(
+                  width: 10,
                 ),
                 Container(
                   width: 100,
@@ -383,10 +396,12 @@ class _AddFoodDetailsPageState extends State<addFoodDetails> {
                     ),
                     keyboardType: TextInputType.number,
                     onChanged: (value) {
-                      setState(() {
-                        costPerPiece = double.tryParse(value) ?? costPerPiece;
-                        _updateTotalCost();
-                      });
+                      if (value.isNotEmpty) {
+                        setState(() {
+                          costPerPiece = double.tryParse(value) ?? costPerPiece;
+                          _updateTotalCost();
+                        });
+                      }
                     },
                   ),
                 ),
@@ -404,32 +419,608 @@ class _AddFoodDetailsPageState extends State<addFoodDetails> {
               ],
             ),
             Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
                 ElevatedButton(
-                  onPressed: () {},
-                  child: Text('Previous'),
+                  onPressed: () => {},
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: AppTheme.softBlue,
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10)),
+                  ),
+                  child: Text(
+                    'Previous',
+                    style: FontsTheme.mouseMemoirs_30Black()
+                        .copyWith(color: Colors.black),
+                  ),
                 ),
                 ElevatedButton(
-                  onPressed: () {},
-                  child: Text('Done'),
+                  onPressed: () => {},
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: AppTheme.softOrange,
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10)),
+                  ),
+                  child: Text(
+                    'Done',
+                    style: FontsTheme.mouseMemoirs_30Black()
+                        .copyWith(color: Colors.black),
+                  ),
                 ),
                 ElevatedButton(
-                  onPressed: () {},
-                  child: Text('Next'),
+                  onPressed: () => {},
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: AppTheme.softBlue,
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10)),
+                  ),
+                  child: Text(
+                    'Next',
+                    style: FontsTheme.mouseMemoirs_30Black()
+                        .copyWith(color: Colors.black),
+                  ),
                 ),
               ],
             ),
+            Center(
+              child: IconButton(
+                icon: Image.asset('assets/images/BackButton.png'),
+                iconSize: 50,
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => Inventory(),
+                    ),
+                  );
+                },
+              ),
+            )
           ],
         ),
       ),
     );
   }
 
+  Widget buildCategoriesField(String label, String value, IconData icon) {
+    List<String> items = [
+      "Cooked food",
+      "Fresh food",
+      "Frozen food",
+      "Dried food",
+      "Instant food"
+    ];
+    String selectedValue = items[0];
+    return StatefulBuilder(
+        builder: (BuildContext context, StateSetter setState) {
+      return Padding(
+        padding: const EdgeInsets.symmetric(vertical: 8),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Container(
+                padding: EdgeInsets.symmetric(horizontal: 10),
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(10),
+                  color: Colors.white,
+                ),
+                child: Row(
+                  children: [
+                    Expanded(
+                      flex: 5,
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: [
+                          Container(
+                            width: 120,
+                            child: Text(
+                              label,
+                              style: FontsTheme.mouseMemoirs_30Black(),
+                            ),
+                          )
+                        ],
+                      ),
+                    ),
+                    SizedBox(
+                      width: 215,
+                      child: DropdownButtonHideUnderline(
+                        child: DropdownButton<String>(
+                          value: selectedValue,
+                          isExpanded: true,
+                          icon: Icon(icon),
+                          items: items.map((String item) {
+                            return DropdownMenuItem<String>(
+                              value: item,
+                              child: Text(
+                                item,
+                                style: FontsTheme.mouseMemoirs_30Black(),
+                              ),
+                            );
+                          }).toList(),
+                          onChanged: (String? newValue) {
+                            if (newValue != null) {
+                              setState(() {
+                                selectedValue = newValue;
+                              });
+                            }
+                          },
+                        ),
+                      ),
+                    )
+                  ],
+                ))
+          ],
+        ),
+      );
+    });
+  }
+
+  Widget buildWhereField(String label, String value, IconData icon) {
+    List<String> items = [
+      "Refrigerator",
+      "Pantry",
+    ];
+    String selectedValue = items[0];
+    return StatefulBuilder(
+        builder: (BuildContext context, StateSetter setState) {
+      return Padding(
+        padding: const EdgeInsets.symmetric(vertical: 8),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Container(
+                padding: EdgeInsets.symmetric(horizontal: 10),
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(10),
+                  color: Colors.white,
+                ),
+                child: Row(
+                  children: [
+                    Expanded(
+                      flex: 5,
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: [
+                          Container(
+                            width: 120,
+                            child: Text(
+                              label,
+                              style: FontsTheme.mouseMemoirs_30Black(),
+                            ),
+                          )
+                        ],
+                      ),
+                    ),
+                    SizedBox(
+                      width: 215,
+                      child: DropdownButtonHideUnderline(
+                        child: DropdownButton<String>(
+                          value: selectedValue,
+                          isExpanded: true,
+                          icon: Icon(icon),
+                          items: items.map((String item) {
+                            return DropdownMenuItem<String>(
+                              value: item,
+                              child: Text(
+                                item,
+                                style: FontsTheme.mouseMemoirs_30Black(),
+                              ),
+                            );
+                          }).toList(),
+                          onChanged: (String? newValue) {
+                            if (newValue != null) {
+                              setState(() {
+                                selectedValue = newValue;
+                              });
+                            }
+                          },
+                        ),
+                      ),
+                    )
+                  ],
+                ))
+          ],
+        ),
+      );
+    });
+  }
+
+  Widget buildDateField(String label, String date) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 8),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Container(
+            padding: EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(10),
+              color: Colors.white,
+            ),
+            child: Row(
+              children: [
+                Expanded(
+                  child: Text(
+                    label,
+                    style: FontsTheme.mouseMemoirs_20(),
+                  ),
+                ),
+                SizedBox(
+                  width: 200,
+                  child: ListTile(
+                    title: Text(
+                        '${expirationDate.toLocal().toString().split(' ')[0]}',
+                        style: FontsTheme.hind_20()),
+                    trailing: Icon(Icons.calendar_month_rounded),
+                    onTap: _selectExDate,
+                  ),
+                )
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget buildReminderField(String date) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 8),
+      child: Column(
+        children: [
+          Container(
+            padding: EdgeInsets.all(8),
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(10),
+              color: Colors.white,
+            ),
+            child: Row(
+              children: [
+                Icon(Icons.notifications, color: Colors.red),
+                SizedBox(
+                  width: 10,
+                ),
+                Expanded(
+                  child: Text('Remind on', style: FontsTheme.mouseMemoirs_20()),
+                ),
+                SizedBox(
+                  width: 200,
+                  child: ListTile(
+                    title: Text(
+                        '${reminderDate.toLocal().toString().split(' ')[0]}',
+                        style: FontsTheme.hind_20()),
+                    trailing: Icon(Icons.calendar_month_rounded),
+                    onTap: _selectReDate,
+                  ),
+                )
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget buildQuantityWeight() {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 8),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          //buildQuantityButton(Icons.remove),
+          Stack(
+            children: [
+              Container(
+                padding: EdgeInsets.all(8),
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(15),
+                  color: AppTheme.softBlue,
+                ),
+                child: Column(
+                  children: [
+                    Row(
+                      children: [
+                        Text('Quantity',
+                            style: FontsTheme.mouseMemoirs_30Black()),
+                        Column(
+                          children: [
+                            Container(
+                              width: 120,
+                              padding: EdgeInsets.symmetric(
+                                  horizontal: 12, vertical: 8),
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(10),
+                                color: Colors.white,
+                              ),
+                              child: Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Text('$quantity ',
+                                      style: FontsTheme.hindBold_20()),
+                                  Text('Pieces',
+                                      style: FontsTheme.hindBold_20()),
+                                ],
+                              ),
+                            ),
+                            SliderTheme(
+                              data: SliderTheme.of(context).copyWith(
+                                trackHeight: 10.0,
+                                thumbShape: SliderComponentShape.noThumb,
+                                overlayShape: RoundSliderOverlayShape(
+                                    overlayRadius: 24.0),
+                                activeTrackColor: Colors.orange,
+                                inactiveTrackColor: Colors.orange[100],
+                                thumbColor: Colors.white,
+                                overlayColor: Colors.orange.withAlpha(32),
+                              ),
+                              child: Slider(
+                                value: quantity.toDouble(),
+                                min: 1,
+                                max: 100,
+                                divisions: 100,
+                                onChanged: (value) {
+                                  setState(() {
+                                    quantity = value.toInt();
+                                    _updateAllCost();
+                                  });
+                                },
+                              ),
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
+
+                    //Weight
+                    Row(
+                      children: [
+                        Text('Weight',
+                            style: FontsTheme.mouseMemoirs_30Black()),
+                        Column(
+                          children: [
+                            Container(
+                              width: 180,
+                              padding: EdgeInsets.symmetric(
+                                  horizontal: 12, vertical: 8),
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(10),
+                                color: Colors.white,
+                              ),
+                              child: Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Text('$weightReduced ',
+                                      style: FontsTheme.hindBold_20()),
+                                  Text('grams',
+                                      style: FontsTheme.hindBold_20()),
+                                ],
+                              ),
+                            ),
+                            SliderTheme(
+                              data: SliderTheme.of(context).copyWith(
+                                trackHeight: 10.0,
+                                thumbShape: SliderComponentShape.noThumb,
+                                overlayShape: RoundSliderOverlayShape(
+                                    overlayRadius: 24.0),
+                                activeTrackColor: Colors.orange,
+                                inactiveTrackColor: Colors.orange[100],
+                                thumbColor: Colors.white,
+                                overlayColor: Colors.orange.withAlpha(32),
+                              ),
+                              child: Slider(
+                                value: weight,
+                                min: 1,
+                                max: 10000,
+                                divisions: 10000,
+                                onChanged: (value) {
+                                  setState(() {
+                                    weight = value;
+
+                                    weightReduced = weight.toStringAsFixed(3);
+                                  });
+                                },
+                              ),
+                            ),
+                          ],
+                        ),
+                      ],
+                    )
+                  ],
+                ),
+              ),
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget buildEachPieceField() {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 8),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Container(
+              padding: EdgeInsets.all(8),
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(10),
+                color: Colors.white,
+              ),
+              child: Column(
+                children: [
+                  Row(
+                    children: [
+                      //buildQuantityButton(Icons.remove),
+                      Expanded(
+                        flex: 5,
+                        child: Container(
+                            padding: EdgeInsets.symmetric(
+                                horizontal: 12, vertical: 8),
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(10),
+                              color: Colors.white,
+                            ),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              children: [
+                                Text('Each piece',
+                                    style: FontsTheme.mouseMemoirs_30Black()),
+                                SizedBox(width: 20),
+                                SizedBox(
+                                  width: 100,
+                                  child: TextField(
+                                      decoration: InputDecoration(
+                                        labelText: 'All Cost',
+                                      ),
+                                      keyboardType: TextInputType.number,
+                                      onChanged: (value) {
+                                        setState(() {
+                                          allCost =
+                                              double.tryParse(value) ?? allCost;
+                                          _updateAllCost();
+                                        });
+                                      },
+                                      style: FontsTheme.hindBold_15()),
+                                ),
+                                Icon(Icons.attach_money, color: Colors.green),
+                              ],
+                            )),
+                      )
+                    ],
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      //buildQuantityButton(Icons.remove),
+
+                      Container(
+                        padding:
+                            EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(10),
+                          color: Colors.white,
+                        ),
+                        child: SizedBox(
+                            width: 100,
+                            child: TextField(
+                                decoration: InputDecoration(
+                                  labelText: 'Weight',
+                                ),
+                                keyboardType: TextInputType.number,
+                                onChanged: (value) {
+                                  if (value.isNotEmpty) {
+                                    setState(() {
+                                      costPerPiece = double.tryParse(value) ??
+                                          costPerPiece;
+                                      _updateAllCost();
+                                    });
+                                  }
+                                },
+                                controller: TextEditingController(
+                                    text: _updateWeight()
+                                        .toString()), // Set initial text
+
+                                style: FontsTheme.hindBold_15())),
+                      ),
+                      Container(
+                          padding:
+                              EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(10),
+                            color: Colors.white,
+                          ),
+                          child: Row(
+                            children: [
+                              SizedBox(
+                                  width: 100,
+                                  child: TextField(
+                                      decoration: InputDecoration(
+                                        labelText: 'Cost',
+                                      ),
+                                      keyboardType: TextInputType.number,
+                                      onChanged: (value) {
+                                        if (value.isNotEmpty) {
+                                          setState(() {
+                                            costPerPiece =
+                                                double.tryParse(value) ??
+                                                    costPerPiece;
+                                            _updateCost();
+                                          });
+                                        }
+                                        // Text(
+                                        //     '\$${updateWeight.toStringAsFixed(2)}');
+                                        // costPerPiece =
+                                        //     double.tryParse(value) ??
+                                        //         costPerPiece;
+                                        // _updateCost();
+                                        // );
+                                      },
+                                      controller: TextEditingController(
+                                          text: _updateCost().toString()),
+                                      style: FontsTheme.hindBold_15())),
+                              Icon(Icons.attach_money, color: Colors.green),
+                            ],
+                          )),
+                    ],
+                  ),
+                ],
+              )),
+        ],
+      ),
+    );
+  }
+
+  Future<void> _selectExDate() async {
+    final DateTime? picked = await showDatePicker(
+      context: context,
+      initialDate: expirationDate,
+      firstDate: DateTime(2020),
+      lastDate: DateTime(2030),
+    );
+    if (picked != null && picked != expirationDate) {
+      setState(() {
+        expirationDate = picked;
+      });
+    }
+  }
+
+  Future<void> _selectReDate() async {
+    final DateTime? picked = await showDatePicker(
+      context: context,
+      initialDate: reminderDate,
+      firstDate: DateTime(2020),
+      lastDate: DateTime(2030),
+    );
+    if (picked != null && picked != reminderDate) {
+      setState(() {
+        reminderDate = picked;
+      });
+    }
+  }
+
+  void _updateAllCost() {
+    setState(() {
+      updateAllCost = allCost;
+    });
+  }
+
   void _updateTotalCost() {
     setState(() {
-      totalCost = quantity * costPerPiece; 
+      totalCost = quantity * costPerPiece;
     });
+  }
+
+  String _updateCost() {
+    double updateCost = updateAllCost / quantity;
+    return updateCost.toStringAsFixed(3);
+  }
+
+  String _updateWeight() {
+    double updateWeight = weight / quantity;
+    return updateWeight.toStringAsFixed(2);
   }
 
   Future<void> _selectDate() async {

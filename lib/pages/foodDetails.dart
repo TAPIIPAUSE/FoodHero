@@ -4,6 +4,7 @@ import 'dart:async';
 import 'dart:math';
 import 'dart:core';
 import 'package:flutter/material.dart';
+import 'package:foodhero/pages/inventory/inventory.dart';
 import 'package:foodhero/theme.dart';
 import 'package:foodhero/fonts.dart';
 import 'package:image_picker/image_picker.dart';
@@ -572,7 +573,7 @@ class _FoodDetailsPageState extends State<foodDetails> {
         centerTitle: true,
         title: Text(
           "Inventory",
-          style: FontsTheme.mouseMemoirs_64White(),
+          style: FontsTheme.mouseMemoirs_64Black(),
         ),
         leading: IconButton(
           icon: Icon(Icons.person),
@@ -625,9 +626,6 @@ class _FoodDetailsPageState extends State<foodDetails> {
                 children: [
                   Row(
                     children: [
-                      Stack(
-                        children: [],
-                      ),
                       GestureDetector(
                         onTap: () => _chooseAddImageOption(context),
                         child: Container(
@@ -660,6 +658,7 @@ class _FoodDetailsPageState extends State<foodDetails> {
                         width: 200,
                         child: TextField(
                           style: FontsTheme.mouseMemoirs_50Black(),
+                          textAlign: TextAlign.center,
                         ),
                       ),
                     ],
@@ -722,7 +721,14 @@ class _FoodDetailsPageState extends State<foodDetails> {
                     child: IconButton(
                       icon: Image.asset('assets/images/BackButton.png'),
                       iconSize: 50,
-                      onPressed: () {},
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => const Inventory(),
+                          ),
+                        );
+                      },
                     ),
                   ),
                 ],
@@ -972,7 +978,8 @@ class _FoodDetailsPageState extends State<foodDetails> {
                   children: [
                     Row(
                       children: [
-                        Text('Quantity', style: FontsTheme.mouseMemoirs_30Black()),
+                        Text('Quantity',
+                            style: FontsTheme.mouseMemoirs_30Black()),
                         Column(
                           children: [
                             Container(
@@ -1026,7 +1033,8 @@ class _FoodDetailsPageState extends State<foodDetails> {
                     //Weight
                     Row(
                       children: [
-                        Text('Weight', style: FontsTheme.mouseMemoirs_30Black()),
+                        Text('Weight',
+                            style: FontsTheme.mouseMemoirs_30Black()),
                         Column(
                           children: [
                             Container(
@@ -1264,8 +1272,6 @@ class _FoodDetailsPageState extends State<foodDetails> {
 
   String _updateWeight() {
     double updateWeight = weight / quantity;
-    log(weight);
-    log(quantity);
     return updateWeight.toStringAsFixed(2);
   }
 }

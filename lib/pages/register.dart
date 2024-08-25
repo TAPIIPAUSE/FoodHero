@@ -119,7 +119,7 @@ class _RegisterState extends State<Register> {
                     height: 20,
                   ),
                   Image.asset(
-                    'assets/fhlogo.png',
+                    'assets/images/fhlogo.png',
                     height: isKeyboardOpen ? 0 : 150,
                     width: isKeyboardOpen ? 0 : 150,
                   ),

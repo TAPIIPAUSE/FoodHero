@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:foodhero/pages/foodDetails.dart';
+
 import 'package:foodhero/theme.dart';
 import 'package:percent_indicator/percent_indicator.dart';
 
@@ -23,7 +25,14 @@ class InventoryListItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      // onTap: () => context.push(''),
+      onTap: () {
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => foodDetails(),
+          ),
+        );
+      },
       child: Column(
         children: [
           Container(
