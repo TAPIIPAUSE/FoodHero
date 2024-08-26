@@ -1,6 +1,7 @@
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:foodhero/fonts.dart';
+import 'package:foodhero/main.dart';
 import 'package:foodhero/theme.dart';
 import 'package:foodhero/widgets/interorg/heatmap.dart';
 import 'package:foodhero/widgets/interorg/price_piechart.dart';
@@ -79,7 +80,7 @@ class _InterDashboardState extends State<InterDashboard> {
             title: const Text('Statistics'),
             centerTitle: true,
             backgroundColor: AppTheme.greenMainTheme,
-            titleTextStyle: FontsTheme.mouseMemoirs_64Black(color: Colors.white),
+            titleTextStyle: FontsTheme.mouseMemoirs_64Black(),
             leading: IconButton.filled(
               onPressed: () => context.push(''),
               icon: const Icon(

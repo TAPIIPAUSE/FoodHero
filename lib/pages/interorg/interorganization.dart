@@ -1,6 +1,7 @@
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:foodhero/fonts.dart';
+import 'package:foodhero/main.dart';
 import 'package:foodhero/theme.dart';
 import 'package:foodhero/utils/constants.dart';
 import 'package:foodhero/widgets/interorg/org_listscore.dart';
@@ -36,58 +37,61 @@ class _InterOrganizationState extends State<InterOrganization> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: AppTheme.lightGreenBackground,
-      appBar: PreferredSize(
-        preferredSize: const Size.fromHeight(120.0),
-        child: Container(
-          color: AppTheme.greenMainTheme,
-          child: Column(
-            children: [
-              AppBar(
-                title: const Text('Dashboard'),
-                centerTitle: true,
-                backgroundColor: AppTheme.greenMainTheme,
-                titleTextStyle: FontsTheme.mouseMemoirs_64Black(color: Colors.white),
-                leading: IconButton.filled(
-                  onPressed: () => context.push(''),
-                  icon: const Icon(
-                    Icons.person_sharp,
-                    color: Colors.white,
-                  ),
-                ),
-                actions: [
-                  IconButton.filled(
-                    onPressed: () {},
+    return MainScaffold(
+      selectedRouteIndex: 2,
+      child: Scaffold(
+        backgroundColor: AppTheme.lightGreenBackground,
+        appBar: PreferredSize(
+          preferredSize: const Size.fromHeight(120.0),
+          child: Container(
+            color: AppTheme.greenMainTheme,
+            child: Column(
+              children: [
+                AppBar(
+                  title: const Text('Dashboard'),
+                  centerTitle: true,
+                  backgroundColor: AppTheme.greenMainTheme,
+                  titleTextStyle: FontsTheme.mouseMemoirs_64Black(),
+                  leading: IconButton.filled(
+                    onPressed: () => context.push(''),
                     icon: const Icon(
-                      Icons.notifications_outlined,
+                      Icons.person_sharp,
                       color: Colors.white,
                     ),
                   ),
-                ],
-              ),
-              DropdownButton<String>(
-                // dropdownColor: AppTheme.softYellow,
-                underline: Container(), // Removes the default underline
-                value: selectedValue,
-                onChanged: (String? newValue) {
-                  setState(() {
-                    selectedValue = newValue!;
-                  });
-                },
-                items: <String>[inter, hh, org]
-                    .map<DropdownMenuItem<String>>((String value) {
-                  return DropdownMenuItem<String>(
-                    value: value,
-                    child: Text(value),
-                  );
-                }).toList(),
-              ),
-            ],
+                  actions: [
+                    IconButton.filled(
+                      onPressed: () {},
+                      icon: const Icon(
+                        Icons.notifications_outlined,
+                        color: Colors.white,
+                      ),
+                    ),
+                  ],
+                ),
+                DropdownButton<String>(
+                  // dropdownColor: AppTheme.softYellow,
+                  underline: Container(), // Removes the default underline
+                  value: selectedValue,
+                  onChanged: (String? newValue) {
+                    setState(() {
+                      selectedValue = newValue!;
+                    });
+                  },
+                  items: <String>[inter, hh, org]
+                      .map<DropdownMenuItem<String>>((String value) {
+                    return DropdownMenuItem<String>(
+                      value: value,
+                      child: Text(value),
+                    );
+                  }).toList(),
+                ),
+              ],
+            ),
           ),
         ),
+        body: SingleChildScrollView(child: _buildContent()),
       ),
-      body: SingleChildScrollView(child: _buildContent()),
     );
   }
 

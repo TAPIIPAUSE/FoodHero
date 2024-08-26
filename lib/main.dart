@@ -6,11 +6,11 @@ import 'package:foodhero/pages/interorg/waste_chart.dart';
 import 'package:foodhero/pages/inventory/category.dart';
 import 'package:foodhero/pages/inventory/inventory.dart';
 import 'package:foodhero/pages/inventory/search/search_item.dart';
+import 'package:foodhero/pages/login_regis.dart';
 import 'package:foodhero/pages/notifications.dart';
 import 'package:foodhero/pages/register.dart';
 import 'package:foodhero/theme.dart';
 import 'package:go_router/go_router.dart';
-import 'package:foodhero/pages/foodDetails.dart';
 
 void main() {
   runApp(const MainApp());
@@ -22,7 +22,7 @@ final GoRouter _router = GoRouter(
     GoRoute(
       path: '/',
       builder: (BuildContext context, GoRouterState state) {
-        return const Register();
+        return login_regis();
       },
       routes: <RouteBase>[
         GoRoute(
@@ -109,7 +109,8 @@ class MainScaffold extends StatelessWidget {
   final int selectedRouteIndex;
   final Widget child;
 
-  const MainScaffold({required this.selectedRouteIndex, required this.child});
+  const MainScaffold(
+      {super.key, required this.selectedRouteIndex, required this.child});
 
   void _onItemTapped(BuildContext context, int index) {
     switch (index) {
@@ -129,6 +130,21 @@ class MainScaffold extends StatelessWidget {
         break;
     }
   }
+
+  // Widget _getSelectedPage(int index) {
+  //   switch (index) {
+  //     case 0:
+  //       return Inventory(); // Example page
+  //     case 1:
+  //     // return  ConsumedPage(); // Example page
+  //     case 2:
+  //       return InterDashboard(); // Example page
+  //     case 3:
+  //       return household(); // Example page
+  //     default:
+  //       return Inventory(); // Default page
+  //   }
+  // }
 
   @override
   Widget build(BuildContext context) {

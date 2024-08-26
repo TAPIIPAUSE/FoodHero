@@ -58,8 +58,7 @@ class _InventoryState extends State<Inventory> {
               "Inventory",
               style: FontsTheme.mouseMemoirs_64Black(),
             ),
-            titleTextStyle:
-                FontsTheme.mouseMemoirs_64Black(color: Colors.white),
+            titleTextStyle: FontsTheme.mouseMemoirs_64White(),
             leading: IconButton.filled(
               onPressed: () => context.push(''),
               icon: const Icon(

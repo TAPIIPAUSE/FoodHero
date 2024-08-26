@@ -5,22 +5,22 @@ class FontsTheme {
   static TextStyle mouseMemoirs_64Black({
     FontWeight fontWeight = FontWeight.w400,
     double fontSize = 64,
-    Color color = Colors.black,
   }) {
     return GoogleFonts.mouseMemoirs(
       fontWeight: fontWeight,
       fontSize: fontSize,
+      color: Colors.black,
     );
   }
 
   static TextStyle mouseMemoirs_64White({
     FontWeight fontWeight = FontWeight.w400,
     double fontSize = 64,
-    Color color = Colors.white,
   }) {
     return GoogleFonts.mouseMemoirs(
       fontWeight: fontWeight,
       fontSize: fontSize,
+      color: Colors.white,
     );
   }
 
@@ -57,7 +57,7 @@ class FontsTheme {
     );
   }
 
-    static TextStyle mouseMemoirs_30White({
+  static TextStyle mouseMemoirs_30White({
     FontWeight fontWeight = FontWeight.w400,
     double fontSize = 30,
     Color color = Colors.white,

@@ -23,7 +23,7 @@ class WasteChart extends StatelessWidget {
             title: const Text('Statistics'),
             centerTitle: true,
             backgroundColor: AppTheme.greenMainTheme,
-            titleTextStyle: FontsTheme.mouseMemoirs_64Black(color: Colors.white),
+            titleTextStyle: FontsTheme.mouseMemoirs_64Black(),
             leading: IconButton.filled(
               onPressed: () => context.push(''),
               icon: const Icon(
