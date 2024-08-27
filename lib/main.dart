@@ -34,12 +34,12 @@ final GoRouter _router = GoRouter(
           },
         ),
 
-        // GoRoute(
-        //   path: 'inventory/All food',
-        //   builder: (BuildContext context, GoRouterState state) {
-        //     return const Inventory();
-        //   },
-        // ),
+        GoRoute(
+          path: 'register',
+          builder: (BuildContext context, GoRouterState state) {
+            return const Register();
+          },
+        ),
         GoRoute(
           path: 'HouseOrga',
           builder: (BuildContext context, GoRouterState state) {
