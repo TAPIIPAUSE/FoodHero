@@ -5,9 +5,14 @@ import express from "express";
 import jwt from 'jsonwebtoken';
 import passport from "passport";
 import LocalStrategy from 'passport-local'
+import dotenv from 'dotenv';
+import { authenticateToken, authenticateCookieToken } from '../service/jwt_auth.js';
+
 
 
 const router = express.Router();
+
+dotenv.config();
 
 passport.use(new LocalStrategy(
   { usernameField: 'username' },
@@ -40,13 +45,6 @@ passport.deserializeUser(async (id, done) => {
       done(err);
   }
 });
-
-
-// Registration Function, set the postman request to POST, Body -> x-www-form-urlencoded
-// Required fields for Registration
-// Username
-// Email
-// Password
 
 router.post('/register', async (req, res) => {
   try {
@@ -113,49 +111,38 @@ router.post('/login', async (req, res) => {
     res.status(400).send("Password doesn't match!!!")
     return;
   }
+  console.log("TOKEN_SECRET during signing:", process.env.TOKEN_SECRET);
 
     // Generate JWT Token
   const token = jwt.sign(
     { userId: user._id, username: user.username },
-    process.env.SECRET_KEY || "1234!@#%<{*&)",
-    { expiresIn: "1h" }
+    process.env.TOKEN_SECRET,
+    { expiresIn: '1h' }
   );
 
-  res.status(200).json({ message: 'Logged in successfully', token });
+  res.cookie('token', token, {
+    httpOnly: true, // Cookie is only accessible by the web server
+    secure: process.env.NODE_ENV === 'production', // Set to true if using HTTPS
+    sameSite: 'Strict', // Helps prevent CSRF attacks
+    maxAge: 3600000 // 1 hour in milliseconds
+  });
 
 
+  console.log("Token received for signing:", token);
+  res.status(200).json({ success: true,message: 'Logged in successfully', token });
+})
 
+router.get('/create_house', authenticateCookieToken,async (req,res) => {
+  
+  console.log("Authenticated user:", req.user);
 
 })
 
+router.get('/test', (req, res) => {
+  res.setHeader('Authorization', 'Bearer testtoken');
+  res.status(200).json({ message: 'Test route' });
+});
 
-//   // Check If The Input Fields are Valid
-//   if (!username || !password) {
-//     return res
-//       .status(400)
-//       .json({ message: "Please Input Username and Password" });
-//   }
-
-
-//   if (!passwordMatch) {
-//     return res.status(401).json({ message: "Invalid username or password" });
-//   }
-
-//   // Generate JWT Token
-//   const token = jwt.sign(
-//     { userId: user._id, username: user.username },
-//     process.env.SECRET_KEY || "1234!@#%<{*&)",
-//     { expiresIn: "1h" }
-//   );
-
-//   return res
-//     .status(200)
-//     .json({ message: "Login Successful", data: user, token });
-// } catch (error) {
-//   console.log(error.message);
-//   return res.status(500).json({ message: "Error during login" });
-// }
-// })
 
 
 

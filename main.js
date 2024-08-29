@@ -5,11 +5,16 @@ import mongoose from "mongoose";
 import LocalStrategy from 'passport-local'
 import crypto from 'crypto'
 import {MongoClient} from "mongodb"
+import cookieParser from 'cookie-parser';
 
 
 const app = express();
 app.use(express.urlencoded({extended:true})) 
 app.use(express.static('public')) //static file for hosting
+
+// Ensure Body Parsing, Cookie Parsing Middleware is Used
+app.use(express.json());
+app.use(cookieParser());
 
 //Passport JS Tutorial
 // Routes
