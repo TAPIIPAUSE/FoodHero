@@ -4,6 +4,7 @@ import autoIncrementModelID from './counterSchema.js'; // Adjust path as necessa
 
 const houseSchema = new mongoose.Schema({
     assigned_ID: { type: Number, unique: true, min: 1 , index: true},
+    org_ID: {type:Number, default: 0},
     house_name: {type: String, required: true, unique: true},
     createdAt: { type: Date, default: Date.now , unique: false},
     modifiedAt: { type: Date , unique: false},
@@ -13,7 +14,7 @@ houseSchema.plugin(passportLocalMongoose)
 
 var newHouse = false
 
-houseSchema.plugin('save', async function (next) {
+houseSchema.pre('save', async function (next) {
     if(this.isNew){
         try{
             await autoIncrementModelID('House', this);

@@ -6,6 +6,7 @@ import jwt from 'jsonwebtoken';
 import passport from "passport";
 import LocalStrategy from 'passport-local'
 import dotenv from 'dotenv';
+import House from '../schema/houseSchema.js';
 import { authenticateToken, authenticateCookieToken } from '../service/jwt_auth.js';
 
 
@@ -132,10 +133,24 @@ router.post('/login', async (req, res) => {
   res.status(200).json({ success: true,message: 'Logged in successfully', token });
 })
 
-router.get('/create_house', authenticateCookieToken,async (req,res) => {
+router.post('/create_house', authenticateCookieToken,async (req,res) => {
   
-  console.log("Authenticated user:", req.user);
+  const {house_name} = req.body;
 
+  const existingHouseName = await House.findOne({ house_name });
+  if (existingHouseName) {
+    return res.status(400).send('This house name has been in used');
+  }
+
+  const newHouseName = new House({
+      house_name
+  })
+
+  console.log("This will be your new house name:", house_name)
+
+  await newHouseName.save();
+
+  res.status(200).send("New House Registered");
 })
 
 router.get('/test', (req, res) => {

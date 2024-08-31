@@ -33,8 +33,10 @@ export function authenticateCookieToken(req, res, next){
   if (!token) return res.status(401).send('Access Denied');
 
   jwt.verify(token, process.env.TOKEN_SECRET, (err, user) => {
-      if (err) return res.status(403).send('Invalid Token');
+      if (err) return res.status(403).send('Expired Token');
       req.user = user; // Attach user info to the request object
       next();
   });
 };
+
+
