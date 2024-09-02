@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:foodhero/pages/Household/household.dart';
+import 'package:foodhero/pages/House&Orga/join.dart';
 import 'package:foodhero/pages/interorg/dashboard_inter.dart';
 import 'package:foodhero/pages/interorg/interorganization.dart';
 import 'package:foodhero/pages/interorg/waste_chart.dart';
@@ -33,7 +33,6 @@ final GoRouter _router = GoRouter(
             return Inventory(initialFoodCategory: foodCategory);
           },
         ),
-
         GoRoute(
           path: 'register',
           builder: (BuildContext context, GoRouterState state) {
@@ -43,7 +42,7 @@ final GoRouter _router = GoRouter(
         GoRoute(
           path: 'HouseOrga',
           builder: (BuildContext context, GoRouterState state) {
-            return household();
+            return join();
           },
         ),
         GoRoute(

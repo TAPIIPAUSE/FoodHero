@@ -4,7 +4,7 @@ import 'dart:math';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:foodhero/main.dart';
-import 'package:foodhero/pages/Household/houseStatistic.dart';
+import 'package:foodhero/pages/House&Orga/Household/houseStatistics.dart';
 import 'package:foodhero/theme.dart';
 import 'package:foodhero/fonts.dart';
 import 'package:carousel_slider/carousel_slider.dart';
@@ -165,7 +165,7 @@ class _HouseholdState extends State<household> {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => houseStatistic(),
+                        builder: (context) => houseStatistics(),
                       ),
                     );
                   },

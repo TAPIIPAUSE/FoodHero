@@ -512,6 +512,18 @@ class _AddFoodDetailsPageState extends State<addFoodDetails> {
   }
 
   Widget buildQuantityWeight() {
+    String Piece = "Piece";
+    if (quantity == 1) {
+      Piece = "Piece";
+    } else if (quantity > 1) {
+      Piece = "Pieces";
+    }
+    String Gram = "Gram";
+    if (weight == 1) {
+      Gram = "Gram";
+    } else if (weight > 1) {
+      Gram = "Grams";
+    }
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 8),
       child: Column(
@@ -548,8 +560,7 @@ class _AddFoodDetailsPageState extends State<addFoodDetails> {
                                 children: [
                                   Text('$quantity ',
                                       style: FontsTheme.hindBold_20()),
-                                  Text('Pieces',
-                                      style: FontsTheme.hindBold_20()),
+                                  Text(Piece, style: FontsTheme.hindBold_20()),
                                 ],
                               ),
                             ),
@@ -603,8 +614,7 @@ class _AddFoodDetailsPageState extends State<addFoodDetails> {
                                 children: [
                                   Text('$weightReduced ',
                                       style: FontsTheme.hindBold_20()),
-                                  Text('grams',
-                                      style: FontsTheme.hindBold_20()),
+                                  Text(Gram, style: FontsTheme.hindBold_20()),
                                 ],
                               ),
                             ),
@@ -628,7 +638,7 @@ class _AddFoodDetailsPageState extends State<addFoodDetails> {
                                   setState(() {
                                     weight = value;
 
-                                    weightReduced = weight.toStringAsFixed(3);
+                                    weightReduced = weight.toStringAsFixed(0);
                                   });
                                 },
                               ),

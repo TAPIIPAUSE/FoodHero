@@ -10,12 +10,12 @@ import 'package:foodhero/widgets/interorg/waste_piechart.dart';
 import 'package:foodhero/widgets/interorg/wastetype_piechart.dart';
 import 'package:go_router/go_router.dart';
 
-class houseStatistic extends StatefulWidget {
+class houseStatistics extends StatefulWidget {
   @override
   _houseStatisticState createState() => _houseStatisticState();
 }
 
-class _houseStatisticState extends State<houseStatistic> {
+class _houseStatisticState extends State<houseStatistics> {
   @override
   Widget build(BuildContext context) {
     final screenWidth = MediaQuery.of(context).size.width;
