@@ -34,7 +34,7 @@ houseSchema.pre('save', async function (next) {
 houseSchema.post('save', function (next) {
     console.log("Saved Successfully")
     console.log("Here is the result of your registration", this)
-    return newHouse
+    return true
   })
 
 const House = mongoose.model('House', houseSchema);

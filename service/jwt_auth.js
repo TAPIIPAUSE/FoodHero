@@ -28,7 +28,7 @@ export function authenticateCookieToken(req, res, next){
   // Get token from cookies
   const token = req.cookies.token;
 
-  console.log("This is cookie information:", req.cookies.token)
+  // console.log("This is cookie information:", req.cookies.token)
 
   if (!token) return res.status(401).send('Access Denied');
 

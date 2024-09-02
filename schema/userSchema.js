@@ -9,13 +9,12 @@ const userSchema = new mongoose.Schema({
   username: { type: String, required: true, unique: true },
   email: { type: String, required: true, unique: true },
   password: { type: String, required: true },
-  orgID: { type: Number, unique: false},
-  isOrgLead: { type: Boolean , unique: false},
-  hID: { type: Number, unique: false},
-  isFamilyLead: { type: Boolean , unique: false},
+  orgID: { type: Number, unique: false, default: 0},
+  isOrgLead: { type: Boolean , unique: false,default: false},
+  hID: { type: Number, unique: false,default: 0},
+  isFamilyLead: { type: Boolean , unique: false, default: false},
   createdAt: { type: Date, default: Date.now , unique: false},
-  modifiedAt: { type: Date , unique: false},
-  tokenID: { type: String, unique: false}
+  modifiedAt: { type: Date , unique: false}
 });
 
 userSchema.plugin(passportLocalMongoose);

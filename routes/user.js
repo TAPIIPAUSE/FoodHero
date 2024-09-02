@@ -8,6 +8,7 @@ import LocalStrategy from 'passport-local'
 import dotenv from 'dotenv';
 import House from '../schema/houseSchema.js';
 import { authenticateToken, authenticateCookieToken } from '../service/jwt_auth.js';
+import { get_house_from_db, get_user_from_db, save_house_to_db} from '../service/user_service.js';
 
 
 
@@ -134,28 +135,56 @@ router.post('/login', async (req, res) => {
 })
 
 router.post('/create_house', authenticateCookieToken,async (req,res) => {
-  
+
   const {house_name} = req.body;
 
-  const existingHouseName = await House.findOne({ house_name });
-  if (existingHouseName) {
-    return res.status(400).send('This house name has been in used');
+  // 1# Create new house part
+  var ID = await save_house_to_db(house_name)
+
+  console.log("This is our ID", ID)
+  if(ID){
+    console.log("House Being Created . . .")
+
+    // #2 User Update -> Adding the hID to that  user's hID field
+    console.log("This is the ID: ", ID)
+    var user = await get_user_from_db(req,res)
+
+    user.hID = ID
+
+    await user.save()
+    
+    res.status(200).send("New House Registered");
+  }else{
+    res.status(400).send("This house is being used already, please pick a new name")
   }
+ 
+  
+  
 
-  const newHouseName = new House({
-      house_name
-  })
 
-  console.log("This will be your new house name:", house_name)
 
-  await newHouseName.save();
-
-  res.status(200).send("New House Registered");
+  
 })
 
-router.get('/test', (req, res) => {
-  res.setHeader('Authorization', 'Bearer testtoken');
-  res.status(200).json({ message: 'Test route' });
+router.get('/test_jwt', async (req, res) => {
+
+  // var house = await save_house_to_db(req,res)
+ 
+  // console.log(house)
+
+  // var user = await get_user_from_db(req,res)
+
+  // try{
+  //   user.hID = 1
+
+  //   await user.save()
+  //   console.log(user)
+  res.status(200).json({ message: 'Save Successfully' });
+  // } catch(error){
+  //   console.error("Error updating house", error)
+  //   return res.status(500).json({ message: 'An error occurred.' });
+  // }
+
 });
 
 
