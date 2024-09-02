@@ -1,16 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:foodhero/pages/consumed_food.dart';
-import 'package:foodhero/pages/dashboard.dart';
-import 'package:foodhero/pages/edit_food.dart';
-import 'package:foodhero/pages/household.dart';
-import 'package:foodhero/pages/interorganization.dart';
-import 'package:foodhero/pages/organization.dart';
-import 'package:foodhero/pages/user_profile.dart';
-import 'package:go_router/go_router.dart';
-
-import 'package:foodhero/pages/add_food.dart';
-import 'package:foodhero/pages/inventory.dart';
-import 'package:foodhero/pages/login.dart';
+import 'package:foodhero/pages/House&Orga/join.dart';
+import 'package:foodhero/pages/interorg/dashboard_inter.dart';
+import 'package:foodhero/pages/interorg/interorganization.dart';
+import 'package:foodhero/pages/interorg/waste_chart.dart';
+import 'package:foodhero/pages/inventory/category.dart';
+import 'package:foodhero/pages/inventory/inventory.dart';
+import 'package:foodhero/pages/inventory/search/search_item.dart';
+import 'package:foodhero/pages/login_regis.dart';
 import 'package:foodhero/pages/notifications.dart';
 import 'package:foodhero/pages/register.dart';
 
@@ -48,7 +44,7 @@ final GoRouter _router = GoRouter(
         GoRoute(
           path: 'edit_food',
           builder: (BuildContext context, GoRouterState state) {
-            return const EditFood();
+            return join();
           },
         ),
         GoRoute(
