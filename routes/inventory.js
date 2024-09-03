@@ -6,6 +6,7 @@ import FoodType from '../schema/foodTypeSchema.js';
 import jwt from 'jsonwebtoken';
 import passport from "passport";
 import LocalStrategy from 'passport-local'
+import { get_user_from_db, get_houseID } from '../service/user_service.js';
 
 const router = express.Router();
 
@@ -47,6 +48,21 @@ router.post('/addFoodType',async(req,res) => {
     await newFoodType.save();
 
     res.status(200).send("New Food Type Registered");
+})
+
+router.get('/addFood', async(req,res) => {
+  const {
+    food_name,
+    food_category,
+    unit_type,
+    current_amount,
+    total_amount,
+    total_price
+  } = req.body
+
+  console.log(req.body)
+
+  return res.status(200).send("Receiving Message Payload")
 })
 
 
