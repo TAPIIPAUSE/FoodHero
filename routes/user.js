@@ -150,6 +150,7 @@ router.post('/create_house', authenticateCookieToken,async (req,res) => {
     var user = await get_user_from_db(req,res)
 
     user.hID = ID
+    user.isFamilyLead = true
 
     await user.save()
     
