@@ -8,7 +8,8 @@ import LocalStrategy from 'passport-local'
 import dotenv from 'dotenv';
 import House from '../schema/houseSchema.js';
 import { authenticateToken, authenticateCookieToken } from '../service/jwt_auth.js';
-import { get_house_from_db, get_user_from_db, save_house_to_db} from '../service/user_service.js';
+import { save_org_to_db, get_user_from_db, save_house_to_db, get_houseID, get_house_from_db} from '../service/user_service.js';
+import Organization from '../schema/organizationSchema.js';
 
 
 
@@ -158,34 +159,51 @@ router.post('/create_house', authenticateCookieToken,async (req,res) => {
   }else{
     res.status(400).send("This house is being used already, please pick a new name")
   }
- 
-  
-  
-
-
-
-  
 })
 
-router.get('/test_jwt', async (req, res) => {
+router.post('/create_org', authenticateCookieToken,async (req,res) => {
 
-  // var house = await save_house_to_db(req,res)
- 
-  // console.log(house)
+  const {org_name} = req.body;
 
-  // var user = await get_user_from_db(req,res)
+  // 1# Create new house part
+  var ID = await save_org_to_db(org_name)
 
-  // try{
-  //   user.hID = 1
+  console.log("This is our ID", ID)
+  if(ID){
+    console.log("Organization Being Created . . .")
 
-  //   await user.save()
-  //   console.log(user)
-  res.status(200).json({ message: 'Save Successfully' });
-  // } catch(error){
-  //   console.error("Error updating house", error)
-  //   return res.status(500).json({ message: 'An error occurred.' });
-  // }
+    // #2 User Update -> Adding the hID to that  user's hID field
+    console.log("This is the ID: ", ID)
+    var user = await get_user_from_db(req,res)
+    // For updating the orgID in house table
+    var hID = await get_houseID(user)
+    var house = await get_house_from_db(hID)
+    
+    // Update in house table as well, -> org_id 
+    house.org_ID = ID
+    // Updte in user table as well, -> orgID
+    user.orgID = ID
+    user.isOrgLead = true
 
+    // Save 2 tables
+    await house.save()
+    await user.save()
+    
+    res.status(200).send("New Organization Registered");
+  }else{
+    res.status(400).send("This organization is being used already, please pick a new name")
+  }
+})
+
+router.get('/test_jwt', authenticateCookieToken,async (req, res) => {
+
+  var user = await get_user_from_db(req,res)
+  console.log("User info:", user)
+  var hID = await get_houseID(user)
+  console.log("House ID:", hID)
+  var house = await get_house_from_db(hID)
+
+  console.log("House info:", house)
 });
 
 
