@@ -9,6 +9,8 @@ import 'package:foodhero/pages/inventory/search/search_item.dart';
 import 'package:foodhero/pages/login_regis.dart';
 import 'package:foodhero/pages/notifications.dart';
 import 'package:foodhero/pages/register.dart';
+import 'package:foodhero/theme.dart';
+import 'package:go_router/go_router.dart';
 
 void main() {
   runApp(const MainApp());
@@ -20,13 +22,15 @@ final GoRouter _router = GoRouter(
     GoRoute(
       path: '/',
       builder: (BuildContext context, GoRouterState state) {
-        return const Inventory();
+        return login_regis();
       },
       routes: <RouteBase>[
         GoRoute(
-          path: 'login',
+          path: 'inventory/:foodCategory',
           builder: (BuildContext context, GoRouterState state) {
-            return const Login();
+            final foodCategory =
+                state.pathParameters['foodCategory'] ?? 'All food';
+            return Inventory(initialFoodCategory: foodCategory);
           },
         ),
         GoRoute(
@@ -36,27 +40,21 @@ final GoRouter _router = GoRouter(
           },
         ),
         GoRoute(
-          path: 'add_food',
-          builder: (BuildContext context, GoRouterState state) {
-            return const AddFood();
-          },
-        ),
-        GoRoute(
-          path: 'edit_food',
+          path: 'HouseOrga',
           builder: (BuildContext context, GoRouterState state) {
             return join();
           },
         ),
         GoRoute(
-          path: 'consumed_food',
+          path: 'category',
           builder: (BuildContext context, GoRouterState state) {
-            return const ConsumedFood();
+            return const ChooseCategory();
           },
         ),
         GoRoute(
-          path: 'wasted_food',
+          path: 'searchitem',
           builder: (BuildContext context, GoRouterState state) {
-            return const ConsumedFood();
+            return const SearchItem();
           },
         ),
         GoRoute(
@@ -66,33 +64,21 @@ final GoRouter _router = GoRouter(
           },
         ),
         GoRoute(
-          path: 'household',
-          builder: (BuildContext context, GoRouterState state) {
-            return const Household();
-          },
-        ),
-        GoRoute(
-          path: 'organization',
-          builder: (BuildContext context, GoRouterState state) {
-            return const Organization();
-          },
-        ),
-        GoRoute(
-          path: 'inter_organization',
+          path: 'inter_org',
           builder: (BuildContext context, GoRouterState state) {
             return const InterOrganization();
           },
         ),
         GoRoute(
-          path: 'dashboard',
+          path: 'dashboard_inter',
           builder: (BuildContext context, GoRouterState state) {
-            return const Dashboard();
+            return const InterDashboard();
           },
         ),
         GoRoute(
-          path: 'user_profile',
+          path: 'waste_chart',
           builder: (BuildContext context, GoRouterState state) {
-            return const UserProfile();
+            return const WasteChart();
           },
         ),
       ],
@@ -100,6 +86,7 @@ final GoRouter _router = GoRouter(
   ],
 );
 
+// Main app entry
 class MainApp extends StatelessWidget {
   const MainApp({super.key});
 
@@ -107,6 +94,88 @@ class MainApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp.router(
       routerConfig: _router,
+      debugShowCheckedModeBanner: false,
+    );
+    // return MaterialApp(
+    //   // home: foodDetails(),
+    //   home: household(),
+    // );
+  }
+}
+
+// Reusable scaffold with BottomNavigationBar
+class MainScaffold extends StatelessWidget {
+  final int selectedRouteIndex;
+  final Widget child;
+
+  const MainScaffold(
+      {super.key, required this.selectedRouteIndex, required this.child});
+
+  void _onItemTapped(BuildContext context, int index) {
+    switch (index) {
+      case 0:
+        String foodCategory = 'All food';
+        context.go('/inventory/${Uri.encodeComponent(foodCategory)}');
+
+        break;
+      case 1:
+        context.go('/consumed');
+        break;
+      case 2:
+        context.go('/inter_org');
+        break;
+      case 3:
+        context.go('/HouseOrga');
+        break;
+    }
+  }
+
+  // Widget _getSelectedPage(int index) {
+  //   switch (index) {
+  //     case 0:
+  //       return Inventory(); // Example page
+  //     case 1:
+  //     // return  ConsumedPage(); // Example page
+  //     case 2:
+  //       return InterDashboard(); // Example page
+  //     case 3:
+  //       return household(); // Example page
+  //     default:
+  //       return Inventory(); // Default page
+  //   }
+  // }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: child,
+      bottomNavigationBar: BottomNavigationBar(
+        items: const <BottomNavigationBarItem>[
+          BottomNavigationBarItem(
+            icon: Icon(Icons.inventory),
+            label: 'Inventory',
+            backgroundColor: AppTheme.greenMainTheme,
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.confirmation_number),
+            label: 'Consumed',
+            backgroundColor: AppTheme.greenMainTheme,
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.business),
+            label: 'Inter',
+            backgroundColor: AppTheme.greenMainTheme,
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.house),
+            label: 'Household',
+            backgroundColor: AppTheme.greenMainTheme,
+          ),
+        ],
+        currentIndex: selectedRouteIndex,
+        selectedItemColor: AppTheme.lightGreenBackground,
+        onTap: (index) => _onItemTapped(context, index),
+      ),
     );
   }
 }
