@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:foodhero/example/get.dart';
 import 'package:foodhero/example/post.dart';
-import 'package:foodhero/example/put.dart';
+// import 'package:foodhero/example/put.dart';
 
 void main() {
   runApp(const MaterialApp(

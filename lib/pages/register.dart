@@ -119,7 +119,7 @@ class _RegisterState extends State<Register> {
                     height: 20,
                   ),
                   Image.asset(
-                    'assets/fhlogo.png',
+                    'assets/images/fhlogo.png',
                     height: isKeyboardOpen ? 0 : 150,
                     width: isKeyboardOpen ? 0 : 150,
                   ),
@@ -157,14 +157,14 @@ class _RegisterState extends State<Register> {
                             print(_email);
                             print(_password);
 
-                            context.go('/inventory');
+                            context.push('/inventory/All food');
                           },
                           style: buttonStyle,
                           child: const Text("Register"),
                         ),
                         if (!isKeyboardOpen)
                           IconButton(
-                            onPressed: () => context.go('/inventory'),
+                            onPressed: () => context.push('/inter_org'),
                             icon: const Icon(Icons.arrow_back_ios_new),
                             style: backButtonStyle,
                           ),
