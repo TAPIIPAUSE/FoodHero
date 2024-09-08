@@ -10,14 +10,14 @@ import 'package:foodhero/widgets/interorg/waste_piechart.dart';
 import 'package:foodhero/widgets/interorg/wastetype_piechart.dart';
 import 'package:go_router/go_router.dart';
 
-class InterDashboard extends StatefulWidget {
-  const InterDashboard({super.key});
+class UserDashboard extends StatefulWidget {
+  const UserDashboard({super.key});
 
   @override
-  State<InterDashboard> createState() => _InterDashboardState();
+  State<UserDashboard> createState() => _UserDashboardState();
 }
 
-class _InterDashboardState extends State<InterDashboard> {
+class _UserDashboardState extends State<UserDashboard> {
   CarouselController buttonCarouselController = CarouselController();
 
   @override
@@ -73,30 +73,13 @@ class _InterDashboardState extends State<InterDashboard> {
 
     return Scaffold(
       backgroundColor: AppTheme.lightGreenBackground,
-      appBar: PreferredSize(
-          preferredSize: const Size.fromHeight(80.0),
-          child: AppBar(
-            title: const Text('Statistics'),
-            centerTitle: true,
-            backgroundColor: AppTheme.greenMainTheme,
-            titleTextStyle: FontsTheme.mouseMemoirs_64Black(),
-            leading: IconButton.filled(
-              onPressed: () => context.push(''),
-              icon: const Icon(
-                Icons.person_sharp,
-                color: Colors.white,
-              ),
-            ),
-            actions: [
-              IconButton.filled(
-                onPressed: () {},
-                icon: const Icon(
-                  Icons.notifications_outlined,
-                  color: Colors.white,
-                ),
-              ),
-            ],
-          )),
+      appBar: AppBar(
+        title: const Text('Your Statistics'),
+        centerTitle: true,
+        backgroundColor: AppTheme.greenMainTheme,
+        titleTextStyle: FontsTheme.mouseMemoirs_64White(),
+        automaticallyImplyLeading: false,
+      ),
       body: SingleChildScrollView(
         child: Column(
           children: [
@@ -119,7 +102,7 @@ class _InterDashboardState extends State<InterDashboard> {
               ),
             ),
             IconButton(
-              onPressed: () => context.push('/waste_chart'),
+              onPressed: () => context.push('/user_waste_chart'),
               icon: const Icon(
                 Icons.keyboard_arrow_down_rounded,
                 color: AppTheme.mainBlue,

@@ -9,6 +9,9 @@ import 'package:foodhero/pages/inventory/search/search_item.dart';
 import 'package:foodhero/pages/login_regis.dart';
 import 'package:foodhero/pages/notifications.dart';
 import 'package:foodhero/pages/register.dart';
+import 'package:foodhero/pages/userprofile/user_dashboard.dart';
+import 'package:foodhero/pages/userprofile/user_profile.dart';
+import 'package:foodhero/pages/userprofile/user_waste_chart.dart';
 import 'package:foodhero/theme.dart';
 import 'package:go_router/go_router.dart';
 
@@ -79,6 +82,24 @@ final GoRouter _router = GoRouter(
           path: 'waste_chart',
           builder: (BuildContext context, GoRouterState state) {
             return const WasteChart();
+          },
+        ),
+        GoRoute(
+          path: 'user_profile',
+          builder: (BuildContext context, GoRouterState state) {
+            return const UserProfile();
+          },
+        ),
+        GoRoute(
+          path: 'user_dashboard',
+          builder: (BuildContext context, GoRouterState state) {
+            return const UserDashboard();
+          },
+        ),
+        GoRoute(
+          path: 'user_waste_chart',
+          builder: (BuildContext context, GoRouterState state) {
+            return const UserWasteChart();
           },
         ),
       ],
