@@ -92,7 +92,7 @@ export async function save_org_to_db (org_name){
     
 
   try {
-      // Check if the house already exists in the database
+      // Check if the organization already exists in the database
       const organization = await Organization.findOne({ org_name });
       var newID = 0
   

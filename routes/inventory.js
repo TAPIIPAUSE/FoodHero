@@ -3,6 +3,7 @@ import bcrypt from 'bcryptjs';
 import express from "express";
 import UnitType from '../schema/unitTypeSchema.js';
 import FoodType from '../schema/foodTypeSchema.js';
+import Food from '../schema/foodInventorySchema.js';
 import jwt from 'jsonwebtoken';
 import passport from "passport";
 import LocalStrategy from 'passport-local'
@@ -50,19 +51,43 @@ router.post('/addFoodType',async(req,res) => {
     res.status(200).send("New Food Type Registered");
 })
 
-router.get('/addFood', async(req,res) => {
+router.post('/addFood', async(req,res) => {
   const {
     food_name,
     food_category,
     unit_type,
     current_amount,
     total_amount,
-    total_price
+    total_price,
+    bestByDate
   } = req.body
 
-  console.log(req.body)
+  var user = await get_user_from_db(req,res)
 
-  return res.status(200).send("Receiving Message Payload")
+  var hID = await get_houseID(user)
+
+  try{
+    const newFood = new Food({
+      hID,
+      food_name,
+      food_category,
+      unit_type,
+      current_amount,
+      total_amount,
+      total_price,
+      bestByDate
+    })
+  
+    console.log(newFood)
+  
+    await newFood.save();
+  
+    return res.status(200).send("New Food Registered to your Fridge")
+  }catch (error){
+    return res.status(500).send(`Error registering Food: ${error.message}`);
+  }
+
+
 })
 
 
