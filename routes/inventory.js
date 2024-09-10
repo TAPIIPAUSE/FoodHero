@@ -8,6 +8,7 @@ import jwt from 'jsonwebtoken';
 import passport from "passport";
 import LocalStrategy from 'passport-local'
 import { get_user_from_db, get_houseID } from '../service/user_service.js';
+import House from '../schema/houseSchema.js';
 
 const router = express.Router();
 
@@ -90,5 +91,46 @@ router.post('/addFood', async(req,res) => {
 
 })
 
+// This function is created to retrieve all foods within that house
+router.get('/getFoodByHouse', async(req,res) => {
+
+  // const {fID} = req.body
+
+  var user = await get_user_from_db(req,res)
+
+  var hID = user.hID
+
+  try{
+  // search foods by the house ID
+  const house_fridge = await Food.find({hID})
+
+  return res.status(200).send(house_fridge)
+
+  }catch(error){
+    return res.status(400).send(`Error when getting Food's Info: ${error}`)
+  }
+})
+
+// This function is created to retrieve food within that house
+router.get('/getFoodById', async(req,res) => {
+
+  const {fID} = req.body
+
+  var user = await get_user_from_db(req,res)
+
+  var hID = user.hID
+
+  try{
+  // search foods by the food ID
+  const assigned_ID = fID
+  const food = await Food.findOne({assigned_ID})
+
+
+  return res.status(200).send(food)
+
+  }catch(error){
+    return res.status(400).send(`Error when getting Food's Info: ${error}`)
+  }
+})
 
 export default router;
