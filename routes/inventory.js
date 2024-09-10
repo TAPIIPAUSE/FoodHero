@@ -4,11 +4,7 @@ import express from "express";
 import UnitType from '../schema/unitTypeSchema.js';
 import FoodType from '../schema/foodTypeSchema.js';
 import Food from '../schema/foodInventorySchema.js';
-import jwt from 'jsonwebtoken';
-import passport from "passport";
-import LocalStrategy from 'passport-local'
 import { get_user_from_db, get_houseID } from '../service/user_service.js';
-import House from '../schema/houseSchema.js';
 
 const router = express.Router();
 
@@ -130,6 +126,30 @@ router.get('/getFoodById', async(req,res) => {
 
   }catch(error){
     return res.status(400).send(`Error when getting Food's Info: ${error}`)
+  }
+})
+
+// Delete by the input's fID
+router.post('/deleteFoodById', async(req,res) => {
+  const {fID} = req.body
+  var user = await get_user_from_db(req,res)
+  try{
+  // search foods by the food ID
+  const assigned_ID = fID
+  // Deletion doesn't require save -> deleteOne with the designated ID, and that's all
+  const deleteResult = await Food.deleteOne({assigned_ID})
+
+  // delete result looks like this { acknowledged: true, deletedCount: 1 }
+  
+  // Secondly, the delete function returns the deletion object
+  if (deleteResult.deletedCount === 0) {
+    return res.status(404).send("Food not found");
+  }
+
+  return res.status(200).send("Delete Successfully")
+
+  }catch(error){
+    return res.status(400).send(`Error when deleting Food's Info: ${error}`)
   }
 })
 
