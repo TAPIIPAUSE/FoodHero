@@ -1,19 +1,20 @@
 import 'package:flutter/material.dart';
+import 'package:foodhero/pages/consumed/Consumed.dart';
+import 'package:foodhero/pages/consumed/consumedDetails.dart';
 import 'package:foodhero/pages/foodDetails.dart';
-
 import 'package:foodhero/theme.dart';
 import 'package:percent_indicator/percent_indicator.dart';
 
-class InventoryListItem extends StatelessWidget {
-  const InventoryListItem({
-    super.key,
+class ConsumedListItem extends StatelessWidget {
+   const ConsumedListItem({
+    Key? key,
     required this.thumbnail,
     required this.foodname,
     required this.expiry,
     required this.progressbar,
     required this.consuming,
     required this.remaining,
-  });
+  }) : super(key: key);
 
   final String thumbnail;
   final String foodname;
@@ -26,10 +27,10 @@ class InventoryListItem extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        Navigator.push(
+       Navigator.push(
           context,
           MaterialPageRoute(
-            builder: (context) => foodDetails(item: this, addToConsumed: (ConsumedListItem ) {  },),
+            builder: (context) => ConsumedDetails(),
           ),
         );
       },

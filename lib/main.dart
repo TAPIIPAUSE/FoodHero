@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:foodhero/pages/House&Orga/join.dart';
+import 'package:foodhero/pages/consumed/Consumed.dart';
+import 'package:foodhero/pages/consumed/consumedDetails.dart';
 import 'package:foodhero/pages/interorg/dashboard_inter.dart';
 import 'package:foodhero/pages/interorg/interorganization.dart';
 import 'package:foodhero/pages/interorg/waste_chart.dart';
@@ -37,6 +39,12 @@ final GoRouter _router = GoRouter(
           path: 'register',
           builder: (BuildContext context, GoRouterState state) {
             return const Register();
+          },
+        ),
+        GoRoute(
+          path: 'consumed',
+          builder: (BuildContext context, GoRouterState state) {
+            return Consumed(consumedItems: [],);
           },
         ),
         GoRoute(

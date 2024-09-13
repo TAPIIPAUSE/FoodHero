@@ -1,21 +1,28 @@
-import 'dart:ui';
 import 'dart:io';
-import 'dart:async';
-import 'dart:math';
 import 'dart:core';
 import 'package:flutter/material.dart';
+import 'package:foodhero/pages/consumed/Consumed.dart';
+import 'package:foodhero/pages/consumed/consumedDetails.dart';
 import 'package:foodhero/pages/inventory/inventory.dart';
+import 'package:foodhero/widgets/consumed/consumed_list_item.dart';
+import 'package:foodhero/widgets/inventory/inventory_list_item.dart';
 import 'package:foodhero/theme.dart';
 import 'package:foodhero/fonts.dart';
 import 'package:image_picker/image_picker.dart';
 
 class foodDetails extends StatefulWidget {
+  final InventoryListItem item;
+  final Function(ConsumedListItem) addToConsumed; // Callback function
+
+  foodDetails({required this.item, required this.addToConsumed});
+
   @override
   _FoodDetailsPageState createState() => _FoodDetailsPageState();
 }
 
 class _FoodDetailsPageState extends State<foodDetails> {
-  ImageProvider? _image; // Image provider for the selected image
+   FileImage? _image;
+ // Image provider for the selected image
   bool _isLoading = false; // Flag to indicate image loading state
   bool _showImageOption = false;
   DateTime expirationDate = DateTime(2024);
@@ -26,6 +33,7 @@ class _FoodDetailsPageState extends State<foodDetails> {
   double allCost = 0;
   double costPerPiece = 0;
   double updateAllCost = 0;
+  final foodname = TextEditingController();
 
   void _pickImage() async {
     // Implement your image picking logic here (e.g., using image_picker)
@@ -41,6 +49,7 @@ class _FoodDetailsPageState extends State<foodDetails> {
       setState(() {
         _image = image;
         _isLoading = false; // Hide loading indicator
+        _showImageOption = true;
       });
     }
   }
@@ -148,6 +157,75 @@ class _FoodDetailsPageState extends State<foodDetails> {
     );
   }
 
+  @override
+  void dispose() {
+    // Clean up the controller when the widget is disposed.
+    foodname.dispose();
+    super.dispose();
+  }
+
+  Future<void> _selectExDate() async {
+    final DateTime? picked = await showDatePicker(
+      context: context,
+      initialDate: expirationDate,
+      firstDate: DateTime(2020),
+      lastDate: DateTime(2030),
+    );
+    if (picked != null && picked != expirationDate) {
+      setState(() {
+        expirationDate = picked;
+      });
+    }
+  }
+
+  Future<void> _selectReDate() async {
+    final DateTime? picked = await showDatePicker(
+      context: context,
+      initialDate: reminderDate,
+      firstDate: DateTime(2020),
+      lastDate: DateTime(2030),
+    );
+    if (picked != null && picked != reminderDate) {
+      setState(() {
+        reminderDate = picked;
+      });
+    }
+  }
+
+  void _updateAllCost() {
+    setState(() {
+      updateAllCost = allCost;
+    });
+  }
+
+  String _updateCost() {
+    double updateCost = updateAllCost / quantity;
+    return updateCost.toStringAsFixed(3);
+  }
+
+  String _updateWeight() {
+    double updateWeight = weight / quantity;
+    return updateWeight.toStringAsFixed(2);
+  }
+
+  List<ConsumedListItem> consumedItems = [];
+  void addToConsumed(BuildContext context) {
+    final newItem = ConsumedListItem(
+      thumbnail: "assets/images/apples.jpg",
+      foodname: foodname.text,
+      expiry: "ssss",
+      progressbar: 80,
+      consuming: 12,
+      remaining: 8,
+    );
+    consumedItems.add(newItem);
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+          builder: (context) => Consumed(consumedItems: consumedItems)),
+    );
+  }
+
   void _consumeOption(BuildContext context) {
     showDialog(
         context: context,
@@ -172,7 +250,10 @@ class _FoodDetailsPageState extends State<foodDetails> {
                         child: Container(
                           alignment: Alignment.bottomCenter,
                           child: TextButton(
-                            onPressed: () {},
+                            onPressed: () {
+                              addToConsumed(context);
+                              print("adding");
+                            },
                             style: TextButton.styleFrom(
                               backgroundColor: AppTheme.softRed,
                               fixedSize: Size(350, 50),
@@ -507,237 +588,279 @@ class _FoodDetailsPageState extends State<foodDetails> {
   }
 
   @override
+  void initState() {
+    super.initState();
+    foodname.text = widget.item.foodname;
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
-      // appBar: AppBar(
-      //   backgroundColor: const Color.fromRGBO(67, 189, 174, 1),
-      //   toolbarHeight: 75,
-      //   centerTitle: true,
-      //   title: Text(
-      //     "Inventory",
-      //     style: FontsTheme.mouseMemoirs_64White(),
-      //   ),
-      // ),
-      // backgroundColor: AppTheme.lightGreenBackground,
-      // body: SizedBox(
-      //   child: Column(
-      //     children: [
-      //       Container(
-      //         alignment: Alignment.centerLeft,
-      //         height: 68,
-      //         width: 100,
-      //         margin: EdgeInsets.fromLTRB(10, 10, 0, 0),
-      //         decoration: BoxDecoration(
-      //           color: AppTheme.mainBlue,
-      //           borderRadius: BorderRadius.circular(10),
-      //         ),
-      //       ),
-      //       Container(
-      //         height: 62,
-      //         width: 378,
-      //         margin: EdgeInsets.fromLTRB(10, 10, 0, 0),
-      //         decoration: BoxDecoration(
-      //           color: AppTheme.pastelsoftBlue,
-      //           borderRadius: BorderRadius.only(
-      //             topLeft: Radius.circular(15), // Set top left corner radius
-      //             topRight: Radius.circular(15), // Set top right corner radius
-      //             bottomLeft:
-      //                 Radius.circular(5), // Set bottom left corner radius
-      //             bottomRight: Radius.circular(5), //
-      //           ),
-      //         ),
-      //       ),
-      //       Container(
-      //         height: 62,
-      //         width: 378,
-      //         margin: EdgeInsets.fromLTRB(10, 10, 0, 0),
-      //         decoration: BoxDecoration(
-      //           color: AppTheme.pastelsoftBlue,
-      //           borderRadius: BorderRadius.only(
-      //             topLeft: Radius.circular(5), // Set top left corner radius
-      //             topRight: Radius.circular(5), // Set top right corner radius
-      //             bottomLeft:
-      //                 Radius.circular(15), // Set bottom left corner radius
-      //             bottomRight: Radius.circular(15), //
-      //           ),
-      //         ),
-      //       ),
-      //     ],
-      //   ),
-      // ),
+        // appBar: AppBar(
+        //   backgroundColor: const Color.fromRGBO(67, 189, 174, 1),
+        //   toolbarHeight: 75,
+        //   centerTitle: true,
+        //   title: Text(
+        //     "Inventory",
+        //     style: FontsTheme.mouseMemoirs_64White(),
+        //   ),
+        // ),
+        // backgroundColor: AppTheme.lightGreenBackground,
+        // body: SizedBox(
+        //   child: Column(
+        //     children: [
+        //       Container(
+        //         alignment: Alignment.centerLeft,
+        //         height: 68,
+        //         width: 100,
+        //         margin: EdgeInsets.fromLTRB(10, 10, 0, 0),
+        //         decoration: BoxDecoration(
+        //           color: AppTheme.mainBlue,
+        //           borderRadius: BorderRadius.circular(10),
+        //         ),
+        //       ),
+        //       Container(
+        //         height: 62,
+        //         width: 378,
+        //         margin: EdgeInsets.fromLTRB(10, 10, 0, 0),
+        //         decoration: BoxDecoration(
+        //           color: AppTheme.pastelsoftBlue,
+        //           borderRadius: BorderRadius.only(
+        //             topLeft: Radius.circular(15), // Set top left corner radius
+        //             topRight: Radius.circular(15), // Set top right corner radius
+        //             bottomLeft:
+        //                 Radius.circular(5), // Set bottom left corner radius
+        //             bottomRight: Radius.circular(5), //
+        //           ),
+        //         ),
+        //       ),
+        //       Container(
+        //         height: 62,
+        //         width: 378,
+        //         margin: EdgeInsets.fromLTRB(10, 10, 0, 0),
+        //         decoration: BoxDecoration(
+        //           color: AppTheme.pastelsoftBlue,
+        //           borderRadius: BorderRadius.only(
+        //             topLeft: Radius.circular(5), // Set top left corner radius
+        //             topRight: Radius.circular(5), // Set top right corner radius
+        //             bottomLeft:
+        //                 Radius.circular(15), // Set bottom left corner radius
+        //             bottomRight: Radius.circular(15), //
+        //           ),
+        //         ),
+        //       ),
+        //     ],
+        //   ),
+        // ),
 
-      backgroundColor: Color(0xFFB2F1ED),
-      appBar: AppBar(
-        backgroundColor: AppTheme.greenMainTheme,
-        toolbarHeight: 90,
-        centerTitle: true,
-        title: Text(
-          "Inventory",
-          style: FontsTheme.mouseMemoirs_64Black(),
-        ),
-        leading: IconButton(
-          icon: Icon(Icons.person),
-          onPressed: () {},
-        ),
-        actions: [
-          IconButton(
-            icon: Icon(Icons.notifications),
+        backgroundColor: AppTheme.lightGreenBackground,
+        appBar: AppBar(
+          backgroundColor: AppTheme.greenMainTheme,
+          toolbarHeight: 90,
+          centerTitle: true,
+          title: Text(
+            "Inventory",
+            style: FontsTheme.mouseMemoirs_64Black(),
+          ),
+          leading: IconButton(
+            icon: Icon(Icons.person),
             onPressed: () {},
           ),
-        ],
-      ),
-      body: SingleChildScrollView(
-        padding: const EdgeInsets.all(16),
-        child: Center(
-          child: Stack(
-            children: [
-              Positioned(
-                // Item history
-                top: 20,
-                right: 0.0,
-                child: GestureDetector(
-                  onTap: () {
-                    // Handle the tap event here
-                    print('Container tapped');
-                  },
-                  child: Container(
-                    width: 60,
-                    height: 54,
-                    decoration: const BoxDecoration(
-                      color: AppTheme.greenMainTheme,
-                      borderRadius: BorderRadius.only(
-                          topLeft: Radius.circular(27),
-                          bottomLeft: Radius.circular(27),
-                          topRight: Radius.circular(10),
-                          bottomRight: Radius.circular(10)),
-                    ),
-                    child: Container(
-                      alignment: const Alignment(-8, 0),
-                      child: Image.asset('assets/images/TimeMachine.png'),
-                    ),
-                  ),
-                ),
-              ),
-              SizedBox(
-                height: 20,
-              ),
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Row(
-                    children: [
-                      GestureDetector(
-                        onTap: () => _chooseAddImageOption(context),
-                        child: Container(
-                          width: 100,
-                          height: 68,
-                          decoration: BoxDecoration(
-                            color: AppTheme.mainBlue,
-                            borderRadius: BorderRadius.circular(10),
+          actions: [
+            IconButton(
+              icon: Icon(Icons.notifications),
+              onPressed: () {},
+            ),
+          ],
+        ),
+        body: Stack(
+          children: [
+            // Container(
+            //   //for make border
+            //   height: 550,
+            //   decoration: BoxDecoration(
+            //       color: AppTheme.lightGreenBackground,
+            //       borderRadius: BorderRadius.only(
+            //           bottomLeft: const Radius.circular(20),
+            //           bottomRight: const Radius.circular(20))),
+            // ),
+            SingleChildScrollView(
+                padding: const EdgeInsets.all(16),
+                child: SizedBox(
+                  height: 975,
+                  child: Center(
+                    child: Stack(
+                      children: [
+                        Positioned(
+                          // Item history
+                          top: 20,
+                          right: 0.0,
+                          child: GestureDetector(
+                            onTap: () {
+                              // Handle the tap event here
+                              print('Container tapped');
+                            },
+                            child: Container(
+                              width: 60,
+                              height: 54,
+                              decoration: const BoxDecoration(
+                                color: AppTheme.greenMainTheme,
+                                borderRadius: BorderRadius.only(
+                                    topLeft: Radius.circular(27),
+                                    bottomLeft: Radius.circular(27),
+                                    topRight: Radius.circular(10),
+                                    bottomRight: Radius.circular(10)),
+                              ),
+                              child: Container(
+                                alignment: const Alignment(-8, 0),
+                                child: Image.asset(
+                                    'assets/images/TimeMachine.png'),
+                              ),
+                            ),
                           ),
-                          child: _image == null
-                              ? const Center(
-                                  child: Icon(
-                                  Icons.add_a_photo,
-                                  color: Colors.white,
-                                ))
-                              : _isLoading
-                                  ? const Center(
-                                      child: CircularProgressIndicator())
-                                  : ClipRRect(
-                                      borderRadius: BorderRadius.circular(8.0),
-                                      child: Image(
-                                          image: _image!, fit: BoxFit.cover),
+                        ),
+                        SizedBox(
+                          height: 20,
+                        ),
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Row(
+                              children: [
+                                GestureDetector(
+                                  onTap: () => _chooseAddImageOption(context),
+                                  child: Container(
+                                    width: 100,
+                                    height: 68,
+                                    decoration: BoxDecoration(
+                                      color: AppTheme.mainBlue,
+                                      borderRadius: BorderRadius.circular(10),
                                     ),
-                        ),
-                      ),
-                      const SizedBox(
-                        width: 10,
-                      ),
-                      SizedBox(
-                        width: 200,
-                        child: TextField(
-                          style: FontsTheme.mouseMemoirs_50Black(),
-                          textAlign: TextAlign.center,
-                        ),
-                      ),
-                    ],
-                  ),
+                                    child: _image == null
+                                        ? const Center(
+                                            child: Icon(
+                                            Icons.add_a_photo,
+                                            color: Colors.white,
+                                          ))
+                                        : _isLoading
+                                            ? const Center(
+                                                child:
+                                                    CircularProgressIndicator())
+                                            : ClipRRect(
+                                                borderRadius:
+                                                    BorderRadius.circular(8.0),
+                                                child: Image(
+                                                    image: _image!,
+                                                    fit: BoxFit.cover),
+                                              ),
+                                  ),
+                                ),
+                                const SizedBox(
+                                  width: 10,
+                                ),
+                                SizedBox(
+                                  width: 200,
+                                  child: TextField(
+                                    style: FontsTheme.mouseMemoirs_50Black(),
+                                    textAlign: TextAlign.center,
+                                    controller: foodname,
+                                  ),
+                                ),
+                              ],
+                            ),
 
-                  SizedBox(height: 16),
-                  //buildDropdownField('Categories', "value", Icons.local_dining),
-                  buildCategoriesField(
-                      "Categories", "value", Icons.arrow_drop_down),
-                  buildWhereField('In', 'value', Icons.kitchen),
-                  buildDateField('Expiration date', ''),
-                  buildReminderField('30 April 2024'),
-                  buildQuantityWeight(),
-                  buildEachPieceField(),
-                  //buildCostField(),
-                  SizedBox(height: 16),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: [
-                      ElevatedButton(
-                        onPressed: () => _consumeOption(context),
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: Color(0xFFF4A261),
-                          shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(10)),
+                            SizedBox(height: 16),
+                            //buildDropdownField('Categories', "value", Icons.local_dining),
+                            buildCategoriesField(
+                                "Categories", "value", Icons.arrow_drop_down),
+                            buildWhereField('In', 'value', Icons.kitchen),
+                            buildDateField('Expiration date', ''),
+                            buildReminderField('30 April 2024'),
+                            buildQuantityWeight(),
+                            buildEachPieceField(),
+                            //buildCostField(),
+                          ],
                         ),
-                        child: Text(
-                          'Consume',
-                          style: FontsTheme.mouseMemoirs_30Black()
-                              .copyWith(color: Colors.black),
-                        ),
-                      ),
-                      ElevatedButton(
-                        onPressed: () => _wasteOption(context),
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: Color(0xFFE76F51),
-                          shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(10)),
-                        ),
-                        child: Text(
-                          'Waste',
-                          style: FontsTheme.mouseMemoirs_30Black()
-                              .copyWith(color: Colors.black),
-                        ),
-                      ),
-                    ],
-                  ),
-                  SizedBox(height: 16),
-                  Center(
-                    child: TextButton(
-                      onPressed: () {},
-                      child: Text(
-                        'Delete item',
-                        style: TextStyle(color: Colors.black),
-                      ),
+                      ],
                     ),
                   ),
-                  SizedBox(height: 5),
-                  Center(
-                    child: IconButton(
-                      icon: Image.asset('assets/images/BackButton.png'),
-                      iconSize: 50,
-                      onPressed: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => const Inventory(),
+                )),
+            Align(
+              alignment: Alignment.bottomCenter,
+              child: Stack(
+                children: [
+                  Container(
+                    width: double.infinity,
+                    height: 180,
+                    color: AppTheme.lightGreenBackground,
+                    child: Column(
+                      children: [
+                        SizedBox(
+                          height: 10,
+                        ),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          children: [
+                            ElevatedButton(
+                              onPressed: () => _consumeOption(context),
+                              style: ElevatedButton.styleFrom(
+                                backgroundColor: Color(0xFFF4A261),
+                                shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(10)),
+                              ),
+                              child: Text(
+                                'Consume',
+                                style: FontsTheme.mouseMemoirs_30Black()
+                                    .copyWith(color: Colors.black),
+                              ),
+                            ),
+                            ElevatedButton(
+                              onPressed: () => _wasteOption(context),
+                              style: ElevatedButton.styleFrom(
+                                backgroundColor: Color(0xFFE76F51),
+                                shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(10)),
+                              ),
+                              child: Text(
+                                'Waste',
+                                style: FontsTheme.mouseMemoirs_30Black()
+                                    .copyWith(color: Colors.black),
+                              ),
+                            ),
+                          ],
+                        ),
+                        SizedBox(height: 2),
+                        Center(
+                          child: TextButton(
+                            onPressed: () {},
+                            child: Text(
+                              'Delete item',
+                              style: TextStyle(color: Colors.black),
+                            ),
                           ),
-                        );
-                      },
+                        ),
+                        Center(
+                          child: IconButton(
+                            icon: Image.asset('assets/images/BackButton.png'),
+                            iconSize: 50,
+                            onPressed: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => const Inventory(),
+                                ),
+                              );
+                            },
+                          ),
+                        ),
+                      ],
                     ),
                   ),
                 ],
               ),
-            ],
-          ),
-        ),
-      ),
-    );
+            )
+          ],
+        ));
   }
 
   Widget buildCategoriesField(String label, String value, IconData icon) {
@@ -1239,49 +1362,5 @@ class _FoodDetailsPageState extends State<foodDetails> {
         ],
       ),
     );
-  }
-
-  Future<void> _selectExDate() async {
-    final DateTime? picked = await showDatePicker(
-      context: context,
-      initialDate: expirationDate,
-      firstDate: DateTime(2020),
-      lastDate: DateTime(2030),
-    );
-    if (picked != null && picked != expirationDate) {
-      setState(() {
-        expirationDate = picked;
-      });
-    }
-  }
-
-  Future<void> _selectReDate() async {
-    final DateTime? picked = await showDatePicker(
-      context: context,
-      initialDate: reminderDate,
-      firstDate: DateTime(2020),
-      lastDate: DateTime(2030),
-    );
-    if (picked != null && picked != reminderDate) {
-      setState(() {
-        reminderDate = picked;
-      });
-    }
-  }
-
-  void _updateAllCost() {
-    setState(() {
-      updateAllCost = allCost;
-    });
-  }
-
-  String _updateCost() {
-    double updateCost = updateAllCost / quantity;
-    return updateCost.toStringAsFixed(3);
-  }
-
-  String _updateWeight() {
-    double updateWeight = weight / quantity;
-    return updateWeight.toStringAsFixed(2);
   }
 }
