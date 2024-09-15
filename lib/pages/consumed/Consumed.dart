@@ -6,14 +6,18 @@ import 'package:foodhero/widgets/consumed/consumed_list_item.dart';
 import 'package:foodhero/widgets/inventory/inventory_list_item.dart';
 import 'package:go_router/go_router.dart';
 
-class Consumed extends StatelessWidget {
+class Consumed extends StatefulWidget {
+ final List<ConsumedListItem> consumedItems;
+  const Consumed({super.key, required this.consumedItems});
 
-  final List<ConsumedListItem> consumedItems;
+  @override 
+  State <Consumed> createState() => _ConsumedState();
+}
+  class _ConsumedState extends State<Consumed> {
 
-  Consumed({required this.consumedItems});
-  
   @override
   Widget build(BuildContext context) {
+       final consumedItems = widget.consumedItems;
     return MainScaffold(
         selectedRouteIndex: 1,
         child: Scaffold(

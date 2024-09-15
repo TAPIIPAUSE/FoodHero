@@ -21,8 +21,8 @@ class foodDetails extends StatefulWidget {
 }
 
 class _FoodDetailsPageState extends State<foodDetails> {
-   FileImage? _image;
- // Image provider for the selected image
+  FileImage? _image;
+  // Image provider for the selected image
   bool _isLoading = false; // Flag to indicate image loading state
   bool _showImageOption = false;
   DateTime expirationDate = DateTime(2024);
@@ -219,11 +219,11 @@ class _FoodDetailsPageState extends State<foodDetails> {
       remaining: 8,
     );
     consumedItems.add(newItem);
-    Navigator.push(
-      context,
-      MaterialPageRoute(
-          builder: (context) => Consumed(consumedItems: consumedItems)),
-    );
+    // Navigator.push(
+    //   context,
+    //   MaterialPageRoute(
+    //       builder: (context) => Consumed(consumedItems: consumedItems)),
+    // );
   }
 
   void _consumeOption(BuildContext context) {
