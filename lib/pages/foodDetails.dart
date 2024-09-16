@@ -1,26 +1,30 @@
 import 'dart:io';
 import 'dart:core';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:foodhero/pages/consumed/Consumed.dart';
-import 'package:foodhero/pages/consumed/consumedDetails.dart';
+import 'package:foodhero/pages/consumed/consumedItemsProvider.dart';
 import 'package:foodhero/pages/inventory/inventory.dart';
 import 'package:foodhero/widgets/consumed/consumed_list_item.dart';
 import 'package:foodhero/widgets/inventory/inventory_list_item.dart';
 import 'package:foodhero/theme.dart';
 import 'package:foodhero/fonts.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:provider/provider.dart';
+import 'package:interactive_slider/interactive_slider.dart';
+import 'package:input_quantity/input_quantity.dart';
 
 class foodDetails extends StatefulWidget {
   final InventoryListItem item;
-  final Function(ConsumedListItem) addToConsumed; // Callback function
 
-  foodDetails({required this.item, required this.addToConsumed});
+  foodDetails({required this.item});
 
   @override
   _FoodDetailsPageState createState() => _FoodDetailsPageState();
 }
 
 class _FoodDetailsPageState extends State<foodDetails> {
+  final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
   FileImage? _image;
   // Image provider for the selected image
   bool _isLoading = false; // Flag to indicate image loading state
@@ -33,7 +37,7 @@ class _FoodDetailsPageState extends State<foodDetails> {
   double allCost = 0;
   double costPerPiece = 0;
   double updateAllCost = 0;
-  final foodname = TextEditingController();
+  final TextEditingController foodname = TextEditingController();
 
   void _pickImage() async {
     // Implement your image picking logic here (e.g., using image_picker)
@@ -209,6 +213,7 @@ class _FoodDetailsPageState extends State<foodDetails> {
   }
 
   List<ConsumedListItem> consumedItems = [];
+
   void addToConsumed(BuildContext context) {
     final newItem = ConsumedListItem(
       thumbnail: "assets/images/apples.jpg",
@@ -218,12 +223,26 @@ class _FoodDetailsPageState extends State<foodDetails> {
       consuming: 12,
       remaining: 8,
     );
-    consumedItems.add(newItem);
+
+    Provider.of<ConsumedItemsProvider>(context, listen: false)
+        .addConsumedItem(newItem);
+    // setState(() {
+    //   consumedItems.add(newItem);
+    // });
+
+    consumedModal(context);
     // Navigator.push(
     //   context,
     //   MaterialPageRoute(
-    //       builder: (context) => Consumed(consumedItems: consumedItems)),
+    //     builder: (context) => Consumed(consumedItems: consumedItems),
+    //   ),
     // );
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text('${foodname.text} added to consumed list'),
+        duration: Duration(seconds: 2),
+      ),
+    );
   }
 
   void _consumeOption(BuildContext context) {
@@ -285,6 +304,62 @@ class _FoodDetailsPageState extends State<foodDetails> {
                           borderRadius: BorderRadius.circular(30),
                         ),
                       ),
+                      Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Container(
+                            width: 100,
+                            height: 50,
+                            padding: EdgeInsets.all(3),
+                            decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(5),
+                                color: AppTheme.greenMainTheme),
+                            child: Row(
+                              children: [
+                                InkWell(
+                                    onTap: () {},
+                                    child: Icon(
+                                      Icons.remove,
+                                      color: Colors.white,
+                                      size: 16,
+                                    )),
+                                Container(
+                                  margin: EdgeInsets.symmetric(horizontal: 3),
+                                  padding: EdgeInsets.symmetric(
+                                      horizontal: 3, vertical: 2),
+                                  decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(3),
+                                      color: Colors.white),
+                                  child: Text(
+                                    '3',
+                                    style: TextStyle(
+                                        color: Colors.black, fontSize: 16),
+                                  ),
+                                ),
+                                InkWell(
+                                    onTap: () {},
+                                    child: Icon(
+                                      Icons.add,
+                                      color: Colors.white,
+                                      size: 16,
+                                    )),
+                              ],
+                            ),
+                          ),
+                          SizedBox(
+                            width: 350,
+                            child: InteractiveSlider(
+                              focusedHeight: 20,
+                              startIcon:
+                                  const Icon(Icons.remove_circle_rounded),
+                              endIcon: const Icon(Icons.add_circle_rounded),
+                              min: 1.0,
+                              max: 15.0,
+                              onChanged: (value) => setState(() => quantity),
+                            ),
+                          )
+                        ],
+                      )
                     ],
                   ),
                 ),
@@ -322,6 +397,52 @@ class _FoodDetailsPageState extends State<foodDetails> {
             ),
           );
         });
+  }
+
+  void consumedModal(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return GestureDetector(
+          onTap: () {
+            Navigator.of(context).pop();
+          },
+          child: Dialog.fullscreen(
+              child: Stack(
+            children: [
+              const ColoredBox(color: AppTheme.lightGreenBackground),
+              Column(
+                children: [
+                  Center(
+                    child: Text(
+                      '$foodname Consummed',
+                      style: FontsTheme.mouseMemoirs_40(),
+                    ),
+                  ),
+                  TextButton(
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => Consumed(),
+                          ),
+                        );
+                      },
+                      child: Text(
+                        'Go to the consuming food',
+                        style: FontsTheme.mouseMemoirs_20(),
+                      ))
+                ],
+              )
+            ],
+          )),
+        );
+      },
+    );
+
+    Future.delayed(const Duration(seconds: 2), () {
+      Navigator.of(context).pop();
+    });
   }
 
   void _wasteOption(BuildContext context) {
@@ -596,6 +717,7 @@ class _FoodDetailsPageState extends State<foodDetails> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+        key: scaffoldKey,
         // appBar: AppBar(
         //   backgroundColor: const Color.fromRGBO(67, 189, 174, 1),
         //   toolbarHeight: 75,

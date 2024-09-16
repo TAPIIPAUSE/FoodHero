@@ -138,7 +138,7 @@ class _ConsumedDetailsState extends State<ConsumedDetails> {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                            builder: (context) => Consumed(consumedItems: const [],),
+                            builder: (context) => Consumed(),
                           ),
                         );
                       },

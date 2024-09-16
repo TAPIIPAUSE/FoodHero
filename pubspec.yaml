@@ -21,8 +21,9 @@ dependencies:
   percent_indicator: ^4.2.3
   textwrap: ^1.2.0
   image_picker: ^0.8.4+2
-
-
+  provider: ^6.1.2
+  interactive_slider: ^0.2.1
+  input_quantity: ^1.2.4
 
 dev_dependencies:
   flutter_test:
@@ -40,3 +41,4 @@ flutter:
   # - family: MouseMemoirs
   # fonts:
   # - asset:
+

@@ -29,7 +29,7 @@ class InventoryListItem extends StatelessWidget {
         Navigator.push(
           context,
           MaterialPageRoute(
-            builder: (context) => foodDetails(item: this, addToConsumed: (ConsumedListItem ) {  },),
+            builder: (context) => foodDetails(item: this),
           ),
         );
       },

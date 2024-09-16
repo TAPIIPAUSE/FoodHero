@@ -1,23 +1,23 @@
 import 'package:flutter/material.dart';
 import 'package:foodhero/fonts.dart';
 import 'package:foodhero/main.dart';
+import 'package:foodhero/pages/consumed/consumedItemsProvider.dart';
 import 'package:foodhero/theme.dart';
 import 'package:foodhero/widgets/consumed/consumed_list_item.dart';
 import 'package:foodhero/widgets/inventory/inventory_list_item.dart';
 import 'package:go_router/go_router.dart';
+import 'package:provider/provider.dart';
 
 class Consumed extends StatefulWidget {
- final List<ConsumedListItem> consumedItems;
-  const Consumed({super.key, required this.consumedItems});
-
-  @override 
-  State <Consumed> createState() => _ConsumedState();
-}
-  class _ConsumedState extends State<Consumed> {
 
   @override
+  State<Consumed> createState() => _ConsumedState();
+}
+
+class _ConsumedState extends State<Consumed> {
+  @override
   Widget build(BuildContext context) {
-       final consumedItems = widget.consumedItems;
+      final consumedItems = Provider.of<ConsumedItemsProvider>(context).consumedItems;
     return MainScaffold(
         selectedRouteIndex: 1,
         child: Scaffold(
@@ -31,82 +31,78 @@ class Consumed extends StatefulWidget {
               style: FontsTheme.mouseMemoirs_64Black(),
             ),
             titleTextStyle: FontsTheme.mouseMemoirs_64White(),
-            leading: IconButton.filled(
+            leading: IconButton(
               onPressed: () => context.push(''),
               icon: const Icon(
-                Icons.person_sharp,
-                color: Colors.white,
+                Icons.person,
               ),
             ),
             actions: [
-              IconButton.filled(
+              IconButton(
                 onPressed: () {},
                 icon: const Icon(
-                  Icons.notifications_outlined,
-                  color: Colors.white,
+                  Icons.notifications,
                 ),
               ),
             ],
           ),
           body: SingleChildScrollView(
-              padding: const EdgeInsets.all(16),
-              child:
-                  // Column(
-                  // children: [
-                  //   const InventoryListItem(
-                  //     thumbnail: "assets/images/banana.jpg",
-                  //     foodname: 'Banana',
-                  //     expiry: '2 weeks',
-                  //     progressbar: 40,
-                  //     consuming: 5,
-                  //     remaining: 5,
-                  //   ),
-                  //   const InventoryListItem(
-                  //     thumbnail: "assets/images/tomatoes.jpg",
-                  //     foodname: 'Tomatos',
-                  //     expiry: '3 days left',
-                  //     progressbar: 20.3,
-                  //     consuming: 5,
-                  //     remaining: 7,
-                  //   ),
-                  //   const InventoryListItem(
-                  //     thumbnail: "assets/images/apples.jpg",
-                  //     foodname: 'Apple',
-                  //     expiry: '3 days left',
-                  //     progressbar: 60.57,
-                  //     consuming: 5,
-                  //     remaining: 7,
-                  //   ),
-                  //   const InventoryListItem(
-                  //     thumbnail: "assets/images/banana.jpg",
-                  //     foodname: 'Banana',
-                  //     expiry: '2 weeks',
-                  //     progressbar: 40,
-                  //     consuming: 5,
-                  //     remaining: 5,
-                  //   ),
-                  // ],
+            padding: const EdgeInsets.all(16),
+            child:
+                // Column(
+                // children: [
+                //   const InventoryListItem(
+                //     thumbnail: "assets/images/banana.jpg",
+                //     foodname: 'Banana',
+                //     expiry: '2 weeks',
+                //     progressbar: 40,
+                //     consuming: 5,
+                //     remaining: 5,
+                //   ),
+                //   const InventoryListItem(
+                //     thumbnail: "assets/images/tomatoes.jpg",
+                //     foodname: 'Tomatos',
+                //     expiry: '3 days left',
+                //     progressbar: 20.3,
+                //     consuming: 5,
+                //     remaining: 7,
+                //   ),
+                //   const InventoryListItem(
+                //     thumbnail: "assets/images/apples.jpg",
+                //     foodname: 'Apple',
+                //     expiry: '3 days left',
+                //     progressbar: 60.57,
+                //     consuming: 5,
+                //     remaining: 7,
+                //   ),
+                //   const InventoryListItem(
+                //     thumbnail: "assets/images/banana.jpg",
+                //     foodname: 'Banana',
+                //     expiry: '2 weeks',
+                //     progressbar: 40,
+                //     consuming: 5,
+                //     remaining: 5,
+                //   ),
+                // ],
 
-                  //  ),
-                  Column(
-                children: [
-                  ListView.builder(
-                    scrollDirection: Axis.vertical,
-                    shrinkWrap: true,
-                    itemCount: consumedItems.length,
-                    itemBuilder: (context, index) {
-                      final item = consumedItems[index];
-                      return ConsumedListItem(
-                          thumbnail: item.thumbnail,
-                          foodname: item.foodname,
-                          expiry: item.expiry,
-                          progressbar: item.progressbar,
-                          consuming: item.consuming,
-                          remaining: item.remaining);
-                    },
-                  ),
-                ],
-              )),
+                //  ),
+
+              ListView.builder(
+              scrollDirection: Axis.vertical,
+              shrinkWrap: true,
+              itemCount: consumedItems.length,
+              itemBuilder: (context, index) {
+                final item = consumedItems[index];
+                return ConsumedListItem(
+                    thumbnail: item.thumbnail,
+                    foodname: item.foodname,
+                    expiry: item.expiry,
+                    progressbar: item.progressbar,
+                    consuming: item.consuming,
+                    remaining: item.remaining);
+              },
+            ),
+          ),
         ));
   }
 }
