@@ -3,16 +3,36 @@ import 'package:foodhero/fonts.dart';
 import 'package:foodhero/main.dart';
 import 'package:foodhero/pages/consumed/Consumed.dart';
 import 'package:foodhero/theme.dart';
+import 'package:foodhero/widgets/inventory/inventory_list_item.dart';
 
 class ConsumedDetails extends StatefulWidget {
+
+  //  final InventoryListItem item;
+  // ConsumedDetails({required this.item});
+
   @override
   _ConsumedDetailsState createState() => _ConsumedDetailsState();
 }
+
 
 class _ConsumedDetailsState extends State<ConsumedDetails> {
   int quantity = 1;
   double weight = 1; // in grams
   String weightReduced = ''; //make it proper for the decimals
+    final TextEditingController foodname = TextEditingController();
+    
+  // @override
+  // void initState() {
+  //   super.initState();
+  //   foodname.text = widget.item.foodname;
+  // }
+    @override
+  void dispose() {
+    // Clean up the controller when the widget is disposed.
+    foodname.dispose();
+    super.dispose();
+  }
+  
   @override
   Widget build(BuildContext context) {
     return
@@ -85,6 +105,7 @@ class _ConsumedDetailsState extends State<ConsumedDetails> {
                         child: TextField(
                           style: FontsTheme.mouseMemoirs_50Black(),
                           textAlign: TextAlign.center,
+                          controller: foodname,
                         ),
                       ),
                     ],

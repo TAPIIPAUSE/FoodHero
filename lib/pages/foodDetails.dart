@@ -16,7 +16,6 @@ import 'package:input_quantity/input_quantity.dart';
 
 class foodDetails extends StatefulWidget {
   final InventoryListItem item;
-
   foodDetails({required this.item});
 
   @override
@@ -37,6 +36,7 @@ class _FoodDetailsPageState extends State<foodDetails> {
   double allCost = 0;
   double costPerPiece = 0;
   double updateAllCost = 0;
+  int consumeQuantity = 0;
   final TextEditingController foodname = TextEditingController();
 
   void _pickImage() async {
@@ -307,43 +307,61 @@ class _FoodDetailsPageState extends State<foodDetails> {
                       Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          Container(
-                            width: 100,
-                            height: 50,
-                            padding: EdgeInsets.all(3),
-                            decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(5),
-                                color: AppTheme.greenMainTheme),
-                            child: Row(
-                              children: [
-                                InkWell(
-                                    onTap: () {},
-                                    child: Icon(
-                                      Icons.remove,
-                                      color: Colors.white,
-                                      size: 16,
-                                    )),
-                                Container(
-                                  margin: EdgeInsets.symmetric(horizontal: 3),
-                                  padding: EdgeInsets.symmetric(
-                                      horizontal: 3, vertical: 2),
-                                  decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(3),
-                                      color: Colors.white),
-                                  child: Text(
-                                    '3',
-                                    style: TextStyle(
-                                        color: Colors.black, fontSize: 16),
+                          SizedBox(
+                            height: 20,
+                          ),
+                          SizedBox(
+                            width: 80,
+                            child: Container(
+                              width: 100,
+                              height: 50,
+                              padding: EdgeInsets.all(3),
+                              decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(5),
+                                  color: AppTheme.softRed),
+                              child: Row(
+                                children: [
+                                  // SizedBox(
+                                  //   width: 10,
+                                  //   height: 10,
+                                  //   child: InkWell(
+                                  //       onTap: () {
+                                  //         consumeQuantity - 1;
+                                  //       },
+                                  //       child: Icon(
+                                  //         Icons.remove,
+                                  //         color: Colors.white,
+                                  //         size: 16,
+                                  //       )),
+                                  // ),
+                                  Container(
+                                    margin: EdgeInsets.symmetric(horizontal: 3),
+                                    padding: EdgeInsets.symmetric(
+                                        horizontal: 3, vertical: 2),
+                                    decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(3),
+                                        color: Colors.white),
+                                    child: Text(
+                                      "$consumeQuantity",
+                                      style: TextStyle(
+                                          color: Colors.black, fontSize: 16),
+                                    ),
                                   ),
-                                ),
-                                InkWell(
-                                    onTap: () {},
-                                    child: Icon(
-                                      Icons.add,
-                                      color: Colors.white,
-                                      size: 16,
-                                    )),
-                              ],
+                                  // SizedBox(
+                                  //   width: 10,
+                                  //   height: 10,
+                                  //   child: InkWell(
+                                  //       onTap: () {
+                                  //         consumeQuantity + 1;
+                                  //       },
+                                  //       child: Icon(
+                                  //         Icons.add,
+                                  //         color: Colors.white,
+                                  //         size: 16,
+                                  //       )),
+                                  // )
+                                ],
+                              ),
                             ),
                           ),
                           SizedBox(
@@ -355,7 +373,8 @@ class _FoodDetailsPageState extends State<foodDetails> {
                               endIcon: const Icon(Icons.add_circle_rounded),
                               min: 1.0,
                               max: 15.0,
-                              onChanged: (value) => setState(() => quantity),
+                              onChanged: (value) =>
+                                  setState(() => consumeQuantity),
                             ),
                           )
                         ],
@@ -400,6 +419,7 @@ class _FoodDetailsPageState extends State<foodDetails> {
   }
 
   void consumedModal(BuildContext context) {
+    String foodnameString = foodname.text;
     showDialog(
       context: context,
       builder: (BuildContext context) {
@@ -410,30 +430,40 @@ class _FoodDetailsPageState extends State<foodDetails> {
           child: Dialog.fullscreen(
               child: Stack(
             children: [
-              const ColoredBox(color: AppTheme.lightGreenBackground),
-              Column(
-                children: [
-                  Center(
-                    child: Text(
-                      '$foodname Consummed',
-                      style: FontsTheme.mouseMemoirs_40(),
+              Container(
+                  color: AppTheme.lightGreenBackground,
+                  child: Center(
+                    child: Column(
+                      children: [
+                        Text(
+                          '$foodnameString\n Consummed',
+                          style: FontsTheme.mouseMemoirs_64Black(),
+                          textAlign: TextAlign.center,
+                        ),
+                        const SizedBox(
+                          height: 400,
+                        ),
+                        Text(
+                          '5 Boxes were consumed\n You get 5 points (+5.0)\n Save 500 baht',
+                          style: FontsTheme.mouseMemoirs_30Black(),
+                          textAlign: TextAlign.center,
+                        ),
+                        TextButton(
+                            onPressed: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => Consumed(),
+                                ),
+                              );
+                            },
+                            child: Text(
+                              'Go to the consuming food',
+                              style: FontsTheme.mouseMemoirs_20(),
+                            ))
+                      ],
                     ),
-                  ),
-                  TextButton(
-                      onPressed: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => Consumed(),
-                          ),
-                        );
-                      },
-                      child: Text(
-                        'Go to the consuming food',
-                        style: FontsTheme.mouseMemoirs_20(),
-                      ))
-                ],
-              )
+                  )),
             ],
           )),
         );
@@ -1277,6 +1307,7 @@ class _FoodDetailsPageState extends State<foodDetails> {
                                   setState(() {
                                     quantity = value.toInt();
                                     _updateAllCost();
+                                    consumeQuantity = quantity;
                                   });
                                 },
                               ),
