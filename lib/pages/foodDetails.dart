@@ -212,39 +212,6 @@ class _FoodDetailsPageState extends State<foodDetails> {
     return updateWeight.toStringAsFixed(2);
   }
 
-  List<ConsumedListItem> consumedItems = [];
-
-  void addToConsumed(BuildContext context) {
-    final newItem = ConsumedListItem(
-      thumbnail: "assets/images/apples.jpg",
-      foodname: foodname.text,
-      expiry: "ssss",
-      progressbar: 80,
-      consuming: 12,
-      remaining: 8,
-    );
-
-    Provider.of<ConsumedItemsProvider>(context, listen: false)
-        .addConsumedItem(newItem);
-    // setState(() {
-    //   consumedItems.add(newItem);
-    // });
-
-    consumedModal(context);
-    // Navigator.push(
-    //   context,
-    //   MaterialPageRoute(
-    //     builder: (context) => Consumed(consumedItems: consumedItems),
-    //   ),
-    // );
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text('${foodname.text} added to consumed list'),
-        duration: Duration(seconds: 2),
-      ),
-    );
-  }
-
   void _consumeOption(BuildContext context) {
     showDialog(
         context: context,
@@ -384,7 +351,9 @@ class _FoodDetailsPageState extends State<foodDetails> {
                 ),
                 SizedBox(height: 10),
                 ElevatedButton(
-                  onPressed: () {},
+                  onPressed: () {
+                    completeConsume(context);
+                  },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Color(0xFFF4A261),
                     shape: RoundedRectangleBorder(
@@ -416,6 +385,42 @@ class _FoodDetailsPageState extends State<foodDetails> {
             ),
           );
         });
+  }
+
+  List<ConsumedListItem> consumedItems = [];
+
+  void addToConsumed(BuildContext context) {
+    final newItem = ConsumedListItem(
+      thumbnail: "assets/images/apples.jpg",
+      foodname: foodname.text,
+      expiry: "ssss",
+      progressbar: 80,
+      consuming: 12,
+      remaining: 8,
+    );
+
+    Provider.of<ConsumedItemsProvider>(context, listen: false)
+        .addConsumedItem(newItem);
+    // setState(() {
+    //   consumedItems.add(newItem);
+    // });
+
+    // Navigator.push(
+    //   context,
+    //   MaterialPageRoute(
+    //     builder: (context) => Consumed(consumedItems: consumedItems),
+    //   ),
+    // );
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text('${foodname.text} added to consumed list'),
+        duration: const Duration(seconds: 2),
+      ),
+    );
+  }
+
+  void completeConsume(BuildContext context) {
+    consumedModal(context);
   }
 
   void consumedModal(BuildContext context) {
@@ -1175,7 +1180,7 @@ class _FoodDetailsPageState extends State<foodDetails> {
                 Expanded(
                   child: Text(
                     label,
-                    style: FontsTheme.mouseMemoirs_20(),
+                    style: FontsTheme.mouseMemoirs_30Black(),
                   ),
                 ),
                 SizedBox(
@@ -1214,7 +1219,8 @@ class _FoodDetailsPageState extends State<foodDetails> {
                   width: 10,
                 ),
                 Expanded(
-                  child: Text('Remind on', style: FontsTheme.mouseMemoirs_20()),
+                  child: Text('Remind on',
+                      style: FontsTheme.mouseMemoirs_30Black()),
                 ),
                 SizedBox(
                   width: 200,

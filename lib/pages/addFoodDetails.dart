@@ -155,27 +155,40 @@ class _AddFoodDetailsPageState extends State<addFoodDetails> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppTheme.lightGreenBackground,
-      appBar: AppBar(
-        backgroundColor: AppTheme.greenMainTheme,
-        toolbarHeight: 90,
-        centerTitle: true,
-        title: Text('Inventory'),
-        titleTextStyle: FontsTheme.mouseMemoirs_64Black(),
-        shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.only(
-                bottomLeft: Radius.circular(25),
-                bottomRight: Radius.circular(25))),
-        leading: IconButton(
-          icon: Icon(Icons.person),
-          onPressed: () {},
-        ),
-        actions: [
-          IconButton(
-            icon: Icon(Icons.notifications),
-            onPressed: () {},
-          ),
-        ],
-      ),
+      appBar: PreferredSize(
+          preferredSize: const Size.fromHeight(150),
+          child: Container(
+            color: AppTheme.greenMainTheme,
+            child: Column(
+              children: [
+                AppBar(
+                  backgroundColor: AppTheme.greenMainTheme,
+                  toolbarHeight: 90,
+                  centerTitle: true,
+                  title: Text('Inventory'),
+                  titleTextStyle: FontsTheme.mouseMemoirs_64Black(),
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.only(
+                          bottomLeft: Radius.circular(25),
+                          bottomRight: Radius.circular(25))),
+                  leading: IconButton(
+                    icon: Icon(Icons.person),
+                    onPressed: () {},
+                  ),
+                  actions: [
+                    IconButton(
+                      icon: Icon(Icons.notifications),
+                      onPressed: () {},
+                    ),
+                  ],
+                ),
+                Icon(
+                  Icons.arrow_upward_rounded,
+                  size: 50,
+                ),
+              ],
+            ),
+          )),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(16),
         child: Column(
@@ -452,7 +465,7 @@ class _AddFoodDetailsPageState extends State<addFoodDetails> {
                 Expanded(
                   child: Text(
                     label,
-                    style: FontsTheme.mouseMemoirs_20(),
+                    style: FontsTheme.mouseMemoirs_30Black(),
                   ),
                 ),
                 SizedBox(
@@ -491,7 +504,8 @@ class _AddFoodDetailsPageState extends State<addFoodDetails> {
                   width: 10,
                 ),
                 Expanded(
-                  child: Text('Remind on', style: FontsTheme.mouseMemoirs_20()),
+                  child: Text('Remind on',
+                      style: FontsTheme.mouseMemoirs_30Black()),
                 ),
                 SizedBox(
                   width: 200,
