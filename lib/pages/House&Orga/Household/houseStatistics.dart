@@ -10,16 +10,12 @@ import 'package:foodhero/widgets/interorg/waste_piechart.dart';
 import 'package:foodhero/widgets/interorg/wastetype_piechart.dart';
 import 'package:go_router/go_router.dart';
 
-class InterDashboard extends StatefulWidget {
-  const InterDashboard({super.key});
-
+class houseStatistics extends StatefulWidget {
   @override
-  State<InterDashboard> createState() => _InterDashboardState();
+  _houseStatisticState createState() => _houseStatisticState();
 }
 
-class _InterDashboardState extends State<InterDashboard> {
-  CarouselController buttonCarouselController = CarouselController();
-
+class _houseStatisticState extends State<houseStatistics> {
   @override
   Widget build(BuildContext context) {
     final screenWidth = MediaQuery.of(context).size.width;
@@ -70,7 +66,6 @@ class _InterDashboardState extends State<InterDashboard> {
         ),
       ),
     ];
-
     return Scaffold(
       backgroundColor: AppTheme.lightGreenBackground,
       appBar: PreferredSize(

@@ -6,38 +6,20 @@ import 'package:foodhero/widgets/interorg/waste_barchart.dart';
 import 'package:foodhero/widgets/interorg/waste_piechart.dart';
 import 'package:go_router/go_router.dart';
 
-class WasteChart extends StatelessWidget {
-  const WasteChart({super.key});
+class UserWasteChart extends StatelessWidget {
+  const UserWasteChart({super.key});
 
   @override
   Widget build(BuildContext context) {
     final screenWidth = MediaQuery.of(context).size.width;
     return Scaffold(
       backgroundColor: AppTheme.lightGreenBackground,
-      appBar: PreferredSize(
-          preferredSize: const Size.fromHeight(80.0),
-          child: AppBar(
-            title: const Text('Statistics'),
-            centerTitle: true,
-            backgroundColor: AppTheme.greenMainTheme,
-            titleTextStyle: FontsTheme.mouseMemoirs_64Black(),
-            leading: IconButton.filled(
-              onPressed: () => context.push(''),
-              icon: const Icon(
-                Icons.person_sharp,
-                color: Colors.white,
-              ),
-            ),
-            actions: [
-              IconButton.filled(
-                onPressed: () {},
-                icon: const Icon(
-                  Icons.notifications_outlined,
-                  color: Colors.white,
-                ),
-              ),
-            ],
-          )),
+      appBar: AppBar(
+          title: const Text('Your Statistics'),
+          centerTitle: true,
+          backgroundColor: AppTheme.greenMainTheme,
+          titleTextStyle: FontsTheme.mouseMemoirs_64Black(),
+          automaticallyImplyLeading: false),
       body: SingleChildScrollView(
         child: Column(children: [
           const SizedBox(

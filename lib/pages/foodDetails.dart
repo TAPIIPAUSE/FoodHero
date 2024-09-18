@@ -4,6 +4,7 @@ import 'dart:async';
 import 'dart:math';
 import 'dart:core';
 import 'package:flutter/material.dart';
+import 'package:foodhero/pages/inventory/inventory.dart';
 import 'package:foodhero/theme.dart';
 import 'package:foodhero/fonts.dart';
 import 'package:image_picker/image_picker.dart';
@@ -572,7 +573,7 @@ class _FoodDetailsPageState extends State<foodDetails> {
         centerTitle: true,
         title: Text(
           "Inventory",
-          style: FontsTheme.mouseMemoirs_64White(),
+          style: FontsTheme.mouseMemoirs_64Black(),
         ),
         leading: IconButton(
           icon: Icon(Icons.person),
@@ -625,9 +626,6 @@ class _FoodDetailsPageState extends State<foodDetails> {
                 children: [
                   Row(
                     children: [
-                      Stack(
-                        children: [],
-                      ),
                       GestureDetector(
                         onTap: () => _chooseAddImageOption(context),
                         child: Container(
@@ -660,6 +658,7 @@ class _FoodDetailsPageState extends State<foodDetails> {
                         width: 200,
                         child: TextField(
                           style: FontsTheme.mouseMemoirs_50Black(),
+                          textAlign: TextAlign.center,
                         ),
                       ),
                     ],
@@ -722,7 +721,14 @@ class _FoodDetailsPageState extends State<foodDetails> {
                     child: IconButton(
                       icon: Image.asset('assets/images/BackButton.png'),
                       iconSize: 50,
-                      onPressed: () {},
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => const Inventory(),
+                          ),
+                        );
+                      },
                     ),
                   ),
                 ],
@@ -954,6 +960,18 @@ class _FoodDetailsPageState extends State<foodDetails> {
   }
 
   Widget buildQuantityWeight() {
+    String Piece = "Piece";
+    if (quantity == 1) {
+      Piece = "Piece";
+    } else if (quantity > 1) {
+      Piece = "Pieces";
+    }
+    String Gram = "Gram";
+    if (weight == 1) {
+      Gram = "Gram";
+    } else if (weight > 1) {
+      Gram = "Grams";
+    }
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 8),
       child: Column(
@@ -972,7 +990,8 @@ class _FoodDetailsPageState extends State<foodDetails> {
                   children: [
                     Row(
                       children: [
-                        Text('Quantity', style: FontsTheme.mouseMemoirs_30Black()),
+                        Text('Quantity',
+                            style: FontsTheme.mouseMemoirs_30Black()),
                         Column(
                           children: [
                             Container(
@@ -989,8 +1008,7 @@ class _FoodDetailsPageState extends State<foodDetails> {
                                 children: [
                                   Text('$quantity ',
                                       style: FontsTheme.hindBold_20()),
-                                  Text('Pieces',
-                                      style: FontsTheme.hindBold_20()),
+                                  Text(Piece, style: FontsTheme.hindBold_20()),
                                 ],
                               ),
                             ),
@@ -1026,7 +1044,8 @@ class _FoodDetailsPageState extends State<foodDetails> {
                     //Weight
                     Row(
                       children: [
-                        Text('Weight', style: FontsTheme.mouseMemoirs_30Black()),
+                        Text('Weight',
+                            style: FontsTheme.mouseMemoirs_30Black()),
                         Column(
                           children: [
                             Container(
@@ -1043,8 +1062,7 @@ class _FoodDetailsPageState extends State<foodDetails> {
                                 children: [
                                   Text('$weightReduced ',
                                       style: FontsTheme.hindBold_20()),
-                                  Text('grams',
-                                      style: FontsTheme.hindBold_20()),
+                                  Text(Gram, style: FontsTheme.hindBold_20()),
                                 ],
                               ),
                             ),
@@ -1068,7 +1086,7 @@ class _FoodDetailsPageState extends State<foodDetails> {
                                   setState(() {
                                     weight = value;
 
-                                    weightReduced = weight.toStringAsFixed(3);
+                                    weightReduced = weight.toStringAsFixed(0);
                                   });
                                 },
                               ),
@@ -1264,8 +1282,6 @@ class _FoodDetailsPageState extends State<foodDetails> {
 
   String _updateWeight() {
     double updateWeight = weight / quantity;
-    log(weight);
-    log(quantity);
     return updateWeight.toStringAsFixed(2);
   }
 }

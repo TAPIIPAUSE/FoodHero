@@ -157,14 +157,14 @@ class _RegisterState extends State<Register> {
                             print(_email);
                             print(_password);
 
-                            context.push('/inventory/All food');
+                            context.go('/inventory');
                           },
                           style: buttonStyle,
                           child: const Text("Register"),
                         ),
                         if (!isKeyboardOpen)
                           IconButton(
-                            onPressed: () => context.push('/inter_org'),
+                            onPressed: () => context.go('/inventory'),
                             icon: const Icon(Icons.arrow_back_ios_new),
                             style: backButtonStyle,
                           ),
