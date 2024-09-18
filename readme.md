@@ -34,7 +34,7 @@ TOKEN_SECRET = james
 ```
 
 ## Set up Database
-1. Create your local Database
+Create your local Database & Try to connet to the code in main.js at URI variable
 
 
 ## To Run Backend Service
@@ -42,6 +42,82 @@ You can check this command in package.json
 ```bash
 npm start 
 ```
+
+## API Service Guide
+
+#### Base URL
+```
+http://localhost:3000
+```
+
+### User Module
+
+#### 1. Register: POST
+URL:
+```
+http://localhost:3000/api/v1/users/register
+```
+
+JSON Body:
+```
+{
+    "username": {string},
+    "email": {string},
+    "password": {string}
+}
+```
+
+#### 2. Login: POST
+URL:
+```
+http://localhost:3000/api/v1/users/login
+```
+
+JSON Body:
+```
+{
+    "username": {string},
+    "password": {string}
+}
+```
+
+#### 3. Create House: POST
+URL:
+```
+http://localhost:3000/api/v1/users/create_house
+```
+
+JSON Body:
+```
+{
+    "house_name": {string},
+}
+```
+
+This function will create the house based on that user's input house name,
+It will automatically assign the house ID to that user and update every related field in database.
+It also generate the hID based on the current pointer in House model.
+
+#### 4. Create Organization: POST
+URL:
+```
+http://localhost:3000/api/v1/users/create_org
+```
+
+JSON Body:
+```
+{
+    "org_name": {string},
+}
+```
+
+This function will create the organization based on that user's input organization name,
+It will automatically assign the organization ID to that user and update every related field in database.
+It also generate the hID based on the current pointer in House model.
+
+
+
+
 
 
 
