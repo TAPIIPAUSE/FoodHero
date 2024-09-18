@@ -34,7 +34,7 @@ TOKEN_SECRET = james
 ```
 
 ## Set up Database
-1. Create your local Database
+Create your local Database & Try to connet to the code in main.js at URI variable
 
 
 ## To Run Backend Service
@@ -42,6 +42,48 @@ You can check this command in package.json
 ```bash
 npm start 
 ```
+
+## API Service Guide
+
+#### Base URL
+```
+http://localhost:3000
+```
+
+### User Module
+
+#### 1. Register: POST
+URL:
+```
+http://localhost:3000/api/v1/users/register
+```
+
+JSON Body:
+```
+{
+    "username": {string},
+    "email": {string},
+    "password": {string}
+}
+```
+
+#### 2. Login: POST
+URL:
+```
+http://localhost:3000/api/v1/users/login
+```
+
+JSON Body:
+```
+{
+    "username": {string},
+    "password": {string}
+}
+```
+
+
+
+
 
 
 
