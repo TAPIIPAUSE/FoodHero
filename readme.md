@@ -81,6 +81,40 @@ JSON Body:
 }
 ```
 
+#### 3. Create House: POST
+URL:
+```
+http://localhost:3000/api/v1/users/create_house
+```
+
+JSON Body:
+```
+{
+    "house_name": {string},
+}
+```
+
+This function will create the house based on that user's input house name,
+It will automatically assign the house ID to that user and update every related field in database.
+It also generate the hID based on the current pointer in House model.
+
+#### 4. Create Organization: POST
+URL:
+```
+http://localhost:3000/api/v1/users/create_org
+```
+
+JSON Body:
+```
+{
+    "org_name": {string},
+}
+```
+
+This function will create the organization based on that user's input organization name,
+It will automatically assign the organization ID to that user and update every related field in database.
+It also generate the hID based on the current pointer in House model.
+
 
 
 
