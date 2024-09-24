@@ -24,9 +24,9 @@ import inventoryRoute from './routes/inventory.js'
 if(userRoute){
     console.log("Found the directory")
 }
+// const uri = "mongodb://admin:foodhero@10.4.150.148:27017/"
+const uri = "mongodb+srv://foodhero:foodhero@foodhero.a6ndt4i.mongodb.net/userAuth"
 
-const uri = "mongodb://127.0.0.1:27017/userAuth"; // Replace with your MongoDB URI
-// const uri = "mongodb://10.4.150.148:27017/userAuth"; // Replace with your MongoDB URI
 const client = new MongoClient(uri); //Connect DB
 
 
