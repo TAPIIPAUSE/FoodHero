@@ -115,6 +115,8 @@ This function will create the organization based on that user's input organizati
 It will automatically assign the organization ID to that user and update every related field in database.
 It also generate the hID based on the current pointer in House model.
 
+Screw You
+
 
 
 
