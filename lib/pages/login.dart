@@ -1,9 +1,22 @@
 import 'package:flutter/material.dart';
+import 'package:foodhero/pages/api/ApiClient.dart';
 import 'package:foodhero/pages/login_regis.dart';
 import 'package:foodhero/theme.dart';
 import 'package:foodhero/fonts.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class login extends StatelessWidget {
+  void loginUser(String email, String password) async {
+    AuthService apiClient =
+        AuthService('http://localhost:3000/api/v1/users/login');
+    await apiClient.login(email, password);
+  }
+  
+  Future<void> saveToken(String token) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    await prefs.setString('user_token', token);
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -48,7 +61,7 @@ class login extends StatelessWidget {
             ),
             Form(
               child: Padding(
-                  padding: const EdgeInsets.only(top: 400),
+                  padding: const EdgeInsets.only(top: 350),
                   child: Center(
                     child: Column(
                       children: [
@@ -56,7 +69,11 @@ class login extends StatelessWidget {
                           children: [
                             Text(
                               'Login',
-                              style: FontsTheme.hindBold_30(),
+                              style: FontsTheme.mouseMemoirs_40()
+                                  .copyWith(fontSize: 50),
+                            ),
+                            const SizedBox(
+                              height: 5,
                             ),
                             Container(
                               width: 300,
@@ -79,22 +96,12 @@ class login extends StatelessWidget {
                                   ),
                                   maxLines: 1,
                                 ),
-                                //     ListView(
-                                //   reverse: false,
-                                //   children: <Widget>[
-
-                                //   ].reversed.toList(),
-                                // )
                               ),
                             ),
-                          ],
-                        ),
-                        SizedBox(height: 10),
-                        Column(
-                          children: [
+                            SizedBox(height: 10),
                             Text(
                               'Password',
-                              style: FontsTheme.hindBold_30(),
+                              style: FontsTheme.hindBold_20(),
                             ),
                             Container(
                               width: 300,
@@ -117,10 +124,30 @@ class login extends StatelessWidget {
                                 ),
                               ),
                             ),
+                            const SizedBox(
+                              height: 10,
+                            ),
+                            SizedBox(
+                              height: 55,
+                              width: 250,
+                              child: TextButton(
+                                  onPressed: () {
+                                    loginUser;
+                                  },
+                                  style: TextButton.styleFrom(
+                                      backgroundColor: AppTheme.greenMainTheme),
+                                  child: Center(
+                                    child: Text(
+                                      'Login',
+                                      style: FontsTheme.hindBold_30()
+                                          .copyWith(color: Colors.black),
+                                    ),
+                                  )),
+                            )
                           ],
-                        ), // Add some spacing between the buttons
+                        ), // Add
+                        SizedBox(height: 10),
 
-                        SizedBox(height: 10), //
                         InkWell(
                             onTap: () {
                               // Navigate to another page (replace 'AnotherPage' with your actual page name)

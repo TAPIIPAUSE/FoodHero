@@ -15,14 +15,32 @@ import 'package:foodhero/pages/register.dart';
 import 'package:foodhero/theme.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
-void main() {
-  runApp( ChangeNotifierProvider(
+ void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  SharedPreferences prefs = await SharedPreferences.getInstance();
+  String? token = prefs.getString('james');
+  
+  runApp(
+  ChangeNotifierProvider(
       create: (context) => ConsumedItemsProvider(),
-      child: const MainApp(),),
-);
+      child: MyApp(initialRoute: token != null ? '/home' : '/login',),));
 }
 
+class MyApp extends StatelessWidget {
+    final String initialRoute;
+
+  const MyApp({required this.initialRoute, super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp.router(
+      routerConfig: _router,
+      debugShowCheckedModeBanner: false,
+    );
+  }
+}
 /// The route configuration.
 final GoRouter _router = GoRouter(
   routes: <RouteBase>[
@@ -191,4 +209,7 @@ class MainScaffold extends StatelessWidget {
       ),
     );
   }
+
+ 
+
 }

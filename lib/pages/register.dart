@@ -1,10 +1,22 @@
 import 'package:flutter/material.dart';
 import 'package:foodhero/fonts.dart';
+import 'package:foodhero/pages/api/ApiClient.dart';
 import 'package:foodhero/theme.dart';
 import 'package:go_router/go_router.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class Register extends StatefulWidget {
   const Register({super.key});
+
+  void registerUser(String email, String password) async {
+  AuthService apiClient = AuthService('http://localhost:3000/api/v1/users/register');
+  await apiClient.register(email, password);
+}
+
+Future<void> saveToken(String token) async {
+  SharedPreferences prefs = await SharedPreferences.getInstance();
+  await prefs.setString('user_token', token);
+}
 
   @override
   State<Register> createState() => _RegisterState();
@@ -179,4 +191,9 @@ class _RegisterState extends State<Register> {
       ),
     );
   }
+}
+
+void registerUser(String email, String password) async {
+  AuthService apiClient = AuthService('http://localhost:3000/api/v1/users/register');
+  await apiClient.register(email, password);
 }

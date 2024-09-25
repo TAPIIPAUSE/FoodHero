@@ -24,6 +24,7 @@ dependencies:
   provider: ^6.1.2
   interactive_slider: ^0.2.1
   input_quantity: ^1.2.4
+  shared_preferences: ^2.3.2
 
 dev_dependencies:
   flutter_test:

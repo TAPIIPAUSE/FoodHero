@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:foodhero/pages/api/ApiClient.dart';
 import 'package:foodhero/pages/login.dart';
 import 'package:foodhero/pages/register.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:foodhero/theme.dart';
 import 'package:foodhero/fonts.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class login_regis extends StatelessWidget {
   @override
@@ -38,7 +40,7 @@ class login_regis extends StatelessWidget {
             alignment: Alignment.bottomCenter,
             child: Container(
               height: 436,
-              decoration: BoxDecoration(
+              decoration: const BoxDecoration(
                 color: AppTheme.softBlue,
                 borderRadius: BorderRadius.only(
                     topLeft: Radius.circular(30),
@@ -64,7 +66,6 @@ class login_regis extends StatelessWidget {
                   children: [
                     InkWell(
                       onTap: () {
-                        // Navigate to another page (replace 'AnotherPage' with your actual page name)
                         Navigator.push(
                           context,
                           MaterialPageRoute(builder: (context) => login()),
