@@ -5,27 +5,36 @@ import 'package:foodhero/theme.dart';
 import 'package:go_router/go_router.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-class Register extends StatefulWidget {
-  const Register({super.key});
-
-  void registerUser(String email, String password) async {
-  AuthService apiClient = AuthService('http://localhost:3000/api/v1/users/register');
-  await apiClient.register(email, password);
-}
-
-Future<void> saveToken(String token) async {
-  SharedPreferences prefs = await SharedPreferences.getInstance();
-  await prefs.setString('user_token', token);
-}
-
+class RegisterScreen extends StatefulWidget {
   @override
-  State<Register> createState() => _RegisterState();
+  _RegisterScreenState createState() => _RegisterScreenState();
 }
 
-class _RegisterState extends State<Register> {
+class _RegisterScreenState extends State<RegisterScreen> {
+  final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _passwordController = TextEditingController();
+  final TextEditingController _nameController = TextEditingController();
+  final AuthService _authService = AuthService();
   late String _email;
   late String _password;
   late String _name;
+  void _register() async {
+    String email = _emailController.text;
+    String password = _passwordController.text;
+    String name = _nameController.text;
+
+    bool success = await _authService.register(email, password, name);
+
+    if (success) {
+      // Navigate to login or dashboard page
+      Navigator.pushReplacementNamed(context, '/login');
+    } else {
+      // Show error
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Registration failed')),
+      );
+    }
+  }
 
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
@@ -191,9 +200,4 @@ class _RegisterState extends State<Register> {
       ),
     );
   }
-}
-
-void registerUser(String email, String password) async {
-  AuthService apiClient = AuthService('http://localhost:3000/api/v1/users/register');
-  await apiClient.register(email, password);
 }

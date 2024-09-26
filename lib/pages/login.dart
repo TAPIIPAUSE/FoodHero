@@ -5,12 +5,36 @@ import 'package:foodhero/theme.dart';
 import 'package:foodhero/fonts.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-class login extends StatelessWidget {
-  void loginUser(String email, String password) async {
-    AuthService apiClient =
-        AuthService('http://localhost:3000/api/v1/users/login');
-    await apiClient.login(email, password);
+
+class LoginScreen extends StatefulWidget {
+  @override
+  _loginState createState() => _loginState();
+}
+
+class _loginState extends State<LoginScreen> {
+   final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _passwordController = TextEditingController();
+    final AuthService _authService = AuthService();
+
+    void _login() async {
+    String email = _emailController.text;
+    String password = _passwordController.text;
+
+    bool success = await _authService.login(email, password);
+
+    if (success) {
+      // Navigate to home or dashboard page
+      Navigator.pushReplacementNamed(context, '/inventory/:foodCategory');
+    } else {
+      // Show error
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Invalid email or password')),
+      );
+    }
   }
+
+  
+ 
   
   Future<void> saveToken(String token) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -87,6 +111,7 @@ class login extends StatelessWidget {
                               padding: EdgeInsets.all(10.0),
                               child: Center(
                                 child: TextField(
+                                  controller: _emailController,
                                   style: FontsTheme.hindBold_30(),
                                   scrollPadding: EdgeInsets.only(bottom: 100),
                                   decoration: InputDecoration(
@@ -115,6 +140,7 @@ class login extends StatelessWidget {
                               padding: EdgeInsets.all(10.0),
                               child: Center(
                                 child: TextField(
+                                  controller: _passwordController,
                                   style: FontsTheme.hindBold_30(),
                                   decoration: InputDecoration(
                                     hintText: 'Enter your password',
@@ -132,7 +158,7 @@ class login extends StatelessWidget {
                               width: 250,
                               child: TextButton(
                                   onPressed: () {
-                                    loginUser;
+                                    _login;
                                   },
                                   style: TextButton.styleFrom(
                                       backgroundColor: AppTheme.greenMainTheme),

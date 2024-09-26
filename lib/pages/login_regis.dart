@@ -50,7 +50,7 @@ class login_regis extends StatelessWidget {
           ),
           Align(
             alignment: Alignment.bottomCenter,
-            child: Container(
+            child: SizedBox(
               width: 356,
               height: 267,
               child: Image.asset(
@@ -68,7 +68,7 @@ class login_regis extends StatelessWidget {
                       onTap: () {
                         Navigator.push(
                           context,
-                          MaterialPageRoute(builder: (context) => login()),
+                          MaterialPageRoute(builder: (context) => LoginScreen()),
                         );
                       },
                       child: Container(
@@ -94,7 +94,7 @@ class login_regis extends StatelessWidget {
                         // Navigate to another page (replace 'AnotherPage' with your actual page name)
                         Navigator.push(
                           context,
-                          MaterialPageRoute(builder: (context) => Register()),
+                          MaterialPageRoute(builder: (context) => RegisterScreen()),
                         );
                       },
                       child: Container(

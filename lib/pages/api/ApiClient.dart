@@ -4,37 +4,56 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 
 class AuthService {
-   final String baseUrl = 'http://10.4.154.140/api/';
-
-  AuthService(String s);
-
-  Future<void> login(String email, String password) async {
+   final String apiUrl = 'localhost:3000/api/v1/users';
+   
+  Future<bool> login(String email, String password) async {
     final response = await http.post(
-      Uri.parse('$baseUrl/login'),
-      headers: {'Content-Type': 'application/json'},
-      body: jsonEncode({'email': email, 'password': password}),
+      Uri.parse('$apiUrl/login'),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+      },
+    body: jsonEncode(<String, String>{
+        'email': email,
+        'password': password,
+      }),
     );
     if (response.statusCode == 200) {
-      // Handle successful login
+    // Assuming the API returns a token on successful login
+      String token = jsonDecode(response.body)['token'];
+
+      // Save token in SharedPreferences
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      await prefs.setString('user_token', token);
+
+      return true;
     } else {
-      // Handle error
+      return false;
     }
   }
 
-  Future<void> register(String email, String password) async {
+ // Register method
+  Future<bool> register(String email, String password, String name) async {
     final response = await http.post(
-      Uri.parse('$baseUrl/register'),
-      headers: {'Content-Type': 'application/json'},
-      body: jsonEncode({'email': email, 'password': password}),
+      Uri.parse('$apiUrl/register'),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+      },
+      body: jsonEncode(<String, String>{
+        'email': email,
+        'password': password,
+        'name': name,
+      }),
     );
+
     if (response.statusCode == 201) {
-      // Handle successful registration
+      // Successful registration
+      return true;
     } else {
-      // Handle error
+      return false;
     }
   }
 
-   // Logout method (removes token)
+  // Logout method (removes token)
   Future<void> logout() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     await prefs.remove('user_token');

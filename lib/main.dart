@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:foodhero/pages/House&Orga/join.dart';
 import 'package:foodhero/pages/consumed/Consumed.dart';
-import 'package:foodhero/pages/consumed/consumedDetails.dart';
 import 'package:foodhero/pages/consumed/consumedItemsProvider.dart';
 import 'package:foodhero/pages/interorg/dashboard_inter.dart';
 import 'package:foodhero/pages/interorg/interorganization.dart';
@@ -61,7 +60,7 @@ final GoRouter _router = GoRouter(
         GoRoute(
           path: 'register',
           builder: (BuildContext context, GoRouterState state) {
-            return const Register();
+            return RegisterScreen();
           },
         ),
         GoRoute(
