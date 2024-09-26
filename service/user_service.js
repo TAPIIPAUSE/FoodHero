@@ -63,6 +63,7 @@ export async function save_house_to_db (house_name){
     try {
         // Check if the house already exists in the database
         const house = await House.findOne({ house_name });
+        console.log("This is starting of save_house_to_db:",house)
         var newID = 0
     
         // If house does not exist, create a new house entry
@@ -72,6 +73,8 @@ export async function save_house_to_db (house_name){
           const newHouse = new House({
             house_name
           });
+
+          console.log("This is your new house object:", newHouse)
     
           console.log("This will be your new house name:", house_name);
           const newly_registered_house = await newHouse.save();
@@ -103,8 +106,10 @@ export async function save_org_to_db (org_name){
         const newOrg = new Organization({
           org_name
         });
+
+        console.log("This is your new Organization object:", newOrg)
   
-        console.log("This will be your new house name:", org_name);
+        console.log("This will be your new Organization name:", org_name);
         const newly_registered_org = await newOrg.save();
         newID = newly_registered_org.assigned_ID
         return newID; // Indicate that a new organization was created

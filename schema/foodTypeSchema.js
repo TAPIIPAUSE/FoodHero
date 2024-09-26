@@ -6,8 +6,7 @@ const foodTypeSchema = new mongoose.Schema({
     assigned_ID:{
         type: Number,
         unique: true,
-        min: 1,
-        index: true
+        min: 1
     },
     type: {
         type:String,
@@ -16,7 +15,10 @@ const foodTypeSchema = new mongoose.Schema({
     }
 })
 
-foodTypeSchema.plugin(passportLocalMongoose);
+foodTypeSchema.plugin(passportLocalMongoose,{ 
+  usernameField: false,
+  selectFields: [] // This disables the addition of the default username field
+});
 
 // https://techinsights.manisuec.com/mongodb/mongoose-pre-and-post-hooks-middlewares/#:~:text=Pre%20and%20post%20middleware%20hooks%20is%20a%20very%20useful%20feature,particular%20action%20that%20you%20specify.
 

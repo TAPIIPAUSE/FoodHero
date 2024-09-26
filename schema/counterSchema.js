@@ -17,7 +17,7 @@ const autoIncrementModelID = async function (modelName, doc) {
 
     doc.assigned_ID = counter.seq;
     console.log("This is the counter.seq:", counter.seq);
-    console.log("This is doc.id:", doc.userID);
+    console.log("This is doc.id:", doc.assigned_ID);
   } catch (error) {
     throw error;
   }

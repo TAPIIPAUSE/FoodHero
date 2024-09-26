@@ -4,19 +4,22 @@ import autoIncrementModelID from './counterSchema.js'; // Adjust path as necessa
 
 const foodInventorySchema = new mongoose.Schema({
     hID: {type:Number,required: true, min:1},
-    assigned_ID: { type: Number, unique: true, min: 1 , index: true},
+    assigned_ID: { type: Number, unique: true, min: 1},
     food_name: {type: String, required: true},
     food_category: {type: Number, required: true},
     unit_type: {type: Number, required: true},
-    current_amount: {type: mongoose.Schema.Types.Decimal128, required: true, unique: true},
-    total_amount: {type: mongoose.Schema.Types.Decimal128, required: true, unique: true},
-    total_price: {type: mongoose.Schema.Types.Decimal128, required: true, unique: true},
+    current_amount: {type: mongoose.Schema.Types.Decimal128, required: true},
+    total_amount: {type: mongoose.Schema.Types.Decimal128, required: true},
+    total_price: {type: mongoose.Schema.Types.Decimal128, required: true},
     bestByDate: {type: Date, required: true},
     createdAt: { type: Date, default: Date.now , unique: false},
     modifiedAt: { type: Date , unique: false},
 })
 
-foodInventorySchema.plugin(passportLocalMongoose)
+foodInventorySchema.plugin(passportLocalMongoose, { 
+    usernameField: false,
+    selectFields: [] // This disables the addition of the default username field
+  })
 
 var newFood = false
 

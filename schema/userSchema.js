@@ -5,7 +5,7 @@ import autoIncrementModelID from './counterSchema.js'; // Adjust path as necessa
 
 
 const userSchema = new mongoose.Schema({
-  assigned_ID: { type: Number, unique: true, min: 1 , index: true},
+  assigned_ID: { type: Number, unique: true, min: 1},
   username: { type: String, required: true, unique: true },
   email: { type: String, required: true, unique: true },
   password: { type: String, required: true },
