@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:foodhero/pages/api/ApiClient.dart';
+import 'package:foodhero/pages/inventory/inventory.dart';
 import 'package:foodhero/pages/login_regis.dart';
 import 'package:foodhero/theme.dart';
 import 'package:foodhero/fonts.dart';
+import 'package:foodhero/utils/constants.dart';
+import 'package:go_router/go_router.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-
 
 class LoginScreen extends StatefulWidget {
   @override
@@ -12,19 +14,48 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _loginState extends State<LoginScreen> {
-   final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
-    final AuthService _authService = AuthService();
+  final AuthService _authService = AuthService();
 
-    void _login() async {
-    String email = _emailController.text;
+  void _login() async {
+    print("Login button tapped"); // Should show in console when you tap
+
+    String username = _emailController.text;
     String password = _passwordController.text;
 
-    bool success = await _authService.login(email, password);
+    //log
+    print("Attempting login with Username: $username, Password: $password");
+
+    // if (username.isEmpty || password.isEmpty) {
+    //   ScaffoldMessenger.of(context).showSnackBar(
+    //     const SnackBar(content: Text('Please enter both email and password')),
+    //   );
+    //   return;
+    // }
+
+    // showDialog(
+    //   context: context,
+    //   barrierDismissible: false,
+    //   builder: (BuildContext context) {
+    //     return const Center(child: CircularProgressIndicator());
+    //   },
+    // );
+
+    print("Login button tapped");
+    print("Username: $username");
+    print("Password: $password");
+    bool success = await _authService.login(username, password);
+
+    // Navigator.of(context).pop(); // Remove loading indicator
 
     if (success) {
-      // Navigate to home or dashboard page
-      Navigator.pushReplacementNamed(context, '/inventory/:foodCategory');
+      // Navigate to inventory
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(
+            builder: (context) => Inventory(initialFoodCategory: 'all food')),
+      );
     } else {
       // Show error
       ScaffoldMessenger.of(context).showSnackBar(
@@ -33,13 +64,10 @@ class _loginState extends State<LoginScreen> {
     }
   }
 
-  
- 
-  
-  Future<void> saveToken(String token) async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    await prefs.setString('user_token', token);
-  }
+  // Future<void> saveToken(String token) async {
+  //   SharedPreferences prefs = await SharedPreferences.getInstance();
+  //   await prefs.setString('user_token', token);
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -156,9 +184,11 @@ class _loginState extends State<LoginScreen> {
                             SizedBox(
                               height: 55,
                               width: 250,
-                              child: TextButton(
+                              child: ElevatedButton(
                                   onPressed: () {
                                     _login;
+                                    print(_emailController);
+                                      print('ddd');
                                   },
                                   style: TextButton.styleFrom(
                                       backgroundColor: AppTheme.greenMainTheme),
