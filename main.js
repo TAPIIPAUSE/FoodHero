@@ -1,3 +1,4 @@
+import cors from 'cors';
 import express from "express";
 import session from "express-session";
 import passport from "passport";
@@ -9,6 +10,7 @@ import cookieParser from 'cookie-parser';
 
 
 const app = express();
+app.use(cors({ origin: 'http://127.0.0.1:PORT' })); 
 app.use(express.urlencoded({extended:true})) 
 app.use(express.static('public')) //static file for hosting
 
