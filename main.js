@@ -7,7 +7,8 @@ import LocalStrategy from 'passport-local'
 import crypto from 'crypto'
 import {MongoClient} from "mongodb"
 import cookieParser from 'cookie-parser';
-
+import swaggerDocs from './utils/swagger-output.json' assert { type: 'json' };
+import swaggerUi from "swagger-ui-express";
 
 const app = express();
 app.use(cors({ origin: 'http://127.0.0.1:PORT' })); 
@@ -63,11 +64,9 @@ app.use((req,res,next) => {
 // implement all route function from routes file
 app.use('/api/v1/users', userRoute)
 app.use('/api/v1/inventory', inventoryRoute)
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocs))
 
-
-
-
-app.listen(3000, ()=>{
+app.listen(3000, () => {
     console.log("Server Started");
 })
 
