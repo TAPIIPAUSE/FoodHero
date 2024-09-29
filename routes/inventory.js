@@ -87,6 +87,50 @@ router.post('/addFood', async(req,res) => {
 
 })
 
+router.put("/editFood", async (req, res) => {
+  const {
+    id,
+    food_name,
+    food_category,
+    unit_type,
+    current_amount,
+    total_amount,
+    total_price,
+    bestByDate,
+  } = req.body;
+
+  var user = await get_user_from_db(req, res);
+
+  var hID = await get_houseID(user);
+
+  try {
+    // Find the existing food item
+    const existingFood = await Food.findOne({ _id: id, hID: hID });
+
+    if (!existingFood) {
+      return res.status(404).send("Food item not found or you don't have permission to edit it");
+    }
+
+    // Update the food item
+    existingFood.food_name = food_name;
+    existingFood.food_category = food_category;
+    existingFood.unit_type = unit_type;
+    existingFood.current_amount = current_amount;
+    existingFood.total_amount = total_amount;
+    existingFood.total_price = total_price;
+    existingFood.bestByDate = bestByDate;
+
+    // Save the updated food item
+    await existingFood.save();
+
+    console.log(existingFood);
+
+    return res.status(200).json(existingFood);
+  } catch (error) {
+    return res.status(500).send(`Error updating Food: ${error.message}`);
+  }
+});
+
 // This function is created to retrieve all foods within that house
 router.get('/getFoodByHouse', async(req,res) => {
 

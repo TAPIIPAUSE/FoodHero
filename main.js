@@ -11,7 +11,7 @@ import swaggerDocs from './utils/swagger-output.json' assert { type: 'json' };
 import swaggerUi from "swagger-ui-express";
 
 const app = express();
-app.use(cors({ origin: 'http://127.0.0.1:PORT' })); 
+app.use(cors({ origin: ['http://127.0.0.1:PORT','http://localhost:3000'] })); 
 app.use(express.urlencoded({extended:true})) 
 app.use(express.static('public')) //static file for hosting
 

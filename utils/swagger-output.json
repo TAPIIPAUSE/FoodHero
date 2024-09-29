@@ -265,6 +265,57 @@
         }
       }
     },
+    "/api/v1/inventory/editFood": {
+      "put": {
+        "description": "",
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "example": "any"
+                },
+                "food_name": {
+                  "example": "any"
+                },
+                "food_category": {
+                  "example": "any"
+                },
+                "unit_type": {
+                  "example": "any"
+                },
+                "current_amount": {
+                  "example": "any"
+                },
+                "total_amount": {
+                  "example": "any"
+                },
+                "total_price": {
+                  "example": "any"
+                },
+                "bestByDate": {
+                  "example": "any"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "404": {
+            "description": "Not Found"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    },
     "/api/v1/inventory/getFoodByHouse": {
       "get": {
         "description": "",
@@ -413,6 +464,57 @@
         "responses": {
           "200": {
             "description": "OK"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    },
+    "/editFood": {
+      "put": {
+        "description": "",
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "example": "any"
+                },
+                "food_name": {
+                  "example": "any"
+                },
+                "food_category": {
+                  "example": "any"
+                },
+                "unit_type": {
+                  "example": "any"
+                },
+                "current_amount": {
+                  "example": "any"
+                },
+                "total_amount": {
+                  "example": "any"
+                },
+                "total_price": {
+                  "example": "any"
+                },
+                "bestByDate": {
+                  "example": "any"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "404": {
+            "description": "Not Found"
           },
           "500": {
             "description": "Internal Server Error"
