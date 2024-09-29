@@ -3,6 +3,7 @@ import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 import 'package:foodhero/fonts.dart';
 import 'package:foodhero/main.dart';
 import 'package:foodhero/pages/addFoodDetails.dart';
+import 'package:foodhero/pages/api/ApiUserFood.dart';
 import 'package:foodhero/theme.dart';
 import 'package:foodhero/widgets/inventory/circle_progressbar.dart';
 import 'package:foodhero/widgets/inventory/inventory_dropdown.dart';
@@ -27,6 +28,7 @@ class _InventoryState extends State<Inventory> {
     Segment(value: 4, color: AppTheme.softOrange, label: "Nearly Expired"),
     Segment(value: 70, color: AppTheme.softRedCancleWasted, label: "Wasted"),
   ];
+  late Future<List<dynamic>> inventoryItems;
 
   void _onItemTapped(int index) {
     setState(() {
@@ -34,10 +36,14 @@ class _InventoryState extends State<Inventory> {
     });
   }
 
+  // void _food() async {
+  //   bool success = await food
+  //  }
   @override
   void initState() {
     super.initState();
     foodCategory = widget.initialFoodCategory;
+    inventoryItems = ApiUserFood().fetchInventory();
   }
 
   @override
@@ -45,6 +51,7 @@ class _InventoryState extends State<Inventory> {
     // final screenHeight = MediaQuery.of(context).size.height;
     final screenWidth = MediaQuery.of(context).size.width;
     final progressBar = PrimerCircularProgressBar(segments: segments);
+    //final foodItems = Provider.of<FoodItemsProvider>(context).consumedItems;
 
     return MainScaffold(
       selectedRouteIndex: 0,
@@ -197,6 +204,54 @@ class _InventoryState extends State<Inventory> {
                           const SizedBox(
                             height: 10,
                           ),
+                          FutureBuilder<List<dynamic>>(
+                              future: inventoryItems,
+                              builder: (context, snapshot) {
+                                if (snapshot.connectionState ==
+                                    ConnectionState.waiting) {
+                                  return Center(
+                                      child: CircularProgressIndicator());
+                                } else if (snapshot.hasError) {
+                                  return Center(
+                                      child: Text('Error: ${snapshot.error}'));
+                                } else if (!snapshot.hasData ||
+                                    snapshot.data!.isEmpty) {
+                                  return Center(
+                                      child: Text('No food items found'));
+                                }
+                                final foodItems = snapshot.data!;
+                                return SingleChildScrollView(
+                                  child: Column(
+                                    children: [
+                                      const SizedBox(
+                                        height: 10,
+                                      ),
+                                      ListView.builder(
+                                        scrollDirection: Axis.vertical,
+                                        shrinkWrap: true,
+                                        itemCount: foodItems.length,
+                                        itemBuilder: (context, index) {
+                                          final item = foodItems[index];
+                                          return InventoryListItem(
+                                            thumbnail:
+                                                "assets/images/default.jpg", // You can update this based on your data
+                                            foodname: item['food_name'],
+                                            expiry:
+                                                'Expires: ${item['bestByDate']}', // Format as needed
+                                            progressbar:
+                                                item['current_amount'] /
+                                                    item['total_amount'] *
+                                                    100, // Progress calculation
+                                            consuming: item['current_amount'],
+                                            remaining: item['total_amount'] -
+                                                item['current_amount'],
+                                          );
+                                        },
+                                      ),
+                                    ],
+                                  ),
+                                );
+                              }),
                           const InventoryListItem(
                             thumbnail: "assets/images/banana.jpg",
                             foodname: 'Banana',

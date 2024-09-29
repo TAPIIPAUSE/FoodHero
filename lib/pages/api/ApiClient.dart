@@ -5,7 +5,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 //const String backApiUrl = 'http://localhost:3000/api/v1/users';
 
 class AuthService {
-  final String backApiUrl = 'http://localhost:3000/api/v1/users/login';
+  //final String backApiUrl = 'http://localhost:3000/api/v1/users';
 
   Future<bool> login(String username, String password) async {
     try {
@@ -13,7 +13,7 @@ class AuthService {
           "Attempting to log in with username: $username, password: $password");
 
       final response = await http.post(
-        Uri.parse('$backApiUrl'),
+        Uri.parse('http://192.168.1.34:3000/api/v1/users/login'),
         headers: <String, String>{
           'Content-Type': 'application/json; charset=UTF-8',
         },
@@ -42,25 +42,32 @@ class AuthService {
   }
 
   // Register method
-  Future<bool> register(String username, String password, String name) async {
+  Future<bool> register(String username, String email, String password) async {
+ 
     final response = await http.post(
-      Uri.parse('$backApiUrl/register'),
+      Uri.parse('http://192.168.1.34:3000/api/v1/users/register'),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
       },
       body: jsonEncode(<String, String>{
         'username': username,
-        'password': password,
-        'name': name,
+        'email': email,
+        'password': password
       }),
     );
 
+    print('Response status: ${response.statusCode}');
+    print('Response body: ${response.body}');
+
     if (response.statusCode == 201) {
-      // Successful registration
+      String token = jsonDecode(response.body)['token'];
+      print('Token received: $token');
+      // Save token in SharedPreferences
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      await prefs.setString('user_token', token);
       return true;
-    } else {
-      return false;
     }
+    return await register(username, email, password);
   }
 
   // Logout method (removes token)

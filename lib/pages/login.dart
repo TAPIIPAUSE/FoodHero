@@ -27,20 +27,20 @@ class _loginState extends State<LoginScreen> {
     //log
     print("Attempting login with Username: $username, Password: $password");
 
-    // if (username.isEmpty || password.isEmpty) {
-    //   ScaffoldMessenger.of(context).showSnackBar(
-    //     const SnackBar(content: Text('Please enter both email and password')),
-    //   );
-    //   return;
-    // }
+    if (username.isEmpty || password.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Please enter both email and password')),
+      );
+      return;
+    }
 
-    // showDialog(
-    //   context: context,
-    //   barrierDismissible: false,
-    //   builder: (BuildContext context) {
-    //     return const Center(child: CircularProgressIndicator());
-    //   },
-    // );
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (BuildContext context) {
+        return const Center(child: CircularProgressIndicator());
+      },
+    );
 
     print("Login button tapped");
     print("Username: $username");
@@ -56,6 +56,7 @@ class _loginState extends State<LoginScreen> {
         MaterialPageRoute(
             builder: (context) => Inventory(initialFoodCategory: 'all food')),
       );
+      print('login succesful');
     } else {
       // Show error
       ScaffoldMessenger.of(context).showSnackBar(
@@ -186,9 +187,9 @@ class _loginState extends State<LoginScreen> {
                               width: 250,
                               child: ElevatedButton(
                                   onPressed: () {
-                                    _login;
+                                    _login();
                                     print(_emailController);
-                                      print('ddd');
+                                    print('ddd');
                                   },
                                   style: TextButton.styleFrom(
                                       backgroundColor: AppTheme.greenMainTheme),

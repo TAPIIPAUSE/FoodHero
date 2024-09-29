@@ -13,21 +13,33 @@ class RegisterScreen extends StatefulWidget {
 class _RegisterScreenState extends State<RegisterScreen> {
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
-  final TextEditingController _nameController = TextEditingController();
+  final TextEditingController _usernameController = TextEditingController();
   final AuthService _authService = AuthService();
-  late String _email;
-  late String _password;
-  late String _name;
+  // late String _email;
+  // late String _password;
+  // late String _name;
+
   void _register() async {
+    String username = _usernameController.text;
     String email = _emailController.text;
     String password = _passwordController.text;
-    String name = _nameController.text;
+    
+    print("Attempting login with Username: $username, Password: $password");
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (BuildContext context) {
+        return const Center(child: CircularProgressIndicator());
+      },
+    );
 
-    bool success = await _authService.register(email, password, name);
-
+    print("Username: $username");
+    print("Password: $password");
+    bool success = await _authService.register(username, email, password);
+     print("Registered: $username");
     if (success) {
       // Navigate to login or dashboard page
-      Navigator.pushReplacementNamed(context, '/login');
+      Navigator.pushReplacementNamed(context, '/inventory/:foodCategory');
     } else {
       // Show error
       ScaffoldMessenger.of(context).showSnackBar(
@@ -40,6 +52,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
 
   Widget _buildName() {
     return TextFormField(
+      controller: _usernameController,
       decoration: const InputDecoration(
         labelText: 'User name',
         hintText: 'Enter your user name',
@@ -52,14 +65,15 @@ class _RegisterScreenState extends State<RegisterScreen> {
         }
         return null;
       },
-      onSaved: (String? value) {
-        _name = value ?? '';
-      },
+      // onSaved: (String? value) {
+      //   _name = value ?? '';
+      // },
     );
   }
 
   Widget _buildEmail() {
     return TextFormField(
+      controller: _emailController,
       decoration: const InputDecoration(
         labelText: 'Email',
         hintText: 'Enter your email',
@@ -75,14 +89,15 @@ class _RegisterScreenState extends State<RegisterScreen> {
         }
         return null;
       },
-      onSaved: (String? value) {
-        _email = value ?? '';
-      },
+      // onSaved: (String? value) {
+      //   _email = value ?? '';
+      // },
     );
   }
 
   Widget _buildPassword() {
     return TextFormField(
+      controller: _passwordController,
       decoration: const InputDecoration(
         labelText: 'Password',
         hintText: 'Enter your password',
@@ -100,9 +115,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
         }
         return null;
       },
-      onSaved: (String? value) {
-        _password = value ?? '';
-      },
+      // onSaved: (String? value) {
+      //   _password = value ?? '';
+      // },
     );
   }
 
@@ -174,11 +189,11 @@ class _RegisterScreenState extends State<RegisterScreen> {
                               return;
                             }
                             _formKey.currentState?.save();
-                            print(_name);
-                            print(_email);
-                            print(_password);
+                            // print(_name);
+                            // print(_email);
+                            // print(_password);
 
-                            context.push('/inventory/All food');
+                            _register();
                           },
                           style: buttonStyle,
                           child: const Text("Register"),
