@@ -1,4 +1,3 @@
-import cors from 'cors';
 import express from "express";
 import session from "express-session";
 import passport from "passport";
@@ -11,7 +10,6 @@ import swaggerDocs from './utils/swagger-output.json' assert { type: 'json' };
 import swaggerUi from "swagger-ui-express";
 
 const app = express();
-app.use(cors({ origin: ['http://127.0.0.1:PORT','http://localhost:3000'] })); 
 app.use(express.urlencoded({extended:true})) 
 app.use(express.static('public')) //static file for hosting
 
@@ -71,5 +69,23 @@ app.listen(3000, () => {
 })
 
 // export client
-
-
+app.get('/api/v1/inventory', async (req, res) => {
+    try {
+      const inventoryItems = await InventoryModel.find(); // Fetch all inventory items
+      res.status(200).json(inventoryItems);
+    } catch (error) {
+      res.status(500).json({ message: 'Server Error' });
+    }
+  });
+// GET Inventory Items
+inventoryRoute.get('/', async (req, res) => {
+    try {
+      const inventoryItems = await Food.find();  // Fetch all items
+      res.json(inventoryItems);
+    } catch (error) {
+      console.error('Error fetching inventory:', error);
+      res.status(500).json({ error: 'Server error' });
+    }
+  });
+  
+ // module.exports = inventoryRoute;
