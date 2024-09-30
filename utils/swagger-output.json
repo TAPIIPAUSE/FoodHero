@@ -21,6 +21,32 @@
     "http"
   ],
   "paths": {
+    "/api/v1/inventory": {
+      "get": {
+        "description": "",
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    },
+    "/": {
+      "get": {
+        "description": "",
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    },
     "/api/v1/users/register": {
       "post": {
         "description": "",
@@ -220,6 +246,60 @@
         }
       }
     },
+    "/api/v1/inventory/addPackageType": {
+      "post": {
+        "description": "",
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "type": {
+                  "example": "any"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "400": {
+            "description": "Bad Request"
+          }
+        }
+      }
+    },
+    "/api/v1/inventory/addLocation": {
+      "post": {
+        "description": "",
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "location": {
+                  "example": "any"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "400": {
+            "description": "Bad Request"
+          }
+        }
+      }
+    },
     "/api/v1/inventory/addFood": {
       "post": {
         "description": "",
@@ -233,10 +313,22 @@
                 "food_name": {
                   "example": "any"
                 },
+                "img": {
+                  "example": "any"
+                },
+                "location": {
+                  "example": "any"
+                },
                 "food_category": {
                   "example": "any"
                 },
-                "unit_type": {
+                "isCountable": {
+                  "example": "any"
+                },
+                "weight_type": {
+                  "example": "any"
+                },
+                "package_type": {
                   "example": "any"
                 },
                 "current_amount": {
@@ -245,10 +337,25 @@
                 "total_amount": {
                   "example": "any"
                 },
+                "consumed_amount": {
+                  "example": "any"
+                },
+                "current_quantity": {
+                  "example": "any"
+                },
+                "total_quanitity": {
+                  "example": "any"
+                },
+                "consumed_quantity": {
+                  "example": "any"
+                },
                 "total_price": {
                   "example": "any"
                 },
                 "bestByDate": {
+                  "example": "any"
+                },
+                "RemindDate": {
                   "example": "any"
                 }
               }
@@ -281,10 +388,22 @@
                 "food_name": {
                   "example": "any"
                 },
+                "img": {
+                  "example": "any"
+                },
+                "location": {
+                  "example": "any"
+                },
                 "food_category": {
                   "example": "any"
                 },
-                "unit_type": {
+                "isCountable": {
+                  "example": "any"
+                },
+                "weight_type": {
+                  "example": "any"
+                },
+                "package_type": {
                   "example": "any"
                 },
                 "current_amount": {
@@ -293,10 +412,25 @@
                 "total_amount": {
                   "example": "any"
                 },
+                "consumed_amount": {
+                  "example": "any"
+                },
+                "current_quantity": {
+                  "example": "any"
+                },
+                "total_quanitity": {
+                  "example": "any"
+                },
+                "consumed_quantity": {
+                  "example": "any"
+                },
                 "total_price": {
                   "example": "any"
                 },
                 "bestByDate": {
+                  "example": "any"
+                },
+                "remindDate": {
                   "example": "any"
                 }
               }
@@ -426,6 +560,60 @@
         }
       }
     },
+    "/addPackageType": {
+      "post": {
+        "description": "",
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "type": {
+                  "example": "any"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "400": {
+            "description": "Bad Request"
+          }
+        }
+      }
+    },
+    "/addLocation": {
+      "post": {
+        "description": "",
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "location": {
+                  "example": "any"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "400": {
+            "description": "Bad Request"
+          }
+        }
+      }
+    },
     "/addFood": {
       "post": {
         "description": "",
@@ -439,10 +627,22 @@
                 "food_name": {
                   "example": "any"
                 },
+                "img": {
+                  "example": "any"
+                },
+                "location": {
+                  "example": "any"
+                },
                 "food_category": {
                   "example": "any"
                 },
-                "unit_type": {
+                "isCountable": {
+                  "example": "any"
+                },
+                "weight_type": {
+                  "example": "any"
+                },
+                "package_type": {
                   "example": "any"
                 },
                 "current_amount": {
@@ -451,10 +651,25 @@
                 "total_amount": {
                   "example": "any"
                 },
+                "consumed_amount": {
+                  "example": "any"
+                },
+                "current_quantity": {
+                  "example": "any"
+                },
+                "total_quanitity": {
+                  "example": "any"
+                },
+                "consumed_quantity": {
+                  "example": "any"
+                },
                 "total_price": {
                   "example": "any"
                 },
                 "bestByDate": {
+                  "example": "any"
+                },
+                "RemindDate": {
                   "example": "any"
                 }
               }
@@ -487,10 +702,22 @@
                 "food_name": {
                   "example": "any"
                 },
+                "img": {
+                  "example": "any"
+                },
+                "location": {
+                  "example": "any"
+                },
                 "food_category": {
                   "example": "any"
                 },
-                "unit_type": {
+                "isCountable": {
+                  "example": "any"
+                },
+                "weight_type": {
+                  "example": "any"
+                },
+                "package_type": {
                   "example": "any"
                 },
                 "current_amount": {
@@ -499,10 +726,25 @@
                 "total_amount": {
                   "example": "any"
                 },
+                "consumed_amount": {
+                  "example": "any"
+                },
+                "current_quantity": {
+                  "example": "any"
+                },
+                "total_quanitity": {
+                  "example": "any"
+                },
+                "consumed_quantity": {
+                  "example": "any"
+                },
                 "total_price": {
                   "example": "any"
                 },
                 "bestByDate": {
+                  "example": "any"
+                },
+                "remindDate": {
                   "example": "any"
                 }
               }

@@ -1,96 +1,92 @@
 // import express from 'express';
-import bcrypt from 'bcryptjs';
+import bcrypt from "bcryptjs";
 import express from "express";
-import UnitType from '../schema/unitTypeSchema.js';
-import FoodType from '../schema/foodTypeSchema.js';
-import PackageUnitType from '../schema/packageTypeSchema.js';
-import Location from '../schema/locationSchema.js';
-import Food from '../schema/foodInventorySchema.js';
-import { get_user_from_db, get_houseID } from '../service/user_service.js';
+import UnitType from "../schema/unitTypeSchema.js";
+import FoodType from "../schema/foodTypeSchema.js";
+import PackageUnitType from "../schema/packageTypeSchema.js";
+import Location from "../schema/locationSchema.js";
+import Food from "../schema/foodInventorySchema.js";
+import { get_user_from_db, get_houseID } from "../service/user_service.js";
 
 const router = express.Router();
 
-router.post('/addUnit',async(req,res) => {
+router.post("/addUnit", async (req, res) => {
+  const { type } = req.body;
 
-    const {type} = req.body;
+  const existingUnitType = await UnitType.findOne({ type });
+  if (existingUnitType) {
+    return res.status(400).send("Unit Type already exists");
+  }
 
-    const existingUnitType = await UnitType.findOne({ type });
-    if (existingUnitType) {
-      return res.status(400).send('Unit Type already exists');
-    }
+  const newUnitType = new UnitType({
+    type,
+  });
 
-    const newUnitType = new UnitType({
-        type
-    })
+  console.log("This will be your new unit:", type);
 
-    console.log("This will be your new unit:", type)
+  await newUnitType.save();
 
-    await newUnitType.save();
+  res.status(200).send("New Unit Type Registered");
+});
 
-    res.status(200).send("New Unit Type Registered");
-})
+router.post("/addFoodType", async (req, res) => {
+  const { type } = req.body;
 
-router.post('/addFoodType',async(req,res) => {
+  const existingPackageType = await FoodType.findOne({ type });
+  if (exisitingFoodType) {
+    return res.status(400).send("Food Type already exists");
+  }
 
-    const {type} = req.body;
+  const newFoodType = new FoodType({
+    type,
+  });
 
-    const existingPackageType = await FoodType.findOne({ type });
-    if (exisitingFoodType) {
-      return res.status(400).send('Food Type already exists');
-    }
+  console.log("This will be your new unit:", type);
 
-    const newFoodType = new FoodType({
-        type
-    })
+  await newFoodType.save();
 
-    console.log("This will be your new unit:", type)
+  res.status(200).send("New Food Type Registered");
+});
 
-    await newFoodType.save();
-
-    res.status(200).send("New Food Type Registered");
-})
-
-router.post('/addPackageType',async(req,res) => {
-
-  const {type} = req.body;
+router.post("/addPackageType", async (req, res) => {
+  const { type } = req.body;
 
   const existingPackageType = await PackageUnitType.findOne({ type });
   if (existingPackageType) {
-    return res.status(400).send('Food Type already exists');
+    return res.status(400).send("Food Type already exists");
   }
 
   const newPackage = new PackageUnitType({
-      type
-  })
+    type,
+  });
 
-  console.log("This will be your new package unit:", type)
+  console.log("This will be your new package unit:", type);
 
   await newPackage.save();
 
   res.status(200).send("New Food Package Type Registered");
-})
+});
 
-router.post('/addLocation',async(req,res) => {
-
-  const {location} = req.body;
+router.post("/addLocation", async (req, res) => {
+  const { location } = req.body;
 
   const existingLocation = await Location.findOne({ location });
   if (existingLocation) {
-    return res.status(400).send('Location already exists');
+    return res.status(400).send("Location already exists");
   }
 
   const newLocation = new Location({
-      location
-  })
+    location,
+  });
 
-  console.log("This will be your new location:", location)
+  console.log("This will be your new location:", location);
 
   await newLocation.save();
 
   res.status(200).send("Location Registered");
-})
+});
 
-router.post('/addFood', async(req,res) => {
+router.post("/addFood", async (req, res) => {
   const {
     food_name,
     img,
@@ -107,15 +103,14 @@ router.post('/addFood', async(req,res) => {
     consumed_quantity,
     total_price,
     bestByDate,
-    RemindDate
+    RemindDate,
   } = req.body;
-  
 
-  var user = await get_user_from_db(req,res)
+  var user = await get_user_from_db(req, res);
 
-  var hID = await get_houseID(user)
+  var hID = await get_houseID(user);
 
-  try{
+  try {
     const newFood = new Food({
       hID,
       food_name,
@@ -133,53 +128,69 @@ router.post('/addFood', async(req,res) => {
       consumed_quantity,
       total_price,
       bestByDate,
-      RemindDate
-    })
-  
-    console.log(newFood)
-  
+      RemindDate,
+    });
+
+    console.log(newFood);
+
     await newFood.save();
-  
-    return res.status(200).send("New Food Registered to your Fridge")
-  }catch (error){
+
+    return res.status(200).send("New Food Registered to your Fridge");
+  } catch (error) {
     return res.status(500).send(`Error registering Food: ${error.message}`);
   }
-
-
-})
+});
 
 router.put("/editFood", async (req, res) => {
+  var hID = await get_houseID(user);
+  var user = await get_user_from_db(req, res);
   const {
     id,
     food_name,
+    img,
+    location,
     food_category,
-    unit_type,
+    isCountable,
+    weight_type,
+    package_type,
     current_amount,
     total_amount,
+    consumed_amount,
+    current_quantity,
+    total_quanitity,
+    consumed_quantity,
     total_price,
     bestByDate,
+    remindDate,
   } = req.body;
-
-  var user = await get_user_from_db(req, res);
-
-  var hID = await get_houseID(user);
 
   try {
     // Find the existing food item
     const existingFood = await Food.findOne({ _id: id, hID: hID });
 
     if (!existingFood) {
-      return res.status(404).send("Food item not found or you don't have permission to edit it");
+      return res
+        .status(404)
+        .send("Food item not found or you don't have permission to edit it");
     }
 
     // Update the food item
     existingFood.food_name = food_name;
+    existingFood.img=img;
+    existingFood.location=location;
     existingFood.food_category = food_category;
-    existingFood.unit_type = unit_type;
+    existingFood.isCountable = isCountable;
+    existingFood.weight_type = weight_type;
+    existingFood.package_type = package_type;
     existingFood.current_amount = current_amount;
     existingFood.total_amount = total_amount;
+    existingFood.consumed_amount = consumed_amount;
+    existingFood.current_quantity = current_quantity;
+    existingFood.total_quanitity = total_quanitity;
+    existingFood.consumed_quantity = consumed_quantity;
     existingFood.total_price = total_price;
     existingFood.bestByDate = bestByDate;
+    existingFood.remindDate = remindDate;
 
     // Save the updated food item
     await existingFood.save();
@@ -193,69 +204,63 @@ router.put("/editFood", async (req, res) => {
 });
 
 // This function is created to retrieve all foods within that house
-router.get('/getFoodByHouse', async(req,res) => {
-
+router.get("/getFoodByHouse", async (req, res) => {
   // const {fID} = req.body
 
-  var user = await get_user_from_db(req,res)
+  var user = await get_user_from_db(req, res);
 
-  var hID = user.hID
+  var hID = user.hID;
 
-  try{
-  // search foods by the house ID
-  const house_fridge = await Food.find({hID})
+  try {
+    // search foods by the house ID
+    const house_fridge = await Food.find({ hID });
 
-  return res.status(200).send(house_fridge)
-
-  }catch(error){
-    return res.status(400).send(`Error when getting Food's Info: ${error}`)
+    return res.status(200).send(house_fridge);
+  } catch (error) {
+    return res.status(400).send(`Error when getting Food's Info: ${error}`);
   }
-})
+});
 
 // This function is created to retrieve food within that house
-router.get('/getFoodById', async(req,res) => {
+router.get("/getFoodById", async (req, res) => {
+  const { fID } = req.body;
 
-  const {fID} = req.body
+  var user = await get_user_from_db(req, res);
 
-  var user = await get_user_from_db(req,res)
+  var hID = user.hID;
 
-  var hID = user.hID
+  try {
+    // search foods by the food ID
+    const assigned_ID = fID;
+    const food = await Food.findOne({ assigned_ID });
 
-  try{
-  // search foods by the food ID
-  const assigned_ID = fID
-  const food = await Food.findOne({assigned_ID})
-
-
-  return res.status(200).send(food)
-
-  }catch(error){
-    return res.status(400).send(`Error when getting Food's Info: ${error}`)
+    return res.status(200).send(food);
+  } catch (error) {
+    return res.status(400).send(`Error when getting Food's Info: ${error}`);
   }
-})
+});
 
 // Delete by the input's fID
-router.post('/deleteFoodById', async(req,res) => {
-  const {fID} = req.body
-  var user = await get_user_from_db(req,res)
-  try{
-  // search foods by the food ID
-  const assigned_ID = fID
-  // Deletion doesn't require save -> deleteOne with the designated ID, and that's all
-  const deleteResult = await Food.deleteOne({assigned_ID})
+router.post("/deleteFoodById", async (req, res) => {
+  const { fID } = req.body;
+  var user = await get_user_from_db(req, res);
+  try {
+    // search foods by the food ID
+    const assigned_ID = fID;
+    // Deletion doesn't require save -> deleteOne with the designated ID, and that's all
+    const deleteResult = await Food.deleteOne({ assigned_ID });
 
-  // delete result looks like this { acknowledged: true, deletedCount: 1 }
-  
-  // Secondly, the delete function returns the deletion object
-  if (deleteResult.deletedCount === 0) {
-    return res.status(404).send("Food not found");
+    // delete result looks like this { acknowledged: true, deletedCount: 1 }
+
+    // Secondly, the delete function returns the deletion object
+    if (deleteResult.deletedCount === 0) {
+      return res.status(404).send("Food not found");
+    }
+
+    return res.status(200).send("Delete Successfully");
+  } catch (error) {
+    return res.status(400).send(`Error when deleting Food's Info: ${error}`);
   }
-
-  return res.status(200).send("Delete Successfully")
-
-  }catch(error){
-    return res.status(400).send(`Error when deleting Food's Info: ${error}`)
-  }
-})
+});
 
 export default router;
