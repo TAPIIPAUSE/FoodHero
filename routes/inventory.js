@@ -93,13 +93,23 @@ router.post('/addLocation',async(req,res) => {
 router.post('/addFood', async(req,res) => {
   const {
     food_name,
+    img,
+    location,
     food_category,
-    unit_type,
+    isCountable,
+    weight_type,
+    package_type,
     current_amount,
     total_amount,
+    consumed_amount,
+    current_quantity,
+    total_quanitity,
+    consumed_quantity,
     total_price,
-    bestByDate
-  } = req.body
+    bestByDate,
+    RemindDate
+  } = req.body;
+  
 
   var user = await get_user_from_db(req,res)
 
@@ -109,12 +119,21 @@ router.post('/addFood', async(req,res) => {
     const newFood = new Food({
       hID,
       food_name,
+      img,
+      location,
       food_category,
-      unit_type,
+      isCountable,
+      weight_type,
+      package_type,
       current_amount,
       total_amount,
+      consumed_amount,
+      current_quantity,
+      total_quanitity,
+      consumed_quantity,
       total_price,
-      bestByDate
+      bestByDate,
+      RemindDate
     })
   
     console.log(newFood)
