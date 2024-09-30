@@ -1,15 +1,16 @@
 // import express from 'express';
 import bcrypt from 'bcryptjs';
-import User from '../schema/userSchema.js'; // Adjust the import path according to your project structure
+import User from '../schema/user_module/userSchema.js'; // Adjust the import path according to your project structure
 import express from "express";
 import jwt from 'jsonwebtoken';
 import passport from "passport";
 import LocalStrategy from 'passport-local'
 import dotenv from 'dotenv';
-import House from '../schema/houseSchema.js';
+import House from '../schema/user_module/houseSchema.js';
+import Organization from '../schema/user_module/organizationSchema.js';
 import { authenticateToken, authenticateCookieToken } from '../service/jwt_auth.js';
 import { save_org_to_db, get_user_from_db, save_house_to_db, get_houseID, get_house_from_db} from '../service/user_service.js';
-import Organization from '../schema/organizationSchema.js';
+
 
 
 

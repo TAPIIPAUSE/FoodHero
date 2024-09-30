@@ -1,8 +1,8 @@
 import jwt from "jsonwebtoken";
 import dotenv from "dotenv";
-import User from "../schema/userSchema.js";
-import House from "../schema/houseSchema.js";
-import Organization from "../schema/organizationSchema.js";
+import User from "../schema/user_module/userSchema.js";
+import House from "../schema/user_module/houseSchema.js";
+import Organization from "../schema/user_module/organizationSchema.js";
 
 export async function get_user_from_db(req, res) {
   try {

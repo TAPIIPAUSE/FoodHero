@@ -1,12 +1,13 @@
 // import express from 'express';
 import bcrypt from "bcryptjs";
 import express from "express";
-import UnitType from "../schema/unitTypeSchema.js";
-import FoodType from "../schema/foodTypeSchema.js";
-import PackageUnitType from "../schema/packageTypeSchema.js";
-import Location from "../schema/locationSchema.js";
-import Food from "../schema/foodInventorySchema.js";
-import { get_user_from_db, get_houseID } from "../service/user_service.js";
+import UnitType from '../schema/inventory_module/unitTypeSchema.js';
+import FoodType from '../schema/inventory_module/foodTypeSchema.js';
+import PackageUnitType from '../schema/inventory_module/packageTypeSchema.js';
+import Location from '../schema/inventory_module/locationSchema.js';
+import Food from '../schema/inventory_module/foodInventorySchema.js';
+import { get_user_from_db, get_houseID } from '../service/user_service.js';
+import { save_consume_to_db } from '../service/inventory_service.js';
 
 const router = express.Router();
 
@@ -262,5 +263,51 @@ router.post("/deleteFoodById", async (req, res) => {
     return res.status(400).send(`Error when deleting Food's Info: ${error}`);
   }
 });
+
+router.post('/consume', async(req,res)=>{
+
+  var {fID, retrievedAmount, retrievedQuantity} = req.body;
+
+  try{
+    var assigned_ID = fID
+    var food = await Food.findOne({assigned_ID})
+    var countable = food.isCountable
+
+
+    console.log("Food is Countable?:", countable)
+
+    if(countable){
+
+    }else{
+      var currentAmount = food.current_amount
+      if(retrievedAmount > currentAmount){
+        return res.status(403).send(`Your order is not fulfilled, the current amount is not enough for your retreiveal, please select again.\n
+          Here is your current amount ${currentAmount}, but here is your requested amount ${retrievedAmount}`)
+      }
+
+      var newCurrentAmount = currentAmount - retrievedAmount
+
+      var user = await get_user_from_db(req,res)
+      var user_ID = user.assigned_ID
+      // Create consumed object
+      var consumed_ID = save_consume_to_db(fID, user_ID,retrievedAmount, retrievedQuantity)
+
+      console.log("This is our newly registered consumed food: ",consumed_ID)
+
+      // Update the currentAmount on inventory collection
+      food.current_amount = newCurrentAmount
+      food.consumed_amount = retrievedAmount
+
+      await food.save()
+
+    res.status(200).send(`Successfully consume food: ${food}\n`)
+  }
+
+  }catch(error){
+    return res.status(400).send(`Error when consuming Food: ${error}`)
+  }
+
+})
+
 
 export default router;

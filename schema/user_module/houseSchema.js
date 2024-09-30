@@ -1,6 +1,6 @@
 import mongoose from 'mongoose';
 import passportLocalMongoose from 'passport-local-mongoose';
-import autoIncrementModelID from './counterSchema.js'; // Adjust path as necessary
+import autoIncrementModelID from '../counterSchema.js'; // Adjust path as necessary
 
 const houseSchema = new mongoose.Schema({
     assigned_ID: { type: Number, unique: true, min: 1},
