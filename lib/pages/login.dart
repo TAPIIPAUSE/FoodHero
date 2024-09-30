@@ -69,10 +69,18 @@ class _loginState extends State<LoginScreen> {
   //   SharedPreferences prefs = await SharedPreferences.getInstance();
   //   await prefs.setString('user_token', token);
   // }
+  bool _obscureText = true;
+
+  void _togglePasswordVisibility() {
+    setState(() {
+      _obscureText = !_obscureText;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+        resizeToAvoidBottomInset: true,
         backgroundColor: AppTheme.lightGreenBackground,
         appBar: AppBar(
           backgroundColor: AppTheme.lightGreenBackground,
@@ -98,143 +106,188 @@ class _loginState extends State<LoginScreen> {
               child: Image.asset(
                   'assets/images/FoodHeroLogo.png'), // Adjust the image asset path as needed
             ),
-            SafeArea(
-              child: Align(
+            Align(
                 alignment: Alignment.bottomCenter,
-                child: Container(
-                  height: 436,
-                  decoration: BoxDecoration(
-                    color: AppTheme.softBlue,
-                    borderRadius: BorderRadius.only(
-                        topLeft: Radius.circular(30),
-                        topRight: Radius.circular(30)),
-                  ),
-                ),
-              ),
-            ),
-            Form(
-              child: Padding(
-                  padding: const EdgeInsets.only(top: 350),
-                  child: Center(
-                    child: Column(
-                      children: [
-                        Column(
-                          children: [
-                            Text(
-                              'Login',
-                              style: FontsTheme.mouseMemoirs_40()
-                                  .copyWith(fontSize: 50),
+                child: SingleChildScrollView(
+                  child: Form(
+                      child: Column(
+                    children: [
+                      SafeArea(
+                        child: Container(
+                            height: 460,
+                            decoration: const BoxDecoration(
+                              color: AppTheme.softBlue,
+                              borderRadius: BorderRadius.only(
+                                  topLeft: Radius.circular(30),
+                                  topRight: Radius.circular(30)),
                             ),
-                            const SizedBox(
-                              height: 5,
-                            ),
-                            Container(
-                              width: 300,
-                              height: 55,
-                              decoration: BoxDecoration(
-                                border:
-                                    Border.all(color: AppTheme.greenMainTheme),
-                                borderRadius: BorderRadius.circular(40),
-                                color: AppTheme.softGreen,
-                              ),
-                              padding: EdgeInsets.all(10.0),
-                              child: Center(
-                                child: TextField(
-                                  controller: _emailController,
-                                  style: FontsTheme.hindBold_30(),
-                                  scrollPadding: EdgeInsets.only(bottom: 100),
-                                  decoration: InputDecoration(
-                                    hintText: 'Enter your email ',
-                                    hintStyle: FontsTheme.hind_20(),
-                                    border: InputBorder.none,
-                                  ),
-                                  maxLines: 1,
-                                ),
-                              ),
-                            ),
-                            SizedBox(height: 10),
-                            Text(
-                              'Password',
-                              style: FontsTheme.hindBold_20(),
-                            ),
-                            Container(
-                              width: 300,
-                              height: 55,
-                              decoration: BoxDecoration(
-                                border:
-                                    Border.all(color: AppTheme.greenMainTheme),
-                                borderRadius: BorderRadius.circular(40),
-                                color: AppTheme.softGreen,
-                              ),
-                              padding: EdgeInsets.all(10.0),
-                              child: Center(
-                                child: TextField(
-                                  controller: _passwordController,
-                                  style: FontsTheme.hindBold_30(),
-                                  decoration: InputDecoration(
-                                    hintText: 'Enter your password',
-                                    hintStyle: FontsTheme.hind_20(),
-                                    border: InputBorder.none,
-                                  ),
-                                ),
-                              ),
-                            ),
-                            const SizedBox(
-                              height: 10,
-                            ),
-                            SizedBox(
-                              height: 55,
-                              width: 250,
-                              child: ElevatedButton(
-                                  onPressed: () {
-                                    _login();
-                                    print(_emailController);
-                                    print('ddd');
-                                  },
-                                  style: TextButton.styleFrom(
-                                      backgroundColor: AppTheme.greenMainTheme),
-                                  child: Center(
-                                    child: Text(
-                                      'Login',
-                                      style: FontsTheme.hindBold_30()
-                                          .copyWith(color: Colors.black),
-                                    ),
-                                  )),
-                            )
-                          ],
-                        ), // Add
-                        SizedBox(height: 10),
+                            child: Center(
+                              child: Column(
+                                children: [
+                                  Column(
+                                    children: [
+                                      Text(
+                                        'Login',
+                                        style: FontsTheme.mouseMemoirs_40()
+                                            .copyWith(fontSize: 50),
+                                      ),
+                                      const SizedBox(
+                                        height: 5,
+                                      ),
+                                      Form(
+                                          child: Column(
+                                        children: [
+                                          Text(
+                                            ' Username or Email',
+                                            style: FontsTheme.hindBold_20(),
+                                          ),
+                                          Container(
+                                            width: 300,
+                                            height: 60,
+                                            decoration: BoxDecoration(
+                                              border: Border.all(
+                                                  color:
+                                                      AppTheme.greenMainTheme),
+                                              borderRadius:
+                                                  BorderRadius.circular(40),
+                                              color: AppTheme.softGreen,
+                                            ),
+                                            padding: EdgeInsets.all(10.0),
+                                            child: Center(
+                                              child: TextFormField(
+                                                controller: _emailController,
+                                                style: FontsTheme.hindBold_20(),
+                                                textAlign: TextAlign.center,
+                                                decoration: InputDecoration(
+                                                  contentPadding:
+                                                      EdgeInsets.symmetric(
+                                                    horizontal: 0,
+                                                  ),
+                                                  hintText:
+                                                      'Enter your Username or Email ',
+                                                  hintStyle:
+                                                      FontsTheme.hind_20(),
+                                                  border: InputBorder.none,
+                                                ),
+                                                maxLines: 1,
+                                              ),
+                                            ),
+                                          ),
+                                          const SizedBox(height: 10),
+                                          Text(
+                                            'Password',
+                                            style: FontsTheme.hindBold_20(),
+                                          ),
+                                          Container(
+                                            width: 300,
+                                            height: 60,
+                                            decoration: BoxDecoration(
+                                              border: Border.all(
+                                                  color:
+                                                      AppTheme.greenMainTheme),
+                                              borderRadius:
+                                                  BorderRadius.circular(40),
+                                              color: AppTheme.softGreen,
+                                            ),
+                                            padding: EdgeInsets.all(10.0),
+                                            child: Center(
+                                              child: TextFormField(
+                                                controller: _passwordController,
+                                                style: FontsTheme.hindBold_20(),
+                                                obscureText:
+                                                    _obscureText, // Toggle password visibility
+                                                textAlign: TextAlign.center,
+                                                decoration: InputDecoration(
+                                                  contentPadding:
+                                                      EdgeInsets.symmetric(
+                                                          horizontal: 30,
+                                                          vertical: 0),
+                                                  hintText:
+                                                      'Enter your password',
+                                                  hintStyle:
+                                                      FontsTheme.hind_20(),
+                                                  border: InputBorder.none,
+                                                  suffixIcon: IconButton(
+                                                    icon: Icon(
+                                                      _obscureText
+                                                          ? Icons.visibility
+                                                          : Icons
+                                                              .visibility_off,
+                                                      color: Colors.grey,
+                                                    ),
+                                                    onPressed:
+                                                        _togglePasswordVisibility, // Toggle visibility
+                                                  ),
+                                                ),
+                                              ),
+                                            ),
+                                          ),
+                                          const SizedBox(
+                                            height: 10,
+                                          ),
+                                        ],
+                                      )),
+                                      SizedBox(
+                                        height: 55,
+                                        width: 250,
+                                        child: ElevatedButton(
+                                            onPressed: () {
+                                              _login();
+                                              print(_emailController);
+                                              print('ddd');
+                                            },
+                                            style: TextButton.styleFrom(
+                                                backgroundColor:
+                                                    AppTheme.greenMainTheme),
+                                            child: Center(
+                                              child: Text(
+                                                'Login',
+                                                style: FontsTheme.hindBold_30()
+                                                    .copyWith(
+                                                        color: Colors.black),
+                                              ),
+                                            )),
+                                      )
+                                    ],
+                                  ), // Add
+                                  SizedBox(height: 10),
 
-                        InkWell(
-                            onTap: () {
-                              // Navigate to another page (replace 'AnotherPage' with your actual page name)
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) => login_regis()),
-                              );
-                            },
-                            child: Text(
-                              'Forgot account',
-                              style: FontsTheme.hind_15(),
+                                  InkWell(
+                                      onTap: () {
+                                        // Navigate to another page (replace 'AnotherPage' with your actual page name)
+                                        Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                              builder: (context) =>
+                                                  login_regis()),
+                                        );
+                                      },
+                                      child: Text(
+                                        'Forgot account',
+                                        style: FontsTheme.hind_15(),
+                                      )),
+
+                                  const SizedBox(height: 10),
+                                  InkWell(
+                                    onTap: () {
+                                      // Navigate to another page (replace 'AnotherPage' with your actual page name)
+                                      Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                            builder: (context) =>
+                                                login_regis()),
+                                      );
+                                    },
+                                    child: Image.asset(
+                                        'assets/images/BackButton.png'),
+                                  ),
+                                ],
+                              ),
                             )),
-
-                        SizedBox(height: 20),
-                        InkWell(
-                          onTap: () {
-                            // Navigate to another page (replace 'AnotherPage' with your actual page name)
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => login_regis()),
-                            );
-                          },
-                          child: Image.asset('assets/images/BackButton.png'),
-                        ),
-                      ],
-                    ),
+                      ),
+                    ],
                   )),
-            )
+                )),
           ],
         ));
   }

@@ -23,7 +23,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
     String username = _usernameController.text;
     String email = _emailController.text;
     String password = _passwordController.text;
-    
+
     print("Attempting login with Username: $username, Password: $password");
     showDialog(
       context: context,
@@ -36,7 +36,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
     print("Username: $username");
     print("Password: $password");
     bool success = await _authService.register(username, email, password);
-     print("Registered: $username");
+    print("Registered: $username");
     if (success) {
       // Navigate to login or dashboard page
       Navigator.pushReplacementNamed(context, '/inventory/:foodCategory');
