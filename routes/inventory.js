@@ -3,6 +3,7 @@ import bcrypt from 'bcryptjs';
 import express from "express";
 import UnitType from '../schema/unitTypeSchema.js';
 import FoodType from '../schema/foodTypeSchema.js';
+import PackageUnitType from '../schema/packageTypeSchema.js';
 import Food from '../schema/foodInventorySchema.js';
 import { get_user_from_db, get_houseID } from '../service/user_service.js';
 
@@ -32,7 +33,7 @@ router.post('/addFoodType',async(req,res) => {
 
     const {type} = req.body;
 
-    const exisitingFoodType = await FoodType.findOne({ type });
+    const existingPackageType = await FoodType.findOne({ type });
     if (exisitingFoodType) {
       return res.status(400).send('Food Type already exists');
     }
@@ -46,6 +47,26 @@ router.post('/addFoodType',async(req,res) => {
     await newFoodType.save();
 
     res.status(200).send("New Food Type Registered");
+})
+
+router.post('/addPackageType',async(req,res) => {
+
+  const {type} = req.body;
+
+  const existingPackageType = await PackageUnitType.findOne({ type });
+  if (existingPackageType) {
+    return res.status(400).send('Food Type already exists');
+  }
+
+  const newPackage = new PackageUnitType({
+      type
+  })
+
+  console.log("This will be your new package unit:", type)
+
+  await newPackage.save();
+
+  res.status(200).send("New Food Package Type Registered");
 })
 
 router.post('/addFood', async(req,res) => {
