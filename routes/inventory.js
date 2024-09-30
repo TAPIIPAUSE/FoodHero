@@ -4,6 +4,7 @@ import express from "express";
 import UnitType from '../schema/unitTypeSchema.js';
 import FoodType from '../schema/foodTypeSchema.js';
 import PackageUnitType from '../schema/packageTypeSchema.js';
+import Location from '../schema/locationSchema.js';
 import Food from '../schema/foodInventorySchema.js';
 import { get_user_from_db, get_houseID } from '../service/user_service.js';
 
@@ -67,6 +68,26 @@ router.post('/addPackageType',async(req,res) => {
   await newPackage.save();
 
   res.status(200).send("New Food Package Type Registered");
+})
+
+router.post('/addLocation',async(req,res) => {
+
+  const {location} = req.body;
+
+  const existingLocation = await Location.findOne({ location });
+  if (existingLocation) {
+    return res.status(400).send('Location already exists');
+  }
+
+  const newLocation = new Location({
+      location
+  })
+
+  console.log("This will be your new location:", location)
+
+  await newLocation.save();
+
+  res.status(200).send("Location Registered");
 })
 
 router.post('/addFood', async(req,res) => {
