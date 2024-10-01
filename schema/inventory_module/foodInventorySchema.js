@@ -25,10 +25,6 @@ const foodInventorySchema = new mongoose.Schema({
     modifiedAt: { type: Date , unique: false},
 })
 
-foodInventorySchema.plugin(passportLocalMongoose, { 
-    usernameField: false,
-    selectFields: [] // This disables the addition of the default username field
-  })
 
 var newFood = false
 

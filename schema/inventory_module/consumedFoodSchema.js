@@ -17,10 +17,10 @@ const consumedFoodSchema = new mongoose.Schema({
     modifiedAt: { type: Date , unique: false},
 })
 
-consumedFoodSchema.plugin(passportLocalMongoose, { 
-    usernameField: false,
-    selectFields: [] // This disables the addition of the default username field
-  })
+// consumedFoodSchema.plugin(passportLocalMongoose, { 
+//     usernameField: false,
+//     selectFields: [] // This disables the addition of the default username field
+//   })
 
 var consumed = false
 

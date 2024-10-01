@@ -16,10 +16,6 @@ const packageTypeSchema = new mongoose.Schema({
     }
 })
 
-packageTypeSchema.plugin(passportLocalMongoose, { 
-  usernameField: false,
-  selectFields: [] // This disables the addition of the default username field
-});
 
 // https://techinsights.manisuec.com/mongodb/mongoose-pre-and-post-hooks-middlewares/#:~:text=Pre%20and%20post%20middleware%20hooks%20is%20a%20very%20useful%20feature,particular%20action%20that%20you%20specify.
 

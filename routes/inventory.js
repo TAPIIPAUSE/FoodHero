@@ -270,12 +270,16 @@ router.post('/consume', async(req,res)=>{
 
   try{
     var assigned_ID = fID
+
+    // Get the food item
     var food = await Food.findOne({assigned_ID})
+
+    if (!food) {
+      return res.status(404).send(`Food item with assigned_ID ${assigned_ID} not found.`);
+    }
+
+    console.log("Food:", food)
     var countable = food.isCountable
-
-
-    console.log("Food is Countable?:", countable)
-
     if(countable){
 
     }else{
