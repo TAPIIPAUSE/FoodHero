@@ -13,7 +13,7 @@ class AuthService {
           "Attempting to log in with username: $username, password: $password");
 
       final response = await http.post(
-        Uri.parse('http://192.168.1.34:3000/api/v1/users/login'),
+        Uri.parse('http://10.4.151.193:3000/api/v1/users/login'),
         headers: <String, String>{
           'Content-Type': 'application/json; charset=UTF-8',
         },
@@ -45,7 +45,7 @@ class AuthService {
   Future<bool> register(String username, String email, String password) async {
  
     final response = await http.post(
-      Uri.parse('http://192.168.1.34:3000/api/v1/users/register'),
+      Uri.parse('http://10.4.151.193:3000/api/v1/users/register'),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
       },

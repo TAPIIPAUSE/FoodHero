@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:foodhero/pages/api/ApiClient.dart';
 import 'package:foodhero/pages/login.dart';
 import 'package:foodhero/pages/register.dart';
+import 'package:foodhero/pages/registerold.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:foodhero/theme.dart';
 import 'package:foodhero/fonts.dart';

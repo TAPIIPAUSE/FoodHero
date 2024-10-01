@@ -100,12 +100,13 @@ class _InventoryState extends State<Inventory> {
                         children: [
                           Text(
                             'Today 3 July 2024',
-                            style: FontsTheme.mouseMemoirs_30Black(
+                            style: FontsTheme.mouseMemoirs_30White(
                                 color: AppTheme.softGreen),
                           ),
                           Text(
                             'Things you should eat today:',
-                            style: FontsTheme.hind_15(color: Colors.white),
+                            style: FontsTheme.hind_15(color: Colors.white)
+                                .copyWith(color: Colors.white),
                           ),
                           Text(
                             '- Tomatos expire tomorrow',

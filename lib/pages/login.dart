@@ -34,6 +34,7 @@ class _loginState extends State<LoginScreen> {
       return;
     }
 
+    
     showDialog(
       context: context,
       barrierDismissible: false,
@@ -63,6 +64,24 @@ class _loginState extends State<LoginScreen> {
         const SnackBar(content: Text('Invalid email or password')),
       );
     }
+  }
+
+   void showErrorDialog(String message) {
+    showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: Text('Error'),
+          content: Text(message),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.of(context).pop(),
+              child: Text('OK'),
+            ),
+          ],
+        );
+      },
+    );
   }
 
   // Future<void> saveToken(String token) async {
