@@ -9,7 +9,7 @@ import dotenv from 'dotenv';
 import House from '../schema/user_module/houseSchema.js';
 import Organization from '../schema/user_module/organizationSchema.js';
 import { authenticateToken, authenticateCookieToken } from '../service/jwt_auth.js';
-import { save_org_to_db, get_user_from_db, save_house_to_db, get_houseID, get_house_from_db} from '../service/user_service.js';
+import { save_org_to_db, get_user_from_db, save_house_to_db, get_houseID, get_house_from_db, get_housename_from_db} from '../service/user_service.js';
 
 
 
@@ -160,6 +160,26 @@ router.post('/create_house', authenticateCookieToken,async (req,res) => {
   }else{
     res.status(400).send("This house is being used already, please pick a new name")
   }
+})
+
+router.post('/join_house', authenticateCookieToken, async (req, res) => {
+  const { housename } = req.body;
+  const user = await get_user_from_db(req, res);
+  const house = await get_housename_from_db(housename);
+  
+  if (!house) {
+    res.status(400).send("House not found");
+    return;
+  }
+
+  if (house.assigned_ID === user.hID) {
+    res.status(400).send("You are already in a house");
+    return;
+  }
+  user.hID = house.assigned_ID;
+  await user.save();
+  res.status(200).send("House Joined");
+  console.log("House Joined");
 })
 
 router.post('/create_org', authenticateCookieToken,async (req,res) => {
