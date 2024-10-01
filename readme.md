@@ -115,7 +115,74 @@ This function will create the organization based on that user's input organizati
 It will automatically assign the organization ID to that user and update every related field in database.
 It also generate the hID based on the current pointer in House model.
 
-Screw You
+## Food Inventory Module
+
+### 1.Add Food (POST)
+
+
+```
+URL: http://localhost:3000/api/v1/inventory/addFood
+```
+
+JSON's body
+```
+For countable noun
+{
+  "food_name": “Banana”,
+  "img": "",
+  "location": 2,
+  "food_category": 2,
+  "isCountable": true,
+  "weight_type": 3,
+  "package_type": 2,
+  "current_amount": 500,
+  "total_amount": 500,
+  "consumed_amount": null,
+  "current_quantity": 5,
+  "total_quanitity": 5,
+  "consumed_quantity": null,
+  "total_price": 50,
+  "bestByDate": "2024-12-31T00:00:00.000Z",
+  "RemindDate": "2024-12-15T00:00:00.000Z"
+}
+```
+For Uncountable Food
+```
+{
+  "food_name": "Cashews",
+  "img": "",
+  "location": 2,
+  "food_category": 3,
+  "isCountable": false,
+  "weight_type": 3,
+  "package_type": null,
+  "current_amount": 500,
+  "total_amount": 500,
+  "consumed_amount": 0.0,
+  "current_quantity": null,
+  "total_quanitity": null,
+  "consumed_quantity": null,
+  "total_price": 300.0,
+  "bestByDate": "2024-12-31T00:00:00.000Z",
+  "RemindDate": "2024-12-15T00:00:00.000Z"
+}
+```
+
+### 2. Consume Food
+
+```
+URL: http://localhost:3000/api/v1/inventory/addFood
+```
+
+JSON's body
+```
+{
+    "fID": 9,
+    "retrievedAmount": 100,
+    "retrievedQuantity": null
+}
+
+```
 
 
 
