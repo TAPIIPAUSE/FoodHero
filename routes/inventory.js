@@ -277,10 +277,39 @@ router.post('/consume', async(req,res)=>{
     if (!food) {
       return res.status(404).send(`Food item with assigned_ID ${assigned_ID} not found.`);
     }
-
-    console.log("Food:", food)
     var countable = food.isCountable
+
+    // Narrative: Countable food will be given only quantity, therefore we need to calculate the change of weight y ourselves,
+    // We start off by calcualting the per unit weight
     if(countable){
+
+      const perunitAmount = food.total_amount/food.total_quanitity
+      //per unit weight calculation
+
+      retrievedAmount = perunitAmount * retrievedQuantity
+
+      var currentQuantity = food.current_quantity
+      if(retrievedQuantity > currentQuantity){
+        return res.status(403).send(`Your order is not fulfilled, the current quantity is not enough for your retreiveal, please select again.\n
+          Here is your current quantity ${currentQuantity}, but here is your requested quantity ${retrievedQuantity}`)
+      }
+
+      var newCurrentQuantity = currentQuantity - retrievedQuantity
+
+      var user = await get_user_from_db(req,res)
+      var user_ID = user.assigned_ID
+      // Create consumed object
+      var consumed_ID = save_consume_to_db(fID, user_ID,retrievedAmount, retrievedQuantity)
+
+      console.log("This is our newly registered consumed food: ",consumed_ID)
+
+      // Update the currentAmount on inventory collection
+      food.current_amount = food.total_amount - retrievedAmount
+      food.current_quantity = newCurrentQuantity
+      food.consumed_quantity = retrievedQuantity
+      food.consumed_amount = retrievedAmount
+
+      await food.save()
 
     }else{
       var currentAmount = food.current_amount
@@ -304,8 +333,10 @@ router.post('/consume', async(req,res)=>{
 
       await food.save()
 
-    res.status(200).send(`Successfully consume food: ${food}\n`)
+
   }
+
+  res.status(200).send(`Successfully consume food: ${food}\n`)
 
   }catch(error){
     return res.status(400).send(`Error when consuming Food: ${error}`)
