@@ -46,6 +46,42 @@ export async function get_house_from_db(hID) {
   }
 }
 
+export async function get_housename_from_db(house_name) {
+  // Need to be called with the get_houseID, so this method could receive the houseID, and use it for searching
+  try {
+    var target_house = await House.findOne({ house_name: house_name });
+
+    if (!target_house) {
+      console.log(
+        "House Name doesn't match with the current house available in database."
+      );
+    }
+
+    return target_house;
+  } catch (error) {
+    console.error("Error getting house info", error);
+    return res.status(500).json({ message: "An error occurred." });
+  }
+}
+
+export async function get_orgname_from_db(org_name) {
+  // Need to be called with the get_houseID, so this method could receive the houseID, and use it for searching
+  try {
+    var target_org = await Organization.findOne({ org_name: org_name });
+
+    if (!target_org) {
+      console.log(
+        "Organization Name doesn't match with the current organization available in database."
+      );
+    }
+
+    return target_org;
+  } catch (error) {
+    console.error("Error getting org info", error);
+    return res.status(500).json({ message: "An error occurred." });
+  }
+}
+
 export async function get_houseID(user) {
   // Get house from the user info
   try {
