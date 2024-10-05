@@ -30,7 +30,9 @@ var newFood = false
 
 foodInventorySchema.pre('save', async function (next) {
     try{
-        await autoIncrementModelID('Food', this);
+        if (this.isNew) {
+            await autoIncrementModelID('Food', this);
+        }
         newFood = true
         next()
     } catch(error){

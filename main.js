@@ -21,6 +21,7 @@ app.use(cookieParser());
 // Routes
 import userRoute from './routes/user.js'
 import inventoryRoute from './routes/inventory.js'
+import consumeRoute from './routes/consume.js'
 
 if(userRoute){
     console.log("Found the directory")
@@ -62,6 +63,7 @@ app.use((req,res,next) => {
 // implement all route function from routes file
 app.use('/api/v1/users', userRoute)
 app.use('/api/v1/inventory', inventoryRoute)
+app.use('/api/v1/consume', consumeRoute)
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocs))
 
 app.listen(3000, () => {

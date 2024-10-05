@@ -5,14 +5,17 @@ import House from "../schema/user_module/houseSchema.js";
 import Organization from "../schema/user_module/organizationSchema.js";
 import ConsumedFood from "../schema/inventory_module/consumedFoodSchema.js";
 
-export async function save_consume_to_db(fID,userID,retrievedAmount, retrievedQuantity) {
+export async function save_consume_to_db(fID,user,retrievedAmount, retrievedQuantity) {
     try {
       // Check if the house already exists in the database
       var newID = 0;
+      var userID = user.assigned_ID
+      var hID = user.hID
 
       const newConsumed = new ConsumedFood({
         food_ID: fID,
-        user_ID: userID,  // provide userID value
+        user_ID: userID,
+        h_ID: hID,  // provide userID value
         current_amount: retrievedAmount,  // retrievedAmount mapped to current_amount
         current_quantity: retrievedQuantity,  // retrievedQuantity mapped to current_quantity
         saved: 0,  // default or initial value

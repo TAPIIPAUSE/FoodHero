@@ -162,7 +162,7 @@ router.post('/create_house', authenticateCookieToken,async (req,res) => {
   }
 })
 
-router.put('/join_house', authenticateCookieToken, async (req, res) => {
+router.post('/join_house', authenticateCookieToken, async (req, res) => {
   const { housename } = req.body;
   const user = await get_user_from_db(req, res);
   const house = await get_housename_from_db(housename);
@@ -177,6 +177,7 @@ router.put('/join_house', authenticateCookieToken, async (req, res) => {
     return;
   }
   user.hID = house.assigned_ID;
+  user.orgID = house.org_ID;
   await user.save();
   res.status(200).send("House Joined");
   console.log("House Joined");
@@ -216,10 +217,15 @@ router.post('/create_org', authenticateCookieToken,async (req,res) => {
   }
 })
 
-router.put('/join_org', authenticateCookieToken, async (req, res) => {
+router.post('/join_org', authenticateCookieToken, async (req, res) => {
   const { orgname } = req.body;
   const user = await get_user_from_db(req, res);
   const org = await get_orgname_from_db(orgname);
+
+  if(user.isFamilyLead === false){
+    console.log(user)
+    return res.status(430).send("Only House Lead is permitted to join organization.")
+  }
   
   if (!org) {
     res.status(400).send("Organization not found");

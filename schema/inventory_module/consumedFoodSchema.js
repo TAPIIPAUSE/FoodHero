@@ -6,6 +6,7 @@ const consumedFoodSchema = new mongoose.Schema({
     assigned_ID: { type: Number, unique: true, min: 1},
     food_ID: {type:Number, required: true},
     user_ID: {type: Number, required: true, min: 1},
+    h_ID: {type: Number, required: true, min: 1},
     current_amount: {type: mongoose.Schema.Types.Decimal128, required: true},
     current_quantity: {type: mongoose.Schema.Types.Decimal128, required: true, default: 0,set: (v) => v === null ? 0 : v},
     saved: {type: mongoose.Schema.Types.Decimal128, required: true, default: 0},
