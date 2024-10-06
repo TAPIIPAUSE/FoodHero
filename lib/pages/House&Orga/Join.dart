@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:foodhero/main.dart';
 import 'package:foodhero/pages/House&Orga/Household/household.dart';
 import 'package:foodhero/pages/House&Orga/Organization/organization.dart';
+import 'package:foodhero/pages/api/HouseholdService.dart';
 import 'package:foodhero/theme.dart';
 import 'package:foodhero/fonts.dart';
 
@@ -11,6 +12,29 @@ class join extends StatefulWidget {
 }
 
 class _JoinState extends State<join> {
+  final householdService = HouseholdService();
+
+// Example usage
+  void createHousehold() async {
+    bool success = await householdService.createHousehold(
+        'My Household', 'securepassword123');
+    if (success) {
+      // Handle successful creation
+    } else {
+      // Handle failure
+    }
+  }
+
+  void joinHousehold() async {
+    bool success = await householdService.joinHousehold(
+        'householdId123', 'securepassword123');
+    if (success) {
+      // Handle successful joining
+    } else {
+      // Handle failure
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return MainScaffold(
@@ -36,56 +60,159 @@ class _JoinState extends State<join> {
         ),
         body: SingleChildScrollView(
           child: Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Center(
-                child: Column(
-                  children: [
-                    Text("Household"),
-                    SizedBox(
-                      width: 200,
-                      height: 50,
-                      child: TextButton(
-                        onPressed: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => household(),
-                            ),
-                          );
-                        },
-                        style: TextButton.styleFrom(
-                            foregroundColor: AppTheme.greenMainTheme),
-                        child: Text('Join'),
-                      ),
-                    ),
-                    SizedBox(
-                      height: 10,
-                    ),
-                    Text("Organization"),
-                    SizedBox(
-                      width: 200,
-                      height: 50,
-                      child: TextButton(
-                        onPressed: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => organization(),
-                            ),
-                          );
-                        },
-                        style: TextButton.styleFrom(
-                            foregroundColor: AppTheme.mainBlue),
-                        child: Text('Join'),
-                      ),
-                    ),
+              padding: const EdgeInsets.all(100),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Text(
+                    "Household",
+                    style: FontsTheme.mouseMemoirs_40(),
+                  ),
 
-                    // Members section
-                  ],
-                ),
+                  SizedBox(
+                    width: 200,
+                    height: 50,
+                    child: TextButton(
+                      onPressed: () => JoinHouse(context),
+                      style: TextButton.styleFrom(
+                          foregroundColor: AppTheme.mainBlue),
+                      child: Text('Join'),
+                    ),
+                  ),
+                  SizedBox(
+                    height: 120,
+                  ),
+                  Text(
+                    "Organization",
+                    style: FontsTheme.mouseMemoirs_40(),
+                  ),
+                  SizedBox(
+                    width: 200,
+                    height: 50,
+                    child: TextButton(
+                      onPressed: () => JoinOrga(context),
+                      style: TextButton.styleFrom(
+                          foregroundColor: AppTheme.orangeGray),
+                      child: Text('Join'),
+                    ),
+                  ),
+
+                  // Members section
+                ],
               )),
         ),
       ),
+    );
+  }
+
+  void JoinHouse(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          scrollable: true,
+          backgroundColor: AppTheme.softBlue,
+          title: const Text("Join Household"),
+          titleTextStyle:
+              FontsTheme.mouseMemoirs_40().copyWith(color: Colors.black),
+          content: Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Form(
+              child: Column(
+                children: [
+                  TextFormField(
+                    decoration: const InputDecoration(
+                      labelText: "Household Code",
+                      icon: Icon(Icons.password_rounded),
+                    ),
+                  ),
+                  TextFormField(
+                    decoration: const InputDecoration(
+                      labelText: "Email",
+                      icon: Icon(Icons.email),
+                    ),
+                  ),
+                  TextFormField(
+                    decoration: const InputDecoration(
+                      labelText: "Message",
+                      icon: Icon(Icons.message),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+          actions: [
+            ElevatedButton(
+              child: const Text("Join"),
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => household(),
+                  ),
+                );
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  void JoinOrga(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          scrollable: true,
+          backgroundColor: AppTheme.softRedBrown,
+          title: const Text("Join Organization"),
+          titleTextStyle:
+              FontsTheme.mouseMemoirs_40().copyWith(color: Colors.black),
+          content: Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Form(
+              child: Column(
+                children: [
+                  TextFormField(
+                    decoration: const InputDecoration(
+                      labelText: "Organization Code",
+                      icon: Icon(Icons.password_rounded),
+                    ),
+                  ),
+                  TextFormField(
+                    decoration: const InputDecoration(
+                      labelText: "Email",
+                      icon: Icon(Icons.email),
+                    ),
+                  ),
+                  TextFormField(
+                    decoration: const InputDecoration(
+                      labelText: "Message",
+                      icon: Icon(Icons.message),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+          actions: [
+            ElevatedButton(
+              child: const Text("Join"),
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => organization(),
+                  ),
+                );
+              },
+            ),
+          ],
+        );
+      },
     );
   }
 }

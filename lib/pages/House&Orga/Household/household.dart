@@ -1,5 +1,3 @@
-import 'dart:io';
-import 'dart:async';
 import 'dart:math';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
@@ -9,9 +7,8 @@ import 'package:foodhero/theme.dart';
 import 'package:foodhero/fonts.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:percent_indicator/percent_indicator.dart';
-import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:go_router/go_router.dart';
+
 
 class household extends StatefulWidget {
   @override
@@ -19,9 +16,9 @@ class household extends StatefulWidget {
 }
 
 class _HouseholdState extends State<household> {
+  final CarouselController _controller = CarouselController();
   late String _todayDate;
   late String _weekday;
-  final CarouselController _controller = CarouselController();
   int _current = 0;
   int _weekdayIndex = 0;
   int touchedIndex = -1;

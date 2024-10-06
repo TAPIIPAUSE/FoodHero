@@ -1,3 +1,4 @@
+import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 import 'package:foodhero/fonts.dart';
@@ -10,6 +11,7 @@ import 'package:foodhero/widgets/inventory/inventory_dropdown.dart';
 import 'package:foodhero/widgets/inventory/inventory_list_item.dart';
 import 'package:foodhero/widgets/inventory/sort_dropdown.dart';
 import 'package:go_router/go_router.dart';
+import 'package:intl/intl.dart';
 import 'package:textwrap/textwrap.dart';
 
 class Inventory extends StatefulWidget {
@@ -29,6 +31,11 @@ class _InventoryState extends State<Inventory> {
     Segment(value: 70, color: AppTheme.softRedCancleWasted, label: "Wasted"),
   ];
   late Future<List<dynamic>> inventoryItems;
+  late String _todayDate;
+  late String _weekday;
+  int _current = 0;
+  int _weekdayIndex = 0;
+  int touchedIndex = -1;
 
   void _onItemTapped(int index) {
     setState(() {
@@ -44,7 +51,42 @@ class _InventoryState extends State<Inventory> {
     super.initState();
     foodCategory = widget.initialFoodCategory;
     inventoryItems = ApiUserFood().fetchInventory();
+    _updateDate();
   }
+
+  void _updateDate() {
+    final now = DateTime.now();
+    _todayDate = DateFormat('EEEE d MMMM yyyy').format(now); // Full format
+    _weekday = weekdays[now.weekday - 1]; // Adjust for index starting from 0
+    _weekdayIndex = now.weekday - 1;
+    log(_weekdayIndex);
+  }
+
+  final List<String> weekdays = [
+    'Monday',
+    'Tuesday',
+    'Wednesday',
+    'Thursday',
+    'Friday',
+    'Saturday',
+    'Sunday',
+  ];
+  final List<String> briefweekdays = [
+    "Mon",
+    "Tue",
+    "Wed",
+    "Thu",
+    "Fri",
+    "Sat",
+    "Sun"
+  ];
+
+  List<Map<String, dynamic>> members = [
+    {"name": "You", "score": 24058},
+    {"name": "Dad", "score": 24024},
+    {"name": "Mom", "score": 18547},
+    {"name": "Brother", "score": 17245},
+  ];
 
   @override
   Widget build(BuildContext context) {
@@ -98,46 +140,41 @@ class _InventoryState extends State<Inventory> {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text(
-                            'Today 3 July 2024',
-                            style: FontsTheme.mouseMemoirs_30White(
-                                color: AppTheme.softGreen),
-                          ),
+                          Text('Today $_todayDate',
+                              style: FontsTheme.mouseMemoirs_30White()
+                                  .copyWith(color: Colors.white)),
                           Text(
                             'Things you should eat today:',
-                            style: FontsTheme.hind_15(color: Colors.white)
+                            style: FontsTheme.hind_15()
                                 .copyWith(color: Colors.white),
                           ),
                           Text(
                             '- Tomatos expire tomorrow',
-                            style: FontsTheme.hind_15(color: Colors.white),
+                            style: FontsTheme.hind_15()
+                                .copyWith(color: Colors.white),
                           ),
                           Text(
                             '- Lettuce expire in 2 days',
-                            style: FontsTheme.hind_15(color: Colors.white),
+                            style: FontsTheme.hind_15()
+                                .copyWith(color: Colors.white),
                           ),
                           Text(
                             '- Tomatos expire tomorrow',
-                            style: FontsTheme.hind_15(color: Colors.white),
-                          ),
-                          Text(
-                            fill(
-                                '- Lettuce expire in 2 days gkgkglh;hlg;g;glhlg;ghh;g;gk',
-                                width: 50),
-                            style: FontsTheme.hind_15(color: Colors.white),
+                            style: FontsTheme.hind_15()
+                                .copyWith(color: Colors.white),
                           ),
                           Text(
                             'Yogurt should be eaten before the next 3 days',
-                            style: FontsTheme.hind_15(color: Colors.white),
-                          ),
-                          Text(
-                            'Yogurt should be eaten before the next 3 days',
-                            style: FontsTheme.hind_15(color: Colors.white),
+                            style: FontsTheme.hind_15()
+                                .copyWith(color: Colors.white),
                           ),
                           const SizedBox(
                             height: 20,
                           ),
                           Center(child: progressBar),
+                          const SizedBox(
+                            height: 10,
+                          )
                         ],
                       ),
                     ),

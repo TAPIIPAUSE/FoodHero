@@ -413,8 +413,12 @@ class _FoodDetailsPageState extends State<foodDetails> {
     // );
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
-        content: Text('${foodname.text} added to consumed list'),
+        content: Text(
+          '${foodname.text} added to consumed list',
+          style: FontsTheme.hindBold_20(),
+        ),
         duration: const Duration(seconds: 2),
+        backgroundColor: AppTheme.greenMainTheme,
       ),
     );
   }
@@ -753,6 +757,7 @@ class _FoodDetailsPageState extends State<foodDetails> {
   Widget build(BuildContext context) {
     return Scaffold(
         key: scaffoldKey,
+        resizeToAvoidBottomInset: true,
         // appBar: AppBar(
         //   backgroundColor: const Color.fromRGBO(67, 189, 174, 1),
         //   toolbarHeight: 75,
@@ -1241,18 +1246,6 @@ class _FoodDetailsPageState extends State<foodDetails> {
   }
 
   Widget buildQuantityWeight() {
-    String Piece = "Piece";
-    if (quantity == 1) {
-      Piece = "Piece";
-    } else if (quantity > 1) {
-      Piece = "Pieces";
-    }
-    String Gram = "Gram";
-    if (weight == 1) {
-      Gram = "Gram";
-    } else if (weight > 1) {
-      Gram = "Grams";
-    }
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 8),
       child: Column(
@@ -1273,10 +1266,13 @@ class _FoodDetailsPageState extends State<foodDetails> {
                       children: [
                         Text('Quantity',
                             style: FontsTheme.mouseMemoirs_30Black()),
+                        SizedBox(
+                          width: 40,
+                        ),
                         Column(
                           children: [
                             Container(
-                              width: 120,
+                              width: 200,
                               padding: EdgeInsets.symmetric(
                                   horizontal: 12, vertical: 8),
                               decoration: BoxDecoration(
@@ -1289,7 +1285,7 @@ class _FoodDetailsPageState extends State<foodDetails> {
                                 children: [
                                   Text('$quantity ',
                                       style: FontsTheme.hindBold_20()),
-                                  Text(Piece, style: FontsTheme.hindBold_20()),
+                                  buildQuantityUnit('')
                                 ],
                               ),
                             ),
@@ -1328,10 +1324,13 @@ class _FoodDetailsPageState extends State<foodDetails> {
                       children: [
                         Text('Weight',
                             style: FontsTheme.mouseMemoirs_30Black()),
+                        SizedBox(
+                          width: 55,
+                        ),
                         Column(
                           children: [
                             Container(
-                              width: 180,
+                              width: 200,
                               padding: EdgeInsets.symmetric(
                                   horizontal: 12, vertical: 8),
                               decoration: BoxDecoration(
@@ -1344,7 +1343,7 @@ class _FoodDetailsPageState extends State<foodDetails> {
                                 children: [
                                   Text('$weightReduced ',
                                       style: FontsTheme.hindBold_20()),
-                                  Text(Gram, style: FontsTheme.hindBold_20()),
+                                  buildWeightUnit('')
                                 ],
                               ),
                             ),
@@ -1387,138 +1386,259 @@ class _FoodDetailsPageState extends State<foodDetails> {
     );
   }
 
+  Widget buildQuantityUnit(String value) {
+    String pieceLabel = quantity == 1 ? "Piece" : "Pieces";
+    String boxLabel = quantity == 1 ? "Box" : "Boxes";
+    String bottleLabel = quantity == 1 ? "Bottle" : "Bottles";
+    List<String> items = [pieceLabel, boxLabel, bottleLabel];
+    String selectedValue = items[0];
+    return StatefulBuilder(
+        builder: (BuildContext context, StateSetter setState) {
+      return Padding(
+        padding: const EdgeInsets.symmetric(vertical: 8),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Container(
+                padding: EdgeInsets.symmetric(horizontal: 10),
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(10),
+                  color: Colors.white,
+                ),
+                child: Row(
+                  children: [
+                    SizedBox(
+                      width: 100,
+                      height: 30,
+                      child: DropdownButtonHideUnderline(
+                        child: DropdownButton<String>(
+                          value: selectedValue,
+                          isExpanded: true,
+                          items: items.map((String item) {
+                            return DropdownMenuItem<String>(
+                              value: item,
+                              child: Text(
+                                item,
+                                style: FontsTheme.hindBold_20(),
+                              ),
+                            );
+                          }).toList(),
+                          onChanged: (String? newValue) {
+                            if (newValue != null) {
+                              setState(() {
+                                selectedValue = newValue;
+                              });
+                            }
+                          },
+                        ),
+                      ),
+                    )
+                  ],
+                ))
+          ],
+        ),
+      );
+    });
+  }
+
+  Widget buildWeightUnit(String value) {
+    String Gram = "Gram";
+    if (weight == 1) {
+      Gram = "Gram";
+    } else if (weight > 1) {
+      Gram = "Grams";
+    }
+    List<String> items = [Gram];
+    String selectedValue = items[0];
+    return StatefulBuilder(
+        builder: (BuildContext context, StateSetter setState) {
+      return Padding(
+        padding: const EdgeInsets.symmetric(vertical: 8),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Container(
+                padding: EdgeInsets.symmetric(horizontal: 10),
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(10),
+                  color: Colors.white,
+                ),
+                child: Row(
+                  children: [
+                    SizedBox(
+                      width: 100,
+                      height: 30,
+                      child: DropdownButtonHideUnderline(
+                        child: DropdownButton<String>(
+                          value: selectedValue,
+                          isExpanded: true,
+                          items: items.map((String item) {
+                            return DropdownMenuItem<String>(
+                              value: item,
+                              child: Text(
+                                item,
+                                style: FontsTheme.hindBold_20(),
+                              ),
+                            );
+                          }).toList(),
+                          onChanged: (String? newValue) {
+                            if (newValue != null) {
+                              setState(() {
+                                selectedValue = newValue;
+                              });
+                            }
+                          },
+                        ),
+                      ),
+                    )
+                  ],
+                ))
+          ],
+        ),
+      );
+    });
+  }
+
   Widget buildEachPieceField() {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 8),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Container(
-              padding: EdgeInsets.all(8),
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(10),
-                color: Colors.white,
-              ),
-              child: Column(
-                children: [
-                  Row(
+      child: SingleChildScrollView(
+        child: Form(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Container(
+                  padding: EdgeInsets.all(8),
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(10),
+                    color: Colors.white,
+                  ),
+                  child: Column(
                     children: [
-                      //buildQuantityButton(Icons.remove),
-                      Expanded(
-                        flex: 5,
-                        child: Container(
+                      Row(
+                        children: [
+                          //buildQuantityButton(Icons.remove),
+                          Expanded(
+                            flex: 5,
+                            child: Container(
+                                padding: EdgeInsets.symmetric(
+                                    horizontal: 12, vertical: 8),
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(10),
+                                  color: Colors.white,
+                                ),
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  children: [
+                                    Text('Each piece',
+                                        style:
+                                            FontsTheme.mouseMemoirs_30Black()),
+                                    SizedBox(width: 20),
+                                    SizedBox(
+                                      width: 100,
+                                      child: TextField(
+                                          decoration: InputDecoration(
+                                            labelText: 'All Cost',
+                                          ),
+                                          keyboardType: TextInputType.number,
+                                          onChanged: (value) {
+                                            setState(() {
+                                              allCost =
+                                                  double.tryParse(value) ??
+                                                      allCost;
+                                              _updateAllCost();
+                                            });
+                                          },
+                                          style: FontsTheme.hindBold_15()),
+                                    ),
+                                    Icon(Icons.attach_money,
+                                        color: Colors.green),
+                                  ],
+                                )),
+                          ),
+                        ],
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          //buildQuantityButton(Icons.remove),
+
+                          Container(
                             padding: EdgeInsets.symmetric(
                                 horizontal: 12, vertical: 8),
                             decoration: BoxDecoration(
                               borderRadius: BorderRadius.circular(10),
                               color: Colors.white,
                             ),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              children: [
-                                Text('Each piece',
-                                    style: FontsTheme.mouseMemoirs_30Black()),
-                                SizedBox(width: 20),
-                                SizedBox(
-                                  width: 100,
-                                  child: TextField(
-                                      decoration: InputDecoration(
-                                        labelText: 'All Cost',
-                                      ),
-                                      keyboardType: TextInputType.number,
-                                      onChanged: (value) {
+                            child: SizedBox(
+                                width: 100,
+                                child: TextField(
+                                    decoration: InputDecoration(
+                                      labelText: 'Weight',
+                                    ),
+                                    keyboardType: TextInputType.number,
+                                    onChanged: (value) {
+                                      if (value.isNotEmpty) {
                                         setState(() {
-                                          allCost =
-                                              double.tryParse(value) ?? allCost;
+                                          costPerPiece =
+                                              double.tryParse(value) ??
+                                                  costPerPiece;
                                           _updateAllCost();
                                         });
-                                      },
-                                      style: FontsTheme.hindBold_15()),
-                                ),
-                                Icon(Icons.attach_money, color: Colors.green),
-                              ],
-                            )),
-                      )
-                    ],
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      //buildQuantityButton(Icons.remove),
+                                      }
+                                    },
+                                    controller: TextEditingController(
+                                        text: _updateWeight()
+                                            .toString()), // Set initial text
 
-                      Container(
-                        padding:
-                            EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(10),
-                          color: Colors.white,
-                        ),
-                        child: SizedBox(
-                            width: 100,
-                            child: TextField(
-                                decoration: InputDecoration(
-                                  labelText: 'Weight',
-                                ),
-                                keyboardType: TextInputType.number,
-                                onChanged: (value) {
-                                  if (value.isNotEmpty) {
-                                    setState(() {
-                                      costPerPiece = double.tryParse(value) ??
-                                          costPerPiece;
-                                      _updateAllCost();
-                                    });
-                                  }
-                                },
-                                controller: TextEditingController(
-                                    text: _updateWeight()
-                                        .toString()), // Set initial text
-
-                                style: FontsTheme.hindBold_15())),
-                      ),
-                      Container(
-                          padding:
-                              EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(10),
-                            color: Colors.white,
+                                    style: FontsTheme.hindBold_15())),
                           ),
-                          child: Row(
-                            children: [
-                              SizedBox(
-                                  width: 100,
-                                  child: TextField(
-                                      decoration: InputDecoration(
-                                        labelText: 'Cost',
-                                      ),
-                                      keyboardType: TextInputType.number,
-                                      onChanged: (value) {
-                                        if (value.isNotEmpty) {
-                                          setState(() {
-                                            costPerPiece =
-                                                double.tryParse(value) ??
-                                                    costPerPiece;
-                                            _updateCost();
-                                          });
-                                        }
-                                        // Text(
-                                        //     '\$${updateWeight.toStringAsFixed(2)}');
-                                        // costPerPiece =
-                                        //     double.tryParse(value) ??
-                                        //         costPerPiece;
-                                        // _updateCost();
-                                        // );
-                                      },
-                                      controller: TextEditingController(
-                                          text: _updateCost().toString()),
-                                      style: FontsTheme.hindBold_15())),
-                              Icon(Icons.attach_money, color: Colors.green),
-                            ],
-                          )),
+                          Container(
+                              padding: EdgeInsets.symmetric(
+                                  horizontal: 12, vertical: 8),
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(10),
+                                color: Colors.white,
+                              ),
+                              child: Row(
+                                children: [
+                                  SizedBox(
+                                      width: 100,
+                                      child: TextField(
+                                          decoration: InputDecoration(
+                                            labelText: 'Cost',
+                                          ),
+                                          keyboardType: TextInputType.number,
+                                          onChanged: (value) {
+                                            if (value.isNotEmpty) {
+                                              setState(() {
+                                                costPerPiece =
+                                                    double.tryParse(value) ??
+                                                        costPerPiece;
+                                                _updateCost();
+                                              });
+                                            }
+                                            // Text(
+                                            //     '\$${updateWeight.toStringAsFixed(2)}');
+                                            // costPerPiece =
+                                            //     double.tryParse(value) ??
+                                            //         costPerPiece;
+                                            // _updateCost();
+                                            // );
+                                          },
+                                          controller: TextEditingController(
+                                              text: _updateCost().toString()),
+                                          style: FontsTheme.hindBold_15())),
+                                  Icon(Icons.attach_money, color: Colors.green),
+                                ],
+                              )),
+                        ],
+                      ),
                     ],
-                  ),
-                ],
-              )),
-        ],
+                  )),
+            ],
+          ),
+        ),
       ),
     );
   }

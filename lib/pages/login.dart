@@ -34,7 +34,6 @@ class _loginState extends State<LoginScreen> {
       return;
     }
 
-    
     showDialog(
       context: context,
       barrierDismissible: false,
@@ -66,7 +65,7 @@ class _loginState extends State<LoginScreen> {
     }
   }
 
-   void showErrorDialog(String message) {
+  void showErrorDialog(String message) {
     showDialog(
       context: context,
       builder: (context) {
@@ -252,8 +251,14 @@ class _loginState extends State<LoginScreen> {
                                         child: ElevatedButton(
                                             onPressed: () {
                                               _login();
+                                              // Navigator.push(
+                                              //   context,
+                                              //   MaterialPageRoute(
+                                              //       builder: (context) =>
+                                              //           Inventory()),
+                                              // );
                                               print(_emailController);
-                                              print('ddd');
+                                              print('login tapped');
                                             },
                                             style: TextButton.styleFrom(
                                                 backgroundColor:
