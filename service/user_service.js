@@ -14,7 +14,7 @@ export async function get_user_from_db(req, res) {
     // and second one is secret key for matching the token is valid or not.
     // The validation method returns a decode object that we stored the token in.
     const existingUser = await User.findOne({ username: target_user });
-
+    
     if (!existingUser) {
       console.log(
         "Token username doesn't match with the current username available in database."

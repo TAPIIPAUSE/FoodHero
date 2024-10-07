@@ -14,19 +14,25 @@ const router = express.Router();
 router.get("/showConsumedFood",authenticateCookieToken, async (req, res) => {
   
     
-  var user = await get_user_from_db(req, res);
-
-  var h_ID = user.hID;
-
-  const consumed_items = await ConsumedFood.find({ h_ID });
-
-  var food_array = []
-
-  consumed_items.forEach(food => {
-    food_array.push(getFoodDetailForConsumeInventory(food.fID))
-});
-
-  res.status(200).send("Successful");
+try {
+    var user = await get_user_from_db(req, res);
+  
+    var h_ID = user.hID;
+  
+    const consumed_items = await ConsumedFood.find({ h_ID });
+    // Fetch food details for each consumed item using Promise.all to wait for all promises to resolve
+    const food_array = await Promise.all(
+      consumed_items.map(async (food) => {
+        const foodDetail = await getFoodDetailForConsumeInventory(food.food_ID, food.assigned_ID);
+        return foodDetail;
+      })
+    );
+    
+    console.log(food_array)
+  return res.status(200).send("Successful");
+} catch (error) {
+  return res.status(400).send("Error when showing consumed food list", error);
+}
 });
 
 export default router;

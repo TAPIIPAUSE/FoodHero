@@ -9,13 +9,11 @@ export async function save_consume_to_db(fID,user,retrievedAmount, retrievedQuan
     try {
       // Check if the house already exists in the database
       var newID = 0;
-      var userID = user.assigned_ID
-      var hID = user.hID
 
       const newConsumed = new ConsumedFood({
         food_ID: fID,
-        user_ID: userID,
-        h_ID: hID,  // provide userID value
+        user_ID: user.assigned_ID,
+        h_ID: user.hID,
         current_amount: retrievedAmount,  // retrievedAmount mapped to current_amount
         current_quantity: retrievedQuantity,  // retrievedQuantity mapped to current_quantity
         saved: 0,  // default or initial value
@@ -24,6 +22,9 @@ export async function save_consume_to_db(fID,user,retrievedAmount, retrievedQuan
         wasted: 0,   // default or initial value
         score: 0,    // default or initial value
       });
+    console.log("User assigned_ID:", user.assigned_ID);
+    console.log("User hID:", user.hID);
+
     console.log("This is your new consumed object:", newConsumed);
     var new_consumption = await newConsumed.save();
     newID = new_consumption.assigned_ID;

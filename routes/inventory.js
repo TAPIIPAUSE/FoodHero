@@ -297,10 +297,11 @@ router.post('/consume', authenticateCookieToken,async(req,res)=>{
 
       var newCurrentQuantity = currentQuantity - retrievedQuantity
 
-      var user = await get_user_from_db(req,res)
+      var user = get_user_from_db(req,res)
       var user_ID = user.assigned_ID
       // Create consumed object
-      var consumed_ID = save_consume_to_db(fID, user,retrievedAmount, retrievedQuantity)
+
+      var consumed_ID = await save_consume_to_db(fID,user,retrievedAmount, retrievedQuantity)
 
       console.log("This is our newly registered consumed food: ",consumed_ID)
 
@@ -324,7 +325,7 @@ router.post('/consume', authenticateCookieToken,async(req,res)=>{
       var user = await get_user_from_db(req,res)
       var user_ID = user.assigned_ID
       // Create consumed object
-      var consumed_ID = save_consume_to_db(fID, user_ID,retrievedAmount, retrievedQuantity)
+      var consumed_ID = save_consume_to_db(fID, user,retrievedAmount, retrievedQuantity)
 
       console.log("This is our newly registered consumed food: ",consumed_ID)
 
