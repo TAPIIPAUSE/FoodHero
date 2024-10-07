@@ -6,6 +6,7 @@ import 'package:foodhero/main.dart';
 import 'package:foodhero/pages/addFoodDetails.dart';
 import 'package:foodhero/pages/api/ApiUserFood.dart';
 import 'package:foodhero/theme.dart';
+import 'package:foodhero/utils/constants.dart';
 import 'package:foodhero/widgets/inventory/circle_progressbar.dart';
 import 'package:foodhero/widgets/inventory/inventory_dropdown.dart';
 import 'package:foodhero/widgets/inventory/inventory_list_item.dart';
@@ -16,7 +17,8 @@ import 'package:textwrap/textwrap.dart';
 
 class Inventory extends StatefulWidget {
   final String initialFoodCategory;
-  const Inventory({super.key, this.initialFoodCategory = 'all food'});
+  final int hID;
+   Inventory({super.key, this.initialFoodCategory = 'all food', required  this.hID});
 
   @override
   State<Inventory> createState() => _InventoryState();
@@ -30,12 +32,13 @@ class _InventoryState extends State<Inventory> {
     Segment(value: 4, color: AppTheme.softOrange, label: "Nearly Expired"),
     Segment(value: 70, color: AppTheme.softRedCancleWasted, label: "Wasted"),
   ];
-  late Future<List<dynamic>> inventoryItems;
+  late Future<List<InventoryListItem>> inventoryItems;
   late String _todayDate;
   late String _weekday;
   int _current = 0;
   int _weekdayIndex = 0;
   int touchedIndex = -1;
+
 
   void _onItemTapped(int index) {
     setState(() {
@@ -50,7 +53,7 @@ class _InventoryState extends State<Inventory> {
   void initState() {
     super.initState();
     foodCategory = widget.initialFoodCategory;
-    inventoryItems = ApiUserFood().fetchInventory();
+    inventoryItems = fetchUserFood(widget.hID);
     _updateDate();
   }
 
@@ -242,7 +245,7 @@ class _InventoryState extends State<Inventory> {
                           const SizedBox(
                             height: 10,
                           ),
-                          FutureBuilder<List<dynamic>>(
+                          FutureBuilder<List<InventoryListItem>>(
                               future: inventoryItems,
                               builder: (context, snapshot) {
                                 if (snapshot.connectionState ==
@@ -271,10 +274,25 @@ class _InventoryState extends State<Inventory> {
                                         itemBuilder: (context, index) {
                                           final item = foodItems[index];
                                           return InventoryListItem(
-                                            thumbnail:
+                                            hID: 1,
+                                            food_name: item['food_name'],
+                                            img:
                                                 "assets/images/default.jpg", // You can update this based on your data
-                                            foodname: item['food_name'],
-                                            expiry:
+
+                                            location: item["loacation"],
+                                            food_category: item[foodCategory],
+                                            isCountable: item[true],
+                                            weight_type: item[""],
+                                            package_type: item[""],
+                                            current_amount: item[""],
+                                            total_amount: item[""],
+                                            consumed_amount: item[""],
+                                            current_quantity: item[""],
+                                            total_quanitity: item[""],
+                                            consumed_quantity: item[""],
+                                            total_price: item[""],
+                                            RemindDate: item[""],
+                                            bestByDate:
                                                 'Expires: ${item['bestByDate']}', // Format as needed
                                             progressbar:
                                                 item['current_amount'] /
@@ -291,53 +309,58 @@ class _InventoryState extends State<Inventory> {
                                 );
                               }),
                           const InventoryListItem(
-                            thumbnail: "assets/images/banana.jpg",
-                            foodname: 'Banana',
-                            expiry: '2 weeks',
+                            hID: 1,
+                            food_name: 'Banana',
+                            img: "assets/images/banana.jpg",
+                            location: "loacation",
+                            food_category: foodTypeFresh,
+                            isCountable: true,
+                            weight_type: 'gram',
+                            package_type: 'piece',
+                            current_amount: 5,
+                            total_amount: 7,
+                            consumed_amount: 2,
+                            current_quantity: 5,
+                            total_quanitity: 7,
+                            consumed_quantity: 2,
+                            total_price: 50,
+                            RemindDate: "5/10/2024",
+                            bestByDate: '2 weeks',
                             progressbar: 40,
                             consuming: 5,
                             remaining: 5,
                           ),
                           const InventoryListItem(
-                            thumbnail: "assets/images/tomatoes.jpg",
-                            foodname: 'Tomatos',
-                            expiry: '3 days left',
-                            progressbar: 20.3,
-                            consuming: 5,
-                            remaining: 7,
-                          ),
-                          const InventoryListItem(
-                            thumbnail: "assets/images/apples.jpg",
-                            foodname: 'Apple',
-                            expiry: '3 days left',
-                            progressbar: 60.57,
-                            consuming: 5,
-                            remaining: 7,
-                          ),
-                          const InventoryListItem(
-                            thumbnail: "assets/images/banana.jpg",
-                            foodname: 'Banana',
-                            expiry: '2 weeks',
+                            hID: 1,
+                            food_name: 'Apple',
+                            img: "assets/images/apple.jpg",
+                            location: "loacation",
+                            food_category: foodTypeFresh,
+                            isCountable: true,
+                            weight_type: 'gram',
+                            package_type: 'piece',
+                            current_amount: 5,
+                            total_amount: 7,
+                            consumed_amount: 2,
+                            current_quantity: 5,
+                            total_quanitity: 7,
+                            consumed_quantity: 2,
+                            total_price: 50,
+                            RemindDate: "5/10/2024",
+                            bestByDate: '2 weeks',
                             progressbar: 40,
                             consuming: 5,
                             remaining: 5,
                           ),
-                          const InventoryListItem(
-                            thumbnail: "assets/images/tomatoes.jpg",
-                            foodname: 'Tomatos',
-                            expiry: '3 days left',
-                            progressbar: 20.3,
-                            consuming: 5,
-                            remaining: 7,
-                          ),
-                          const InventoryListItem(
-                            thumbnail: "assets/images/apples.jpg",
-                            foodname: 'Apple',
-                            expiry: '3 days left',
-                            progressbar: 60.57,
-                            consuming: 5,
-                            remaining: 7,
-                          ),
+                          // const InventoryListItem(
+                          //    hID: 1,
+                          //   img: "assets/images/apples.jpg",
+                          //   food_name: 'Apple',
+                          //   bestByDate: '3 days left',
+                          //   progressbar: 60,
+                          //   consuming: 5,
+                          //   remaining: 7,
+                          // ),
                         ],
                       ),
                     ),

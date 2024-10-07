@@ -7,21 +7,77 @@ import 'package:percent_indicator/percent_indicator.dart';
 class InventoryListItem extends StatelessWidget {
   const InventoryListItem({
     super.key,
-    required this.thumbnail,
-    required this.foodname,
-    required this.expiry,
+    required this.hID,
+    required this.food_name,
+    required this.img,
+    required this.location,
+    required this.food_category,
+    required this.isCountable,
+    required this.weight_type,
+    required this.package_type,
+    required this.current_amount,
+    required this.total_amount,
+    required this.consumed_amount,
+    required this.current_quantity,
+    required this.total_quanitity,
+    required this.consumed_quantity,
+    required this.total_price,
+    required this.bestByDate,
+    required this.RemindDate,
+
     required this.progressbar,
-    required this.consuming,
-    required this.remaining,
+     required this.consuming,
+      required this.remaining,
   });
 
-  final String thumbnail;
-  final String foodname;
-  final String expiry;
-  final double progressbar;
-  final int consuming;
-  final int remaining;
+  final int hID;
+  final String food_name;
+  final String img;
+  final String location;
+  final String food_category;
+  final bool isCountable;
+  final String weight_type;
+  final String package_type;
+  final int current_amount;
+  final int total_amount;
+  final int consumed_amount;
+  final int current_quantity;
+  final int total_quanitity;
+  final int consumed_quantity;
+  final int total_price;
+  final String bestByDate;
+  final String RemindDate;
 
+  // final String thumbnail;
+  // final String foodname;
+  // final String expiry;
+  final int progressbar;
+   final int consuming;
+   final int remaining;
+
+ factory InventoryListItem.fromJson(Map<String, dynamic> json) {
+    return InventoryListItem(
+    
+      hID: json['hID'],
+      img: json['img'],
+      food_name: json['food_name'],
+      location: json['location'],
+      food_category: json['food_category'],
+      weight_type: json['weight_type'],
+      package_type: json['package_type'],
+      isCountable: json['isCountable'],
+      current_amount: int.parse(json['current_amount']['\$numberDecimal']),
+      total_amount: int.parse(json['total_amount']['\$numberDecimal']),
+      consumed_amount: int.parse(json['consumed_amount']['\$numberDecimal']),
+      current_quantity: int.parse(json['current_quantity']['\$numberDecimal']),
+      total_quanitity: int.parse(json['total_quanitity']['\$numberDecimal']),
+      consumed_quantity: int.parse(json['consumed_quantity']['\$numberDecimal']),
+      total_price: int.parse(json['total_price']['\$numberDecimal']),
+      bestByDate: String.parse(json['bestByDate']['\$date']),
+      RemindDate: String.parse(json['RemindDate']['\$date']),
+    );
+  }
+}
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
@@ -29,7 +85,9 @@ class InventoryListItem extends StatelessWidget {
         Navigator.push(
           context,
           MaterialPageRoute(
-            builder: (context) => foodDetails(item: this),
+            builder: (context) => foodDetails(
+              item:,
+            ),
           ),
         );
       },
@@ -53,7 +111,7 @@ class InventoryListItem extends StatelessWidget {
                       borderRadius: BorderRadius.circular(
                           10.0), // Adjust the value as needed
                       child: Image.asset(
-                        thumbnail.toString(),
+                        img.toString(),
                         fit: BoxFit.cover,
                         width: MediaQuery.of(context).size.width * 0.1,
                         height: MediaQuery.of(context).size.height * 0.12,
@@ -63,11 +121,11 @@ class InventoryListItem extends StatelessWidget {
                   Expanded(
                     flex: 3,
                     child: _FoodDetail(
-                      foodname: foodname,
-                      expiry: expiry,
-                      progessbar: progressbar,
-                      consumeing: consuming,
-                      remaining: remaining,
+                      foodname: food_name,
+                      expiry: bestByDate,
+                      progessbar: current_quantity,
+                      consumeing: consumed_amount,
+                      remaining: current_quantity,
                     ),
                   ),
                 ],
@@ -94,7 +152,7 @@ class _FoodDetail extends StatelessWidget {
 
   final String foodname;
   final String expiry;
-  final double progessbar;
+  final int progessbar;
   final int consumeing;
   final int remaining;
 

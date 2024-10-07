@@ -11,7 +11,6 @@ import 'package:foodhero/pages/inventory/search/search_item.dart';
 import 'package:foodhero/pages/login_regis.dart';
 import 'package:foodhero/pages/notifications.dart';
 import 'package:foodhero/pages/register.dart';
-import 'package:foodhero/pages/registerold.dart';
 import 'package:foodhero/theme.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';

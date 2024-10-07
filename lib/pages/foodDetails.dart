@@ -750,7 +750,7 @@ class _FoodDetailsPageState extends State<foodDetails> {
   @override
   void initState() {
     super.initState();
-    foodname.text = widget.item.foodname;
+    foodname.text = widget.item.food_name;
   }
 
   @override
@@ -1009,7 +1009,7 @@ class _FoodDetailsPageState extends State<foodDetails> {
                               Navigator.push(
                                 context,
                                 MaterialPageRoute(
-                                  builder: (context) => const Inventory(),
+                                  builder: (context) =>  Inventory(hID: hID,),
                                 ),
                               );
                             },
