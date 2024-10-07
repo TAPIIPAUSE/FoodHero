@@ -7,7 +7,8 @@ import PackageUnitType from '../schema/inventory_module/packageTypeSchema.js';
 import Location from '../schema/inventory_module/locationSchema.js';
 import Food from '../schema/inventory_module/foodInventorySchema.js';
 import { get_user_from_db, get_houseID } from '../service/user_service.js';
-import { save_consume_to_db } from '../service/inventory_service.js';
+import { calculateScore, save_consume_to_db } from '../service/inventory_service.js';
+import ConsumedFood from "../schema/inventory_module/consumedFoodSchema.js";
 
 const router = express.Router();
 
@@ -344,5 +345,71 @@ router.post('/consume', async(req,res)=>{
 
 })
 
+router.post('/consume/all', async (req, res) => {
+  const { fID } = req.body;
+
+  try {
+    const food = await Food.findOne({ assigned_ID: fID });
+    const user = await get_user_from_db(req,res)
+    let consumedFood = await ConsumedFood.findOne({ assigned_ID: fID, user_ID: user.assigned_ID });
+    if (!food) {
+      return res.status(404).json({ message: 'Food item not found' });
+    }
+
+    // Calculate the score for consuming all of the food
+    let score = await calculateScore(food.total_amount,food.current_amount,food.weight_type); // Consuming 100% of the food
+    if (Object.is(score, -0) || Math.abs(score) < Number.EPSILON) {
+      score = 0;
+    }
+    console.log("This is our score: ", score)
+
+    
+    await Food.updateOne(
+      { assigned_ID: fID }, // Filter by assigned_ID
+      {
+        $set: {
+          current_amount: 0,
+          current_quantity: 0,
+          consumed_amount: food.total_amount,
+          consumed_quantity: food.total_quantity,
+        },
+      }
+    );
+
+    // If no consumedFood entry is found, create a new one
+    if (!consumedFood) {
+      consumedFood = new ConsumedFood({
+        assigned_ID: fID,
+        user_ID: user.assigned_ID,
+        food_ID: food.assigned_ID,
+        score: score,  // Set the initial score
+        total_amount: food.total_amount,
+        total_quantity: food.total_quantity,
+        consumed_amount: food.total_amount,
+        consumed_quantity: food.total_quantity,
+        current_amount: 0,
+        current_quantity: 0,
+      });
+    } else {
+      // If consumedFood exists, update the score
+      consumedFood.score += score;
+    }
+
+    // Save the consumedFood entry
+    await consumedFood.save();
+
+    // Remove the food item from the user's inventory
+    // await Food.deleteOne({ assigned_ID: food.assigned_ID });
+
+    res.status(200).json({
+      message: 'Food item consumed successfully',
+      scoreGained: score,
+    });
+
+  } catch (error) {
+    console.error('Error in consume all route:', error);
+    res.status(500).json({ message: 'An error occurred while processing your request' });
+  }
+});
 
 export default router;
