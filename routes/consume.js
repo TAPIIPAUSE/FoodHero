@@ -28,9 +28,8 @@ try {
         return foodDetail;
       })
     );
-    
-    console.log(food_array)
-  return res.status(200).send("Successful");
+  
+  return res.status(200).send(food_array);
 } catch (error) {
   return res.status(400).send("Error when showing consumed food list", error);
 }
