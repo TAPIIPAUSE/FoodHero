@@ -1630,6 +1630,7 @@ class _FoodDetailsPageState extends State<foodDetails> {
                                               text: _updateCost().toString()),
                                           style: FontsTheme.hindBold_15())),
                                   Icon(Icons.attach_money, color: Colors.green),
+                                  Icon(Icons.info_rounded, color: AppTheme.mainBlue,),
                                 ],
                               )),
                         ],

@@ -3,6 +3,8 @@ import 'package:foodhero/main.dart';
 import 'package:foodhero/pages/House&Orga/Household/household.dart';
 import 'package:foodhero/pages/House&Orga/Organization/organization.dart';
 import 'package:foodhero/pages/api/HouseholdService.dart';
+import 'package:foodhero/pages/api/createAndjoinHousehold.dart';
+import 'package:foodhero/pages/api/createHousehold.dart';
 import 'package:foodhero/theme.dart';
 import 'package:foodhero/fonts.dart';
 
@@ -12,26 +14,35 @@ class join extends StatefulWidget {
 }
 
 class _JoinState extends State<join> {
-  final householdService = HouseholdService();
+  final TextEditingController _nameController = TextEditingController();
 
 // Example usage
-  void createHousehold() async {
-    bool success = await householdService.createHousehold(
-        'My Household', 'securepassword123');
-    if (success) {
+  void _createHousehold() async {
+    String householdName = _nameController.text;
+
+    // bool success = await householdService.createHousehold(
+    //     'My Household', 'securepassword123');
+    if (householdName.isNotEmpty) {
+      await createHousehold(householdName);
       // Handle successful creation
     } else {
-      // Handle failure
+      ScaffoldMessenger.of(context)
+          .showSnackBar(SnackBar(content: Text('Please enter a name')));
     }
   }
 
-  void joinHousehold() async {
-    bool success = await householdService.joinHousehold(
-        'householdId123', 'securepassword123');
-    if (success) {
+  final TextEditingController _searchController = TextEditingController();
+
+  void _joinHousehold() async {
+    String householdId = _searchController.text;
+    // bool success = await householdService.joinHousehold(
+    //     'householdId123', 'securepassword123');
+    if (householdId.isNotEmpty) {
+      await joinHousehold(householdId);
       // Handle successful joining
     } else {
-      // Handle failure
+      ScaffoldMessenger.of(context)
+          .showSnackBar(SnackBar(content: Text('Please enter a household ID')));
     }
   }
 
@@ -147,12 +158,13 @@ class _JoinState extends State<join> {
             ElevatedButton(
               child: const Text("Join"),
               onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => household(),
-                  ),
-                );
+                _joinHousehold;
+                // Navigator.push(
+                //   context,
+                //   MaterialPageRoute(
+                //     builder: (context) => household(),
+                //   ),
+                // );
               },
             ),
           ],

@@ -6,7 +6,7 @@ Future<List<InventoryListItem>> fetchUserFood(int hID) async {
   try {
     print("Attempting to log in with username: $hID");
     final response = await http.get(
-      Uri.parse('http://192.168.1.34:3000/api/v1/inventory/getFoodByHouse'),
+      Uri.parse('http://10.4.152.33:3000/api/v1/inventory/getFoodByHouse'),
       headers: {
         'Content-Type': 'application/json',
         // Add other headers if necessary, like authentication tokens
