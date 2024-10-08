@@ -18,7 +18,8 @@ import 'package:textwrap/textwrap.dart';
 class Inventory extends StatefulWidget {
   final String initialFoodCategory;
   final int hID;
-   Inventory({super.key, this.initialFoodCategory = 'all food', required  this.hID});
+  Inventory(
+      {super.key, this.initialFoodCategory = 'all food', required this.hID});
 
   @override
   State<Inventory> createState() => _InventoryState();
@@ -38,7 +39,6 @@ class _InventoryState extends State<Inventory> {
   int _current = 0;
   int _weekdayIndex = 0;
   int touchedIndex = -1;
-
 
   void _onItemTapped(int index) {
     setState(() {
@@ -246,7 +246,7 @@ class _InventoryState extends State<Inventory> {
                             height: 10,
                           ),
                           FutureBuilder<List<InventoryListItem>>(
-                              future: inventoryItems,
+                              future: fetchUserFood(widget.hID),
                               builder: (context, snapshot) {
                                 if (snapshot.connectionState ==
                                     ConnectionState.waiting) {
@@ -259,54 +259,75 @@ class _InventoryState extends State<Inventory> {
                                     snapshot.data!.isEmpty) {
                                   return Center(
                                       child: Text('No food items found'));
-                                }
-                                final foodItems = snapshot.data!;
-                                return SingleChildScrollView(
-                                  child: Column(
-                                    children: [
-                                      const SizedBox(
-                                        height: 10,
-                                      ),
-                                      ListView.builder(
-                                        scrollDirection: Axis.vertical,
-                                        shrinkWrap: true,
-                                        itemCount: foodItems.length,
-                                        itemBuilder: (context, index) {
-                                          final item = foodItems[index];
-                                          return InventoryListItem(
-                                            hID: 1,
-                                            food_name: item['food_name'],
-                                            img:
-                                                "assets/images/default.jpg", // You can update this based on your data
+                                } else {
+                                  List<InventoryListItem> foodItems =
+                                      snapshot.data!;
+                                  return SingleChildScrollView(
+                                    child: Column(
+                                      children: [
+                                        const SizedBox(
+                                          height: 10,
+                                        ),
+                                        ListView.builder(
+                                          scrollDirection: Axis.vertical,
+                                          shrinkWrap: true,
+                                          itemCount: foodItems.length,
+                                          itemBuilder: (context, index) {
+                                            final item = foodItems[index];
+                                            double progress =
+                                                (item.current_amount /
+                                                        item.total_quanitity) *
+                                                    100;
+                                            int remaining = (item.total_amount - item.current_amount);
+                                            return InventoryListItem(
+                                                hID: item.hID,
+                                                food_name: foodItems[index]
+                                                    .food_name,
+                                                img:
+                                                    "assets/images/default.jpg", // You can update this based on your data
 
-                                            location: item["loacation"],
-                                            food_category: item[foodCategory],
-                                            isCountable: item[true],
-                                            weight_type: item[""],
-                                            package_type: item[""],
-                                            current_amount: item[""],
-                                            total_amount: item[""],
-                                            consumed_amount: item[""],
-                                            current_quantity: item[""],
-                                            total_quanitity: item[""],
-                                            consumed_quantity: item[""],
-                                            total_price: item[""],
-                                            RemindDate: item[""],
-                                            bestByDate:
-                                                'Expires: ${item['bestByDate']}', // Format as needed
-                                            progressbar:
-                                                item['current_amount'] /
-                                                    item['total_amount'] *
-                                                    100, // Progress calculation
-                                            consuming: item['current_amount'],
-                                            remaining: item['total_amount'] -
-                                                item['current_amount'],
-                                          );
-                                        },
-                                      ),
-                                    ],
-                                  ),
-                                );
+                                                location: foodItems[index]
+                                                    .location,
+                                                food_category: foodItems[index]
+                                                    .food_category,
+                                                isCountable: foodItems[index]
+                                                    .isCountable,
+                                                weight_type: foodItems[index]
+                                                    .weight_type,
+                                                package_type: foodItems[index]
+                                                    .package_type,
+                                                current_amount: foodItems[index]
+                                                    .current_amount,
+                                                total_amount: foodItems[index]
+                                                    .total_amount,
+                                                consumed_amount: foodItems[
+                                                        index]
+                                                    .consumed_amount,
+                                                current_quantity:
+                                                    foodItems[index]
+                                                        .consumed_quantity,
+                                                total_quanitity:
+                                                    foodItems[index]
+                                                        .total_quanitity,
+                                                consumed_quantity:
+                                                    foodItems[index]
+                                                        .consumed_quantity,
+                                                total_price: foodItems[index]
+                                                    .total_price,
+                                                RemindDate:
+                                                    foodItems[index].RemindDate,
+                                                bestByDate: foodItems[index]
+                                                    .bestByDate, // Format as needed
+                                                progressbar: progress,
+                                                consuming: foodItems[index]
+                                                    .current_amount,
+                                                remaining: remaining);
+                                          },
+                                        ),
+                                      ],
+                                    ),
+                                  );
+                                }
                               }),
                           const InventoryListItem(
                             hID: 1,

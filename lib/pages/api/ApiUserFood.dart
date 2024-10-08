@@ -2,9 +2,7 @@ import 'dart:convert';
 import 'package:foodhero/widgets/inventory/inventory_list_item.dart';
 import 'package:http/http.dart' as http;
 
-Future<List<InventoryListItem>> fetchUserFood(
-  int hID,
-) async {
+Future<List<InventoryListItem>> fetchUserFood(int hID) async {
   try {
     print("Attempting to log in with username: $hID");
     final response = await http.get(

@@ -54,7 +54,7 @@ class _loginState extends State<LoginScreen> {
       Navigator.pushReplacement(
         context,
         MaterialPageRoute(
-            builder: (context) => Inventory(initialFoodCategory: 'all food')),
+            builder: (context) => Inventory(initialFoodCategory: 'all food', hID: 0,)),
       );
       print('login succesful');
     } else {

@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'dart:async';
 import 'package:flutter/material.dart';
+import 'package:foodhero/pages/api/ApiUserFood.dart';
 import 'package:foodhero/pages/inventory/inventory.dart';
 import 'package:foodhero/theme.dart';
 import 'package:foodhero/fonts.dart';
@@ -280,7 +281,7 @@ class _AddFoodDetailsPageState extends State<addFoodDetails> {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => Inventory(),
+                      builder: (context) => Inventory(hID: 0),
                     ),
                   );
                 },

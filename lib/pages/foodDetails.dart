@@ -1009,7 +1009,7 @@ class _FoodDetailsPageState extends State<foodDetails> {
                               Navigator.push(
                                 context,
                                 MaterialPageRoute(
-                                  builder: (context) =>  Inventory(hID: hID,),
+                                  builder: (context) =>  Inventory(hID: 0,),
                                 ),
                               );
                             },

@@ -54,7 +54,7 @@ final GoRouter _router = GoRouter(
           builder: (BuildContext context, GoRouterState state) {
             final foodCategory =
                 state.pathParameters['foodCategory'] ?? 'All food';
-            return Inventory(initialFoodCategory: foodCategory);
+            return Inventory(initialFoodCategory: foodCategory, hID: 0,);
           },
         ),
         GoRoute(

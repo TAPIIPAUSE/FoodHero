@@ -1,10 +1,36 @@
 import 'package:flutter/material.dart';
+import 'package:foodhero/pages/api/ApiUserFood.dart';
 import 'package:foodhero/pages/foodDetails.dart';
 
 import 'package:foodhero/theme.dart';
 import 'package:percent_indicator/percent_indicator.dart';
 
 class InventoryListItem extends StatelessWidget {
+
+  final int hID;
+  final String food_name;
+  final String img;
+  final String location;
+  final String food_category;
+  final bool isCountable;
+  final String weight_type;
+  final String package_type;
+  final int current_amount;
+  final int total_amount;
+  final int consumed_amount;
+  final int current_quantity;
+  final int total_quanitity;
+  final int consumed_quantity;
+  final int total_price;
+  final String bestByDate;
+  final String RemindDate;
+
+  // final String thumbnail;
+  // final String foodname;
+  // final String expiry;
+  final double progressbar;
+   final int consuming;
+   final int remaining;
   const InventoryListItem({
     super.key,
     required this.hID,
@@ -30,30 +56,7 @@ class InventoryListItem extends StatelessWidget {
       required this.remaining,
   });
 
-  final int hID;
-  final String food_name;
-  final String img;
-  final String location;
-  final String food_category;
-  final bool isCountable;
-  final String weight_type;
-  final String package_type;
-  final int current_amount;
-  final int total_amount;
-  final int consumed_amount;
-  final int current_quantity;
-  final int total_quanitity;
-  final int consumed_quantity;
-  final int total_price;
-  final String bestByDate;
-  final String RemindDate;
-
-  // final String thumbnail;
-  // final String foodname;
-  // final String expiry;
-  final int progressbar;
-   final int consuming;
-   final int remaining;
+  
 
  factory InventoryListItem.fromJson(Map<String, dynamic> json) {
     return InventoryListItem(
@@ -66,18 +69,21 @@ class InventoryListItem extends StatelessWidget {
       weight_type: json['weight_type'],
       package_type: json['package_type'],
       isCountable: json['isCountable'],
-      current_amount: int.parse(json['current_amount']['\$numberDecimal']),
-      total_amount: int.parse(json['total_amount']['\$numberDecimal']),
-      consumed_amount: int.parse(json['consumed_amount']['\$numberDecimal']),
-      current_quantity: int.parse(json['current_quantity']['\$numberDecimal']),
-      total_quanitity: int.parse(json['total_quanitity']['\$numberDecimal']),
-      consumed_quantity: int.parse(json['consumed_quantity']['\$numberDecimal']),
-      total_price: int.parse(json['total_price']['\$numberDecimal']),
-      bestByDate: String.parse(json['bestByDate']['\$date']),
-      RemindDate: String.parse(json['RemindDate']['\$date']),
+      current_amount: json['current_amount'],
+      total_amount: (json['total_amount']),
+      consumed_amount: (json['consumed_amount']),
+      current_quantity: (json['current_quantity']),
+      total_quanitity: (json['total_quanitity']),
+      consumed_quantity: (json['consumed_quantity']),
+      total_price: (json['total_price']),
+      bestByDate: (json['bestByDate']),
+      RemindDate: (json['RemindDate']), 
+      progressbar: (json['']), 
+      consuming: (json['consumed_quantity']), 
+      remaining: (json['']),
     );
   }
-}
+
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
@@ -86,7 +92,7 @@ class InventoryListItem extends StatelessWidget {
           context,
           MaterialPageRoute(
             builder: (context) => foodDetails(
-              item:,
+              item:this,
             ),
           ),
         );
