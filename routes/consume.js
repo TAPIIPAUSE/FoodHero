@@ -8,6 +8,7 @@ import { save_consume_to_db } from '../service/inventory_service.js';
 import { authenticateCookieToken } from "../service/jwt_auth.js";
 import { getFoodDetailForConsumeInventory } from "../service/consume_service.js";
 
+
 const router = express.Router();
 
 // Show all consumed items within 1 fridge

@@ -23,8 +23,8 @@ export async function getFoodDetailForConsumeInventory(fID, cID) {
       var package_id = food.package_type
       var package_type = await mapPackageType(package_id)
 
-      consume_msg = `${Number(food.consumed_quantity.toString())} ${package_type}${Number(food.consumed_quantity.toString()) > 1 ? (package_type === 'box' ? 'es' : 's') : ''}`;
-      remain_msg = `${Number(food.current_quantity.toString())} ${package_type}${Number(food.current_quantity.toString()) > 1 ? (package_type === 'box' ? 'es' : 's') : ''}`;
+      consume_msg = `${Number(food.consumed_quantity.toString())} ${package_type}${Number(food.consumed_quantity.toString()) > 1 ? (package_type === 'Box' ? 'es' : 's') : ''}`;
+      remain_msg = `${Number(food.current_quantity.toString())} ${package_type}${Number(food.current_quantity.toString()) > 1 ? (package_type === 'Box' ? 'es' : 's') : ''}`;
 
     } else {
       var unit_id = food.weight_type
@@ -56,14 +56,14 @@ export async function getFoodDetailForConsumeInventory(fID, cID) {
 }
 
 
-async function mapPackageType(id) {
+export async function mapPackageType(id) {
   var assigned_ID = id
   var package_type = await PackageUnitType.findOne({ assigned_ID })
   console.log(package_type)
   return package_type.type
 }
 
-async function mapUnitType(id) {
+export async function mapUnitType(id) {
   var assigned_ID = id
   var unit_type = await UnitType.findOne({ assigned_ID })
   console.log(unit_type)

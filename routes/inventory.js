@@ -9,6 +9,7 @@ import Food from '../schema/inventory_module/foodInventorySchema.js';
 import { get_user_from_db, get_houseID } from '../service/user_service.js';
 import { save_consume_to_db } from '../service/inventory_service.js';
 import { authenticateCookieToken } from "../service/jwt_auth.js";
+import { getFoodDetailForFoodInventory } from "../service/inventory_service.js";
 
 const router = express.Router();
 
@@ -217,7 +218,14 @@ router.get("/getFoodByHouse",authenticateCookieToken, async (req, res) => {
     // search foods by the house ID
     const house_fridge = await Food.find({ hID });
 
-    return res.status(200).send(house_fridge);
+    const food_array = await Promise.all(
+      house_fridge.map(async (food) => {
+        const foodDetail = await getFoodDetailForFoodInventory(food.assigned_ID);
+        return foodDetail;
+      })
+    );
+
+    return res.status(200).send(food_array);
   } catch (error) {
     return res.status(400).send(`Error when getting Food's Info: ${error}`);
   }
