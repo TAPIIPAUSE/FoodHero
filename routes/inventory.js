@@ -7,6 +7,9 @@ import PackageUnitType from '../schema/inventory_module/packageTypeSchema.js';
 import Location from '../schema/inventory_module/locationSchema.js';
 import Food from '../schema/inventory_module/foodInventorySchema.js';
 import { get_user_from_db, get_houseID } from '../service/user_service.js';
+import { save_consume_to_db } from '../service/inventory_service.js';
+import { authenticateCookieToken } from "../service/jwt_auth.js";
+import { getFoodDetailForFoodInventory } from "../service/inventory_service.js";
 import { calculateScore, save_consume_to_db } from '../service/inventory_service.js';
 import ConsumedFood from "../schema/inventory_module/consumedFoodSchema.js";
 
@@ -88,7 +91,7 @@ router.post("/addLocation", async (req, res) => {
   res.status(200).send("Location Registered");
 });
 
-router.post("/addFood", async (req, res) => {
+router.post("/addFood", authenticateCookieToken,async (req, res) => {
   const {
     food_name,
     img,
@@ -143,7 +146,7 @@ router.post("/addFood", async (req, res) => {
   }
 });
 
-router.put("/editFood", async (req, res) => {
+router.put("/editFood", authenticateCookieToken,async (req, res) => {
   var hID = await get_houseID(user);
   var user = await get_user_from_db(req, res);
   const {
@@ -206,7 +209,7 @@ router.put("/editFood", async (req, res) => {
 });
 
 // This function is created to retrieve all foods within that house
-router.get("/getFoodByHouse", async (req, res) => {
+router.get("/getFoodByHouse",authenticateCookieToken, async (req, res) => {
   // const {fID} = req.body
 
   var user = await get_user_from_db(req, res);
@@ -217,14 +220,21 @@ router.get("/getFoodByHouse", async (req, res) => {
     // search foods by the house ID
     const house_fridge = await Food.find({ hID });
 
-    return res.status(200).send(house_fridge);
+    const food_array = await Promise.all(
+      house_fridge.map(async (food) => {
+        const foodDetail = await getFoodDetailForFoodInventory(food.assigned_ID);
+        return foodDetail;
+      })
+    );
+
+    return res.status(200).send(food_array);
   } catch (error) {
     return res.status(400).send(`Error when getting Food's Info: ${error}`);
   }
 });
 
 // This function is created to retrieve food within that house
-router.get("/getFoodById", async (req, res) => {
+router.get("/getFoodById", authenticateCookieToken,async (req, res) => {
   const { fID } = req.body;
 
   var user = await get_user_from_db(req, res);
@@ -243,7 +253,7 @@ router.get("/getFoodById", async (req, res) => {
 });
 
 // Delete by the input's fID
-router.post("/deleteFoodById", async (req, res) => {
+router.post("/deleteFoodById", authenticateCookieToken,async (req, res) => {
   const { fID } = req.body;
   var user = await get_user_from_db(req, res);
   try {
@@ -265,7 +275,7 @@ router.post("/deleteFoodById", async (req, res) => {
   }
 });
 
-router.post('/consume', async(req,res)=>{
+router.post('/consume', authenticateCookieToken,async(req,res)=>{
 
   var {fID, retrievedAmount, retrievedQuantity} = req.body;
 
@@ -297,18 +307,19 @@ router.post('/consume', async(req,res)=>{
 
       var newCurrentQuantity = currentQuantity - retrievedQuantity
 
-      var user = await get_user_from_db(req,res)
+      var user = get_user_from_db(req,res)
       var user_ID = user.assigned_ID
       // Create consumed object
-      var consumed_ID = save_consume_to_db(fID, user_ID,retrievedAmount, retrievedQuantity)
+
+      var consumed_ID = await save_consume_to_db(fID,user,retrievedAmount, retrievedQuantity)
 
       console.log("This is our newly registered consumed food: ",consumed_ID)
 
       // Update the currentAmount on inventory collection
-      food.current_amount = food.total_amount - retrievedAmount
+      food.current_amount = food.current_amount - retrievedAmount
       food.current_quantity = newCurrentQuantity
-      food.consumed_quantity = retrievedQuantity
-      food.consumed_amount = retrievedAmount
+      food.consumed_quantity = parseInt(food.consumed_quantity) + retrievedQuantity //need to parse int first: CAREFUL
+      food.consumed_amount = parseInt(food.consumed_amount) + retrievedAmount //need to parse int first: CAREFUL
 
       await food.save()
 
@@ -324,7 +335,7 @@ router.post('/consume', async(req,res)=>{
       var user = await get_user_from_db(req,res)
       var user_ID = user.assigned_ID
       // Create consumed object
-      var consumed_ID = save_consume_to_db(fID, user_ID,retrievedAmount, retrievedQuantity)
+      var consumed_ID = save_consume_to_db(fID, user,retrievedAmount, retrievedQuantity)
 
       console.log("This is our newly registered consumed food: ",consumed_ID)
 
