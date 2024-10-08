@@ -7,9 +7,9 @@ import PackageUnitType from '../schema/inventory_module/packageTypeSchema.js';
 import Location from '../schema/inventory_module/locationSchema.js';
 import Food from '../schema/inventory_module/foodInventorySchema.js';
 import { get_user_from_db, get_houseID } from '../service/user_service.js';
-import { authenticateCookieToken, authenticateToken } from "../service/jwt_auth.js";
+import { authenticateCookieToken } from "../service/jwt_auth.js";
 import { getFoodDetailForFoodInventory } from "../service/inventory_service.js";
-import { calculateScore, save_consume_to_db } from '../service/inventory_service.js';
+import { calculateScore } from "../service/score_service.js";
 import ConsumedFood from "../schema/inventory_module/consumedFoodSchema.js";
 
 const router = express.Router();
@@ -134,8 +134,6 @@ router.post("/addFood", authenticateToken,async (req, res) => {
       bestByDate,
       RemindDate,
     });
-
-    console.log(newFood);
 
     await newFood.save();
 
@@ -368,45 +366,43 @@ router.post('/consume/all', authenticateToken,async (req, res) => {
 
     // Calculate the score for consuming all of the food
     let score = await calculateScore(food.total_amount,food.current_amount,food.weight_type); // Consuming 100% of the food
-    if (Object.is(score, -0) || Math.abs(score) < Number.EPSILON) {
-      score = 0;
-    }
+
     console.log("This is our score: ", score)
 
     
-    await Food.updateOne(
-      { assigned_ID: fID }, // Filter by assigned_ID
-      {
-        $set: {
-          current_amount: 0,
-          current_quantity: 0,
-          consumed_amount: food.total_amount,
-          consumed_quantity: food.total_quantity,
-        },
-      }
-    );
+    // await Food.updateOne(
+    //   { assigned_ID: fID }, // Filter by assigned_ID
+    //   {
+    //     $set: {
+    //       current_amount: 0,
+    //       current_quantity: 0,
+    //       consumed_amount: food.total_amount,
+    //       consumed_quantity: food.total_quantity,
+    //     },
+    //   }
+    // );
 
     // If no consumedFood entry is found, create a new one
-    if (!consumedFood) {
-      consumedFood = new ConsumedFood({
-        assigned_ID: fID,
-        user_ID: user.assigned_ID,
-        food_ID: food.assigned_ID,
-        score: score,  // Set the initial score
-        total_amount: food.total_amount,
-        total_quantity: food.total_quantity,
-        consumed_amount: food.total_amount,
-        consumed_quantity: food.total_quantity,
-        current_amount: 0,
-        current_quantity: 0,
-      });
-    } else {
-      // If consumedFood exists, update the score
-      consumedFood.score += score;
-    }
+    // if (!consumedFood) {
+    //   consumedFood = new ConsumedFood({
+    //     assigned_ID: fID,
+    //     user_ID: user.assigned_ID,
+    //     food_ID: food.assigned_ID,
+    //     score: score,  // Set the initial score
+    //     total_amount: food.total_amount,
+    //     total_quantity: food.total_quantity,
+    //     consumed_amount: food.total_amount,
+    //     consumed_quantity: food.total_quantity,
+    //     current_amount: 0,
+    //     current_quantity: 0,
+    //   });
+    // } else {
+    //   // If consumedFood exists, update the score
+    //   consumedFood.score += score;
+    // }
 
-    // Save the consumedFood entry
-    await consumedFood.save();
+    // // Save the consumedFood entry
+    // await consumedFood.save();
 
     // Remove the food item from the user's inventory
     // await Food.deleteOne({ assigned_ID: food.assigned_ID });
