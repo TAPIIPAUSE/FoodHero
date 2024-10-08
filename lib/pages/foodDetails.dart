@@ -212,6 +212,291 @@ class _FoodDetailsPageState extends State<foodDetails> {
     return updateWeight.toStringAsFixed(2);
   }
 
+  @override
+  void initState() {
+    super.initState();
+    foodname.text = widget.item.food_name;
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final keyboardHeight = MediaQuery.of(context).viewInsets.bottom;
+    return Scaffold(
+        key: scaffoldKey,
+        resizeToAvoidBottomInset: true,
+        // appBar: AppBar(
+        //   backgroundColor: const Color.fromRGBO(67, 189, 174, 1),
+        //   toolbarHeight: 75,
+        //   centerTitle: true,
+        //   title: Text(
+        //     "Inventory",
+        //     style: FontsTheme.mouseMemoirs_64White(),
+        //   ),
+        // ),
+        // backgroundColor: AppTheme.lightGreenBackground,
+        // body: SizedBox(
+        //   child: Column(
+        //     children: [
+        //       Container(
+        //         alignment: Alignment.centerLeft,
+        //         height: 68,
+        //         width: 100,
+        //         margin: EdgeInsets.fromLTRB(10, 10, 0, 0),
+        //         decoration: BoxDecoration(
+        //           color: AppTheme.mainBlue,
+        //           borderRadius: BorderRadius.circular(10),
+        //         ),
+        //       ),
+        //       Container(
+        //         height: 62,
+        //         width: 378,
+        //         margin: EdgeInsets.fromLTRB(10, 10, 0, 0),
+        //         decoration: BoxDecoration(
+        //           color: AppTheme.pastelsoftBlue,
+        //           borderRadius: BorderRadius.only(
+        //             topLeft: Radius.circular(15), // Set top left corner radius
+        //             topRight: Radius.circular(15), // Set top right corner radius
+        //             bottomLeft:
+        //                 Radius.circular(5), // Set bottom left corner radius
+        //             bottomRight: Radius.circular(5), //
+        //           ),
+        //         ),
+        //       ),
+        //       Container(
+        //         height: 62,
+        //         width: 378,
+        //         margin: EdgeInsets.fromLTRB(10, 10, 0, 0),
+        //         decoration: BoxDecoration(
+        //           color: AppTheme.pastelsoftBlue,
+        //           borderRadius: BorderRadius.only(
+        //             topLeft: Radius.circular(5), // Set top left corner radius
+        //             topRight: Radius.circular(5), // Set top right corner radius
+        //             bottomLeft:
+        //                 Radius.circular(15), // Set bottom left corner radius
+        //             bottomRight: Radius.circular(15), //
+        //           ),
+        //         ),
+        //       ),
+        //     ],
+        //   ),
+        // ),
+
+        backgroundColor: AppTheme.lightGreenBackground,
+        appBar: AppBar(
+          backgroundColor: AppTheme.greenMainTheme,
+          toolbarHeight: 90,
+          centerTitle: true,
+          title: Text(
+            "Inventory",
+            style: FontsTheme.mouseMemoirs_64Black(),
+          ),
+          leading: IconButton(
+            icon: Icon(Icons.person),
+            onPressed: () {},
+          ),
+          actions: [
+            IconButton(
+              icon: Icon(Icons.notifications),
+              onPressed: () {},
+            ),
+          ],
+        ),
+        body: Stack(
+          children: [
+            // Container(
+            //   //for make border
+            //   height: 550,
+            //   decoration: BoxDecoration(
+            //       color: AppTheme.lightGreenBackground,
+            //       borderRadius: BorderRadius.only(
+            //           bottomLeft: const Radius.circular(20),
+            //           bottomRight: const Radius.circular(20))),
+            // ),
+            SingleChildScrollView(
+                padding: const EdgeInsets.all(16),
+                child: SizedBox(
+                  height: 1000,
+                  child: Center(
+                    child: Stack(
+                      children: [
+                        Positioned(
+                          // Item history
+                          top: 20,
+                          right: 0.0,
+                          child: GestureDetector(
+                            onTap: () {
+                              // Handle the tap event here
+                              print('Container tapped');
+                            },
+                            child: Container(
+                              width: 60,
+                              height: 54,
+                              decoration: const BoxDecoration(
+                                color: AppTheme.greenMainTheme,
+                                borderRadius: BorderRadius.only(
+                                    topLeft: Radius.circular(27),
+                                    bottomLeft: Radius.circular(27),
+                                    topRight: Radius.circular(10),
+                                    bottomRight: Radius.circular(10)),
+                              ),
+                              child: Container(
+                                alignment: const Alignment(-8, 0),
+                                child: Image.asset(
+                                    'assets/images/TimeMachine.png'),
+                              ),
+                            ),
+                          ),
+                        ),
+                        SizedBox(
+                          height: 20,
+                        ),
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Row(
+                              children: [
+                                GestureDetector(
+                                  onTap: () => _chooseAddImageOption(context),
+                                  child: Container(
+                                    width: 100,
+                                    height: 68,
+                                    decoration: BoxDecoration(
+                                      color: AppTheme.mainBlue,
+                                      borderRadius: BorderRadius.circular(10),
+                                    ),
+                                    child: _image == null
+                                        ? const Center(
+                                            child: Icon(
+                                            Icons.add_a_photo,
+                                            color: Colors.white,
+                                          ))
+                                        : _isLoading
+                                            ? const Center(
+                                                child:
+                                                    CircularProgressIndicator())
+                                            : ClipRRect(
+                                                borderRadius:
+                                                    BorderRadius.circular(8.0),
+                                                child: Image(
+                                                    image: _image!,
+                                                    fit: BoxFit.cover),
+                                              ),
+                                  ),
+                                ),
+                                const SizedBox(
+                                  width: 10,
+                                ),
+                                SizedBox(
+                                  width: 200,
+                                  child: TextField(
+                                    style: FontsTheme.mouseMemoirs_50Black(),
+                                    textAlign: TextAlign.center,
+                                    controller: foodname,
+                                    decoration: InputDecoration(
+                                        hintStyle:
+                                            FontsTheme.mouseMemoirs_50Black(),
+                                        hintText: 'Food name'),
+                                  ),
+                                ),
+                              ],
+                            ),
+
+                            SizedBox(height: 16),
+                            //buildDropdownField('Categories', "value", Icons.local_dining),
+                            buildCategoriesField(
+                                "Categories", "value", Icons.arrow_drop_down),
+                            buildWhereField('In', 'value', Icons.kitchen),
+                            buildDateField('Expiration date', ''),
+                            buildReminderField('30 April 2024'),
+                            buildQuantityWeight(),
+                            buildEachPieceField(),
+                            //buildCostField(),
+                          ],
+                        ),
+                      ],
+                    ),
+                  ),
+                )),
+            Align(
+              alignment: Alignment.bottomCenter,
+              child: Stack(
+                children: [
+                  Container(
+                    width: double.infinity,
+                    height: keyboardHeight > 0 ? 0 : 180,
+                    color: AppTheme.lightGreenBackground,
+                    child: Column(
+                      children: [
+                        SizedBox(
+                          height: 10,
+                        ),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          children: [
+                            ElevatedButton(
+                              onPressed: () => _consumeOption(context),
+                              style: ElevatedButton.styleFrom(
+                                backgroundColor: Color(0xFFF4A261),
+                                shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(10)),
+                              ),
+                              child: Text(
+                                'Consume',
+                                style: FontsTheme.mouseMemoirs_30Black()
+                                    .copyWith(color: Colors.black),
+                              ),
+                            ),
+                            ElevatedButton(
+                              onPressed: () => _wasteOption(context),
+                              style: ElevatedButton.styleFrom(
+                                backgroundColor: Color(0xFFE76F51),
+                                shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(10)),
+                              ),
+                              child: Text(
+                                'Waste',
+                                style: FontsTheme.mouseMemoirs_30Black()
+                                    .copyWith(color: Colors.black),
+                              ),
+                            ),
+                          ],
+                        ),
+                        SizedBox(height: 2),
+                        Center(
+                          child: TextButton(
+                            onPressed: () {},
+                            child: Text(
+                              'Delete item',
+                              style: TextStyle(color: Colors.black),
+                            ),
+                          ),
+                        ),
+                        Center(
+                          child: IconButton(
+                            icon: Image.asset('assets/images/BackButton.png'),
+                            iconSize: 50,
+                            onPressed: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => Inventory(
+                                    hID: 0,
+                                  ),
+                                ),
+                              );
+                            },
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+            )
+          ],
+        ));
+  }
+
   void _consumeOption(BuildContext context) {
     showDialog(
         context: context,
@@ -226,7 +511,7 @@ class _FoodDetailsPageState extends State<foodDetails> {
                   child: Stack(
                     children: [
                       Container(
-                        height: 200,
+                        height: 280,
                         width: 375,
                         padding: EdgeInsets.all(10),
                         decoration: BoxDecoration(
@@ -263,7 +548,7 @@ class _FoodDetailsPageState extends State<foodDetails> {
                       ),
                       Container(
                         alignment: Alignment.topCenter,
-                        height: 120,
+                        height: 200,
                         width: 355,
                         margin: EdgeInsets.all(10),
                         foregroundDecoration: BoxDecoration(
@@ -271,21 +556,21 @@ class _FoodDetailsPageState extends State<foodDetails> {
                           borderRadius: BorderRadius.circular(30),
                         ),
                       ),
-                      Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
+                      Flexible(
+                          child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: <Widget>[
                           SizedBox(
                             height: 20,
                           ),
                           SizedBox(
-                            width: 80,
                             child: Container(
-                              width: 100,
-                              height: 50,
+                              width: 300,
+                              height: 200,
                               padding: EdgeInsets.all(3),
-                              decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(5),
-                                  color: AppTheme.softRed),
+                              // decoration: BoxDecoration(
+                              //     borderRadius: BorderRadius.circular(5),
+                              //     color: AppTheme.softRed),
                               child: Row(
                                 children: [
                                   // SizedBox(
@@ -301,19 +586,41 @@ class _FoodDetailsPageState extends State<foodDetails> {
                                   //         size: 16,
                                   //       )),
                                   // ),
+                                  // Container(
+                                  //   margin: EdgeInsets.symmetric(horizontal: 3),
+                                  //   padding: EdgeInsets.symmetric(
+                                  //       horizontal: 3, vertical: 2),
+                                  //   decoration: BoxDecoration(
+                                  //       borderRadius: BorderRadius.circular(3),
+                                  //       color: Colors.white),
+                                  //   child: Text(
+                                  //     "$consumeQuantity",
+                                  //     style: TextStyle(
+                                  //         color: Colors.black, fontSize: 16),
+                                  //   ),
+                                  // ),
                                   Container(
-                                    margin: EdgeInsets.symmetric(horizontal: 3),
+                                    width: 250,
+                                    height: 150,
                                     padding: EdgeInsets.symmetric(
-                                        horizontal: 3, vertical: 2),
+                                        horizontal: 2, vertical: 2),
                                     decoration: BoxDecoration(
-                                        borderRadius: BorderRadius.circular(3),
-                                        color: Colors.white),
-                                    child: Text(
-                                      "$consumeQuantity",
-                                      style: TextStyle(
-                                          color: Colors.black, fontSize: 16),
+                                      borderRadius: BorderRadius.circular(10),
+                                      color: Colors.white,
+                                    ),
+                                    child: Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        Text('$quantity ',
+                                            style: FontsTheme.hindBold_20()),
+                                        buildQuantityUnit('')
+                                      ],
                                     ),
                                   ),
+                                  SizedBox(
+                                    height: 50,
+                                  )
                                   // SizedBox(
                                   //   width: 10,
                                   //   height: 10,
@@ -331,21 +638,27 @@ class _FoodDetailsPageState extends State<foodDetails> {
                               ),
                             ),
                           ),
-                          SizedBox(
-                            width: 350,
-                            child: InteractiveSlider(
-                              focusedHeight: 20,
-                              startIcon:
-                                  const Icon(Icons.remove_circle_rounded),
-                              endIcon: const Icon(Icons.add_circle_rounded),
-                              min: 1.0,
-                              max: 15.0,
-                              onChanged: (value) =>
-                                  setState(() => consumeQuantity),
-                            ),
-                          )
+                          // Column(
+                          //     mainAxisSize: MainAxisSize.max,
+                          //     mainAxisAlignment: MainAxisAlignment.end,
+                          //     children: [
+                          //       SizedBox(
+                          //         width: 350,
+                          //         child: InteractiveSlider(
+                          //           focusedHeight: 20,
+                          //           startIcon:
+                          //               const Icon(Icons.remove_circle_rounded),
+                          //           endIcon:
+                          //               const Icon(Icons.add_circle_rounded),
+                          //           min: 1.0,
+                          //           max: 15.0,
+                          //           onChanged: (value) =>
+                          //               setState(() => consumeQuantity),
+                          //         ),
+                          //       ),
+                          //     ])
                         ],
-                      )
+                      )),
                     ],
                   ),
                 ),
@@ -745,284 +1058,6 @@ class _FoodDetailsPageState extends State<foodDetails> {
             ),
           );
         });
-  }
-
-  @override
-  void initState() {
-    super.initState();
-    foodname.text = widget.item.food_name;
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-        key: scaffoldKey,
-        resizeToAvoidBottomInset: true,
-        // appBar: AppBar(
-        //   backgroundColor: const Color.fromRGBO(67, 189, 174, 1),
-        //   toolbarHeight: 75,
-        //   centerTitle: true,
-        //   title: Text(
-        //     "Inventory",
-        //     style: FontsTheme.mouseMemoirs_64White(),
-        //   ),
-        // ),
-        // backgroundColor: AppTheme.lightGreenBackground,
-        // body: SizedBox(
-        //   child: Column(
-        //     children: [
-        //       Container(
-        //         alignment: Alignment.centerLeft,
-        //         height: 68,
-        //         width: 100,
-        //         margin: EdgeInsets.fromLTRB(10, 10, 0, 0),
-        //         decoration: BoxDecoration(
-        //           color: AppTheme.mainBlue,
-        //           borderRadius: BorderRadius.circular(10),
-        //         ),
-        //       ),
-        //       Container(
-        //         height: 62,
-        //         width: 378,
-        //         margin: EdgeInsets.fromLTRB(10, 10, 0, 0),
-        //         decoration: BoxDecoration(
-        //           color: AppTheme.pastelsoftBlue,
-        //           borderRadius: BorderRadius.only(
-        //             topLeft: Radius.circular(15), // Set top left corner radius
-        //             topRight: Radius.circular(15), // Set top right corner radius
-        //             bottomLeft:
-        //                 Radius.circular(5), // Set bottom left corner radius
-        //             bottomRight: Radius.circular(5), //
-        //           ),
-        //         ),
-        //       ),
-        //       Container(
-        //         height: 62,
-        //         width: 378,
-        //         margin: EdgeInsets.fromLTRB(10, 10, 0, 0),
-        //         decoration: BoxDecoration(
-        //           color: AppTheme.pastelsoftBlue,
-        //           borderRadius: BorderRadius.only(
-        //             topLeft: Radius.circular(5), // Set top left corner radius
-        //             topRight: Radius.circular(5), // Set top right corner radius
-        //             bottomLeft:
-        //                 Radius.circular(15), // Set bottom left corner radius
-        //             bottomRight: Radius.circular(15), //
-        //           ),
-        //         ),
-        //       ),
-        //     ],
-        //   ),
-        // ),
-
-        backgroundColor: AppTheme.lightGreenBackground,
-        appBar: AppBar(
-          backgroundColor: AppTheme.greenMainTheme,
-          toolbarHeight: 90,
-          centerTitle: true,
-          title: Text(
-            "Inventory",
-            style: FontsTheme.mouseMemoirs_64Black(),
-          ),
-          leading: IconButton(
-            icon: Icon(Icons.person),
-            onPressed: () {},
-          ),
-          actions: [
-            IconButton(
-              icon: Icon(Icons.notifications),
-              onPressed: () {},
-            ),
-          ],
-        ),
-        body: Stack(
-          children: [
-            // Container(
-            //   //for make border
-            //   height: 550,
-            //   decoration: BoxDecoration(
-            //       color: AppTheme.lightGreenBackground,
-            //       borderRadius: BorderRadius.only(
-            //           bottomLeft: const Radius.circular(20),
-            //           bottomRight: const Radius.circular(20))),
-            // ),
-            SingleChildScrollView(
-                padding: const EdgeInsets.all(16),
-                child: SizedBox(
-                  height: 975,
-                  child: Center(
-                    child: Stack(
-                      children: [
-                        Positioned(
-                          // Item history
-                          top: 20,
-                          right: 0.0,
-                          child: GestureDetector(
-                            onTap: () {
-                              // Handle the tap event here
-                              print('Container tapped');
-                            },
-                            child: Container(
-                              width: 60,
-                              height: 54,
-                              decoration: const BoxDecoration(
-                                color: AppTheme.greenMainTheme,
-                                borderRadius: BorderRadius.only(
-                                    topLeft: Radius.circular(27),
-                                    bottomLeft: Radius.circular(27),
-                                    topRight: Radius.circular(10),
-                                    bottomRight: Radius.circular(10)),
-                              ),
-                              child: Container(
-                                alignment: const Alignment(-8, 0),
-                                child: Image.asset(
-                                    'assets/images/TimeMachine.png'),
-                              ),
-                            ),
-                          ),
-                        ),
-                        SizedBox(
-                          height: 20,
-                        ),
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Row(
-                              children: [
-                                GestureDetector(
-                                  onTap: () => _chooseAddImageOption(context),
-                                  child: Container(
-                                    width: 100,
-                                    height: 68,
-                                    decoration: BoxDecoration(
-                                      color: AppTheme.mainBlue,
-                                      borderRadius: BorderRadius.circular(10),
-                                    ),
-                                    child: _image == null
-                                        ? const Center(
-                                            child: Icon(
-                                            Icons.add_a_photo,
-                                            color: Colors.white,
-                                          ))
-                                        : _isLoading
-                                            ? const Center(
-                                                child:
-                                                    CircularProgressIndicator())
-                                            : ClipRRect(
-                                                borderRadius:
-                                                    BorderRadius.circular(8.0),
-                                                child: Image(
-                                                    image: _image!,
-                                                    fit: BoxFit.cover),
-                                              ),
-                                  ),
-                                ),
-                                const SizedBox(
-                                  width: 10,
-                                ),
-                                SizedBox(
-                                  width: 200,
-                                  child: TextField(
-                                    style: FontsTheme.mouseMemoirs_50Black(),
-                                    textAlign: TextAlign.center,
-                                    controller: foodname,
-                                  ),
-                                ),
-                              ],
-                            ),
-
-                            SizedBox(height: 16),
-                            //buildDropdownField('Categories', "value", Icons.local_dining),
-                            buildCategoriesField(
-                                "Categories", "value", Icons.arrow_drop_down),
-                            buildWhereField('In', 'value', Icons.kitchen),
-                            buildDateField('Expiration date', ''),
-                            buildReminderField('30 April 2024'),
-                            buildQuantityWeight(),
-                            buildEachPieceField(),
-                            //buildCostField(),
-                          ],
-                        ),
-                      ],
-                    ),
-                  ),
-                )),
-            Align(
-              alignment: Alignment.bottomCenter,
-              child: Stack(
-                children: [
-                  Container(
-                    width: double.infinity,
-                    height: 180,
-                    color: AppTheme.lightGreenBackground,
-                    child: Column(
-                      children: [
-                        SizedBox(
-                          height: 10,
-                        ),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                          children: [
-                            ElevatedButton(
-                              onPressed: () => _consumeOption(context),
-                              style: ElevatedButton.styleFrom(
-                                backgroundColor: Color(0xFFF4A261),
-                                shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(10)),
-                              ),
-                              child: Text(
-                                'Consume',
-                                style: FontsTheme.mouseMemoirs_30Black()
-                                    .copyWith(color: Colors.black),
-                              ),
-                            ),
-                            ElevatedButton(
-                              onPressed: () => _wasteOption(context),
-                              style: ElevatedButton.styleFrom(
-                                backgroundColor: Color(0xFFE76F51),
-                                shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(10)),
-                              ),
-                              child: Text(
-                                'Waste',
-                                style: FontsTheme.mouseMemoirs_30Black()
-                                    .copyWith(color: Colors.black),
-                              ),
-                            ),
-                          ],
-                        ),
-                        SizedBox(height: 2),
-                        Center(
-                          child: TextButton(
-                            onPressed: () {},
-                            child: Text(
-                              'Delete item',
-                              style: TextStyle(color: Colors.black),
-                            ),
-                          ),
-                        ),
-                        Center(
-                          child: IconButton(
-                            icon: Image.asset('assets/images/BackButton.png'),
-                            iconSize: 50,
-                            onPressed: () {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) =>  Inventory(hID: 0,),
-                                ),
-                              );
-                            },
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ],
-              ),
-            )
-          ],
-        ));
   }
 
   Widget buildCategoriesField(String label, String value, IconData icon) {
@@ -1553,6 +1588,17 @@ class _FoodDetailsPageState extends State<foodDetails> {
                                     ),
                                     Icon(Icons.attach_money,
                                         color: Colors.green),
+                                    SizedBox(
+                                      width: 50,
+                                    ),
+                                    IconButton(
+                                      onPressed: () {},
+                                      icon: Icon(
+                                        Icons.info_rounded,
+                                        color: AppTheme.mainBlue,
+                                        size: 30,
+                                      ),
+                                    )
                                   ],
                                 )),
                           ),
@@ -1630,7 +1676,6 @@ class _FoodDetailsPageState extends State<foodDetails> {
                                               text: _updateCost().toString()),
                                           style: FontsTheme.hindBold_15())),
                                   Icon(Icons.attach_money, color: Colors.green),
-                                  Icon(Icons.info_rounded, color: AppTheme.mainBlue,),
                                 ],
                               )),
                         ],
