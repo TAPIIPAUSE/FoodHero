@@ -9,6 +9,8 @@ import 'package:go_router/go_router.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class LoginScreen extends StatefulWidget {
+    late final int hID;
+
   @override
   _loginState createState() => _loginState();
 }
@@ -56,7 +58,7 @@ class _loginState extends State<LoginScreen> {
         MaterialPageRoute(
             builder: (context) => Inventory(
                   initialFoodCategory: 'all food',
-                  hID: 0,
+                  hID: widget.hID,
                 )),
       );
       print('login succesful');
@@ -253,16 +255,16 @@ class _loginState extends State<LoginScreen> {
                                         width: 250,
                                         child: ElevatedButton(
                                             onPressed: () {
-                                              //_login();
-                                              Navigator.push(
-                                                context,
-                                                MaterialPageRoute(
-                                                    builder: (context) =>
-                                                        Inventory(
-                                                          hID: 0,
-                                                        )),
-                                              );
-                                              print(_emailController);
+                                              _login();
+                                              // Navigator.push(
+                                              //   context,
+                                              //   MaterialPageRoute(
+                                              //       builder: (context) =>
+                                              //           Inventory(
+                                              //             hID: 0,
+                                              //           )),
+                                              // );
+                                              // print(_emailController);
                                               print('login tapped');
                                             },
                                             style: TextButton.styleFrom(

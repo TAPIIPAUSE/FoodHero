@@ -408,6 +408,7 @@ class _FoodDetailsPageState extends State<foodDetails> {
                             buildWhereField('In', 'value', Icons.kitchen),
                             buildDateField('Expiration date', ''),
                             buildReminderField('30 April 2024'),
+                            buildCountable(),
                             buildQuantityWeight(),
                             buildEachPieceField(),
                             //buildCostField(),

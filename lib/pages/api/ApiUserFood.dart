@@ -4,7 +4,8 @@ import 'package:http/http.dart' as http;
 
 Future<List<InventoryListItem>> fetchUserFood(int hID) async {
   try {
-    print("Attempting to log in with username: $hID");
+    
+    print("Attempting to log in with hID: $hID");
     final response = await http.get(
       Uri.parse('http://192.168.1.34:3000/api/v1/inventory/getFoodByHouse'),
       headers: {
@@ -12,7 +13,8 @@ Future<List<InventoryListItem>> fetchUserFood(int hID) async {
         // Add other headers if necessary, like authentication tokens
       },
     );
-
+    print("Response status: ${response.statusCode}");
+    print("Response body: ${response.body}");
     if (response.statusCode == 200) {
       final List<dynamic> foodItemsJson = jsonDecode(response.body)['data'];
       return foodItemsJson
