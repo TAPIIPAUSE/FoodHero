@@ -4,15 +4,15 @@ import User from "../schema/user_module/userSchema.js";
 export async function calculateScore(totalAmount, currentAmount, weightType) {
     try {
 
-        var totalAmount,currentAmount = await unitConverter(weightType,totalAmount,currentAmount)
-        console.log("Total Amount:",totalAmount)
-        console.log("Current Amount:", currentAmount)
+        var {totalAmount:convertedTotalAmount,currentAmount:convertedCurrentAmount} = await unitConverter(weightType,totalAmount,currentAmount)
+        console.log("Total Amount:",convertedTotalAmount)
+        console.log("Current Amount:", convertedCurrentAmount)
         // Calculate the consumed amount in grams
-        const consumedPercen = (currentAmount * 100) / totalAmount;
+        const consumedPercen = (convertedCurrentAmount * 100) / convertedTotalAmount;
 
         // Calculate the score
         let score;
-        if (totalAmount > 1000) {
+        if (convertedTotalAmount > 1000) {
             if (consumedPercen >= 90) {
                 score = consumedPercen / 100 * 5;
             } else if (consumedPercen >= 70) {
@@ -75,6 +75,8 @@ export async function unitConverter(type,totalAmount,currentAmount) {
     }
 
     console.log("This is in unitConverter, the unit is ", unitType.type)
+    console.log("This is in unitConverter, total amount", totalAmount)
+    console.log("This is in unitConverter, current amount", currentAmount)
 
     // Convert the food weight to grams
     
@@ -96,7 +98,10 @@ export async function unitConverter(type,totalAmount,currentAmount) {
         default:
             throw new Error('Unknown unit type');
     }
+    console.log("After Conversion")
+    console.log("This is in unitConverter, total amount", totalAmount)
+    console.log("This is in unitConverter, current amount", currentAmount)
 
 
-    return totalAmount,currentAmount
+    return {totalAmount,currentAmount}
 }
