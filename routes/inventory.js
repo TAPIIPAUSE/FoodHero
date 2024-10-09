@@ -11,6 +11,7 @@ import { authenticateCookieToken } from "../service/jwt_auth.js";
 import { getFoodDetailForFoodInventory } from "../service/inventory_service.js";
 import { calculateScore } from "../service/score_service.js";
 import ConsumedFood from "../schema/inventory_module/consumedFoodSchema.js";
+import { calculateConsumedData, updateCountableConsume } from "../service/consume_service.js";
 
 const router = express.Router();
 
@@ -178,8 +179,8 @@ router.put("/editFood", authenticateToken,async (req, res) => {
 
     // Update the food item
     existingFood.food_name = food_name;
-    existingFood.img=img;
-    existingFood.location=location;
+    existingFood.img = img;
+    existingFood.location = location;
     existingFood.food_category = food_category;
     existingFood.isCountable = isCountable;
     existingFood.weight_type = weight_type;
@@ -274,13 +275,13 @@ router.post("/deleteFoodById", authenticateToken,async (req, res) => {
 
 router.post('/consume', authenticateToken,async(req,res)=>{
 
-  var {fID, retrievedAmount, retrievedQuantity} = req.body;
+  var { fID, retrievedAmount, retrievedQuantity } = req.body;
 
-  try{
+  try {
     var assigned_ID = fID
 
     // Get the food item
-    var food = await Food.findOne({assigned_ID})
+    var food = await Food.findOne({ assigned_ID })
 
     if (!food) {
       return res.status(404).send(`Food item with assigned_ID ${assigned_ID} not found.`);
@@ -289,15 +290,15 @@ router.post('/consume', authenticateToken,async(req,res)=>{
 
     // Narrative: Countable food will be given only quantity, therefore we need to calculate the change of weight y ourselves,
     // We start off by calcualting the per unit weight
-    if(countable){
+    if (countable) {
 
-      const perunitAmount = food.total_amount/food.total_quanitity
+      const perunitAmount = food.total_amount / food.total_quanitity
       //per unit weight calculation
 
       retrievedAmount = perunitAmount * retrievedQuantity
 
       var currentQuantity = food.current_quantity
-      if(retrievedQuantity > currentQuantity){
+      if (retrievedQuantity > currentQuantity) {
         return res.status(403).send(`Your order is not fulfilled, the current quantity is not enough for your retreiveal, please select again.\n
           Here is your current quantity ${currentQuantity}, but here is your requested quantity ${retrievedQuantity}`)
       }
@@ -308,9 +309,9 @@ router.post('/consume', authenticateToken,async(req,res)=>{
       var user_ID = user.assigned_ID
       // Create consumed object
 
-      var consumed_ID = await save_consume_to_db(fID,user,retrievedAmount, retrievedQuantity)
+      var consumed_ID = await save_consume_to_db(fID, user, retrievedAmount, retrievedQuantity)
 
-      console.log("This is our newly registered consumed food: ",consumed_ID)
+      console.log("This is our newly registered consumed food: ", consumed_ID)
 
       // Update the currentAmount on inventory collection
       food.current_amount = food.current_amount - retrievedAmount
@@ -320,21 +321,21 @@ router.post('/consume', authenticateToken,async(req,res)=>{
 
       await food.save()
 
-    }else{
+    } else {
       var currentAmount = food.current_amount
-      if(retrievedAmount > currentAmount){
+      if (retrievedAmount > currentAmount) {
         return res.status(403).send(`Your order is not fulfilled, the current amount is not enough for your retreiveal, please select again.\n
           Here is your current amount ${currentAmount}, but here is your requested amount ${retrievedAmount}`)
       }
 
       var newCurrentAmount = currentAmount - retrievedAmount
 
-      var user = await get_user_from_db(req,res)
+      var user = await get_user_from_db(req, res)
       var user_ID = user.assigned_ID
       // Create consumed object
-      var consumed_ID = save_consume_to_db(fID, user,retrievedAmount, retrievedQuantity)
+      var consumed_ID = save_consume_to_db(fID, user, retrievedAmount, retrievedQuantity)
 
-      console.log("This is our newly registered consumed food: ",consumed_ID)
+      console.log("This is our newly registered consumed food: ", consumed_ID)
 
       // Update the currentAmount on inventory collection
       food.current_amount = newCurrentAmount
@@ -343,11 +344,11 @@ router.post('/consume', authenticateToken,async(req,res)=>{
       await food.save()
 
 
-  }
+    }
 
-  res.status(200).send(`Successfully consume food: ${food}\n`)
+    res.status(200).send(`Successfully consume food: ${food}\n`)
 
-  }catch(error){
+  } catch (error) {
     return res.status(400).send(`Error when consuming Food: ${error}`)
   }
 
@@ -358,54 +359,28 @@ router.post('/consume/all', authenticateToken,async (req, res) => {
 
   try {
     const food = await Food.findOne({ assigned_ID: fID });
-    const user = await get_user_from_db(req,res)
+    const user = await get_user_from_db(req, res)
+    var consume_percen = 100
+
+
     let consumedFood = await ConsumedFood.findOne({ assigned_ID: fID, user_ID: user.assigned_ID });
     if (!food) {
       return res.status(404).json({ message: 'Food item not found' });
     }
 
-    // Calculate the score for consuming all of the food
-    let score = await calculateScore(food.total_amount,food.current_amount,food.weight_type); // Consuming 100% of the food
+    // 1) Calculate the score for consuming all of the food
+    let score = await calculateScore(food.total_amount, consume_percen, food.weight_type); // Consuming 100% of the food
 
-    console.log("This is our score: ", score)
+    // 2)Calculate Consumed Amount 
+    var {
+      current_amount: act_current_amount,
+      current_quan: act_current_quan,
+      consume_amount: act_consume_amount,
+      consume_quan: act_consume_quan } = await calculateConsumedData(consume_percen, food)
 
-    
-    // await Food.updateOne(
-    //   { assigned_ID: fID }, // Filter by assigned_ID
-    //   {
-    //     $set: {
-    //       current_amount: 0,
-    //       current_quantity: 0,
-    //       consumed_amount: food.total_amount,
-    //       consumed_quantity: food.total_quantity,
-    //     },
-    //   }
-    // );
+    // 3) Update in database
+    await updateCountableConsume(food, act_current_amount, act_current_quan, act_consume_amount, act_consume_quan)
 
-    // If no consumedFood entry is found, create a new one
-    // if (!consumedFood) {
-    //   consumedFood = new ConsumedFood({
-    //     assigned_ID: fID,
-    //     user_ID: user.assigned_ID,
-    //     food_ID: food.assigned_ID,
-    //     score: score,  // Set the initial score
-    //     total_amount: food.total_amount,
-    //     total_quantity: food.total_quantity,
-    //     consumed_amount: food.total_amount,
-    //     consumed_quantity: food.total_quantity,
-    //     current_amount: 0,
-    //     current_quantity: 0,
-    //   });
-    // } else {
-    //   // If consumedFood exists, update the score
-    //   consumedFood.score += score;
-    // }
-
-    // // Save the consumedFood entry
-    // await consumedFood.save();
-
-    // Remove the food item from the user's inventory
-    // await Food.deleteOne({ assigned_ID: food.assigned_ID });
 
     res.status(200).json({
       message: 'Food item consumed successfully',

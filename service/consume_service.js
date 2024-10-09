@@ -98,3 +98,39 @@ export async function mapUnitType(id) {
   console.log(unit_type)
   return unit_type.type
 }
+
+export async function calculateConsumedData(consumedPercent,food){
+
+  var act_consumed_amount = (consumedPercent/100) * food.total_amount
+  var act_consumed_quan = (consumedPercent/100) * food.total_quanitity
+
+  var current_amount = parseFloat(food.total_amount) - parseFloat(act_consumed_amount)
+  var current_quan = parseFloat(food.total_quanitity) - parseFloat(act_consumed_quan)
+  var consume_amount = parseFloat(food.consumed_amount) + parseFloat(act_consumed_amount)
+  var consume_quan = parseFloat(food.consumed_quantity) + parseFloat(act_consumed_quan)
+
+  return {current_amount, current_quan, consume_amount, consume_quan}
+
+}
+
+export async function updateCountableConsume(food,cur_amount,cur_quan,con_a,con_quan){
+  try{
+    await Food.updateOne(
+      { assigned_ID: food.assigned_ID }, // Filter by assigned_ID
+      {
+        $set: {
+          current_amount: cur_amount,
+          current_quantity: cur_quan,
+          consumed_amount: con_a,
+          consumed_quantity: con_quan,
+        },
+      }
+    );
+    console.log("Update data successfully")
+    
+  }catch (error){
+    console.log("Error updating food inventory when consuming:", error)
+    throw error
+  }
+
+}

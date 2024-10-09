@@ -1,15 +1,11 @@
 import UnitType from "../schema/inventory_module/unitTypeSchema.js";
 import User from "../schema/user_module/userSchema.js";
+import Food from "../schema/inventory_module/foodInventorySchema.js";
 
-export async function calculateScore(totalAmount, currentAmount, weightType) {
+export async function calculateScore(totalAmount, consumedPercen, weightType) {
     try {
-
-        var {totalAmount:convertedTotalAmount,currentAmount:convertedCurrentAmount} = await unitConverter(weightType,totalAmount,currentAmount)
-        console.log("Total Amount:",convertedTotalAmount)
-        console.log("Current Amount:", convertedCurrentAmount)
-        // Calculate the consumed amount in grams
-        const consumedPercen = (convertedCurrentAmount * 100) / convertedTotalAmount;
-
+        var consumedAmount = (consumedPercen/100) * totalAmount
+        var {totalAmount:convertedTotalAmount, consumedAmount:convertedCurrentAmount} = await unitConverter(weightType,totalAmount,consumedAmount)
         // Calculate the score
         let score;
         if (convertedTotalAmount > 1000) {
@@ -35,6 +31,7 @@ export async function calculateScore(totalAmount, currentAmount, weightType) {
         return score;
     } catch (error) {
         console.error('Error calculating score:', error);
+        throw error
         return 0; // Default score in case of error
     }
 }
@@ -68,29 +65,26 @@ export async function getAmountInGrams(food) {
 }
 
 // This function would 1)Preprocess variety of units into single Grams unit. 2)Return total amount and current amount, ready for calculating the score
-export async function unitConverter(type,totalAmount,currentAmount) {
+export async function unitConverter(type,totalAmount,consumedAmount) {
     const unitType = await UnitType.findOne({ assigned_ID: type });
     if (!unitType) {
         throw new Error('Unit type not found');
     }
 
-    console.log("This is in unitConverter, the unit is ", unitType.type)
-    console.log("This is in unitConverter, total amount", totalAmount)
-    console.log("This is in unitConverter, current amount", currentAmount)
 
     // Convert the food weight to grams
     
     switch (unitType.type) {
         case "Litre":
             totalAmount *= 1000;
-            currentAmount *= 1000;
+            consumedAmount *= 1000;
             break;
         case "Ml":
             // No conversion here, we assume Ml is equivalent to gram
             break;
         case "Kg":
             totalAmount *= 1000;
-            currentAmount *= 1000;
+            consumedAmount *= 1000;
             break;
         case "Grams":
             // No conversion needed
@@ -98,10 +92,7 @@ export async function unitConverter(type,totalAmount,currentAmount) {
         default:
             throw new Error('Unknown unit type');
     }
-    console.log("After Conversion")
-    console.log("This is in unitConverter, total amount", totalAmount)
-    console.log("This is in unitConverter, current amount", currentAmount)
 
 
-    return {totalAmount,currentAmount}
+    return {totalAmount,consumedAmount}
 }
