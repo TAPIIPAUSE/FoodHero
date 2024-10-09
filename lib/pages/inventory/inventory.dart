@@ -17,7 +17,7 @@ import 'package:textwrap/textwrap.dart';
 
 class Inventory extends StatefulWidget {
   final String initialFoodCategory;
-  late int hID;
+  final int hID;
 
   Inventory(
       {super.key, this.initialFoodCategory = 'all food', required this.hID});
@@ -27,6 +27,8 @@ class Inventory extends StatefulWidget {
 }
 
 class _InventoryState extends State<Inventory> {
+  late int hID;
+
   int selectedRouteIndex = 0;
   late String foodCategory;
   final List<Segment> segments = [
@@ -54,8 +56,15 @@ class _InventoryState extends State<Inventory> {
   void initState() {
     super.initState();
     foodCategory = widget.initialFoodCategory;
-    inventoryItems = fetchUserFood(widget.hID);
+    hID = widget.hID;
+    inventoryItems = fetchUserFood(hID);
     _updateDate();
+  }
+
+  Future<int> fetchHId() async {
+    // Simulate network delay
+    await Future.delayed(Duration(seconds: 1));
+    return 123; // Replace with actual logic to get hID
   }
 
   void _updateDate() {
