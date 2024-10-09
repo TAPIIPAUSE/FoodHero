@@ -81,19 +81,17 @@ class _InterDashboardState extends State<InterDashboard> {
             centerTitle: true,
             backgroundColor: AppTheme.greenMainTheme,
             titleTextStyle: FontsTheme.mouseMemoirs_64Black(),
-            leading: IconButton.filled(
+            leading: IconButton(
               onPressed: () => context.push(''),
               icon: const Icon(
                 Icons.person_sharp,
-                color: Colors.white,
               ),
             ),
             actions: [
-              IconButton.filled(
+              IconButton(
                 onPressed: () {},
                 icon: const Icon(
-                  Icons.notifications_outlined,
-                  color: Colors.white,
+                  Icons.notifications,
                 ),
               ),
             ],

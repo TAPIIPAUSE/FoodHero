@@ -215,6 +215,9 @@ class _AddFoodDetailsPageState extends State<addFoodDetails> {
                   child: TextField(
                     style: FontsTheme.mouseMemoirs_50Black(),
                     textAlign: TextAlign.center,
+                    decoration: InputDecoration(
+                        hintStyle: FontsTheme.mouseMemoirs_50Black(),
+                        hintText: 'Food name'),
                   ),
                 ),
               ],
@@ -315,6 +318,7 @@ class _AddFoodDetailsPageState extends State<addFoodDetails> {
                   borderRadius: BorderRadius.circular(10),
                   color: Colors.white,
                 ),
+                height: 60,
                 child: Row(
                   children: [
                     Expanded(
@@ -333,31 +337,39 @@ class _AddFoodDetailsPageState extends State<addFoodDetails> {
                       ),
                     ),
                     SizedBox(
-                      width: 215,
-                      child: DropdownButtonHideUnderline(
-                        child: DropdownButton<String>(
-                          value: selectedValue,
-                          isExpanded: true,
-                          icon: Icon(icon),
-                          items: items.map((String item) {
-                            return DropdownMenuItem<String>(
-                              value: item,
-                              child: Text(
-                                item,
-                                style: FontsTheme.mouseMemoirs_30Black(),
-                              ),
-                            );
-                          }).toList(),
-                          onChanged: (String? newValue) {
-                            if (newValue != null) {
-                              setState(() {
-                                selectedValue = newValue;
-                              });
-                            }
-                          },
-                        ),
-                      ),
-                    )
+                        width: 215,
+                        child: Container(
+                          padding: EdgeInsets.symmetric(horizontal: 10.0),
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(5.0),
+                            border: Border.all(
+                                color: AppTheme.greenMainTheme,
+                                width: 2.0), // Set border color and width
+                          ),
+                          child: DropdownButtonHideUnderline(
+                            child: DropdownButton<String>(
+                              value: selectedValue,
+                              isExpanded: true,
+                              icon: Icon(icon),
+                              items: items.map((String item) {
+                                return DropdownMenuItem<String>(
+                                  value: item,
+                                  child: Text(
+                                    item,
+                                    style: FontsTheme.mouseMemoirs_30Black(),
+                                  ),
+                                );
+                              }).toList(),
+                              onChanged: (String? newValue) {
+                                if (newValue != null) {
+                                  setState(() {
+                                    selectedValue = newValue;
+                                  });
+                                }
+                              },
+                            ),
+                          ),
+                        )),
                   ],
                 ))
           ],
@@ -385,6 +397,7 @@ class _AddFoodDetailsPageState extends State<addFoodDetails> {
                   borderRadius: BorderRadius.circular(10),
                   color: Colors.white,
                 ),
+                height: 60,
                 child: Row(
                   children: [
                     Expanded(
@@ -403,31 +416,39 @@ class _AddFoodDetailsPageState extends State<addFoodDetails> {
                       ),
                     ),
                     SizedBox(
-                      width: 215,
-                      child: DropdownButtonHideUnderline(
-                        child: DropdownButton<String>(
-                          value: selectedValue,
-                          isExpanded: true,
-                          icon: Icon(icon),
-                          items: items.map((String item) {
-                            return DropdownMenuItem<String>(
-                              value: item,
-                              child: Text(
-                                item,
-                                style: FontsTheme.mouseMemoirs_30Black(),
-                              ),
-                            );
-                          }).toList(),
-                          onChanged: (String? newValue) {
-                            if (newValue != null) {
-                              setState(() {
-                                selectedValue = newValue;
-                              });
-                            }
-                          },
-                        ),
-                      ),
-                    )
+                        width: 215,
+                        child: Container(
+                          padding: EdgeInsets.symmetric(horizontal: 10.0),
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(5.0),
+                            border: Border.all(
+                                color: AppTheme.mainBlue,
+                                width: 2.0), // Set border color and width
+                          ),
+                          child: DropdownButtonHideUnderline(
+                            child: DropdownButton<String>(
+                              value: selectedValue,
+                              isExpanded: true,
+                              icon: Icon(icon),
+                              items: items.map((String item) {
+                                return DropdownMenuItem<String>(
+                                  value: item,
+                                  child: Text(
+                                    item,
+                                    style: FontsTheme.mouseMemoirs_30Black(),
+                                  ),
+                                );
+                              }).toList(),
+                              onChanged: (String? newValue) {
+                                if (newValue != null) {
+                                  setState(() {
+                                    selectedValue = newValue;
+                                  });
+                                }
+                              },
+                            ),
+                          ),
+                        )),
                   ],
                 ))
           ],
@@ -708,6 +729,17 @@ class _AddFoodDetailsPageState extends State<addFoodDetails> {
                                       style: FontsTheme.hindBold_15()),
                                 ),
                                 Icon(Icons.attach_money, color: Colors.green),
+                                SizedBox(
+                                  width: 50,
+                                ),
+                                IconButton(
+                                  onPressed: () {},
+                                  icon: Icon(
+                                    Icons.info_rounded,
+                                    color: AppTheme.mainBlue,
+                                    size: 30,
+                                  ),
+                                )
                               ],
                             )),
                       )

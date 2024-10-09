@@ -508,160 +508,164 @@ class _FoodDetailsPageState extends State<foodDetails> {
               mainAxisAlignment: MainAxisAlignment.end,
               children: [
                 Center(
-                  child: Stack(
-                    children: [
-                      Container(
-                        height: 280,
-                        width: 375,
-                        padding: EdgeInsets.all(10),
-                        decoration: BoxDecoration(
-                          color: AppTheme.softRed,
-                          borderRadius: BorderRadius.circular(30),
-                        ),
-                        child: Container(
-                          alignment: Alignment.bottomCenter,
-                          child: TextButton(
-                            onPressed: () {
-                              addToConsumed(context);
-                              print("adding");
-                            },
-                            style: TextButton.styleFrom(
-                              backgroundColor: AppTheme.softRed,
-                              fixedSize: Size(350, 50),
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(10),
+                    child: Stack(
+                  children: [
+                    Container(
+                      height: 250,
+                      width: 375,
+                      padding: EdgeInsets.all(10),
+                      decoration: BoxDecoration(
+                        color: AppTheme.softRed,
+                        borderRadius: BorderRadius.circular(30),
+                      ),
+                      child: Container(
+                        alignment: Alignment.bottomCenter,
+                        child: TextButton(
+                          onPressed: () {
+                            addToConsumed(context);
+                            print("adding");
+                          },
+                          style: TextButton.styleFrom(
+                            backgroundColor: AppTheme.softRed,
+                            fixedSize: Size(350, 50),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(10),
+                            ),
+                          ),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Text(
+                                'Consume',
+                                style: FontsTheme.mouseMemoirs_30Black()
+                                    .copyWith(color: Colors.black),
+                                textAlign: TextAlign.center,
                               ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ),
+                    Container(
+                      alignment: Alignment.topCenter,
+                      height: 180,
+                      width: 355,
+                      margin: EdgeInsets.all(10),
+                      foregroundDecoration: BoxDecoration(
+                        color: AppTheme.softBlue,
+                        borderRadius: BorderRadius.circular(30),
+                      ),
+                    ),
+                    Flexible(
+                      child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: <Widget>[
+                            SizedBox(
+                              height: 20,
                             ),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
+                            // SizedBox(
+                            //   child: Container(
+                            //     width: 300,
+                            //     height: 200,
+                            //     padding: EdgeInsets.all(3),
+                            // decoration: BoxDecoration(
+                            //     borderRadius: BorderRadius.circular(5),
+                            //     color: AppTheme.softRed),
+                            Column(
+                              crossAxisAlignment: CrossAxisAlignment.center,
                               children: [
-                                Text(
-                                  'Consume',
-                                  style: FontsTheme.mouseMemoirs_30Black()
-                                      .copyWith(color: Colors.black),
-                                  textAlign: TextAlign.center,
-                                ),
-                              ],
-                            ),
-                          ),
-                        ),
-                      ),
-                      Container(
-                        alignment: Alignment.topCenter,
-                        height: 200,
-                        width: 355,
-                        margin: EdgeInsets.all(10),
-                        foregroundDecoration: BoxDecoration(
-                          color: AppTheme.softBlue,
-                          borderRadius: BorderRadius.circular(30),
-                        ),
-                      ),
-                      Flexible(
-                          child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: <Widget>[
-                          SizedBox(
-                            height: 20,
-                          ),
-                          SizedBox(
-                            child: Container(
-                              width: 300,
-                              height: 200,
-                              padding: EdgeInsets.all(3),
-                              // decoration: BoxDecoration(
-                              //     borderRadius: BorderRadius.circular(5),
-                              //     color: AppTheme.softRed),
-                              child: Row(
-                                children: [
-                                  // SizedBox(
-                                  //   width: 10,
-                                  //   height: 10,
-                                  //   child: InkWell(
-                                  //       onTap: () {
-                                  //         consumeQuantity - 1;
-                                  //       },
-                                  //       child: Icon(
-                                  //         Icons.remove,
-                                  //         color: Colors.white,
-                                  //         size: 16,
-                                  //       )),
-                                  // ),
-                                  // Container(
-                                  //   margin: EdgeInsets.symmetric(horizontal: 3),
-                                  //   padding: EdgeInsets.symmetric(
-                                  //       horizontal: 3, vertical: 2),
-                                  //   decoration: BoxDecoration(
-                                  //       borderRadius: BorderRadius.circular(3),
-                                  //       color: Colors.white),
-                                  //   child: Text(
-                                  //     "$consumeQuantity",
-                                  //     style: TextStyle(
-                                  //         color: Colors.black, fontSize: 16),
-                                  //   ),
-                                  // ),
-                                  Container(
-                                    width: 250,
-                                    height: 150,
-                                    padding: EdgeInsets.symmetric(
-                                        horizontal: 2, vertical: 2),
-                                    decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(10),
-                                      color: Colors.white,
+                                // SizedBox(
+                                //   width: 10,
+                                //   height: 10,
+                                //   child: InkWell(
+                                //       onTap: () {
+                                //         consumeQuantity - 1;
+                                //       },
+                                //       child: Icon(
+                                //         Icons.remove,
+                                //         color: Colors.white,
+                                //         size: 16,
+                                //       )),
+                                // ),
+                                // Container(
+                                //   margin: EdgeInsets.symmetric(horizontal: 3),
+                                //   padding: EdgeInsets.symmetric(
+                                //       horizontal: 3, vertical: 2),
+                                //   decoration: BoxDecoration(
+                                //       borderRadius: BorderRadius.circular(3),
+                                //       color: Colors.white),
+                                //   child: Text(
+                                //     "$consumeQuantity",
+                                //     style: TextStyle(
+                                //         color: Colors.black, fontSize: 16),
+                                //   ),
+                                // ),
+                                Stack(
+                                  children: [
+                                    Container(
+                                      width: 100,
+                                      height: 80,
+                                      padding: EdgeInsets.symmetric(
+                                          horizontal: 2, vertical: 2),
+                                      decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(10),
+                                        color: Colors.white,
+                                      ),
                                     ),
-                                    child: Row(
+                                    Row(
                                       mainAxisAlignment:
                                           MainAxisAlignment.spaceBetween,
                                       children: [
+                                        SizedBox(
+                                          width: 10,
+                                        ),
                                         Text('$quantity ',
-                                            style: FontsTheme.hindBold_20()),
-                                        buildQuantityUnit('')
+                                            style: FontsTheme.hindBold_20()
+                                                .copyWith(color: Colors.black)),
+                                        AlertDialog(
+                                          content:
+                                              buildConsumedQuantityUnit(''),
+                                        )
                                       ],
                                     ),
-                                  ),
-                                  SizedBox(
-                                    height: 50,
-                                  )
-                                  // SizedBox(
-                                  //   width: 10,
-                                  //   height: 10,
-                                  //   child: InkWell(
-                                  //       onTap: () {
-                                  //         consumeQuantity + 1;
-                                  //       },
-                                  //       child: Icon(
-                                  //         Icons.add,
-                                  //         color: Colors.white,
-                                  //         size: 16,
-                                  //       )),
-                                  // )
-                                ],
+                                  ],
+                                ),
+                                SizedBox(
+                                  height: 50,
+                                )
+                                // SizedBox(
+                                //   width: 10,
+                                //   height: 10,
+                                //   child: InkWell(
+                                //       onTap: () {
+                                //         consumeQuantity + 1;
+                                //       },
+                                //       child: Icon(
+                                //         Icons.add,
+                                //         color: Colors.white,
+                                //         size: 16,
+                                //       )),
+                                // )
+                              ],
+                            ),
+
+                            SizedBox(
+                              width: 350,
+                              child: InteractiveSlider(
+                                focusedHeight: 20,
+                                startIcon:
+                                    const Icon(Icons.remove_circle_rounded),
+                                endIcon: const Icon(Icons.add_circle_rounded),
+                                min: 1.0,
+                                max: 15.0,
+                                onChanged: (value) =>
+                                    setState(() => consumeQuantity),
                               ),
                             ),
-                          ),
-                          // Column(
-                          //     mainAxisSize: MainAxisSize.max,
-                          //     mainAxisAlignment: MainAxisAlignment.end,
-                          //     children: [
-                          //       SizedBox(
-                          //         width: 350,
-                          //         child: InteractiveSlider(
-                          //           focusedHeight: 20,
-                          //           startIcon:
-                          //               const Icon(Icons.remove_circle_rounded),
-                          //           endIcon:
-                          //               const Icon(Icons.add_circle_rounded),
-                          //           min: 1.0,
-                          //           max: 15.0,
-                          //           onChanged: (value) =>
-                          //               setState(() => consumeQuantity),
-                          //         ),
-                          //       ),
-                          //     ])
-                        ],
-                      )),
-                    ],
-                  ),
-                ),
+                          ]),
+                    ),
+                  ],
+                )),
                 SizedBox(height: 10),
                 ElevatedButton(
                   onPressed: () {
@@ -1082,6 +1086,7 @@ class _FoodDetailsPageState extends State<foodDetails> {
                   borderRadius: BorderRadius.circular(10),
                   color: Colors.white,
                 ),
+                height: 60,
                 child: Row(
                   children: [
                     Expanded(
@@ -1100,31 +1105,39 @@ class _FoodDetailsPageState extends State<foodDetails> {
                       ),
                     ),
                     SizedBox(
-                      width: 215,
-                      child: DropdownButtonHideUnderline(
-                        child: DropdownButton<String>(
-                          value: selectedValue,
-                          isExpanded: true,
-                          icon: Icon(icon),
-                          items: items.map((String item) {
-                            return DropdownMenuItem<String>(
-                              value: item,
-                              child: Text(
-                                item,
-                                style: FontsTheme.mouseMemoirs_30Black(),
-                              ),
-                            );
-                          }).toList(),
-                          onChanged: (String? newValue) {
-                            if (newValue != null) {
-                              setState(() {
-                                selectedValue = newValue;
-                              });
-                            }
-                          },
-                        ),
-                      ),
-                    )
+                        width: 215,
+                        child: Container(
+                          padding: EdgeInsets.symmetric(horizontal: 10.0),
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(5.0),
+                            border: Border.all(
+                                color: AppTheme.greenMainTheme,
+                                width: 2.0), // Set border color and width
+                          ),
+                          child: DropdownButtonHideUnderline(
+                            child: DropdownButton<String>(
+                              value: selectedValue,
+                              isExpanded: true,
+                              icon: Icon(icon),
+                              items: items.map((String item) {
+                                return DropdownMenuItem<String>(
+                                  value: item,
+                                  child: Text(
+                                    item,
+                                    style: FontsTheme.mouseMemoirs_30Black(),
+                                  ),
+                                );
+                              }).toList(),
+                              onChanged: (String? newValue) {
+                                if (newValue != null) {
+                                  setState(() {
+                                    selectedValue = newValue;
+                                  });
+                                }
+                              },
+                            ),
+                          ),
+                        )),
                   ],
                 ))
           ],
@@ -1152,6 +1165,7 @@ class _FoodDetailsPageState extends State<foodDetails> {
                   borderRadius: BorderRadius.circular(10),
                   color: Colors.white,
                 ),
+                height: 60,
                 child: Row(
                   children: [
                     Expanded(
@@ -1170,31 +1184,39 @@ class _FoodDetailsPageState extends State<foodDetails> {
                       ),
                     ),
                     SizedBox(
-                      width: 215,
-                      child: DropdownButtonHideUnderline(
-                        child: DropdownButton<String>(
-                          value: selectedValue,
-                          isExpanded: true,
-                          icon: Icon(icon),
-                          items: items.map((String item) {
-                            return DropdownMenuItem<String>(
-                              value: item,
-                              child: Text(
-                                item,
-                                style: FontsTheme.mouseMemoirs_30Black(),
-                              ),
-                            );
-                          }).toList(),
-                          onChanged: (String? newValue) {
-                            if (newValue != null) {
-                              setState(() {
-                                selectedValue = newValue;
-                              });
-                            }
-                          },
-                        ),
-                      ),
-                    )
+                        width: 215,
+                        child: Container(
+                          padding: EdgeInsets.symmetric(horizontal: 10.0),
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(5.0),
+                            border: Border.all(
+                                color: AppTheme.mainBlue,
+                                width: 2.0), // Set border color and width
+                          ),
+                          child: DropdownButtonHideUnderline(
+                            child: DropdownButton<String>(
+                              value: selectedValue,
+                              isExpanded: true,
+                              icon: Icon(icon),
+                              items: items.map((String item) {
+                                return DropdownMenuItem<String>(
+                                  value: item,
+                                  child: Text(
+                                    item,
+                                    style: FontsTheme.mouseMemoirs_30Black(),
+                                  ),
+                                );
+                              }).toList(),
+                              onChanged: (String? newValue) {
+                                if (newValue != null) {
+                                  setState(() {
+                                    selectedValue = newValue;
+                                  });
+                                }
+                              },
+                            ),
+                          ),
+                        )),
                   ],
                 ))
           ],
@@ -1687,5 +1709,54 @@ class _FoodDetailsPageState extends State<foodDetails> {
         ),
       ),
     );
+  }
+
+  Widget buildConsumedQuantityUnit(String value) {
+    String pieceLabel = quantity == 1 ? "Piece" : "Pieces";
+    String boxLabel = quantity == 1 ? "Box" : "Boxes";
+    String bottleLabel = quantity == 1 ? "Bottle" : "Bottles";
+    List<String> items = [pieceLabel, boxLabel, bottleLabel];
+    String selectedValue = items[0];
+    return StatefulBuilder(
+        builder: (BuildContext context, StateSetter setState) {
+      return Padding(
+        padding: const EdgeInsets.symmetric(vertical: 8),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(
+              children: [
+                SizedBox(
+                  width: 70,
+                  height: 30,
+                  child: DropdownButtonHideUnderline(
+                    child: DropdownButton<String>(
+                      value: selectedValue,
+                      isExpanded: true,
+                      items: items.map((String item) {
+                        return DropdownMenuItem<String>(
+                          value: item,
+                          child: Text(
+                            item,
+                            style: FontsTheme.hindBold_20(),
+                          ),
+                        );
+                      }).toList(),
+                      onChanged: (String? newValue) {
+                        if (newValue != null) {
+                          setState(() {
+                            selectedValue = newValue;
+                          });
+                        }
+                      },
+                    ),
+                  ),
+                )
+              ],
+            )
+          ],
+        ),
+      );
+    });
   }
 }
