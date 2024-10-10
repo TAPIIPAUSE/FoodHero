@@ -13,14 +13,14 @@ import 'package:foodhero/widgets/inventory/inventory_list_item.dart';
 import 'package:foodhero/widgets/inventory/sort_dropdown.dart';
 import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:textwrap/textwrap.dart';
 
 class Inventory extends StatefulWidget {
   final String initialFoodCategory;
-  final int hID;
 
   Inventory(
-      {super.key, this.initialFoodCategory = 'all food', required this.hID});
+      {super.key, this.initialFoodCategory = 'all food'});
 
   @override
   State<Inventory> createState() => _InventoryState();
@@ -55,17 +55,25 @@ class _InventoryState extends State<Inventory> {
   @override
   void initState() {
     super.initState();
-    foodCategory = widget.initialFoodCategory;
-    hID = widget.hID;
-    inventoryItems = fetchUserFood(hID);
-    _updateDate();
+    SharedPreferences.getInstance().then((prefs) {
+      final hID = prefs.getInt('hID');
+      foodCategory = widget.initialFoodCategory;
+      inventoryItems = fetchUserFood(hID!);
+      this.hID = hID;
+      _updateDate();
+    });
+    // final hID = prefs.getInt('hID');
+    // foodCategory = widget.initialFoodCategory;
+    // inventoryItems = fetchUserFood(hID!);
+    // this.hID = hID;
+    // _updateDate();
   }
 
-  Future<int> fetchHId() async {
-    // Simulate network delay
-    await Future.delayed(Duration(seconds: 1));
-    return 123; // Replace with actual logic to get hID
-  }
+  // Future<int> fetchHId() async {
+  //   // Simulate network delay
+  //   await Future.delayed(Duration(seconds: 1));
+  //   return 123; // Replace with actual logic to get hID
+  // }
 
   void _updateDate() {
     final now = DateTime.now();
@@ -256,13 +264,9 @@ class _InventoryState extends State<Inventory> {
                             height: 10,
                           ),
                           FutureBuilder<List<InventoryListItem>>(
-                              future: fetchUserFood(widget.hID),
+                              future: fetchUserFood(hID!),
                               builder: (context, snapshot) {
-                                if (snapshot.connectionState ==
-                                    ConnectionState.waiting) {
-                                  return Center(
-                                      child: CircularProgressIndicator());
-                                } else if (snapshot.hasError) {
+                                if (snapshot.hasError) {
                                   return Center(
                                       child: Text('Error: ${snapshot.error}'));
                                 } else if (!snapshot.hasData) {

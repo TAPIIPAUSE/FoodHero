@@ -5,7 +5,7 @@ import 'package:foodhero/main.dart';
 import 'package:foodhero/pages/House&Orga/Household/houseStatistics.dart';
 import 'package:foodhero/theme.dart';
 import 'package:foodhero/fonts.dart';
-import 'package:carousel_slider/carousel_slider.dart';
+import 'package:carousel_slider/carousel_slider.dart' as cs;
 import 'package:percent_indicator/percent_indicator.dart';
 import 'package:intl/intl.dart';
 
@@ -16,7 +16,7 @@ class household extends StatefulWidget {
 }
 
 class _HouseholdState extends State<household> {
-  final CarouselController _controller = CarouselController();
+  final cs.CarouselSliderController _controller = cs.CarouselSliderController();
   late String _todayDate;
   late String _weekday;
   int _current = 0;
@@ -183,10 +183,10 @@ class _HouseholdState extends State<household> {
                       // Row(
                       //   children: [
                       SizedBox(height: 10),
-                      CarouselSlider(
+                      cs.CarouselSlider(
                         items: generateCharts(),
                         carouselController: _controller,
-                        options: CarouselOptions(
+                        options: cs.CarouselOptions(
                           height: 150,
                           enlargeCenterPage: true,
                           onPageChanged: (index, reason) {

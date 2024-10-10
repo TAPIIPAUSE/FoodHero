@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:foodhero/models/loginresult.dart';
 import 'package:foodhero/pages/api/ApiClient.dart';
 import 'package:foodhero/pages/inventory/inventory.dart';
 import 'package:foodhero/pages/login_regis.dart';
@@ -36,29 +37,34 @@ class _loginState extends State<LoginScreen> {
       return;
     }
 
-    showDialog(
-      context: context,
-      barrierDismissible: false,
-      builder: (BuildContext context) {
-        return const Center(child: CircularProgressIndicator());
-      },
-    );
+    // showDialog(
+    //   context: context,
+    //   barrierDismissible: false,
+    //   builder: (BuildContext context) {
+    //     return const Center(child: CircularProgressIndicator());
+    //   },
+    // );
 
     print("Login button tapped");
     print("Username: $username");
     print("Password: $password");
-    bool success = await _authService.login(username, password);
+    Loginresult? result = await _authService.login(username, password);
 
     // Navigator.of(context).pop(); // Remove loading indicator
 
-    if (success) {
+    if (result ==null){
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Invalid email or password')),
+      );
+      return;
+    }
+    if (result.success) {
       // Navigate to inventory
       Navigator.pushReplacement(
         context,
         MaterialPageRoute(
             builder: (context) => Inventory(
                   initialFoodCategory: 'all food',
-                  hID: widget.hID,
                 )),
       );
       print('login succesful');

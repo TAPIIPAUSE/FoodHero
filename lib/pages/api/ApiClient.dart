@@ -1,48 +1,55 @@
 import 'dart:convert';
+import 'package:foodhero/models/loginresult.dart';
+import 'package:foodhero/utils/constants.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:dio/dio.dart';
+
 
 class AuthService {
   //final String backApiUrl = 'http://localhost:3000/api/v1/users';
 
-  Future<bool> login(String username, String password) async {
+  Future<Loginresult?> login(String username, String password) async {
     try {
       print(
           "Attempting to log in with username: $username, password: $password");
-
-      final response = await http.post(
-        Uri.parse('http://10.4.152.33:3000/api/v1/users/login'),
-        headers: <String, String>{
-          'Content-Type': 'application/json; charset=UTF-8',
-        },
-        body: jsonEncode(<String, String>{
-          'username': username,
-          'password': password,
-        }),
-      );
+      final dio = Dio();
+      final response = await dio.post('http://$myip:3000/api/v1/users/login', data: {'username': username, 'password': password});
+      
+      // final response = await http.post(
+      //   Uri.parse('http://$myip:3000/api/v1/users/login'),
+      //   headers: <String, String>{
+      //     'Content-Type': 'application/json; charset=UTF-8',
+      //   },
+      //   body: jsonEncode(<String, String>{
+      //     'username': username,
+      //     'password': password,
+      //   }),
+      // );
       if (response.statusCode == 200) {
         // Assuming the API returns a token on successful login
-        String token = jsonDecode(response.body)['token'];
+        Loginresult loginresult = Loginresult.fromJson(response.data);
 
         // Save token in SharedPreferences
         SharedPreferences prefs = await SharedPreferences.getInstance();
-        await prefs.setString('user_token', token);
+        await prefs.setString('user_token', loginresult.token);
+        await prefs.setInt('hID', loginresult.hID);
 
-        return true;
+        return loginresult;
       } else {
         print("Login failed with status code: ${response.statusCode}");
-        return false;
+        return null;
       }
     } catch (error) {
       print("Error during login request: $error");
-      return false;
+      return null;
     }
   }
 
   // Register method
   Future<bool> register(String username, String email, String password) async {
     final response = await http.post(
-      Uri.parse('http://10.4.152.33:3000/api/v1/users/register'),
+      Uri.parse('http://$myip:3000/api/v1/users/register'),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
       },

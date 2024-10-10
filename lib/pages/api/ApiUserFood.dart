@@ -1,11 +1,13 @@
 import 'dart:convert';
+import 'package:foodhero/utils/constants.dart';
 import 'package:foodhero/widgets/inventory/inventory_list_item.dart';
 import 'package:http/http.dart' as http;
+import 'package:shared_preferences/shared_preferences.dart';
 
 Future<int> fetchHId() async {
   try {
     final response = await http.get(
-      Uri.parse('http://192.168.1.34:3000/api/v1/inventory/getFoodByHouse'), // Your endpoint for hID
+      Uri.parse('http://$myip:3000/api/v1/inventory/getFoodByHouse'), // Your endpoint for hID
       headers: {'Content-Type': 'application/json'},
     );
 
@@ -22,12 +24,13 @@ Future<int> fetchHId() async {
 }
 Future<List<InventoryListItem>> fetchUserFood(int hID) async {
   try {
-    
+    SharedPreferences prefs = await SharedPreferences.getInstance();
     print("Attempting to log in with hID: $hID");
     final response = await http.get(
-      Uri.parse('http://10.4.152.33:3000/api/v1/inventory/getFoodByHouse'),
+      Uri.parse('http://$myip:3000/api/v1/inventory/getFoodByHouse'),
       headers: {
         'Content-Type': 'application/json',
+        'Authorization': 'Bearer ${prefs.getString('user_token')!}'
         // Add other headers if necessary, like authentication tokens
       },
     );

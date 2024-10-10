@@ -2,9 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:foodhero/main.dart';
 import 'package:foodhero/pages/House&Orga/Household/household.dart';
 import 'package:foodhero/pages/House&Orga/Organization/organization.dart';
-import 'package:foodhero/pages/api/HouseholdService.dart';
 import 'package:foodhero/pages/api/createAndjoinHousehold.dart';
-import 'package:foodhero/pages/api/createHousehold.dart';
 import 'package:foodhero/theme.dart';
 import 'package:foodhero/fonts.dart';
 

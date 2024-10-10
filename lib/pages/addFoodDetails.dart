@@ -284,7 +284,7 @@ class _AddFoodDetailsPageState extends State<addFoodDetails> {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => Inventory(hID: 0),
+                      builder: (context) => Inventory(),
                     ),
                   );
                 },

@@ -1,3 +1,4 @@
+import 'package:foodhero/utils/constants.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 
@@ -7,7 +8,7 @@ import 'dart:convert';
   Future<void> createHousehold(String householdName) async {
     try {
       final response = await http.post(
-        Uri.parse('http://10.4.152.33:3000/api/v1/users/create_house'),
+        Uri.parse('http://$myip:3000/api/v1/users/create_house'),
         headers: <String, String>{
           'Content-Type': 'application/json; charset=UTF-8',
         },
@@ -34,7 +35,7 @@ import 'dart:convert';
   Future<void> joinHousehold(String householdId) async {
     try {
       final response = await http.post(
-        Uri.parse('http://192.168.1.34:3000/api/v1/users/join_house'),
+        Uri.parse('http://$myip:3000/api/v1/users/join_house'),
         headers: <String, String>{
           'Content-Type': 'application/json; charset=UTF-8',
         },

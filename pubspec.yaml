@@ -7,7 +7,7 @@ environment:
   sdk: ">=3.4.0-99.1.beta <4.0.0"
 
 dependencies:
-  carousel_slider: ^4.2.1
+  carousel_slider: ^5.0.0
   fl_chart: ^0.68.0
   flutter:
     sdk: flutter
@@ -25,6 +25,7 @@ dependencies:
   interactive_slider: ^0.2.1
   input_quantity: ^1.2.4
   shared_preferences: ^2.3.2
+  dio: ^5.7.0
 
 
 dev_dependencies:

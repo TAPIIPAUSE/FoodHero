@@ -7,7 +7,7 @@ import 'package:foodhero/main.dart';
 import 'package:foodhero/pages/House&Orga/Organization/orgaStatistics.dart';
 import 'package:foodhero/theme.dart';
 import 'package:foodhero/fonts.dart';
-import 'package:carousel_slider/carousel_slider.dart';
+import 'package:carousel_slider/carousel_slider.dart' as cs;
 import 'package:percent_indicator/percent_indicator.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
@@ -21,7 +21,7 @@ class organization extends StatefulWidget {
 class _OrganizationState extends State<organization> {
   late String _todayDate;
   late String _weekday;
-  final CarouselController _controller = CarouselController();
+  final cs.CarouselSliderController _controller = cs.CarouselSliderController();
   int _current = 0;
   int _weekdayIndex = 0;
   int touchedIndex = -1;
@@ -186,10 +186,10 @@ class _OrganizationState extends State<organization> {
                       // Row(
                       //   children: [
                       SizedBox(height: 10),
-                      CarouselSlider(
+                      cs.CarouselSlider(
                         items: generateCharts(),
                         carouselController: _controller,
-                        options: CarouselOptions(
+                        options: cs.CarouselOptions(
                           height: 150,
                           enlargeCenterPage: true,
                           onPageChanged: (index, reason) {

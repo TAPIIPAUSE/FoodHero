@@ -17,19 +17,21 @@ import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
- void main() async {
+void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   SharedPreferences prefs = await SharedPreferences.getInstance();
   String? token = prefs.getString('james');
-  
-  runApp(
-  ChangeNotifierProvider(
-      create: (context) => ConsumedItemsProvider(),
-      child: MyApp(initialRoute: token != null ? '/home' : '/login',),));
+
+  runApp(ChangeNotifierProvider(
+    create: (context) => ConsumedItemsProvider(),
+    child: MyApp(
+      initialRoute: token != null ? '/home' : '/login',
+    ),
+  ));
 }
 
 class MyApp extends StatelessWidget {
-    final String initialRoute;
+  final String initialRoute;
 
   const MyApp({required this.initialRoute, super.key});
 
@@ -41,6 +43,7 @@ class MyApp extends StatelessWidget {
     );
   }
 }
+
 /// The route configuration.
 final GoRouter _router = GoRouter(
   routes: <RouteBase>[
@@ -55,21 +58,25 @@ final GoRouter _router = GoRouter(
           builder: (BuildContext context, GoRouterState state) {
             final foodCategory =
                 state.pathParameters['foodCategory'] ?? 'All food';
-            return FutureBuilder<int>(
-              future: fetchHId(), // Fetch hID from database
-              builder: (context, snapshot) {
-                if (snapshot.connectionState == ConnectionState.waiting) {
-                  return Center(child: CircularProgressIndicator());
-                } else if (snapshot.hasError) {
-                  return Center(child: Text('Error: ${snapshot.error}'));
-                } else if (!snapshot.hasData) {
-                  return Center(child: Text('No ID found'));
-                } else {
-                  int hID = snapshot.data!;
-                  return Inventory(initialFoodCategory: foodCategory, hID: hID);
-                }
+                // SharedPreferences prefs = await SharedPreferences.getInstance();
+                // final hID = ;
+            return
+                // FutureBuilder<int>(
+                //   future: fetchHId(), // Fetch hID from database
+                //   builder: (context, snapshot) {
+                //     if (snapshot.connectionState == ConnectionState.waiting) {
+                //       return Center(child: CircularProgressIndicator());
+                //     } else if (snapshot.hasError) {
+                //       return Center(child: Text('Error: ${snapshot.error}'));
+                //     } else if (!snapshot.hasData) {
+                //       return Center(child: Text('No ID found'));
+                //     } else {
+                //       int hID = snapshot.data!;
+                //       return
+                Inventory(initialFoodCategory: foodCategory);
+            // }
           },
-        );},),
+        ),
         GoRoute(
           path: 'register',
           builder: (BuildContext context, GoRouterState state) {
@@ -130,7 +137,7 @@ final GoRouter _router = GoRouter(
 );
 
 // Main app entry
-class MainApp extends StatelessWidget { 
+class MainApp extends StatelessWidget {
   const MainApp({super.key});
 
   @override
@@ -221,7 +228,4 @@ class MainScaffold extends StatelessWidget {
       ),
     );
   }
-
- 
-
 }

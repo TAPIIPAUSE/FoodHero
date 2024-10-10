@@ -1,4 +1,4 @@
-import 'package:carousel_slider/carousel_slider.dart';
+import 'package:carousel_slider/carousel_slider.dart' as cs;
 import 'package:flutter/material.dart';
 import 'package:foodhero/fonts.dart';
 import 'package:foodhero/main.dart';
@@ -19,7 +19,7 @@ class InterDashboard extends StatefulWidget {
 }
 
 class _InterDashboardState extends State<InterDashboard> {
-  CarouselController buttonCarouselController = CarouselController();
+  final cs.CarouselSliderController buttonCarouselController = cs.CarouselSliderController();
 
   @override
   Widget build(BuildContext context) {
@@ -103,9 +103,9 @@ class _InterDashboardState extends State<InterDashboard> {
               height: 10,
             ),
             const Text("Amount of food waste"),
-            CarouselSlider(
+            cs.CarouselSlider(
               items: carouselItems,
-              options: CarouselOptions(
+              options: cs.CarouselOptions(
                 autoPlay: false, // Enable auto-play
                 enlargeCenterPage: true, // Increase the size of the center item
                 enableInfiniteScroll: false, // Enable infinite scroll
