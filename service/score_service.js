@@ -96,3 +96,14 @@ export async function unitConverter(type,totalAmount,consumedAmount) {
 
     return {totalAmount,consumedAmount}
 }
+
+export async function calculateSaveLost(food, percent){
+    const c_a = parseFloat(food.current_amount)
+    const t_a = parseFloat(food.total_amount)
+    const t_p = parseFloat(food.total_price)
+    
+    const saved = (t_p*((c_a*(percent/100))/t_a))
+    const lost = (t_p*((c_a*((100 - percent)/100))/t_a))
+
+    return {saved,lost}
+}

@@ -1,9 +1,15 @@
-const mongoose = require('mongoose');
-const { Schema } = mongoose;
+import mongoose from 'mongoose';
 
-const personalScoreSchema = new Schema({
+const PersonalScoreSchema = new mongoose.Schema({
     userID: {
         type: Number,
+        required: true
+    },hID: {
+        type: Number, // Integer type for household ID
+        required: true
+    },
+    orgID: {
+        type: Number, // Integer type for organization ID
         required: true
     },
     Score: {
@@ -36,4 +42,6 @@ const personalScoreSchema = new Schema({
     }
 });
 
-module.exports = mongoose.model('PersonalScore', personalScoreSchema);
+const PersonalScore = mongoose.model('PersonalScore', PersonalScoreSchema);
+
+export default PersonalScore;

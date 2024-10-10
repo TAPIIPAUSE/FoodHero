@@ -7,11 +7,13 @@ import PackageUnitType from '../schema/inventory_module/packageTypeSchema.js';
 import Location from '../schema/inventory_module/locationSchema.js';
 import Food from '../schema/inventory_module/foodInventorySchema.js';
 import { get_user_from_db, get_houseID } from '../service/user_service.js';
-import { authenticateCookieToken } from "../service/jwt_auth.js";
+import { authenticateToken } from "../service/jwt_auth.js";
 import { getFoodDetailForFoodInventory } from "../service/inventory_service.js";
-import { calculateScore } from "../service/score_service.js";
+import { calculateSaveLost, calculateScore } from "../service/score_service.js";
 import ConsumedFood from "../schema/inventory_module/consumedFoodSchema.js";
-import { calculateConsumedData, updateCountableConsume } from "../service/consume_service.js";
+import { calculateConsumedData, updateCountableConsume, updateHouseScore, updateOrgScore } from "../service/consume_service.js";
+import PersonalScore from "../schema/score_module/PersonalScoreSchema.js";
+import User from "../schema/user_module/userSchema.js";
 
 const router = express.Router();
 
@@ -382,16 +384,38 @@ router.post('/consume/all', authenticateToken,async (req, res) => {
     // 3.1) Update in Food Inventory Database
     await updateCountableConsume(food, act_current_amount, act_current_quan, act_consume_amount, act_consume_quan)
 
+    const {saved: save, lost: lost} = await calculateSaveLost(food, consume_percen)
     // 3.2) Update Score in Personal Score Database
+    var personObject = new PersonalScore({
+      "userID": user.assigned_ID,
+      "hID": user.hID,
+      "orgID": user.orgID,
+      "Score": score,
+      "Consume": act_consume_amount,
+      "Waste": act_current_amount,
+      "Saved": save,
+      "Lost": lost,
+    })
+
+    await personObject.save()
 
     // 3.3) Update Score in Household Score Database
 
+    const HouseSize = await User.countDocuments({ hID: user.hID });
+
+    await updateHouseScore(user,score,HouseSize)
+
     // 3.4) Update Score in Organization Score Database
+
+    const OrgSize = await User.countDocuments({ orgID: user.orgID });
+
+    await updateOrgScore(user,score,OrgSize)
 
 
     res.status(200).json({
       message: 'Food item consumed successfully',
       scoreGained: score,
+      PersonObject: personObject
     });
 
   } catch (error) {

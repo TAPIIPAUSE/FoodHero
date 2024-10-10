@@ -2,6 +2,8 @@ import Food from "../schema/inventory_module/foodInventorySchema.js";
 import Location from "../schema/inventory_module/locationSchema.js";
 import PackageUnitType from "../schema/inventory_module/packageTypeSchema.js";
 import UnitType from "../schema/inventory_module/unitTypeSchema.js";
+import HouseholdScore from "../schema/score_module/HouseholdScoreSchema.js";
+import OrganizationScore from "../schema/score_module/OrganizationSchema.js";
 
 
 export async function getFoodDetailForConsumeInventory(fID, cID) {
@@ -101,11 +103,11 @@ export async function mapUnitType(id) {
 
 export async function calculateConsumedData(consumedPercent,food){
 
-  var act_consumed_amount = (consumedPercent/100) * food.total_amount
-  var act_consumed_quan = (consumedPercent/100) * food.total_quanitity
+  var act_consumed_amount = (consumedPercent/100) * food.current_amount
+  var act_consumed_quan = (consumedPercent/100) * food.current_quantity
 
-  var current_amount = parseFloat(food.total_amount) - parseFloat(act_consumed_amount)
-  var current_quan = parseFloat(food.total_quanitity) - parseFloat(act_consumed_quan)
+  var current_amount = parseFloat(food.current_amount) - parseFloat(act_consumed_amount)
+  var current_quan = parseFloat(food.current_quantity) - parseFloat(act_consumed_quan)
   var consume_amount = parseFloat(food.consumed_amount) + parseFloat(act_consumed_amount)
   var consume_quan = parseFloat(food.consumed_quantity) + parseFloat(act_consumed_quan)
 
@@ -126,11 +128,32 @@ export async function updateCountableConsume(food,cur_amount,cur_quan,con_a,con_
         },
       }
     );
-    console.log("Update data successfully")
-    
   }catch (error){
     console.log("Error updating food inventory when consuming:", error)
     throw error
   }
 
+}
+
+export async function updateHouseScore(user,score, housesize){
+  const per_house_capita = score/housesize
+
+  var HouseObject = new HouseholdScore({
+    "userID": user.assigned_ID,
+    "hID": user.hID,
+    "Score": per_house_capita
+  })
+
+  await HouseObject.save()
+}
+
+export async function updateOrgScore(user,score, orgSize){
+  const per_org_capita = score/orgSize
+
+  var OrganizationObject = new OrganizationScore({
+    "orgID": user.hID,
+    "Score": per_org_capita
+  })
+
+  await OrganizationObject.save()
 }

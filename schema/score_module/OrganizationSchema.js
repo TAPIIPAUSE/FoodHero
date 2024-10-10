@@ -1,28 +1,11 @@
-const mongoose = require('mongoose');
-const { Schema } = mongoose;
+import mongoose from "mongoose";
 
-const organizationScoreSchema = new Schema({
+const organizationScoreSchema = new mongoose.Schema({
     orgID: {
         type: Number, // Integer type for organization ID
         required: true
     },
     Score: {
-        type: mongoose.Types.Decimal128, // BSON Decimal for precision
-        required: true
-    },
-    Consume: {
-        type: mongoose.Types.Decimal128, // BSON Decimal for precision
-        required: true
-    },
-    Waste: {
-        type: mongoose.Types.Decimal128, // BSON Decimal for precision
-        required: true
-    },
-    MoneySaved: {
-        type: mongoose.Types.Decimal128, // BSON Decimal for precision
-        required: true
-    },
-    MoneyLost: {
         type: mongoose.Types.Decimal128, // BSON Decimal for precision
         required: true
     },
@@ -36,4 +19,6 @@ const organizationScoreSchema = new Schema({
     }
 });
 
-module.exports = mongoose.model('OrganizationScore', organizationScoreSchema);
+const OrganizationScore = mongoose.model('OrganizationScore', organizationScoreSchema);
+
+export default OrganizationScore;
