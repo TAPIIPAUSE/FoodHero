@@ -5,14 +5,14 @@ import Food from '../schema/inventory_module/foodInventorySchema.js';
 import ConsumedFood from "../schema/inventory_module/consumedFoodSchema.js";
 import { get_user_from_db, get_houseID } from '../service/user_service.js';
 import { save_consume_to_db } from '../service/inventory_service.js';
-import { authenticateCookieToken } from "../service/jwt_auth.js";
+import { authenticateToken } from "../service/jwt_auth.js";
 import { getFoodDetailForConsumeInventory } from "../service/consume_service.js";
 
 
 const router = express.Router();
 
 // Show all consumed items within 1 fridge
-router.get("/showConsumedFood",authenticateCookieToken, async (req, res) => {
+router.get("/showConsumedFood",authenticateToken, async (req, res) => {
   
     
 try {

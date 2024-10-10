@@ -8,7 +8,7 @@ import LocalStrategy from 'passport-local'
 import dotenv from 'dotenv';
 import House from '../schema/user_module/houseSchema.js';
 import Organization from '../schema/user_module/organizationSchema.js';
-import { authenticateToken, authenticateCookieToken } from '../service/jwt_auth.js';
+import { authenticateToken } from '../service/jwt_auth.js';
 import { save_org_to_db, get_user_from_db, save_house_to_db, get_houseID, get_house_from_db, get_housename_from_db, get_orgname_from_db} from '../service/user_service.js';
 
 
@@ -125,19 +125,14 @@ router.post('/login', async (req, res) => {
     { expiresIn: '1h' }
   );
 
-  res.cookie('token', token, {
-    httpOnly: true, // Cookie is only accessible by the web server
-    secure: process.env.NODE_ENV === 'production', // Set to true if using HTTPS
-    sameSite: 'Strict', // Helps prevent CSRF attacks
-    maxAge: 3600000 // 1 hour in milliseconds
-  });
+
 
 
   console.log("Token received for signing:", token);
   res.status(200).json({ success: true,message: 'Logged in successfully', token , hID: hID});
 })
 
-router.post('/create_house', authenticateCookieToken,async (req,res) => {
+router.post('/create_house',async (req,res) => {
 
   const {house_name} = req.body;
 
@@ -163,7 +158,7 @@ router.post('/create_house', authenticateCookieToken,async (req,res) => {
   }
 })
 
-router.post('/join_house', authenticateCookieToken, async (req, res) => {
+router.post('/join_house', async (req, res) => {
   const { housename } = req.body;
   const user = await get_user_from_db(req, res);
   const house = await get_housename_from_db(housename);
@@ -184,7 +179,7 @@ router.post('/join_house', authenticateCookieToken, async (req, res) => {
   console.log("House Joined");
 })
 
-router.post('/create_org', authenticateCookieToken,async (req,res) => {
+router.post('/create_org',async (req,res) => {
 
   const {org_name} = req.body;
 
@@ -218,7 +213,7 @@ router.post('/create_org', authenticateCookieToken,async (req,res) => {
   }
 })
 
-router.post('/join_org', authenticateCookieToken, async (req, res) => {
+router.post('/join_org', async (req, res) => {
   const { orgname } = req.body;
   const user = await get_user_from_db(req, res);
   const org = await get_orgname_from_db(orgname);
@@ -246,7 +241,7 @@ router.post('/join_org', authenticateCookieToken, async (req, res) => {
 })
 
 
-router.get('/test_jwt', authenticateCookieToken,async (req, res) => {
+router.get('/test_jwt',async (req, res) => {
 
   var user = await get_user_from_db(req,res)
   console.log("User info:", user)
