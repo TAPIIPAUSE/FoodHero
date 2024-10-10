@@ -379,7 +379,14 @@ router.post('/consume/all', authenticateToken,async (req, res) => {
       consume_quan: act_consume_quan } = await calculateConsumedData(consume_percen, food)
 
     // 3) Update in database
+    // 3.1) Update in Food Inventory Database
     await updateCountableConsume(food, act_current_amount, act_current_quan, act_consume_amount, act_consume_quan)
+
+    // 3.2) Update Score in Personal Score Database
+
+    // 3.3) Update Score in Household Score Database
+
+    // 3.4) Update Score in Organization Score Database
 
 
     res.status(200).json({

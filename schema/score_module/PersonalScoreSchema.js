@@ -11,11 +11,11 @@ const personalScoreSchema = new Schema({
         required: true
     },
     Consume: {
-        type: Number, // Float type
+        type: mongoose.Types.Decimal128, // Float type
         required: true
     },
     Waste: {
-        type: Number, // Float type
+        type: mongoose.Types.Decimal128,// Float type
         required: true
     },
     Saved: {
