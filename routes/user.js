@@ -100,6 +100,7 @@ router.post('/login', async (req, res) => {
   console.log("Password", password)
 
   const user = await User.findOne({ username });
+  const hID = user.hID
 
   if (!user) {
     res.status(400).send(`There is no username registered as: ${username}`)
@@ -133,7 +134,7 @@ router.post('/login', async (req, res) => {
 
 
   console.log("Token received for signing:", token);
-  res.status(200).json({ success: true,message: 'Logged in successfully', token });
+  res.status(200).json({ success: true,message: 'Logged in successfully', token , hID: hID});
 })
 
 router.post('/create_house', authenticateCookieToken,async (req,res) => {

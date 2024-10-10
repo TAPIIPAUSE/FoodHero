@@ -7,7 +7,6 @@ import PackageUnitType from '../schema/inventory_module/packageTypeSchema.js';
 import Location from '../schema/inventory_module/locationSchema.js';
 import Food from '../schema/inventory_module/foodInventorySchema.js';
 import { get_user_from_db, get_houseID } from '../service/user_service.js';
-import { save_consume_to_db } from '../service/inventory_service.js';
 import { authenticateCookieToken } from "../service/jwt_auth.js";
 import { getFoodDetailForFoodInventory } from "../service/inventory_service.js";
 import { calculateScore, save_consume_to_db } from '../service/inventory_service.js';
