@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:foodhero/main.dart';
+import 'package:foodhero/pages/House&Orga/Household/household.dart';
 import 'package:foodhero/pages/House&Orga/Organization/organization.dart';
+import 'package:foodhero/pages/api/HouseholdService.dart';
 import 'package:foodhero/pages/api/createAndjoinHousehold.dart';
+import 'package:foodhero/pages/api/createHousehold.dart';
 import 'package:foodhero/theme.dart';
 import 'package:foodhero/fonts.dart';
 
@@ -68,7 +71,7 @@ class _JoinState extends State<join> {
         ),
         body: SingleChildScrollView(
           child: Padding(
-              padding: const EdgeInsets.all(80),
+              padding: const EdgeInsets.all(100),
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.center,
@@ -77,38 +80,17 @@ class _JoinState extends State<join> {
                     "Household",
                     style: FontsTheme.mouseMemoirs_40(),
                   ),
-                  Row(
-                    children: [
-                      SizedBox(
-                        width: 100,
-                        height: 50,
-                        child: TextButton(
-                          onPressed: () => CreateHouse(context),
-                          style: TextButton.styleFrom(
-                              backgroundColor: AppTheme.greenMainTheme,
-                              foregroundColor: Colors.white),
-                          child: Text('Create'),
-                        ),
-                      ),
-                      SizedBox(
-                        width: 50,
-                      ),
-                      SizedBox(
-                        width: 100,
-                        height: 50,
-                        child: TextButton(
-                          onPressed: () => JoinHouse(context),
-                          style: TextButton.styleFrom(
-                              backgroundColor: AppTheme.mainBlue,
-                              foregroundColor: Colors.white),
-                          child: Text(
-                            'Join',
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
 
+                  SizedBox(
+                    width: 200,
+                    height: 50,
+                    child: TextButton(
+                      onPressed: () => JoinHouse(context),
+                      style: TextButton.styleFrom(
+                          foregroundColor: AppTheme.mainBlue),
+                      child: Text('Join'),
+                    ),
+                  ),
                   SizedBox(
                     height: 120,
                   ),
@@ -116,87 +98,22 @@ class _JoinState extends State<join> {
                     "Organization",
                     style: FontsTheme.mouseMemoirs_40(),
                   ),
-                  Row(
-                    children: [
-                      SizedBox(
-                        width: 100,
-                        height: 50,
-                        child: TextButton(
-                          onPressed: () => CreateOrga(context),
-                          style: TextButton.styleFrom(
-                              backgroundColor: AppTheme.greenMainTheme,
-                              foregroundColor: Colors.white),
-                          child: Text('Create'),
-                        ),
-                      ),
-                      SizedBox(
-                        width: 50,
-                      ),
-                      SizedBox(
-                        width: 100,
-                        height: 50,
-                        child: TextButton(
-                          onPressed: () => JoinOrga(context),
-                          style: TextButton.styleFrom(
-                              backgroundColor: AppTheme.mainBlue,
-                              foregroundColor: Colors.white),
-                          child: Text('Join'),
-                        ),
-                      ),
-                    ],
-                  )
+                  SizedBox(
+                    width: 200,
+                    height: 50,
+                    child: TextButton(
+                      onPressed: () => JoinOrga(context),
+                      style: TextButton.styleFrom(
+                          foregroundColor: AppTheme.orangeGray),
+                      child: Text('Join'),
+                    ),
+                  ),
 
                   // Members section
                 ],
               )),
         ),
       ),
-    );
-  }
-
-  void CreateHouse(BuildContext context) {
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          scrollable: true,
-          backgroundColor: AppTheme.softBlue,
-          title: const Text("Create Household"),
-          titleTextStyle:
-              FontsTheme.mouseMemoirs_40().copyWith(color: Colors.black),
-          content: Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Form(
-              child: Column(
-                children: [
-                  TextFormField(
-                    decoration: const InputDecoration(
-                      labelText: "Household name",
-                      icon: Icon(Icons.password_rounded),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ),
-          actions: [
-            TextButton(
-              child: const Text("Create"),
-              style: TextButton.styleFrom(
-                  backgroundColor: AppTheme.greenMainTheme,
-                  foregroundColor: Colors.white),
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => organization(),
-                  ),
-                );
-              },
-            ),
-          ],
-        );
-      },
     );
   }
 
@@ -217,8 +134,20 @@ class _JoinState extends State<join> {
                 children: [
                   TextFormField(
                     decoration: const InputDecoration(
-                      labelText: "Household name",
+                      labelText: "Household Code",
                       icon: Icon(Icons.password_rounded),
+                    ),
+                  ),
+                  TextFormField(
+                    decoration: const InputDecoration(
+                      labelText: "Email",
+                      icon: Icon(Icons.email),
+                    ),
+                  ),
+                  TextFormField(
+                    decoration: const InputDecoration(
+                      labelText: "Message",
+                      icon: Icon(Icons.message),
                     ),
                   ),
                 ],
@@ -226,11 +155,8 @@ class _JoinState extends State<join> {
             ),
           ),
           actions: [
-            TextButton(
+            ElevatedButton(
               child: const Text("Join"),
-              style: TextButton.styleFrom(
-                  backgroundColor: AppTheme.mainBlue,
-                  foregroundColor: Colors.white),
               onPressed: () {
                 _joinHousehold;
                 // Navigator.push(
@@ -239,52 +165,6 @@ class _JoinState extends State<join> {
                 //     builder: (context) => household(),
                 //   ),
                 // );
-              },
-            ),
-          ],
-        );
-      },
-    );
-  }
-
-  void CreateOrga(BuildContext context) {
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          scrollable: true,
-          backgroundColor: AppTheme.softRedBrown,
-          title: const Text("Create Organization"),
-          titleTextStyle:
-              FontsTheme.mouseMemoirs_40().copyWith(color: Colors.black),
-          content: Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Form(
-              child: Column(
-                children: [
-                  TextFormField(
-                    decoration: const InputDecoration(
-                      labelText: "Organization name",
-                      icon: Icon(Icons.password_rounded),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ),
-          actions: [
-            TextButton(
-              child: const Text("Create"),
-              style: TextButton.styleFrom(
-                  backgroundColor: AppTheme.greenMainTheme,
-                  foregroundColor: Colors.white),
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => organization(),
-                  ),
-                );
               },
             ),
           ],
@@ -310,8 +190,20 @@ class _JoinState extends State<join> {
                 children: [
                   TextFormField(
                     decoration: const InputDecoration(
-                      labelText: "Organization name",
+                      labelText: "Organization Code",
                       icon: Icon(Icons.password_rounded),
+                    ),
+                  ),
+                  TextFormField(
+                    decoration: const InputDecoration(
+                      labelText: "Email",
+                      icon: Icon(Icons.email),
+                    ),
+                  ),
+                  TextFormField(
+                    decoration: const InputDecoration(
+                      labelText: "Message",
+                      icon: Icon(Icons.message),
                     ),
                   ),
                 ],
@@ -319,11 +211,8 @@ class _JoinState extends State<join> {
             ),
           ),
           actions: [
-            TextButton(
+            ElevatedButton(
               child: const Text("Join"),
-              style: TextButton.styleFrom(
-                  backgroundColor: AppTheme.mainBlue,
-                  foregroundColor: Colors.white),
               onPressed: () {
                 Navigator.push(
                   context,

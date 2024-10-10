@@ -54,10 +54,7 @@ class _loginState extends State<LoginScreen> {
       Navigator.pushReplacement(
         context,
         MaterialPageRoute(
-            builder: (context) => Inventory(
-                  initialFoodCategory: 'all food',
-                  hID: 0,
-                )),
+            builder: (context) => Inventory(initialFoodCategory: 'all food', hID: 0,)),
       );
       print('login succesful');
     } else {
@@ -253,15 +250,13 @@ class _loginState extends State<LoginScreen> {
                                         width: 250,
                                         child: ElevatedButton(
                                             onPressed: () {
-                                              //_login();
-                                              Navigator.push(
-                                                context,
-                                                MaterialPageRoute(
-                                                    builder: (context) =>
-                                                        Inventory(
-                                                          hID: 0,
-                                                        )),
-                                              );
+                                              _login();
+                                              // Navigator.push(
+                                              //   context,
+                                              //   MaterialPageRoute(
+                                              //       builder: (context) =>
+                                              //           Inventory()),
+                                              // );
                                               print(_emailController);
                                               print('login tapped');
                                             },
