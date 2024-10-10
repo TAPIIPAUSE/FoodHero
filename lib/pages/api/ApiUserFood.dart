@@ -7,7 +7,8 @@ import 'package:shared_preferences/shared_preferences.dart';
 Future<int> fetchHId() async {
   try {
     final response = await http.get(
-      Uri.parse('http://$myip:3000/api/v1/inventory/getFoodByHouse'), // Your endpoint for hID
+      Uri.parse(
+          'http://$myip:3000/api/v1/inventory/getFoodByHouse'), // Your endpoint for hID
       headers: {'Content-Type': 'application/json'},
     );
 
@@ -22,6 +23,7 @@ Future<int> fetchHId() async {
     throw error; // Rethrow the error for handling in the calling code
   }
 }
+
 Future<List<InventoryListItem>> fetchUserFood(int hID) async {
   try {
     SharedPreferences prefs = await SharedPreferences.getInstance();

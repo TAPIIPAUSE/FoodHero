@@ -3,10 +3,11 @@ import 'package:foodhero/pages/consumed/Consumed.dart';
 import 'package:foodhero/pages/consumed/consumedDetails.dart';
 import 'package:foodhero/pages/foodDetails.dart';
 import 'package:foodhero/theme.dart';
+import 'package:intl/intl.dart';
 import 'package:percent_indicator/percent_indicator.dart';
 
 class ConsumedListItem extends StatelessWidget {
-   const ConsumedListItem({
+  const ConsumedListItem({
     Key? key,
     required this.thumbnail,
     required this.foodname,
@@ -20,14 +21,14 @@ class ConsumedListItem extends StatelessWidget {
   final String foodname;
   final String expiry;
   final double progressbar;
-  final int consuming;
-  final int remaining;
+  final String consuming;
+  final String remaining;
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-       Navigator.push(
+        Navigator.push(
           context,
           MaterialPageRoute(
             builder: (context) => ConsumedDetails(),
@@ -53,7 +54,7 @@ class ConsumedListItem extends StatelessWidget {
                     child: ClipRRect(
                       borderRadius: BorderRadius.circular(
                           10.0), // Adjust the value as needed
-                      child: Image.asset(
+                      child: Image.network(
                         thumbnail.toString(),
                         fit: BoxFit.cover,
                         width: MediaQuery.of(context).size.width * 0.1,
@@ -65,7 +66,7 @@ class ConsumedListItem extends StatelessWidget {
                     flex: 3,
                     child: _FoodDetail(
                       foodname: foodname,
-                      expiry: expiry,
+                      expiry: DateTime.parse(expiry),
                       progessbar: progressbar,
                       consumeing: consuming,
                       remaining: remaining,
@@ -84,6 +85,7 @@ class ConsumedListItem extends StatelessWidget {
   }
 }
 
+
 class _FoodDetail extends StatelessWidget {
   const _FoodDetail({
     required this.foodname,
@@ -94,10 +96,10 @@ class _FoodDetail extends StatelessWidget {
   });
 
   final String foodname;
-  final String expiry;
+  final DateTime expiry;
   final double progessbar;
-  final int consumeing;
-  final int remaining;
+  final String consumeing;
+  final String remaining;
 
   @override
   Widget build(BuildContext context) {
@@ -137,7 +139,7 @@ class _FoodDetail extends StatelessWidget {
                         borderRadius: BorderRadius.circular(10.0),
                       ),
                       child: Text(
-                        '${remaining.toString()} pieces',
+                        remaining.toString(),
                         style: const TextStyle(
                           color: Colors.black,
                           fontSize: 12.0,
@@ -161,7 +163,7 @@ class _FoodDetail extends StatelessWidget {
                   children: [
                     const Padding(padding: EdgeInsets.symmetric(vertical: 2.0)),
                     Text(
-                      expiry,
+                      DateFormat('dd/MM/yyyy').format(expiry),
                       style: const TextStyle(fontSize: 10.0),
                     ),
                     LinearPercentIndicator(
@@ -195,7 +197,7 @@ class _FoodDetail extends StatelessWidget {
                         ),
                       ),
                       Text(
-                        '${consumeing.toString()} pieces',
+                        consumeing.toString(),
                         style: const TextStyle(
                           color: Colors.black,
                           fontSize: 12.0,

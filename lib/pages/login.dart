@@ -10,7 +10,7 @@ import 'package:go_router/go_router.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class LoginScreen extends StatefulWidget {
-    late final int hID;
+  late final int hID;
 
   @override
   _loginState createState() => _loginState();
@@ -52,7 +52,7 @@ class _loginState extends State<LoginScreen> {
 
     // Navigator.of(context).pop(); // Remove loading indicator
 
-    if (result ==null){
+    if (result == null) {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text('Invalid email or password')),
       );
@@ -262,6 +262,7 @@ class _loginState extends State<LoginScreen> {
                                         child: ElevatedButton(
                                             onPressed: () {
                                               _login();
+                                              // context.push('/consumed');
                                               // Navigator.push(
                                               //   context,
                                               //   MaterialPageRoute(

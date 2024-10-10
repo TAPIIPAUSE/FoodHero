@@ -1,30 +1,30 @@
-class Consumedfood {
+class ConsumedfoodData {
   final int consumeId;
   final int foodId;
   final String foodName;
-  final String expired;
+  final String? expired;
   final String consuming;
   final String remaining;
-  final String url;
+  final String? url;
 
-  factory Consumedfood.fromJson(Map<String, dynamic> json) {
-    return Consumedfood(
-      url: json['url'],
-      foodName: json['foodName'],
-      expired: json['expired'],
-      consuming: json['consuming'],
-      remaining: json['remaining'],
-      foodId: json['foodId'],
-      consumeId: json['consumeId'],
+  factory ConsumedfoodData.fromJson(Map<String, dynamic> json) {
+    return ConsumedfoodData(
+      url: json['URL'],
+      foodName: json['FoodName'] as String? ?? 'test',
+      expired: json['Expired'] as String? ?? 'test',
+      consuming: json['Consuming'] as String? ?? 'test',
+      remaining: json['Remaining'] as String? ?? 'test',
+      foodId: json['Food_ID'] as int? ?? 0,
+      consumeId: json['Consume_ID'] as int? ?? 0,
     );
   }
 
-  Consumedfood(
+  ConsumedfoodData(
       {required this.consumeId,
       required this.foodId,
       required this.foodName,
-      required this.expired,
+      this.expired,
       required this.consuming,
       required this.remaining,
-      required this.url});
+      this.url});
 }

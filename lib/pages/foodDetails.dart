@@ -681,8 +681,8 @@ class _FoodDetailsPageState extends State<foodDetails> {
       foodname: foodname.text,
       expiry: "ssss",
       progressbar: 80,
-      consuming: 12,
-      remaining: 8,
+      consuming: "12",
+      remaining: "8",
     );
 
     Provider.of<ConsumedItemsProvider>(context, listen: false)

@@ -16,16 +16,6 @@ class AuthService {
       final dio = Dio();
       final response = await dio.post('http://$myip:3000/api/v1/users/login', data: {'username': username, 'password': password});
       
-      // final response = await http.post(
-      //   Uri.parse('http://$myip:3000/api/v1/users/login'),
-      //   headers: <String, String>{
-      //     'Content-Type': 'application/json; charset=UTF-8',
-      //   },
-      //   body: jsonEncode(<String, String>{
-      //     'username': username,
-      //     'password': password,
-      //   }),
-      // );
       if (response.statusCode == 200) {
         // Assuming the API returns a token on successful login
         Loginresult loginresult = Loginresult.fromJson(response.data);
