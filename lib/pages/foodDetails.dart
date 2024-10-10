@@ -1549,70 +1549,6 @@ class _FoodDetailsPageState extends State<foodDetails> {
     );
   }
 
-  List<bool> countable = [true, false];
-  Widget buildCountable() {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 8),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          //buildQuantityButton(Icons.remove),
-          Stack(
-            children: [
-              Container(
-                padding: EdgeInsets.all(8),
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(15),
-                  color: AppTheme.softBlue,
-                ),
-                child: Column(
-                  children: [
-                    Row(
-                      children: [
-                        ToggleButtons(
-                          isSelected: countable,
-                          onPressed: (int index) {
-                            setState(() {
-                              for (int i = 0; i < countable.length; i++) {
-                                countable[i] = i == index;
-                              }
-                            });
-                          },
-                          children: <Widget>[
-                            Padding(
-                                padding: EdgeInsets.symmetric(horizontal: 20),
-                                child: Text("Option 1")),
-                            Padding(
-                                padding: EdgeInsets.symmetric(horizontal: 20),
-                                child: Text("Option 2")),
-                          ],
-                        ),
-                        Container(
-                          width: 200,
-                          height: 200,
-                          color: countable[0] ? Colors.green : Colors.orange,
-                          child: Center(
-                            child: Text(
-                              countable[0]
-                                  ? "Option 1 Selected"
-                                  : "Option 2 Selected",
-                              style:
-                                  TextStyle(color: Colors.white, fontSize: 24),
-                            ),
-                          ),
-                        ),
-                      ],
-                    )
-                  ],
-                ),
-              ),
-            ],
-          ),
-        ],
-      ),
-    );
-  }
-
   Widget buildQuantityWeight() {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 8),
@@ -1930,6 +1866,7 @@ class _FoodDetailsPageState extends State<foodDetails> {
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           //buildQuantityButton(Icons.remove),
+
                           Container(
                             padding: EdgeInsets.symmetric(
                                 horizontal: 12, vertical: 8),
