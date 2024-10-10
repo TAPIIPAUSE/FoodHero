@@ -18,6 +18,7 @@ import 'package:textwrap/textwrap.dart';
 class Inventory extends StatefulWidget {
   final String initialFoodCategory;
   final int hID;
+
   Inventory(
       {super.key, this.initialFoodCategory = 'all food', required this.hID});
 
@@ -26,6 +27,8 @@ class Inventory extends StatefulWidget {
 }
 
 class _InventoryState extends State<Inventory> {
+  late int hID;
+
   int selectedRouteIndex = 0;
   late String foodCategory;
   final List<Segment> segments = [
@@ -53,8 +56,15 @@ class _InventoryState extends State<Inventory> {
   void initState() {
     super.initState();
     foodCategory = widget.initialFoodCategory;
-    inventoryItems = fetchUserFood(widget.hID);
+    hID = widget.hID;
+    inventoryItems = fetchUserFood(hID);
     _updateDate();
+  }
+
+  Future<int> fetchHId() async {
+    // Simulate network delay
+    await Future.delayed(Duration(seconds: 1));
+    return 123; // Replace with actual logic to get hID
   }
 
   void _updateDate() {
@@ -255,10 +265,14 @@ class _InventoryState extends State<Inventory> {
                                 } else if (snapshot.hasError) {
                                   return Center(
                                       child: Text('Error: ${snapshot.error}'));
-                                } else if (!snapshot.hasData ||
-                                    snapshot.data!.isEmpty) {
+                                } else if (!snapshot.hasData) {
                                   return Center(
-                                      child: Text('No food items found'));
+                                      child:
+                                          Text('Loading...')); // Loading state
+                                } else if (snapshot.data!.isEmpty) {
+                                  return Center(
+                                      child: Text(
+                                          'No food items found for this house ID.'));
                                 } else {
                                   List<InventoryListItem> foodItems =
                                       snapshot.data!;
@@ -278,7 +292,8 @@ class _InventoryState extends State<Inventory> {
                                                 (item.current_amount /
                                                         item.total_quanitity) *
                                                     100;
-                                            int remaining = (item.total_amount - item.current_amount);
+                                            int remaining = (item.total_amount -
+                                                item.current_amount);
                                             return InventoryListItem(
                                                 hID: item.hID,
                                                 food_name: foodItems[index]

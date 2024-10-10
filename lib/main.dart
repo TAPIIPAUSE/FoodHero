@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:foodhero/pages/House&Orga/join.dart';
+import 'package:foodhero/pages/api/ApiUserFood.dart';
 import 'package:foodhero/pages/consumed/Consumed.dart';
 import 'package:foodhero/pages/consumed/consumedItemsProvider.dart';
 import 'package:foodhero/pages/interorg/dashboard_inter.dart';
@@ -54,9 +55,21 @@ final GoRouter _router = GoRouter(
           builder: (BuildContext context, GoRouterState state) {
             final foodCategory =
                 state.pathParameters['foodCategory'] ?? 'All food';
-            return Inventory(initialFoodCategory: foodCategory, hID: 0,);
+            return FutureBuilder<int>(
+              future: fetchHId(), // Fetch hID from database
+              builder: (context, snapshot) {
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return Center(child: CircularProgressIndicator());
+                } else if (snapshot.hasError) {
+                  return Center(child: Text('Error: ${snapshot.error}'));
+                } else if (!snapshot.hasData) {
+                  return Center(child: Text('No ID found'));
+                } else {
+                  int hID = snapshot.data!;
+                  return Inventory(initialFoodCategory: foodCategory, hID: hID);
+                }
           },
-        ),
+        );},),
         GoRoute(
           path: 'register',
           builder: (BuildContext context, GoRouterState state) {

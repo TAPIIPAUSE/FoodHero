@@ -9,6 +9,8 @@ import 'package:go_router/go_router.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class LoginScreen extends StatefulWidget {
+    late final int hID;
+
   @override
   _loginState createState() => _loginState();
 }
@@ -54,7 +56,10 @@ class _loginState extends State<LoginScreen> {
       Navigator.pushReplacement(
         context,
         MaterialPageRoute(
-            builder: (context) => Inventory(initialFoodCategory: 'all food', hID: 0,)),
+            builder: (context) => Inventory(
+                  initialFoodCategory: 'all food',
+                  hID: widget.hID,
+                )),
       );
       print('login succesful');
     } else {
@@ -255,9 +260,11 @@ class _loginState extends State<LoginScreen> {
                                               //   context,
                                               //   MaterialPageRoute(
                                               //       builder: (context) =>
-                                              //           Inventory()),
+                                              //           Inventory(
+                                              //             hID: 0,
+                                              //           )),
                                               // );
-                                              print(_emailController);
+                                              // print(_emailController);
                                               print('login tapped');
                                             },
                                             style: TextButton.styleFrom(
