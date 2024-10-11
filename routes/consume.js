@@ -35,4 +35,18 @@ try {
 }
 });
 
+router.get("/getConsumeById", authenticateToken,async (req, res) => {
+  const { cID } = req.body;
+
+  try {
+    // search foods by the food ID
+    const assigned_ID = cID;
+    const consumedFood = await ConsumedFood.findOne({ assigned_ID });
+
+    return res.status(200).send(consumedFood);
+  } catch (error) {
+    return res.status(400).send(`Error when getting Food's Info: ${error}`);
+  }
+});
+
 export default router;
