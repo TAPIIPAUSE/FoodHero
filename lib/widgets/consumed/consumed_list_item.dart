@@ -1,10 +1,14 @@
+// ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:flutter/material.dart';
-import 'package:foodhero/pages/consumed/consumedDetails.dart';
-import 'package:foodhero/theme.dart';
+import 'package:foodhero/pages/api/consumedfood_api.dart';
 import 'package:intl/intl.dart';
 import 'package:percent_indicator/percent_indicator.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
-class ConsumedListItem extends StatelessWidget {
+import 'package:foodhero/pages/consumed/consumedDetails.dart';
+import 'package:foodhero/theme.dart';
+
+class ConsumedListItem extends StatefulWidget {
   const ConsumedListItem({
     super.key,
     required this.thumbnail,
@@ -13,6 +17,7 @@ class ConsumedListItem extends StatelessWidget {
     required this.progressbar,
     required this.consuming,
     required this.remaining,
+    required this.cID,
   });
 
   final String thumbnail;
@@ -21,6 +26,25 @@ class ConsumedListItem extends StatelessWidget {
   final double progressbar;
   final String consuming;
   final String remaining;
+  final int cID;
+
+  @override
+  State<ConsumedListItem> createState() => _ConsumedListItemState();
+}
+
+class _ConsumedListItemState extends State<ConsumedListItem> {
+  // late int cID;
+
+  // @override
+  // void initState() {
+  //   super.initState();
+  //   SharedPreferences.getInstance().then((prefs) {
+  //     final cID = prefs.getInt('consume_ID');
+  //     setState(() {
+  //       this.cID = cID!;
+  //     });
+  //   });
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -29,7 +53,9 @@ class ConsumedListItem extends StatelessWidget {
         Navigator.push(
           context,
           MaterialPageRoute(
-            builder: (context) => ConsumedDetails(),
+            builder: (context) => ConsumedDetails(
+              cID: widget.cID,
+            ),
           ),
         );
       },
@@ -70,7 +96,7 @@ class ConsumedListItem extends StatelessWidget {
                             //   height: MediaQuery.of(context).size.height * 0.12,
                             // ),
                             Image.network(
-                          thumbnail,
+                          widget.thumbnail,
                           errorBuilder: (context, error, stackTrace) {
                             return const Text('Could not load image');
                           },
@@ -87,11 +113,11 @@ class ConsumedListItem extends StatelessWidget {
                   Expanded(
                     flex: 3,
                     child: _FoodDetail(
-                      foodname: foodname,
-                      expiry: DateTime.parse(expiry),
-                      progessbar: progressbar,
-                      consumeing: consuming,
-                      remaining: remaining,
+                      foodname: widget.foodname,
+                      expiry: DateTime.parse(widget.expiry),
+                      progessbar: widget.progressbar,
+                      consumeing: widget.consuming,
+                      remaining: widget.remaining,
                     ),
                   ),
                 ],

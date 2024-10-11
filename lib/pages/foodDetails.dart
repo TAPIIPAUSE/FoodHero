@@ -677,6 +677,7 @@ class _FoodDetailsPageState extends State<foodDetails> {
 
   void addToConsumed(BuildContext context) {
     final newItem = ConsumedListItem(
+      cID: 1,
       thumbnail: "assets/images/apples.jpg",
       foodname: foodname.text,
       expiry: "ssss",

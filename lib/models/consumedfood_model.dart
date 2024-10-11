@@ -27,4 +27,9 @@ class ConsumedfoodData {
       required this.consuming,
       required this.remaining,
       required this.url});
+
+  @override
+  String toString() {
+    return 'ConsumedfoodData(consumeId: $consumeId, foodName: $foodName, expired: $expired, consuming: $consuming, remaining: $remaining)';
+  }
 }

@@ -59,15 +59,15 @@ class _loginState extends State<LoginScreen> {
       return;
     }
     if (result.success) {
-      context.push('/consumed');
+      // context.push('/consumed');
       // Navigate to inventory
-      // Navigator.pushReplacement(
-      //   context,
-      //   MaterialPageRoute(
-      //       builder: (context) => Inventory(
-      //             initialFoodCategory: 'all food',
-      //           )),
-      // );
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(
+            builder: (context) => Inventory(
+                  initialFoodCategory: 'all food',
+                )),
+      );
       print('login succesful');
     } else {
       // Show error
