@@ -1,21 +1,19 @@
 import 'package:flutter/material.dart';
-import 'package:foodhero/pages/consumed/Consumed.dart';
 import 'package:foodhero/pages/consumed/consumedDetails.dart';
-import 'package:foodhero/pages/foodDetails.dart';
 import 'package:foodhero/theme.dart';
 import 'package:intl/intl.dart';
 import 'package:percent_indicator/percent_indicator.dart';
 
 class ConsumedListItem extends StatelessWidget {
   const ConsumedListItem({
-    Key? key,
+    super.key,
     required this.thumbnail,
     required this.foodname,
     required this.expiry,
     required this.progressbar,
     required this.consuming,
     required this.remaining,
-  }) : super(key: key);
+  });
 
   final String thumbnail;
   final String foodname;
@@ -52,15 +50,39 @@ class ConsumedListItem extends StatelessWidget {
                   Expanded(
                     flex: 2,
                     child: ClipRRect(
-                      borderRadius: BorderRadius.circular(
-                          10.0), // Adjust the value as needed
-                      child: Image.network(
-                        thumbnail.toString(),
-                        fit: BoxFit.cover,
-                        width: MediaQuery.of(context).size.width * 0.1,
-                        height: MediaQuery.of(context).size.height * 0.12,
-                      ),
-                    ),
+                        borderRadius: BorderRadius.circular(
+                            10.0), // Adjust the value as needed
+                        child:
+                            // Image.network(
+                            //   thumbnail,
+                            //   errorBuilder: (context, error, stackTrace) {
+                            //     return Image.network(
+                            //         'https://picsum.photos/250?image=9');
+                            //     // return Image.asset('assets/images/fhlogo.png');
+                            //   },
+                            //   loadingBuilder: (context, child, loadingProgress) {
+                            //     if (loadingProgress == null) return child;
+                            //     return const Center(
+                            //         child: CircularProgressIndicator());
+                            //   },
+                            //   fit: BoxFit.cover,
+                            //   width: MediaQuery.of(context).size.width * 0.1,
+                            //   height: MediaQuery.of(context).size.height * 0.12,
+                            // ),
+                            Image.network(
+                          thumbnail,
+                          errorBuilder: (context, error, stackTrace) {
+                            return const Text('Could not load image');
+                          },
+                        )
+                        //     CachedNetworkImage(
+                        //   imageUrl: thumbnail,
+                        //   placeholder: (context, url) =>
+                        //       const CircularProgressIndicator(),
+                        //   errorWidget: (context, url, error) =>
+                        //       const Center(child: Icon(Icons.image)),
+                        // )),
+                        ),
                   ),
                   Expanded(
                     flex: 3,
@@ -84,7 +106,6 @@ class ConsumedListItem extends StatelessWidget {
     );
   }
 }
-
 
 class _FoodDetail extends StatelessWidget {
   const _FoodDetail({

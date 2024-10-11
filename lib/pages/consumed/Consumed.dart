@@ -307,8 +307,8 @@ class _ConsumedState extends State<Consumed> {
       // }
       print('hID from SharedPreferences: $hID'); // Debug print
       final data = await ConsumedFood().getConsumedfood(hID!);
-      // print('Fetched data: $data'); // Debug print
-      print('Fetched data: ${data.map((item) => item.toString())}');
+      print('Fetched data: $data'); // Debug print
+      // print('Fetched data: ${data.map((item) => item.toString())}');
       return data;
     } catch (e) {
       print('Error loading consumed food: $e'); // Debug print
@@ -358,7 +358,7 @@ class _ConsumedState extends State<Consumed> {
                 itemBuilder: (context, index) {
                   final item = snapshot.data![index];
                   return ConsumedListItem(
-                    thumbnail: item.url ?? 'assets/images/fhlogo.png',
+                    thumbnail: item.url,
                     foodname: item.foodName,
                     expiry: item.expired ?? '',
                     progressbar:
@@ -374,5 +374,4 @@ class _ConsumedState extends State<Consumed> {
       ),
     );
   }
-
 }

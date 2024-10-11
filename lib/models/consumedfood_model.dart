@@ -5,7 +5,7 @@ class ConsumedfoodData {
   final String? expired;
   final String consuming;
   final String remaining;
-  final String? url;
+  final String url;
 
   factory ConsumedfoodData.fromJson(Map<String, dynamic> json) {
     return ConsumedfoodData(
@@ -26,5 +26,5 @@ class ConsumedfoodData {
       this.expired,
       required this.consuming,
       required this.remaining,
-      this.url});
+      required this.url});
 }

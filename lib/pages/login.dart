@@ -59,14 +59,15 @@ class _loginState extends State<LoginScreen> {
       return;
     }
     if (result.success) {
+      context.push('/consumed');
       // Navigate to inventory
-      Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(
-            builder: (context) => Inventory(
-                  initialFoodCategory: 'all food',
-                )),
-      );
+      // Navigator.pushReplacement(
+      //   context,
+      //   MaterialPageRoute(
+      //       builder: (context) => Inventory(
+      //             initialFoodCategory: 'all food',
+      //           )),
+      // );
       print('login succesful');
     } else {
       // Show error
@@ -262,7 +263,7 @@ class _loginState extends State<LoginScreen> {
                                         child: ElevatedButton(
                                             onPressed: () {
                                               _login();
-                                              // context.push('/consumed');
+
                                               // Navigator.push(
                                               //   context,
                                               //   MaterialPageRoute(

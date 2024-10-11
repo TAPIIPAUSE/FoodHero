@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'package:foodhero/models/consumedfood_model.dart';
+import 'package:foodhero/pages/api/ApiClient.dart';
 import 'package:foodhero/utils/constants.dart';
 import 'package:http/http.dart' as http;
 import 'package:dio/dio.dart';
@@ -7,26 +8,27 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 class ConsumedFood {
   static String baseurl = "http://$myip:3000/api/v1/consume";
-
+  final authService = AuthService();
   final dio = Dio();
-
   //get
   Future<List<ConsumedfoodData>> getConsumedfood(int hID) async {
     try {
       SharedPreferences prefs = await SharedPreferences.getInstance();
       final token = prefs.getString('user_token');
 
-      print('login success ${prefs.getString('user_token')}');
-      if (token == null) {
-        throw Exception('No authentication token found');
-      }
+      print('login success $token');
+      // print('login success ${prefs.getString('user_token')}');
+      // if (token == null) {
+      //   // Token is missing or expired, need to re-login
+      //   throw Exception('Authentication required');
+      // }
 
       final res = await dio.get(
         "$baseurl/showConsumedFood",
         options: Options(
           headers: {
             'Content-Type': 'application/json',
-            'Authorization': 'Bearer ${prefs.getString('user_token')!}',
+            'Authorization': 'Bearer $token',
           },
         ),
         queryParameters: {'hID': hID},
@@ -34,9 +36,6 @@ class ConsumedFood {
 
       print("Response status: ${res.statusCode}");
       print("Response body: ${res.data}");
-
-      // final res = await http
-      //     .get(Uri.parse("http://$myip:3000/api/v1/consume/showConsumedFood"));
 
       if (res.statusCode == 200) {
         if (res.data is List) {
@@ -47,27 +46,10 @@ class ConsumedFood {
           throw Exception(
               'Unexpected response format: ${res.data.runtimeType}');
         }
-        // ConsumedfoodData data = ConsumedfoodData.fromJson(res.data);
-
-        // // SharedPreferences prefs = await SharedPreferences.getInstance();
-        // // prefs.getInt('hID');
-        // print(data);
-        // return data;
       } else {
         throw Exception('Failed to load consumed food data');
       }
-
-      // if (res.statusCode == 200) {
-      //   List<dynamic> data = res.data;
-      //   return data.map((item) => ConsumedfoodData.fromJson(item)).toList();
-      // } else {
-      //   throw Exception('Failed to load consumed food data');
-      // }
     } on DioException catch (e) {
-      // if (e.response?.statusCode == 403) {
-      //   print(
-      //       '403 Forbidden: This might be due to an invalid or expired token');
-      // }
       print('Error fetching consumed food: ${e.toString()}');
       return [];
     }
