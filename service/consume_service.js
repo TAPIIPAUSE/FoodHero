@@ -101,7 +101,27 @@ export async function mapUnitType(id) {
   return unit_type.type
 }
 
-export async function calculateConsumedData(consumedPercent,food){
+export async function mapAmountQuan(id){
+  try{
+    const food  = await Food.findOne({assigned_ID: id})
+
+    const t_a = parseFloat(food.total_amount)
+    const t_p = parseFloat(food.total_price)
+    const t_q = parseFloat(food.total_quanitity)
+    const c_a = parseFloat(food.current_amount)
+    const c_q = parseFloat(food.current_quantity)
+    const consumed_a = parseFloat(food.consumed_amount)
+    const consumed_q = parseFloat(food.consumed_quantity)
+
+    return {t_a,t_q, t_p,c_a,c_q,consumed_a, consumed_q}
+
+  }catch (error){
+    throw error
+  }
+}
+
+// This function is designed only for Complete Consume
+export async function calculateCompleteConsumedData(consumedPercent,food){
 
   var act_consumed_amount = (consumedPercent/100) * food.current_amount
   var act_consumed_quan = (consumedPercent/100) * food.current_quantity
@@ -112,6 +132,18 @@ export async function calculateConsumedData(consumedPercent,food){
   var consume_quan = parseFloat(food.consumed_quantity) + parseFloat(act_consumed_quan)
 
   return {current_amount, current_quan, consume_amount, consume_quan}
+
+}
+// This function is designed only for Confirm Consumption, Complete Consume will be calculated differently
+export async function calculateConsumedData(consumedPercent,consumed){
+
+  var act_consumed_amount = (consumedPercent/100) * consumed.current_amount
+  var act_consumed_quan = (consumedPercent/100) * consumed.current_quantity
+
+  var current_amount = parseFloat(consumed.current_amount) - parseFloat(act_consumed_amount)
+  var current_quan = parseFloat(consumed.current_quantity) - parseFloat(act_consumed_quan)
+
+  return {current_amount, current_quan}
 
 }
 

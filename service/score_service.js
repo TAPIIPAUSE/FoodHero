@@ -14,13 +14,13 @@ export async function calculateScore(totalAmount, consumedPercen, weightType) {
             } else if (consumedPercen >= 70) {
                 score = consumedPercen / 100 * 3;
             } else {
-                score = consumedPercen / 100 * -5;
+                score = (100 - consumedPercen) / 100 * -5;
             }
         } else {
-            if (consumedPercen > 80) {
+            if (consumedPercen >= 80) {
                 score = consumedPercen / 100 * 2;
             } else {
-                score = consumedPercen / 100 * -2;
+                score = (100 - consumedPercen) / 100 * -2;
             }
         }
 
@@ -103,6 +103,20 @@ export async function calculateSaveLost(food, percent){
     const t_p = parseFloat(food.total_price)
     
     const saved = (t_p*((c_a*(percent/100))/t_a))
+    const lost = (t_p*((c_a*((100 - percent)/100))/t_a))
+
+    return {saved,lost}
+}
+
+export async function calculateSaveLostForConsume(food,consume, percent){
+    const c_a = parseFloat(consume.current_amount)
+    const t_a = parseFloat(food.total_amount)
+    const t_p = parseFloat(food.total_price)
+    console.log("c_a:", c_a)
+    console.log("t_a:", t_a)
+    console.log("t_p:", t_p)
+    
+    const saved = (t_p*((c_a*(percent/100)))/t_a)
     const lost = (t_p*((c_a*((100 - percent)/100))/t_a))
 
     return {saved,lost}

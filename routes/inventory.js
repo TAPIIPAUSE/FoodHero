@@ -11,7 +11,7 @@ import { authenticateToken } from "../service/jwt_auth.js";
 import { getFoodDetailForFoodInventory } from "../service/inventory_service.js";
 import { calculateSaveLost, calculateScore } from "../service/score_service.js";
 import ConsumedFood from "../schema/inventory_module/consumedFoodSchema.js";
-import { calculateConsumedData, updateCountableConsume, updateHouseScore, updateOrgScore } from "../service/consume_service.js";
+import { calculateCompleteConsumedData, updateCountableConsume, updateHouseScore, updateOrgScore } from "../service/consume_service.js";
 import PersonalScore from "../schema/score_module/PersonalScoreSchema.js";
 import User from "../schema/user_module/userSchema.js";
 
@@ -378,7 +378,7 @@ router.post('/consume/all', authenticateToken,async (req, res) => {
       current_amount: act_current_amount,
       current_quan: act_current_quan,
       consume_amount: act_consume_amount,
-      consume_quan: act_consume_quan } = await calculateConsumedData(consume_percen, food)
+      consume_quan: act_consume_quan } = await calculateCompleteConsumedData(consume_percen, food)
 
     // 3) Update in database
     // 3.1) Update in Food Inventory Database
