@@ -19,8 +19,7 @@ import 'package:textwrap/textwrap.dart';
 class Inventory extends StatefulWidget {
   final String initialFoodCategory;
 
-  Inventory(
-      {super.key, this.initialFoodCategory = 'all food'});
+  Inventory({super.key, this.initialFoodCategory = 'all food'});
 
   @override
   State<Inventory> createState() => _InventoryState();
@@ -161,7 +160,7 @@ class _InventoryState extends State<Inventory> {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text('Today $_todayDate',
+                          Text('Today 11 October 2024',
                               style: FontsTheme.mouseMemoirs_30White()
                                   .copyWith(color: Colors.white)),
                           Text(
@@ -204,7 +203,9 @@ class _InventoryState extends State<Inventory> {
                       width: screenWidth,
                       decoration: const BoxDecoration(
                         color: AppTheme.mainBlue,
-                        borderRadius: BorderRadius.all(Radius.circular(20)),
+                        borderRadius: BorderRadius.only(
+                            topLeft: Radius.circular(20),
+                            topRight: Radius.circular(20)),
                       ),
                       child: Column(
                         children: [
@@ -264,7 +265,7 @@ class _InventoryState extends State<Inventory> {
                             height: 10,
                           ),
                           FutureBuilder<List<InventoryListItem>>(
-                              future: fetchUserFood(hID!),
+                              future: fetchUserFood(hID),
                               builder: (context, snapshot) {
                                 if (snapshot.hasError) {
                                   return Center(
@@ -276,7 +277,10 @@ class _InventoryState extends State<Inventory> {
                                 } else if (snapshot.data!.isEmpty) {
                                   return Center(
                                       child: Text(
-                                          'No food items found for this house ID.'));
+                                    'No food items found for this house ID: $hID.',
+                                    style: FontsTheme.hindBold_20()
+                                        .copyWith(color: Colors.white),
+                                  ));
                                 } else {
                                   List<InventoryListItem> foodItems =
                                       snapshot.data!;
@@ -352,7 +356,29 @@ class _InventoryState extends State<Inventory> {
                             hID: 1,
                             food_name: 'Banana',
                             img: "assets/images/banana.jpg",
-                            location: "loacation",
+                            location: 1,
+                            food_category: foodTypeFresh,
+                            isCountable: true,
+                            weight_type: 'gram',
+                            package_type: 'piece',
+                            current_amount: 5,
+                            total_amount: 7,
+                            consumed_amount: 2,
+                            current_quantity: 5,
+                            total_quanitity: 7,
+                            consumed_quantity: 2,
+                            total_price: 50,
+                            RemindDate: "5/10/2024",
+                            bestByDate: '2 weeks',
+                            progressbar: 40,
+                            consuming: 5,
+                            remaining: 5,
+                          ),
+                          const InventoryListItem(
+                            hID: 1,
+                            food_name: 'Tomato',
+                            img: "assets/images/tomatoes.jpg",
+                            location: 1,
                             food_category: foodTypeFresh,
                             isCountable: true,
                             weight_type: 'gram',
@@ -373,8 +399,30 @@ class _InventoryState extends State<Inventory> {
                           const InventoryListItem(
                             hID: 1,
                             food_name: 'Apple',
-                            img: "assets/images/apple.jpg",
-                            location: "loacation",
+                            img: "assets/images/apples.jpg",
+                            location: 1,
+                            food_category: foodTypeFresh,
+                            isCountable: true,
+                            weight_type: 'gram',
+                            package_type: 'piece',
+                            current_amount: 5,
+                            total_amount: 7,
+                            consumed_amount: 2,
+                            current_quantity: 5,
+                            total_quanitity: 7,
+                            consumed_quantity: 2,
+                            total_price: 50,
+                            RemindDate: "5/10/2024",
+                            bestByDate: '2 weeks',
+                            progressbar: 40,
+                            consuming: 5,
+                            remaining: 5,
+                          ),
+                          const InventoryListItem(
+                            hID: 1,
+                            food_name: 'Banana',
+                            img: "assets/images/banana.jpg",
+                            location: 1,
                             food_category: foodTypeFresh,
                             isCountable: true,
                             weight_type: 'gram',

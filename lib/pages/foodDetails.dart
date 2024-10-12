@@ -22,6 +22,13 @@ class foodDetails extends StatefulWidget {
   _FoodDetailsPageState createState() => _FoodDetailsPageState();
 }
 
+const double width = 300.0;
+const double height = 60.0;
+const double loginAlign = -1;
+const double signInAlign = 1;
+const Color selectedColor = Colors.white;
+const Color normalColor = Colors.black54;
+
 class _FoodDetailsPageState extends State<foodDetails> {
   final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
   FileImage? _image;
@@ -38,7 +45,9 @@ class _FoodDetailsPageState extends State<foodDetails> {
   double updateAllCost = 0;
   int consumeQuantity = 0;
   final TextEditingController foodname = TextEditingController();
-
+  late double xAlign;
+  late Color loginColor;
+  late Color signInColor;
   void _pickImage() async {
     // Implement your image picking logic here (e.g., using image_picker)
     final pickedFile =
@@ -216,6 +225,9 @@ class _FoodDetailsPageState extends State<foodDetails> {
   void initState() {
     super.initState();
     foodname.text = widget.item.food_name;
+    xAlign = loginAlign;
+    loginColor = selectedColor;
+    signInColor = normalColor;
   }
 
   @override
@@ -315,7 +327,7 @@ class _FoodDetailsPageState extends State<foodDetails> {
             SingleChildScrollView(
                 padding: const EdgeInsets.all(16),
                 child: SizedBox(
-                  height: 1000,
+                  height: 1100,
                   child: Center(
                     child: Stack(
                       children: [
@@ -408,7 +420,6 @@ class _FoodDetailsPageState extends State<foodDetails> {
                             buildWhereField('In', 'value', Icons.kitchen),
                             buildDateField('Expiration date', ''),
                             buildReminderField('30 April 2024'),
-                            // buildCountable(),
                             buildQuantityWeight(),
                             buildEachPieceField(),
                             //buildCostField(),
@@ -480,9 +491,7 @@ class _FoodDetailsPageState extends State<foodDetails> {
                               Navigator.push(
                                 context,
                                 MaterialPageRoute(
-                                  builder: (context) => Inventory(
-                                    
-                                  ),
+                                  builder: (context) => Inventory(),
                                 ),
                               );
                             },
@@ -499,142 +508,211 @@ class _FoodDetailsPageState extends State<foodDetails> {
   }
 
   void _consumeOption(BuildContext context) {
+    Widget buildConsumedQuantityUnit(String value) {
+      String pieceLabel = quantity == 1 ? "Piece" : "Pieces";
+      String boxLabel = quantity == 1 ? "Box" : "Boxes";
+      String bottleLabel = quantity == 1 ? "Bottle" : "Bottles";
+      List<String> items = [pieceLabel, boxLabel, bottleLabel];
+      String selectedValue = items[0];
+      return StatefulBuilder(
+          builder: (BuildContext context, StateSetter setState) {
+        return Padding(
+          padding: const EdgeInsets.symmetric(vertical: 8),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Container(
+                width: 100,
+                child: DropdownButtonHideUnderline(
+                  child: DropdownButton<String>(
+                    value: selectedValue,
+                    isExpanded: true,
+                    items: items.map((String item) {
+                      return DropdownMenuItem<String>(
+                        value: item,
+                        child: Text(
+                          item,
+                          style: FontsTheme.hindBold_20(),
+                        ),
+                      );
+                    }).toList(),
+                    onChanged: (String? newValue) {
+                      if (newValue != null) {
+                        setState(() {
+                          selectedValue = newValue;
+                        });
+                      }
+                    },
+                  ),
+                ),
+              ),
+            ],
+          ),
+        );
+      });
+    }
+
     showDialog(
         context: context,
         builder: (BuildContext contetxt) {
           return Transform.translate(
             offset: Offset(0, 0),
             child: Column(
-              crossAxisAlignment: CrossAxisAlignment.center,
               mainAxisAlignment: MainAxisAlignment.end,
               children: [
                 Center(
-                  child: Stack(
-                    children: [
-                      Container(
-                        height: 200,
-                        width: 375,
-                        padding: EdgeInsets.all(10),
-                        decoration: BoxDecoration(
-                          color: AppTheme.softRed,
-                          borderRadius: BorderRadius.circular(30),
-                        ),
-                        child: Container(
-                          alignment: Alignment.bottomCenter,
-                          child: TextButton(
-                            onPressed: () {
-                              addToConsumed(context);
-                              print("adding");
-                            },
-                            style: TextButton.styleFrom(
-                              backgroundColor: AppTheme.softRed,
-                              fixedSize: Size(350, 50),
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(10),
-                              ),
+                    child: Stack(
+                  children: [
+                    Container(
+                      height: 250,
+                      width: 375,
+                      padding: EdgeInsets.all(10),
+                      decoration: BoxDecoration(
+                        color: AppTheme.softRed,
+                        borderRadius: BorderRadius.circular(30),
+                      ),
+                      child: Container(
+                        alignment: Alignment.bottomCenter,
+                        child: TextButton(
+                          onPressed: () {
+                            addToConsumed(context);
+                            print("adding");
+                          },
+                          style: TextButton.styleFrom(
+                            backgroundColor: AppTheme.softRed,
+                            fixedSize: Size(350, 50),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(10),
                             ),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
+                          ),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Text(
+                                'Consume',
+                                style: FontsTheme.mouseMemoirs_30Black()
+                                    .copyWith(color: Colors.black),
+                                textAlign: TextAlign.center,
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ),
+                    Container(
+                      alignment: Alignment.topCenter,
+                      height: 180,
+                      width: 355,
+                      margin: EdgeInsets.all(10),
+                      foregroundDecoration: BoxDecoration(
+                        color: AppTheme.softBlue,
+                        borderRadius: BorderRadius.circular(30),
+                      ),
+                    ),
+                    Container(
+                        width: 350,
+                        child: Column(
+                          children: <Widget>[
+                            SizedBox(
+                              height: 30,
+                            ),
+                            // SizedBox(
+                            //   child: Container(
+                            //     width: 300,
+                            //     height: 200,
+                            //     padding: EdgeInsets.all(3),
+                            // decoration: BoxDecoration(
+                            //     borderRadius: BorderRadius.circular(5),
+                            //     color: AppTheme.softRed),
+
+                            // SizedBox(
+                            //   width: 10,
+                            //   height: 10,
+                            //   child: InkWell(
+                            //       onTap: () {
+                            //         consumeQuantity - 1;
+                            //       },
+                            //       child: Icon(
+                            //         Icons.remove,
+                            //         color: Colors.white,
+                            //         size: 16,
+                            //       )),
+                            // ),
+                            // Container(
+                            //   margin: EdgeInsets.symmetric(horizontal: 3),
+                            //   padding: EdgeInsets.symmetric(
+                            //       horizontal: 3, vertical: 2),
+                            //   decoration: BoxDecoration(
+                            //       borderRadius: BorderRadius.circular(3),
+                            //       color: Colors.white),
+                            //   child: Text(
+                            //     "$consumeQuantity",
+                            //     style: TextStyle(
+                            //         color: Colors.black, fontSize: 16),
+                            //   ),
+                            // ),
+
+                            Row(
                               children: [
-                                Text(
-                                  'Consume',
-                                  style: FontsTheme.mouseMemoirs_30Black()
-                                      .copyWith(color: Colors.black),
-                                  textAlign: TextAlign.center,
+                                SizedBox(
+                                  width: 50,
+                                ),
+                                Container(
+                                  width: 80,
+                                  height: 50,
+                                  padding: EdgeInsets.symmetric(
+                                      horizontal: 20, vertical: 8),
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(10),
+                                    color: Colors.white,
+                                  ),
+                                  child: Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Text('$quantity ',
+                                          style: FontsTheme.hindBold_20()
+                                              .copyWith(color: Colors.black)),
+                                      //   buildConsumedQuantityUnit(''),
+                                    ],
+                                  ),
                                 ),
                               ],
                             ),
-                          ),
-                        ),
-                      ),
-                      Container(
-                        alignment: Alignment.topCenter,
-                        height: 120,
-                        width: 355,
-                        margin: EdgeInsets.all(10),
-                        foregroundDecoration: BoxDecoration(
-                          color: AppTheme.softBlue,
-                          borderRadius: BorderRadius.circular(30),
-                        ),
-                      ),
-                      Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          SizedBox(
-                            height: 20,
-                          ),
-                          SizedBox(
-                            width: 80,
-                            child: Container(
-                              width: 100,
-                              height: 50,
-                              padding: EdgeInsets.all(3),
-                              decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(5),
-                                  color: AppTheme.softRed),
-                              child: Row(
-                                children: [
-                                  // SizedBox(
-                                  //   width: 10,
-                                  //   height: 10,
-                                  //   child: InkWell(
-                                  //       onTap: () {
-                                  //         consumeQuantity - 1;
-                                  //       },
-                                  //       child: Icon(
-                                  //         Icons.remove,
-                                  //         color: Colors.white,
-                                  //         size: 16,
-                                  //       )),
-                                  // ),
-                                  Container(
-                                    margin: EdgeInsets.symmetric(horizontal: 3),
-                                    padding: EdgeInsets.symmetric(
-                                        horizontal: 3, vertical: 2),
-                                    decoration: BoxDecoration(
-                                        borderRadius: BorderRadius.circular(3),
-                                        color: Colors.white),
-                                    child: Text(
-                                      "$consumeQuantity",
-                                      style: TextStyle(
-                                          color: Colors.black, fontSize: 16),
-                                    ),
-                                  ),
-                                  // SizedBox(
-                                  //   width: 10,
-                                  //   height: 10,
-                                  //   child: InkWell(
-                                  //       onTap: () {
-                                  //         consumeQuantity + 1;
-                                  //       },
-                                  //       child: Icon(
-                                  //         Icons.add,
-                                  //         color: Colors.white,
-                                  //         size: 16,
-                                  //       )),
-                                  // )
-                                ],
+
+                            SizedBox(
+                              height: 40,
+                            ),
+                            // SizedBox(
+                            //   width: 10,
+                            //   height: 10,
+                            //   child: InkWell(
+                            //       onTap: () {
+                            //         consumeQuantity + 1;
+                            //       },
+                            //       child: Icon(
+                            //         Icons.add,
+                            //         color: Colors.white,
+                            //         size: 16,
+                            //       )),
+                            // ),
+
+                            SizedBox(
+                              child: InteractiveSlider(
+                                focusedHeight: 20,
+                                startIcon:
+                                    const Icon(Icons.remove_circle_rounded),
+                                endIcon: const Icon(Icons.add_circle_rounded),
+                                min: 1.0,
+                                max: 15.0,
+                                onChanged: (value) =>
+                                    setState(() => consumeQuantity),
                               ),
                             ),
-                          ),
-                          SizedBox(
-                            width: 350,
-                            child: InteractiveSlider(
-                              focusedHeight: 20,
-                              startIcon:
-                                  const Icon(Icons.remove_circle_rounded),
-                              endIcon: const Icon(Icons.add_circle_rounded),
-                              min: 1.0,
-                              max: 15.0,
-                              onChanged: (value) =>
-                                  setState(() => consumeQuantity),
-                            ),
-                          )
-                        ],
-                      )
-                    ],
-                  ),
-                ),
+                          ],
+                        )),
+                  ],
+                )),
                 SizedBox(height: 10),
                 ElevatedButton(
                   onPressed: () {
@@ -1271,7 +1349,8 @@ class _FoodDetailsPageState extends State<foodDetails> {
     );
   }
 
-  Widget buildQuantityWeight() {
+  List<bool> countable = [true, false];
+  Widget buildCountable() {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 8),
       child: Column(
@@ -1288,6 +1367,148 @@ class _FoodDetailsPageState extends State<foodDetails> {
                 ),
                 child: Column(
                   children: [
+                    Row(
+                      children: [
+                        ToggleButtons(
+                          isSelected: countable,
+                          onPressed: (int index) {
+                            setState(() {
+                              for (int i = 0; i < countable.length; i++) {
+                                countable[i] = i == index;
+                              }
+                            });
+                          },
+                          children: <Widget>[
+                            Padding(
+                                padding: EdgeInsets.symmetric(horizontal: 20),
+                                child: Text("Option 1")),
+                            Padding(
+                                padding: EdgeInsets.symmetric(horizontal: 20),
+                                child: Text("Option 2")),
+                          ],
+                        ),
+                        Container(
+                          width: 200,
+                          height: 200,
+                          color: countable[0] ? Colors.green : Colors.orange,
+                          child: Center(
+                            child: Text(
+                              countable[0]
+                                  ? "Option 1 Selected"
+                                  : "Option 2 Selected",
+                              style:
+                                  TextStyle(color: Colors.white, fontSize: 24),
+                            ),
+                          ),
+                        ),
+                      ],
+                    )
+                  ],
+                ),
+              ),
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget buildQuantityWeight() {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 8),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          //buildQuantityButton(Icons.remove),
+
+          Stack(
+            children: [
+              Container(
+                padding: EdgeInsets.all(8),
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(15),
+                  color: AppTheme.softBlue,
+                ),
+                child: Column(
+                  children: [
+                    Center(
+                      child: Container(
+                        width: 300,
+                        height: 60,
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.all(
+                            Radius.circular(50.0),
+                          ),
+                        ),
+                        child: Stack(
+                          children: [
+                            AnimatedAlign(
+                              alignment: Alignment(xAlign, 0),
+                              duration: Duration(milliseconds: 300),
+                              child: Container(
+                                width: 300 * 0.5,
+                                height: 60,
+                                decoration: BoxDecoration(
+                                  color: Colors.lightGreen,
+                                  borderRadius: BorderRadius.all(
+                                    Radius.circular(50.0),
+                                  ),
+                                ),
+                              ),
+                            ),
+                            GestureDetector(
+                              onTap: () {
+                                setState(() {
+                                  xAlign = loginAlign;
+                                  loginColor = selectedColor;
+                                  signInColor = normalColor;
+                                });
+                              },
+                              child: Align(
+                                alignment: Alignment(-1, 0),
+                                child: Container(
+                                  width: width * 0.5,
+                                  color: Colors.transparent,
+                                  alignment: Alignment.center,
+                                  child: Text(
+                                    'Countable',
+                                    style: FontsTheme.mouseMemoirs_30Black()
+                                        .copyWith(letterSpacing: 1),
+                                  ),
+                                ),
+                              ),
+                            ),
+                            GestureDetector(
+                              onTap: () {
+                                setState(() {
+                                  xAlign = signInAlign;
+                                  signInColor = selectedColor;
+
+                                  loginColor = normalColor;
+                                });
+                              },
+                              child: Align(
+                                alignment: Alignment(1, 0),
+                                child: Container(
+                                  width: width * 0.5,
+                                  color: Colors.transparent,
+                                  alignment: Alignment.center,
+                                  child: Text(
+                                    'Uncountable',
+                                    style: FontsTheme.mouseMemoirs_30Black()
+                                        .copyWith(letterSpacing: 1),
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                    SizedBox(
+                      height: 10,
+                    ),
                     Row(
                       children: [
                         Text('Quantity',
@@ -1579,6 +1800,17 @@ class _FoodDetailsPageState extends State<foodDetails> {
                                     ),
                                     Icon(Icons.attach_money,
                                         color: Colors.green),
+                                    SizedBox(
+                                      width: 50,
+                                    ),
+                                    IconButton(
+                                      onPressed: () {},
+                                      icon: Icon(
+                                        Icons.info_rounded,
+                                        color: AppTheme.mainBlue,
+                                        size: 30,
+                                      ),
+                                    )
                                   ],
                                 )),
                           ),
@@ -1588,7 +1820,6 @@ class _FoodDetailsPageState extends State<foodDetails> {
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           //buildQuantityButton(Icons.remove),
-
                           Container(
                             padding: EdgeInsets.symmetric(
                                 horizontal: 12, vertical: 8),
@@ -1656,7 +1887,6 @@ class _FoodDetailsPageState extends State<foodDetails> {
                                               text: _updateCost().toString()),
                                           style: FontsTheme.hindBold_15())),
                                   Icon(Icons.attach_money, color: Colors.green),
-                                  Icon(Icons.info_rounded, color: AppTheme.mainBlue,),
                                 ],
                               )),
                         ],
@@ -1668,54 +1898,5 @@ class _FoodDetailsPageState extends State<foodDetails> {
         ),
       ),
     );
-  }
-
-  Widget buildConsumedQuantityUnit(String value) {
-    String pieceLabel = quantity == 1 ? "Piece" : "Pieces";
-    String boxLabel = quantity == 1 ? "Box" : "Boxes";
-    String bottleLabel = quantity == 1 ? "Bottle" : "Bottles";
-    List<String> items = [pieceLabel, boxLabel, bottleLabel];
-    String selectedValue = items[0];
-    return StatefulBuilder(
-        builder: (BuildContext context, StateSetter setState) {
-      return Padding(
-        padding: const EdgeInsets.symmetric(vertical: 8),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Row(
-              children: [
-                SizedBox(
-                  width: 70,
-                  height: 30,
-                  child: DropdownButtonHideUnderline(
-                    child: DropdownButton<String>(
-                      value: selectedValue,
-                      isExpanded: true,
-                      items: items.map((String item) {
-                        return DropdownMenuItem<String>(
-                          value: item,
-                          child: Text(
-                            item,
-                            style: FontsTheme.hindBold_20(),
-                          ),
-                        );
-                      }).toList(),
-                      onChanged: (String? newValue) {
-                        if (newValue != null) {
-                          setState(() {
-                            selectedValue = newValue;
-                          });
-                        }
-                      },
-                    ),
-                  ),
-                )
-              ],
-            )
-          ],
-        ),
-      );
-    });
   }
 }

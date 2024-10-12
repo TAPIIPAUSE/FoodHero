@@ -10,7 +10,7 @@ class InventoryListItem extends StatelessWidget {
   final int hID;
   final String food_name;
   final String img;
-  final String location;
+  final int location;
   final String food_category;
   final bool isCountable;
   final String weight_type;
@@ -28,7 +28,7 @@ class InventoryListItem extends StatelessWidget {
   // final String thumbnail;
   // final String foodname;
   // final String expiry;
-  final double progressbar;
+    final double progressbar;
    final int consuming;
    final int remaining;
   const InventoryListItem({
