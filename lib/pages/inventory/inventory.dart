@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 import 'package:foodhero/fonts.dart';
 import 'package:foodhero/main.dart';
+import 'package:foodhero/models/inventoryfood_model.dart';
 import 'package:foodhero/pages/addFoodDetails.dart';
 import 'package:foodhero/pages/api/ApiUserFood.dart';
 import 'package:foodhero/theme.dart';
@@ -14,13 +15,11 @@ import 'package:foodhero/widgets/inventory/sort_dropdown.dart';
 import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:textwrap/textwrap.dart';
 
 class Inventory extends StatefulWidget {
   final String initialFoodCategory;
 
-  Inventory(
-      {super.key, this.initialFoodCategory = 'all food'});
+  const Inventory({super.key, this.initialFoodCategory = 'all food'});
 
   @override
   State<Inventory> createState() => _InventoryState();
@@ -36,12 +35,29 @@ class _InventoryState extends State<Inventory> {
     Segment(value: 4, color: AppTheme.softOrange, label: "Nearly Expired"),
     Segment(value: 70, color: AppTheme.softRedCancleWasted, label: "Wasted"),
   ];
-  late Future<List<InventoryListItem>> inventoryItems;
-  late String _todayDate;
-  late String _weekday;
-  int _current = 0;
-  int _weekdayIndex = 0;
-  int touchedIndex = -1;
+  // late Future<List<InventoryListItem>> inventoryItems;
+  Future<List<InventoryFoodData>> _loadInventoryFood() async {
+    try {
+      final prefs = await SharedPreferences.getInstance();
+      final hID = prefs.getInt('hID');
+      print('hID from SharedPreferences: $hID'); // Debug print
+      final data = await InventoryFood().getInventoryFood(hID!);
+      print('Fetched inventory food data: $data'); // Debug print
+      // print('Fetched data: ${data.map((item) => item.toString())}');
+      return data;
+    } catch (e) {
+      print('Error loading inventory food: $e'); // Debug print
+      rethrow;
+    }
+  }
+
+  final dateFormatter = DateFormat('EEEE d MMMM yyyy');
+  late final String _todayDate;
+
+  // late String _weekday;
+  // int _current = 0;
+  // int _weekdayIndex = 0;
+  // int touchedIndex = -1;
 
   void _onItemTapped(int index) {
     setState(() {
@@ -55,13 +71,15 @@ class _InventoryState extends State<Inventory> {
   @override
   void initState() {
     super.initState();
-    SharedPreferences.getInstance().then((prefs) {
-      final hID = prefs.getInt('hID');
-      foodCategory = widget.initialFoodCategory;
-      inventoryItems = fetchUserFood(hID!);
-      this.hID = hID;
-      _updateDate();
-    });
+    _todayDate = dateFormatter.format(DateTime.now());
+    foodCategory = widget.initialFoodCategory;
+    _loadInventoryFood();
+    // SharedPreferences.getInstance().then((prefs) {
+    // final hID = prefs.getInt('hID');
+    // inventoryItems = fetchUserFood(hID!);
+    // this.hID = hID;
+    // _updateDate();
+    // });
     // final hID = prefs.getInt('hID');
     // foodCategory = widget.initialFoodCategory;
     // inventoryItems = fetchUserFood(hID!);
@@ -75,13 +93,13 @@ class _InventoryState extends State<Inventory> {
   //   return 123; // Replace with actual logic to get hID
   // }
 
-  void _updateDate() {
-    final now = DateTime.now();
-    _todayDate = DateFormat('EEEE d MMMM yyyy').format(now); // Full format
-    _weekday = weekdays[now.weekday - 1]; // Adjust for index starting from 0
-    _weekdayIndex = now.weekday - 1;
-    log(_weekdayIndex);
-  }
+  // void _updateDate() {
+  //   final now = DateTime.now();
+  //   _todayDate = DateFormat('EEEE d MMMM yyyy').format(now); // Full format
+  //   _weekday = weekdays[now.weekday - 1]; // Adjust for index starting from 0
+  //   _weekdayIndex = now.weekday - 1;
+  //   log(_weekdayIndex);
+  // }
 
   final List<String> weekdays = [
     'Monday',
@@ -263,144 +281,47 @@ class _InventoryState extends State<Inventory> {
                           const SizedBox(
                             height: 10,
                           ),
-                          FutureBuilder<List<InventoryListItem>>(
-                              future: fetchUserFood(hID!),
+                          FutureBuilder<List<InventoryFoodData>>(
+                              future: _loadInventoryFood(),
                               builder: (context, snapshot) {
-                                if (snapshot.hasError) {
+                                if (snapshot.connectionState ==
+                                    ConnectionState.waiting) {
+                                  return const Center(
+                                    child: CircularProgressIndicator(),
+                                  );
+                                } else if (snapshot.hasError) {
                                   return Center(
                                       child: Text('Error: ${snapshot.error}'));
-                                } else if (!snapshot.hasData) {
-                                  return Center(
+                                } else if (!snapshot.hasData ||
+                                    snapshot.data!.isEmpty) {
+                                  return const Center(
                                       child:
                                           Text('Loading...')); // Loading state
                                 } else if (snapshot.data!.isEmpty) {
-                                  return Center(
-                                      child: Text(
-                                          'No food items found for this house ID.'));
+                                  return const Center(
+                                      child: Text('No food items found'));
                                 } else {
-                                  List<InventoryListItem> foodItems =
-                                      snapshot.data!;
-                                  return SingleChildScrollView(
-                                    child: Column(
-                                      children: [
-                                        const SizedBox(
-                                          height: 10,
-                                        ),
-                                        ListView.builder(
-                                          scrollDirection: Axis.vertical,
-                                          shrinkWrap: true,
-                                          itemCount: foodItems.length,
-                                          itemBuilder: (context, index) {
-                                            final item = foodItems[index];
-                                            double progress =
-                                                (item.current_amount /
-                                                        item.total_quanitity) *
-                                                    100;
-                                            int remaining = (item.total_amount -
-                                                item.current_amount);
-                                            return InventoryListItem(
-                                                hID: item.hID,
-                                                food_name: foodItems[index]
-                                                    .food_name,
-                                                img:
-                                                    "assets/images/default.jpg", // You can update this based on your data
-
-                                                location: foodItems[index]
-                                                    .location,
-                                                food_category: foodItems[index]
-                                                    .food_category,
-                                                isCountable: foodItems[index]
-                                                    .isCountable,
-                                                weight_type: foodItems[index]
-                                                    .weight_type,
-                                                package_type: foodItems[index]
-                                                    .package_type,
-                                                current_amount: foodItems[index]
-                                                    .current_amount,
-                                                total_amount: foodItems[index]
-                                                    .total_amount,
-                                                consumed_amount: foodItems[
-                                                        index]
-                                                    .consumed_amount,
-                                                current_quantity:
-                                                    foodItems[index]
-                                                        .consumed_quantity,
-                                                total_quanitity:
-                                                    foodItems[index]
-                                                        .total_quanitity,
-                                                consumed_quantity:
-                                                    foodItems[index]
-                                                        .consumed_quantity,
-                                                total_price: foodItems[index]
-                                                    .total_price,
-                                                RemindDate:
-                                                    foodItems[index].RemindDate,
-                                                bestByDate: foodItems[index]
-                                                    .bestByDate, // Format as needed
-                                                progressbar: progress,
-                                                consuming: foodItems[index]
-                                                    .current_amount,
-                                                remaining: remaining);
-                                          },
-                                        ),
-                                      ],
+                                  return SizedBox(
+                                    height: 400,
+                                    child: ListView.builder(
+                                      itemCount: snapshot.data!.length,
+                                      itemBuilder: (context, index) {
+                                        final foodItem = snapshot.data![index];
+                                        return InventoryListItem(
+                                          foodname: foodItem.foodname,
+                                          img:
+                                              "https://i.pinimg.com/enabled_lo/564x/d6/8b/05/d68b0536a2f7c44968135da81675f332.jpg",
+                                          progressbar: 40,
+                                          consuming: foodItem.consuming,
+                                          remaining: foodItem.remaining,
+                                          foodid: foodItem.foodid,
+                                          expired: foodItem.expired,
+                                        );
+                                      },
                                     ),
                                   );
                                 }
-                              }),
-                          const InventoryListItem(
-                            hID: 1,
-                            food_name: 'Banana',
-                            img: "assets/images/banana.jpg",
-                            location: "loacation",
-                            food_category: foodTypeFresh,
-                            isCountable: true,
-                            weight_type: 'gram',
-                            package_type: 'piece',
-                            current_amount: 5,
-                            total_amount: 7,
-                            consumed_amount: 2,
-                            current_quantity: 5,
-                            total_quanitity: 7,
-                            consumed_quantity: 2,
-                            total_price: 50,
-                            RemindDate: "5/10/2024",
-                            bestByDate: '2 weeks',
-                            progressbar: 40,
-                            consuming: 5,
-                            remaining: 5,
-                          ),
-                          const InventoryListItem(
-                            hID: 1,
-                            food_name: 'Apple',
-                            img: "assets/images/apple.jpg",
-                            location: "loacation",
-                            food_category: foodTypeFresh,
-                            isCountable: true,
-                            weight_type: 'gram',
-                            package_type: 'piece',
-                            current_amount: 5,
-                            total_amount: 7,
-                            consumed_amount: 2,
-                            current_quantity: 5,
-                            total_quanitity: 7,
-                            consumed_quantity: 2,
-                            total_price: 50,
-                            RemindDate: "5/10/2024",
-                            bestByDate: '2 weeks',
-                            progressbar: 40,
-                            consuming: 5,
-                            remaining: 5,
-                          ),
-                          // const InventoryListItem(
-                          //    hID: 1,
-                          //   img: "assets/images/apples.jpg",
-                          //   food_name: 'Apple',
-                          //   bestByDate: '3 days left',
-                          //   progressbar: 60,
-                          //   consuming: 5,
-                          //   remaining: 7,
-                          // ),
+                              })
                         ],
                       ),
                     ),
@@ -545,43 +466,7 @@ class _InventoryState extends State<Inventory> {
                 ],
               ),
             ],
-          )
-
-          // bottomNavigationBar: BottomNavigationBar(
-          //   items: const <BottomNavigationBarItem>[
-          //     BottomNavigationBarItem(
-          //       icon: Icon(Icons.inventory),
-          //       label: 'Inventory',
-          //       backgroundColor: AppTheme.greenMainTheme,
-          //     ),
-          //     BottomNavigationBarItem(
-          //       icon: Icon(Icons.confirmation_number),
-          //       label: 'Consumed',
-          //       backgroundColor: AppTheme.greenMainTheme,
-          //     ),
-          //     BottomNavigationBarItem(
-          //       icon: Icon(Icons.business),
-          //       label: 'Inter',
-          //       backgroundColor: AppTheme.greenMainTheme,
-          //     ),
-          //     BottomNavigationBarItem(
-          //       icon: Icon(Icons.house),
-          //       label: 'Household',
-          //       backgroundColor: AppTheme.greenMainTheme,
-          //     ),
-          //   ],
-          //   currentIndex: _selectedIndex,
-          //   selectedItemColor: AppTheme.mainBlue,
-          //   onTap: _onItemTapped,
-          // ),
-          // floatingActionButton: FloatingActionButton(
-          //   onPressed: () => {},
-          //   tooltip: 'Adding food',
-          //   child: const Icon(Icons.add),
-          // ),
-          // floatingActionButtonLocation:
-          //     FloatingActionButtonLocation.miniCenterFloat,
-          ),
+          )),
     );
   }
 }

@@ -3,7 +3,6 @@ import 'package:foodhero/models/consumedfood_model.dart';
 import 'package:foodhero/models/idconsumedfood_model.dart';
 import 'package:foodhero/pages/api/ApiClient.dart';
 import 'package:foodhero/utils/constants.dart';
-import 'package:http/http.dart' as http;
 import 'package:dio/dio.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 

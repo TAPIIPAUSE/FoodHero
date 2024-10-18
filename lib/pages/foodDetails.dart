@@ -215,7 +215,7 @@ class _FoodDetailsPageState extends State<foodDetails> {
   @override
   void initState() {
     super.initState();
-    foodname.text = widget.item.food_name;
+    foodname.text = widget.item.foodname;
   }
 
   @override
