@@ -11,7 +11,7 @@ import { authenticateToken } from "../service/jwt_auth.js";
 import { getFoodDetailForFoodInventory } from "../service/inventory_service.js";
 import { calculateSaveLost, calculateScore } from "../service/score_service.js";
 import ConsumedFood from "../schema/inventory_module/consumedFoodSchema.js";
-import { calculateCompleteConsumedData, updateCountableConsume, updateHouseScore, updateOrgScore } from "../service/consume_service.js";
+import { calculateCompleteConsumedData, updateConsume, updateHouseScore, updateOrgScore, calculateCompleteWasteData } from "../service/consume_service.js";
 import PersonalScore from "../schema/score_module/PersonalScoreSchema.js";
 import User from "../schema/user_module/userSchema.js";
 
@@ -382,7 +382,7 @@ router.post('/consume/all', authenticateToken,async (req, res) => {
 
     // 3) Update in database
     // 3.1) Update in Food Inventory Database
-    await updateCountableConsume(food, act_current_amount, act_current_quan, act_consume_amount, act_consume_quan)
+    await updateConsume(food, act_current_amount, act_current_quan, act_consume_amount, act_consume_quan)
 
     const {saved: save, lost: lost} = await calculateSaveLost(food, consume_percen)
     // 3.2) Update Score in Personal Score Database
@@ -420,6 +420,76 @@ router.post('/consume/all', authenticateToken,async (req, res) => {
 
   } catch (error) {
     console.error('Error in consume all route:', error);
+    res.status(500).json({ message: 'An error occurred while processing your request' });
+  }
+});
+
+router.post('/complete_waste', authenticateToken,async (req, res) => {
+  const { fID } = req.body;
+
+  try {
+    const food = await Food.findOne({ assigned_ID: fID });
+    const user = await get_user_from_db(req, res)
+    var consume_percen = 0
+
+
+    let consumedFood = await ConsumedFood.findOne({ assigned_ID: fID, user_ID: user.assigned_ID });
+    if (!food) {
+      return res.status(404).json({ message: 'Food item not found' });
+    }
+
+    // 1) Calculate the score for consuming all of the food
+    let score = await calculateScore(food.total_amount, consume_percen, food.weight_type); // Consuming 100% of the food
+
+    // 2)Calculate Consumed Amount 
+    var {
+      current_amount: act_current_amount,
+      current_quan: act_current_quan,
+      consume_amount: act_consume_amount,
+      consume_quan: act_consume_quan } = await calculateCompleteWasteData(consume_percen, food)
+
+    // 3) Update in database
+    // 3.1) Update in Food Inventory Database
+    await updateConsume(food, act_current_amount, act_current_quan, act_consume_amount, act_consume_quan)
+
+    const {saved: save, lost: lost} = await calculateSaveLost(food, consume_percen)
+    // 3.2) Update Score in Personal Score Database
+    var personObject = new PersonalScore({
+      "userID": user.assigned_ID,
+      "hID": user.hID,
+      "orgID": user.orgID,
+      "Score": score,
+      "Consume": act_consume_amount,
+      "Waste": act_current_amount,
+      "Saved": save,
+      "Lost": lost,
+    })
+
+    console.log(score)
+
+    await personObject.save()
+
+    // 3.3) Update Score in Household Score Database
+
+    const HouseSize = await User.countDocuments({ hID: user.hID });
+
+    await updateHouseScore(user,score,HouseSize)
+
+    // 3.4) Update Score in Organization Score Database
+
+    const OrgSize = await User.countDocuments({ orgID: user.orgID });
+
+    await updateOrgScore(user,score,OrgSize)
+
+
+    res.status(200).json({
+      message: 'Food item Waste successfully',
+      scoreGained: score,
+      PersonObject: personObject
+    });
+
+  } catch (error) {
+    console.error('Error in Waste all route:', error);
     res.status(500).json({ message: 'An error occurred while processing your request' });
   }
 });

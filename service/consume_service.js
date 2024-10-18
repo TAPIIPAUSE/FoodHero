@@ -134,6 +134,25 @@ export async function calculateCompleteConsumedData(consumedPercent,food){
   return {current_amount, current_quan, consume_amount, consume_quan}
 
 }
+
+// This function is designed only for Complete Consume
+export async function calculateCompleteWasteData(consumedPercent,food){
+
+  var act_consumed_amount = food.current_amount
+  var act_consumed_quan = food.current_quantity
+
+  var current_amount = parseFloat(food.current_amount) - parseFloat(act_consumed_amount)
+  var current_quan = parseFloat(food.current_quantity) - parseFloat(act_consumed_quan)
+  var consume_amount = parseFloat(food.consumed_amount) 
+  var consume_quan = parseFloat(food.consumed_quantity) 
+
+  console.log("current_amount:", current_amount)
+  console.log("current_quan:", current_quan)
+  console.log("consume_amount:", consume_amount)
+  console.log("consume_quan:", consume_quan)
+  return {current_amount, current_quan, consume_amount, consume_quan}
+
+}
 // This function is designed only for Confirm Consumption, Complete Consume will be calculated differently
 export async function calculateConsumedData(consumedPercent,consumed){
 
@@ -147,7 +166,7 @@ export async function calculateConsumedData(consumedPercent,consumed){
 
 }
 
-export async function updateCountableConsume(food,cur_amount,cur_quan,con_a,con_quan){
+export async function updateConsume(food,cur_amount,cur_quan,con_a,con_quan){
   try{
     await Food.updateOne(
       { assigned_ID: food.assigned_ID }, // Filter by assigned_ID

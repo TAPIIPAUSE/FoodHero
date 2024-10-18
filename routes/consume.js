@@ -8,7 +8,7 @@ import { save_consume_to_db } from '../service/inventory_service.js';
 import { authenticateToken } from "../service/jwt_auth.js";
 import { getFoodDetailForConsumeInventory, mapAmountQuan } from "../service/consume_service.js";
 import { calculateScore,calculateSaveLost, calculateSaveLostForConsume } from "../service/score_service.js";
-import { calculateConsumedData, updateCountableConsume } from "../service/consume_service.js";
+import { calculateConsumedData, updateConsume } from "../service/consume_service.js";
 import PersonalScore from "../schema/score_module/PersonalScoreSchema.js";
 import User from "../schema/user_module/userSchema.js";
 import { updateHouseScore } from "../service/consume_service.js";
