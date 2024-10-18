@@ -2,6 +2,8 @@ import Food from "../schema/inventory_module/foodInventorySchema.js";
 import Location from "../schema/inventory_module/locationSchema.js";
 import PackageUnitType from "../schema/inventory_module/packageTypeSchema.js";
 import UnitType from "../schema/inventory_module/unitTypeSchema.js";
+import HouseholdScore from "../schema/score_module/HouseholdScoreSchema.js";
+import OrganizationScore from "../schema/score_module/OrganizationSchema.js";
 
 
 export async function getFoodDetailForConsumeInventory(fID, cID) {
@@ -97,4 +99,93 @@ export async function mapUnitType(id) {
   var unit_type = await UnitType.findOne({ assigned_ID })
   console.log(unit_type)
   return unit_type.type
+}
+
+export async function mapAmountQuan(id){
+  try{
+    const food  = await Food.findOne({assigned_ID: id})
+
+    const t_a = parseFloat(food.total_amount)
+    const t_p = parseFloat(food.total_price)
+    const t_q = parseFloat(food.total_quanitity)
+    const c_a = parseFloat(food.current_amount)
+    const c_q = parseFloat(food.current_quantity)
+    const consumed_a = parseFloat(food.consumed_amount)
+    const consumed_q = parseFloat(food.consumed_quantity)
+
+    return {t_a,t_q, t_p,c_a,c_q,consumed_a, consumed_q}
+
+  }catch (error){
+    throw error
+  }
+}
+
+// This function is designed only for Complete Consume
+export async function calculateCompleteConsumedData(consumedPercent,food){
+
+  var act_consumed_amount = (consumedPercent/100) * food.current_amount
+  var act_consumed_quan = (consumedPercent/100) * food.current_quantity
+
+  var current_amount = parseFloat(food.current_amount) - parseFloat(act_consumed_amount)
+  var current_quan = parseFloat(food.current_quantity) - parseFloat(act_consumed_quan)
+  var consume_amount = parseFloat(food.consumed_amount) + parseFloat(act_consumed_amount)
+  var consume_quan = parseFloat(food.consumed_quantity) + parseFloat(act_consumed_quan)
+
+  return {current_amount, current_quan, consume_amount, consume_quan}
+
+}
+// This function is designed only for Confirm Consumption, Complete Consume will be calculated differently
+export async function calculateConsumedData(consumedPercent,consumed){
+
+  var act_consumed_amount = (consumedPercent/100) * consumed.current_amount
+  var act_consumed_quan = (consumedPercent/100) * consumed.current_quantity
+
+  var current_amount = parseFloat(consumed.current_amount) - parseFloat(act_consumed_amount)
+  var current_quan = parseFloat(consumed.current_quantity) - parseFloat(act_consumed_quan)
+
+  return {current_amount, current_quan}
+
+}
+
+export async function updateCountableConsume(food,cur_amount,cur_quan,con_a,con_quan){
+  try{
+    await Food.updateOne(
+      { assigned_ID: food.assigned_ID }, // Filter by assigned_ID
+      {
+        $set: {
+          current_amount: cur_amount,
+          current_quantity: cur_quan,
+          consumed_amount: con_a,
+          consumed_quantity: con_quan,
+        },
+      }
+    );
+  }catch (error){
+    console.log("Error updating food inventory when consuming:", error)
+    throw error
+  }
+
+}
+
+export async function updateHouseScore(user,score, housesize){
+  const per_house_capita = score/housesize
+
+  var HouseObject = new HouseholdScore({
+    "userID": user.assigned_ID,
+    "hID": user.hID,
+    "Score": per_house_capita
+  })
+
+  await HouseObject.save()
+}
+
+export async function updateOrgScore(user,score, orgSize){
+  const per_org_capita = score/orgSize
+
+  var OrganizationObject = new OrganizationScore({
+    "orgID": user.hID,
+    "Score": per_org_capita
+  })
+
+  await OrganizationObject.save()
 }
