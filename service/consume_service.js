@@ -1,4 +1,5 @@
 import Food from "../schema/inventory_module/foodInventorySchema.js";
+import Location from "../schema/inventory_module/locationSchema.js";
 import PackageUnitType from "../schema/inventory_module/packageTypeSchema.js";
 import UnitType from "../schema/inventory_module/unitTypeSchema.js";
 
@@ -52,6 +53,34 @@ export async function getFoodDetailForConsumeInventory(fID, cID) {
   } catch (error) {
     console.error("Error checking consumed:", error);
     throw error; //
+  }
+}
+
+export async function getFoodDetailForConsumeDetail(fID,cID){
+  try{
+    var assigned_ID = fID
+    var food = await Food.findOne({ assigned_ID })
+    var location = await Location.findOne({assigned_ID: food.location})
+
+    var package_id = food.package_type
+    var package_type = await mapPackageType(package_id)
+
+    var food_name = food.food_name
+    var location = location.location
+    var unit = ""
+    var saved_msg = ""
+    var lost_msg = ""
+
+    if(food.isCountable){
+    
+    
+    
+
+      
+    }
+
+  }catch(error){
+    throw error
   }
 }
 
