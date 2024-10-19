@@ -119,6 +119,7 @@ It also generate the hID based on the current pointer in House model.
 
 ### 1.Add Food (POST)
 
+Method: POST
 
 ```
 URL: http://localhost:3000/api/v1/inventory/addFood
@@ -170,8 +171,10 @@ For Uncountable Food
 
 ### 2. Consume Food
 
+Method: POST
+
 ```
-URL: http://localhost:3000/api/v1/inventory/addFood
+URL: http://localhost:3000/api/v1/inventory/consume
 ```
 
 JSON's body
@@ -182,6 +185,67 @@ JSON's body
     "retrievedQuantity": null
 }
 
+```
+
+### 3. Complete Consume
+
+Method: POST
+
+```
+
+URL: http://localhost:3000/api/v1/inventory/consume/all
+
+```
+
+```
+{
+    "fID": 9,
+}
+```
+
+### 4. Complete Waste
+
+Method: POST
+
+```
+URL: http://localhost:3000/api/v1/inventory/complete_waste
+```
+
+```
+{
+    "fID": 9,
+}
+```
+
+## Consume Module
+
+### 1.Show Consumed Food
+
+Method: GET
+
+```
+URL: http://localhost:3000/api/v1/consume/showConsumedFood
+```
+
+```
+{
+    
+}
+```
+
+### 2.Confirm Consume
+
+Method: POST
+
+```
+URL: http://localhost:3000/api/v1/consume/confirmConsume
+```
+
+```
+{
+    "cID": integer,
+    "Percent": Integer (0 - 100)
+}
 ```
 
 
