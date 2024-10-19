@@ -79,35 +79,14 @@ class _ConsumedListItemState extends State<ConsumedListItem> {
                         borderRadius: BorderRadius.circular(
                             10.0), // Adjust the value as needed
                         child:
-                            // Image.network(
-                            //   thumbnail,
-                            //   errorBuilder: (context, error, stackTrace) {
-                            //     return Image.network(
-                            //         'https://picsum.photos/250?image=9');
-                            //     // return Image.asset('assets/images/fhlogo.png');
-                            //   },
-                            //   loadingBuilder: (context, child, loadingProgress) {
-                            //     if (loadingProgress == null) return child;
-                            //     return const Center(
-                            //         child: CircularProgressIndicator());
-                            //   },
-                            //   fit: BoxFit.cover,
-                            //   width: MediaQuery.of(context).size.width * 0.1,
-                            //   height: MediaQuery.of(context).size.height * 0.12,
-                            // ),
                             Image.network(
                           widget.thumbnail,
+                          fit: BoxFit.cover,
                           errorBuilder: (context, error, stackTrace) {
-                            return const Text('Could not load image');
+                            return Image.network(
+                                'https://i.pinimg.com/enabled_lo/564x/e3/e0/fc/e3e0fc91721d4e8dd890cea9f8c86651.jpg');
                           },
                         )
-                        //     CachedNetworkImage(
-                        //   imageUrl: thumbnail,
-                        //   placeholder: (context, url) =>
-                        //       const CircularProgressIndicator(),
-                        //   errorWidget: (context, url, error) =>
-                        //       const Center(child: Icon(Icons.image)),
-                        // )),
                         ),
                   ),
                   Expanded(

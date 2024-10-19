@@ -124,6 +124,10 @@ class InventoryListItem extends StatelessWidget {
                         fit: BoxFit.cover,
                         width: MediaQuery.of(context).size.width * 0.1,
                         height: MediaQuery.of(context).size.height * 0.12,
+                        errorBuilder: (context, error, stackTrace) {
+                          return Image.network(
+                              "https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcTKrjn08eRggR5MYJ-xIoB_bIv0Rlb8PjpKKZal_Vw6y7Yb-Ayz&usqp=CAU");
+                        },
                       ),
                     ),
                   ),
@@ -227,7 +231,7 @@ class _FoodDetail extends StatelessWidget {
                   children: [
                     const Padding(padding: EdgeInsets.symmetric(vertical: 2.0)),
                     Text(
-                      DateFormat('yyyy-MM-dd').format(expiry),
+                      'Expired ${DateFormat('dd/MM/yyyy').format(expiry)}',
                       // expiry,
                       style: const TextStyle(fontSize: 10.0),
                     ),

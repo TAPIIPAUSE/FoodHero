@@ -309,8 +309,7 @@ class _InventoryState extends State<Inventory> {
                                         final foodItem = snapshot.data![index];
                                         return InventoryListItem(
                                           foodname: foodItem.foodname,
-                                          img:
-                                              "https://i.pinimg.com/enabled_lo/564x/d6/8b/05/d68b0536a2f7c44968135da81675f332.jpg",
+                                          img: foodItem.url,
                                           progressbar: 40,
                                           consuming: foodItem.consuming,
                                           remaining: foodItem.remaining,

@@ -77,7 +77,7 @@ class _ConsumedState extends State<Consumed> {
                   final item = snapshot.data![index];
                   return ConsumedListItem(
                     cID: item.consumeId,
-                    thumbnail: "",
+                    thumbnail: item.url,
                     foodname: item.foodName,
                     expiry: item.expired ?? '',
                     progressbar:
