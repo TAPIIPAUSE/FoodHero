@@ -7,12 +7,12 @@ import Organization from "../schema/user_module/organizationSchema.js";
 export async function get_user_from_db(req, res) {
   try {
     const target_user = req.user.username;
-    console.log("Target User: ", target_user);
+    
     // JWT verify method is used for verify the token the take two arguments one is token string value,
     // and second one is secret key for matching the token is valid or not.
     // The validation method returns a decode object that we stored the token in.
     const existingUser = await User.findOne({ username: target_user });
-    console.log("This is existing user:", existingUser)
+  
     if (!existingUser) {
       console.log(
         "Token username doesn't match with the current username available in database."

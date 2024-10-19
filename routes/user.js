@@ -158,7 +158,7 @@ router.post('/create_house',authenticateToken,async (req,res) => {
   }
 })
 
-router.post('/join_house',authenticateToken, async (req, res) => {
+router.post('/join_house',authenticateToken,async (req, res) => {
   const { housename } = req.body;
   const user = await get_user_from_db(req, res);
   const house = await get_housename_from_db(housename);
