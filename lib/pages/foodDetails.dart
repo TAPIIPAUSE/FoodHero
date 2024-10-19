@@ -1413,6 +1413,7 @@ class _FoodDetailsPageState extends State<foodDetails> {
     );
   }
 
+  bool isVisible = true;
   Widget buildQuantityWeight() {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 8),
@@ -1449,8 +1450,11 @@ class _FoodDetailsPageState extends State<foodDetails> {
                               child: Container(
                                 width: 300 * 0.5,
                                 height: 60,
+                                margin: const EdgeInsets.all(4),
                                 decoration: BoxDecoration(
-                                  color: Colors.lightGreen,
+                                  color: AppTheme.softGreen,
+                                  border: Border.all(
+                                      color: AppTheme.greenMainTheme, width: 4),
                                   borderRadius: BorderRadius.all(
                                     Radius.circular(50.0),
                                   ),
@@ -1463,6 +1467,7 @@ class _FoodDetailsPageState extends State<foodDetails> {
                                   xAlign = loginAlign;
                                   loginColor = selectedColor;
                                   signInColor = normalColor;
+                                  isVisible = true;
                                 });
                               },
                               child: Align(
@@ -1484,8 +1489,8 @@ class _FoodDetailsPageState extends State<foodDetails> {
                                 setState(() {
                                   xAlign = signInAlign;
                                   signInColor = selectedColor;
-
                                   loginColor = normalColor;
+                                  isVisible = false;
                                 });
                               },
                               child: Align(
@@ -1509,63 +1514,66 @@ class _FoodDetailsPageState extends State<foodDetails> {
                     SizedBox(
                       height: 10,
                     ),
-                    Row(
-                      children: [
-                        Text('Quantity',
-                            style: FontsTheme.mouseMemoirs_30Black()),
-                        SizedBox(
-                          width: 40,
-                        ),
-                        Column(
-                          children: [
-                            Container(
-                              width: 200,
-                              padding: EdgeInsets.symmetric(
-                                  horizontal: 12, vertical: 8),
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(10),
-                                color: Colors.white,
-                              ),
-                              child: Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: [
-                                  Text('$quantity ',
-                                      style: FontsTheme.hindBold_20()),
-                                  buildQuantityUnit('')
-                                ],
-                              ),
-                            ),
-                            SliderTheme(
-                              data: SliderTheme.of(context).copyWith(
-                                trackHeight: 10.0,
-                                thumbShape: SliderComponentShape.noThumb,
-                                overlayShape: RoundSliderOverlayShape(
-                                    overlayRadius: 24.0),
-                                activeTrackColor: Colors.orange,
-                                inactiveTrackColor: Colors.orange[100],
-                                thumbColor: Colors.white,
-                                overlayColor: Colors.orange.withAlpha(32),
-                              ),
-                              child: Slider(
-                                value: quantity.toDouble(),
-                                min: 1,
-                                max: 100,
-                                divisions: 100,
-                                onChanged: (value) {
-                                  setState(() {
-                                    quantity = value.toInt();
-                                    _updateAllCost();
-                                    consumeQuantity = quantity;
-                                  });
-                                },
-                              ),
-                            ),
-                          ],
-                        ),
-                      ],
-                    ),
 
+                    Visibility(
+                      visible: isVisible,
+                      child: Row(
+                        children: [
+                          Text('Quantity',
+                              style: FontsTheme.mouseMemoirs_30Black()),
+                          SizedBox(
+                            width: 40,
+                          ),
+                          Column(
+                            children: [
+                              Container(
+                                width: 200,
+                                padding: EdgeInsets.symmetric(
+                                    horizontal: 12, vertical: 8),
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(10),
+                                  color: Colors.white,
+                                ),
+                                child: Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Text('$quantity ',
+                                        style: FontsTheme.hindBold_20()),
+                                    buildQuantityUnit('')
+                                  ],
+                                ),
+                              ),
+                              SliderTheme(
+                                data: SliderTheme.of(context).copyWith(
+                                  trackHeight: 10.0,
+                                  thumbShape: SliderComponentShape.noThumb,
+                                  overlayShape: RoundSliderOverlayShape(
+                                      overlayRadius: 24.0),
+                                  activeTrackColor: Colors.orange,
+                                  inactiveTrackColor: Colors.orange[100],
+                                  thumbColor: Colors.white,
+                                  overlayColor: Colors.orange.withAlpha(32),
+                                ),
+                                child: Slider(
+                                  value: quantity.toDouble(),
+                                  min: 1,
+                                  max: 100,
+                                  divisions: 100,
+                                  onChanged: (value) {
+                                    setState(() {
+                                      quantity = value.toInt();
+                                      _updateAllCost();
+                                      consumeQuantity = quantity;
+                                    });
+                                  },
+                                ),
+                              ),
+                            ],
+                          ),
+                        ],
+                      ),
+                    ),
                     //Weight
                     Row(
                       children: [

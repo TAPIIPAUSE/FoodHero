@@ -57,8 +57,8 @@ final GoRouter _router = GoRouter(
           builder: (BuildContext context, GoRouterState state) {
             final foodCategory =
                 state.pathParameters['foodCategory'] ?? 'All food';
-                // SharedPreferences prefs = await SharedPreferences.getInstance();
-                // final hID = ;
+            // SharedPreferences prefs = await SharedPreferences.getInstance();
+            // final hID = ;
             return
                 // FutureBuilder<int>(
                 //   future: fetchHId(), // Fetch hID from database

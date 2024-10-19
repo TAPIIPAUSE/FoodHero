@@ -261,16 +261,17 @@ class _loginState extends State<LoginScreen> {
                                         width: 250,
                                         child: ElevatedButton(
                                             onPressed: () {
-                                              _login();
-                                              // Navigator.push(
-                                              //   context,
-                                              //   MaterialPageRoute(
-                                              //       builder: (context) =>
-                                              //           Inventory(
-                                              //             hID: 0,
-                                              //           )),
-                                              // );
-                                              // print(_emailController);
+                                              //_login();
+                                              Navigator.push(
+                                                context,
+                                                MaterialPageRoute(
+                                                    builder: (context) =>
+                                                        Inventory(
+                                                          initialFoodCategory:
+                                                              'all food',
+                                                        )),
+                                              );
+                                              print(_emailController);
                                               print('login tapped');
                                             },
                                             style: TextButton.styleFrom(
