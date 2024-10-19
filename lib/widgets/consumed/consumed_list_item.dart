@@ -9,16 +9,16 @@ import 'package:foodhero/pages/consumed/consumedDetails.dart';
 import 'package:foodhero/theme.dart';
 
 class ConsumedListItem extends StatefulWidget {
-  const ConsumedListItem({
-    super.key,
-    required this.thumbnail,
-    required this.foodname,
-    required this.expiry,
-    required this.progressbar,
-    required this.consuming,
-    required this.remaining,
-    required this.cID,
-  });
+  const ConsumedListItem(
+      {super.key,
+      required this.thumbnail,
+      required this.foodname,
+      required this.expiry,
+      required this.progressbar,
+      required this.consuming,
+      required this.remaining,
+      required this.cID,
+      required this.isCountable});
 
   final String thumbnail;
   final String foodname;
@@ -27,6 +27,7 @@ class ConsumedListItem extends StatefulWidget {
   final String consuming;
   final String remaining;
   final int cID;
+  final bool isCountable;
 
   @override
   State<ConsumedListItem> createState() => _ConsumedListItemState();
@@ -55,6 +56,8 @@ class _ConsumedListItemState extends State<ConsumedListItem> {
           MaterialPageRoute(
             builder: (context) => ConsumedDetails(
               cID: widget.cID,
+              isCountable: widget.isCountable 
+              
             ),
           ),
         );
@@ -78,16 +81,14 @@ class _ConsumedListItemState extends State<ConsumedListItem> {
                     child: ClipRRect(
                         borderRadius: BorderRadius.circular(
                             10.0), // Adjust the value as needed
-                        child:
-                            Image.network(
+                        child: Image.network(
                           widget.thumbnail,
                           fit: BoxFit.cover,
                           errorBuilder: (context, error, stackTrace) {
                             return Image.network(
                                 'https://i.pinimg.com/enabled_lo/564x/e3/e0/fc/e3e0fc91721d4e8dd890cea9f8c86651.jpg');
                           },
-                        )
-                        ),
+                        )),
                   ),
                   Expanded(
                     flex: 3,

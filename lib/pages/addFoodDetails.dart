@@ -1,7 +1,6 @@
 import 'dart:io';
 import 'dart:async';
 import 'package:flutter/material.dart';
-import 'package:foodhero/pages/api/ApiUserFood.dart';
 import 'package:foodhero/pages/inventory/inventory.dart';
 import 'package:foodhero/theme.dart';
 import 'package:foodhero/fonts.dart';
@@ -12,25 +11,35 @@ class addFoodDetails extends StatefulWidget {
   _AddFoodDetailsPageState createState() => _AddFoodDetailsPageState();
 }
 
+// For countable uncountable option
+const double width = 300.0;
+const double height = 60.0;
+const double loginAlign = -1;
+const double signInAlign = 1;
+const Color selectedColor = Colors.white;
+const Color normalColor = Colors.black54;
+
 class _AddFoodDetailsPageState extends State<addFoodDetails> {
-  String itemName = 'Banana';
-  String category = 'Fresh Food';
-  String storageLocation = 'Refrigerator';
-  DateTime expirationDate = DateTime(2024, 4, 24);
+  FileImage? _image;
+  // Image provider for the selected image
+  bool _isLoading = false; // Flag to indicate image loading state
+  bool _showImageOption = false;
+  DateTime expirationDate = DateTime(2024);
+  DateTime reminderDate = DateTime(2024);
   int quantity = 1;
   double weight = 1; // in grams
-  double costPerPiece = 0;
-  double totalCost = 160;
-
-  ImageProvider? _image; // Image provider for the selected image
-  bool _isLoading = false; // Flag to indicate image loading state
-  bool _chooseImageOption = false;
-  bool _showImageOption = false;
-  DateTime reminderDate = DateTime(2024);
-
   String weightReduced = ''; //make it proper for the decimals
   double allCost = 0;
+  double costPerPiece = 0;
   double updateAllCost = 0;
+  int consumeQuantity = 0;
+  final TextEditingController foodname = TextEditingController();
+
+  // For countable uncountable option
+  late double xAlign;
+  late Color loginColor;
+  late Color signInColor;
+
   void _pickImage() async {
     // Implement your image picking logic here (e.g., using image_picker)
     final pickedFile =
@@ -150,6 +159,14 @@ class _AddFoodDetailsPageState extends State<addFoodDetails> {
         );
       },
     );
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    xAlign = loginAlign;
+    loginColor = selectedColor;
+    signInColor = normalColor;
   }
 
   @override
@@ -534,19 +551,8 @@ class _AddFoodDetailsPageState extends State<addFoodDetails> {
     );
   }
 
+  bool isVisible = true;
   Widget buildQuantityWeight() {
-    String Piece = "Piece";
-    if (quantity == 1) {
-      Piece = "Piece";
-    } else if (quantity > 1) {
-      Piece = "Pieces";
-    }
-    String Gram = "Gram";
-    if (weight == 1) {
-      Gram = "Gram";
-    } else if (weight > 1) {
-      Gram = "Grams";
-    }
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 8),
       child: Column(
@@ -563,68 +569,159 @@ class _AddFoodDetailsPageState extends State<addFoodDetails> {
                 ),
                 child: Column(
                   children: [
-                    Row(
-                      children: [
-                        Text('Quantity',
-                            style: FontsTheme.mouseMemoirs_30Black()),
-                        Column(
+                    Center(
+                      child: Container(
+                        width: 300,
+                        height: 60,
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.all(
+                            Radius.circular(50.0),
+                          ),
+                        ),
+                        child: Stack(
                           children: [
-                            Container(
-                              width: 120,
-                              padding: EdgeInsets.symmetric(
-                                  horizontal: 12, vertical: 8),
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(10),
-                                color: Colors.white,
-                              ),
-                              child: Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: [
-                                  Text('$quantity ',
-                                      style: FontsTheme.hindBold_20()),
-                                  Text(Piece, style: FontsTheme.hindBold_20()),
-                                ],
+                            AnimatedAlign(
+                              alignment: Alignment(xAlign, 0),
+                              duration: Duration(milliseconds: 300),
+                              child: Container(
+                                width: 300 * 0.5,
+                                height: 60,
+                                margin: const EdgeInsets.all(4),
+                                decoration: BoxDecoration(
+                                  color: AppTheme.softGreen,
+                                  border: Border.all(
+                                      color: AppTheme.greenMainTheme, width: 4),
+                                  borderRadius: BorderRadius.all(
+                                    Radius.circular(50.0),
+                                  ),
+                                ),
                               ),
                             ),
-                            SliderTheme(
-                              data: SliderTheme.of(context).copyWith(
-                                trackHeight: 10.0,
-                                thumbShape: SliderComponentShape.noThumb,
-                                overlayShape: RoundSliderOverlayShape(
-                                    overlayRadius: 24.0),
-                                activeTrackColor: Colors.orange,
-                                inactiveTrackColor: Colors.orange[100],
-                                thumbColor: Colors.white,
-                                overlayColor: Colors.orange.withAlpha(32),
+                            GestureDetector(
+                              onTap: () {
+                                setState(() {
+                                  xAlign = loginAlign;
+                                  loginColor = selectedColor;
+                                  signInColor = normalColor;
+                                  isVisible = true;
+                                });
+                              },
+                              child: Align(
+                                alignment: Alignment(-1, 0),
+                                child: Container(
+                                  width: width * 0.5,
+                                  color: Colors.transparent,
+                                  alignment: Alignment.center,
+                                  child: Text(
+                                    'Countable',
+                                    style: FontsTheme.mouseMemoirs_30Black()
+                                        .copyWith(letterSpacing: 1),
+                                  ),
+                                ),
                               ),
-                              child: Slider(
-                                value: quantity.toDouble(),
-                                min: 1,
-                                max: 100,
-                                divisions: 100,
-                                onChanged: (value) {
-                                  setState(() {
-                                    quantity = value.toInt();
-                                    _updateAllCost();
-                                  });
-                                },
+                            ),
+                            GestureDetector(
+                              onTap: () {
+                                setState(() {
+                                  xAlign = signInAlign;
+                                  signInColor = selectedColor;
+                                  loginColor = normalColor;
+                                  isVisible = false;
+                                });
+                              },
+                              child: Align(
+                                alignment: Alignment(1, 0),
+                                child: Container(
+                                  width: width * 0.5,
+                                  color: Colors.transparent,
+                                  alignment: Alignment.center,
+                                  child: Text(
+                                    'Uncountable',
+                                    style: FontsTheme.mouseMemoirs_30Black()
+                                        .copyWith(letterSpacing: 1),
+                                  ),
+                                ),
                               ),
                             ),
                           ],
                         ),
-                      ],
+                      ),
                     ),
-
+                    SizedBox(
+                      height: 10,
+                    ),
+                    Visibility(
+                      visible: isVisible,
+                      child: Row(
+                        children: [
+                          Text('Quantity',
+                              style: FontsTheme.mouseMemoirs_30Black()),
+                          SizedBox(
+                            width: 40,
+                          ),
+                          Column(
+                            children: [
+                              Container(
+                                width: 200,
+                                padding: EdgeInsets.symmetric(
+                                    horizontal: 12, vertical: 8),
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(10),
+                                  color: Colors.white,
+                                ),
+                                child: Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Text('$quantity ',
+                                        style: FontsTheme.hindBold_20()),
+                                    buildQuantityUnit('')
+                                  ],
+                                ),
+                              ),
+                              SliderTheme(
+                                data: SliderTheme.of(context).copyWith(
+                                  trackHeight: 10.0,
+                                  thumbShape: SliderComponentShape.noThumb,
+                                  overlayShape: RoundSliderOverlayShape(
+                                      overlayRadius: 24.0),
+                                  activeTrackColor: Colors.orange,
+                                  inactiveTrackColor: Colors.orange[100],
+                                  thumbColor: Colors.white,
+                                  overlayColor: Colors.orange.withAlpha(32),
+                                ),
+                                child: Slider(
+                                  value: quantity.toDouble(),
+                                  min: 1,
+                                  max: 100,
+                                  divisions: 100,
+                                  onChanged: (value) {
+                                    setState(() {
+                                      quantity = value.toInt();
+                                      _updateAllCost();
+                                      consumeQuantity = quantity;
+                                    });
+                                  },
+                                ),
+                              ),
+                            ],
+                          ),
+                        ],
+                      ),
+                    ),
                     //Weight
                     Row(
                       children: [
                         Text('Weight',
                             style: FontsTheme.mouseMemoirs_30Black()),
+                        SizedBox(
+                          width: 55,
+                        ),
                         Column(
                           children: [
                             Container(
-                              width: 180,
+                              width: 200,
                               padding: EdgeInsets.symmetric(
                                   horizontal: 12, vertical: 8),
                               decoration: BoxDecoration(
@@ -637,7 +734,7 @@ class _AddFoodDetailsPageState extends State<addFoodDetails> {
                                 children: [
                                   Text('$weightReduced ',
                                       style: FontsTheme.hindBold_20()),
-                                  Text(Gram, style: FontsTheme.hindBold_20()),
+                                  buildWeightUnit('')
                                 ],
                               ),
                             ),
@@ -680,119 +777,210 @@ class _AddFoodDetailsPageState extends State<addFoodDetails> {
     );
   }
 
+  Widget buildQuantityUnit(String value) {
+    String pieceLabel = quantity == 1 ? "Piece" : "Pieces";
+    String boxLabel = quantity == 1 ? "Box" : "Boxes";
+    String bottleLabel = quantity == 1 ? "Bottle" : "Bottles";
+    List<String> items = [pieceLabel, boxLabel, bottleLabel];
+    String selectedValue = items[0];
+    return StatefulBuilder(
+        builder: (BuildContext context, StateSetter setState) {
+      return Padding(
+        padding: const EdgeInsets.symmetric(vertical: 8),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Container(
+                padding: EdgeInsets.symmetric(horizontal: 10),
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(10),
+                  color: Colors.white,
+                ),
+                child: Row(
+                  children: [
+                    SizedBox(
+                      width: 100,
+                      height: 30,
+                      child: DropdownButtonHideUnderline(
+                        child: DropdownButton<String>(
+                          value: selectedValue,
+                          isExpanded: true,
+                          items: items.map((String item) {
+                            return DropdownMenuItem<String>(
+                              value: item,
+                              child: Text(
+                                item,
+                                style: FontsTheme.hindBold_20(),
+                              ),
+                            );
+                          }).toList(),
+                          onChanged: (String? newValue) {
+                            if (newValue != null) {
+                              setState(() {
+                                selectedValue = newValue;
+                              });
+                            }
+                          },
+                        ),
+                      ),
+                    )
+                  ],
+                ))
+          ],
+        ),
+      );
+    });
+  }
+
+  Widget buildWeightUnit(String value) {
+    String Gram = "Gram";
+    if (weight == 1) {
+      Gram = "Gram";
+    } else if (weight > 1) {
+      Gram = "Grams";
+    }
+    List<String> items = [Gram];
+    String selectedValue = items[0];
+    return StatefulBuilder(
+        builder: (BuildContext context, StateSetter setState) {
+      return Padding(
+        padding: const EdgeInsets.symmetric(vertical: 8),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Container(
+                padding: EdgeInsets.symmetric(horizontal: 10),
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(10),
+                  color: Colors.white,
+                ),
+                child: Row(
+                  children: [
+                    SizedBox(
+                      width: 100,
+                      height: 30,
+                      child: DropdownButtonHideUnderline(
+                        child: DropdownButton<String>(
+                          value: selectedValue,
+                          isExpanded: true,
+                          items: items.map((String item) {
+                            return DropdownMenuItem<String>(
+                              value: item,
+                              child: Text(
+                                item,
+                                style: FontsTheme.hindBold_20(),
+                              ),
+                            );
+                          }).toList(),
+                          onChanged: (String? newValue) {
+                            if (newValue != null) {
+                              setState(() {
+                                selectedValue = newValue;
+                              });
+                            }
+                          },
+                        ),
+                      ),
+                    )
+                  ],
+                ))
+          ],
+        ),
+      );
+    });
+  }
+
   Widget buildEachPieceField() {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 8),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Container(
-              padding: EdgeInsets.all(8),
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(10),
-                color: Colors.white,
-              ),
-              child: Column(
-                children: [
-                  Row(
-                    children: [
-                      //buildQuantityButton(Icons.remove),
-                      Expanded(
-                        flex: 5,
-                        child: Container(
-                            padding: EdgeInsets.symmetric(
-                                horizontal: 12, vertical: 8),
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(10),
-                              color: Colors.white,
-                            ),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              children: [
-                                Text('Each piece',
-                                    style: FontsTheme.mouseMemoirs_30Black()),
-                                SizedBox(width: 20),
-                                SizedBox(
-                                  width: 100,
-                                  child: TextField(
-                                      decoration: InputDecoration(
-                                        labelText: 'All Cost',
-                                      ),
-                                      keyboardType: TextInputType.number,
-                                      onChanged: (value) {
-                                        setState(() {
-                                          allCost =
-                                              double.tryParse(value) ?? allCost;
-                                          _updateAllCost();
-                                        });
-                                      },
-                                      style: FontsTheme.hindBold_15()),
-                                ),
-                                Icon(Icons.attach_money, color: Colors.green),
-                                SizedBox(
-                                  width: 50,
-                                ),
-                                IconButton(
-                                  onPressed: () {},
-                                  icon: Icon(
-                                    Icons.info_rounded,
-                                    color: AppTheme.mainBlue,
-                                    size: 30,
-                                  ),
-                                )
-                              ],
-                            )),
-                      )
-                    ],
+      child: SingleChildScrollView(
+        child: Form(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Container(
+                  padding: EdgeInsets.all(8),
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(10),
+                    color: Colors.white,
                   ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
+                  child: Column(
                     children: [
-                      //buildQuantityButton(Icons.remove),
-
-                      Container(
-                        padding:
-                            EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(10),
-                          color: Colors.white,
-                        ),
-                        child: SizedBox(
-                            width: 100,
-                            child: TextField(
-                                decoration: InputDecoration(
-                                  labelText: 'Weight',
+                      Row(
+                        children: [
+                          //buildQuantityButton(Icons.remove),
+                          Expanded(
+                            flex: 5,
+                            child: Container(
+                                padding: EdgeInsets.symmetric(
+                                    horizontal: 12, vertical: 8),
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(10),
+                                  color: Colors.white,
                                 ),
-                                keyboardType: TextInputType.number,
-                                onChanged: (value) {
-                                  if (value.isNotEmpty) {
-                                    setState(() {
-                                      costPerPiece = double.tryParse(value) ??
-                                          costPerPiece;
-                                      _updateAllCost();
-                                    });
-                                  }
-                                },
-                                controller: TextEditingController(
-                                    text: _updateWeight()
-                                        .toString()), // Set initial text
-
-                                style: FontsTheme.hindBold_15())),
-                      ),
-                      Container(
-                          padding:
-                              EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(10),
-                            color: Colors.white,
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  children: [
+                                    Text('All Cost',
+                                        style:
+                                            FontsTheme.mouseMemoirs_30Black()),
+                                    SizedBox(width: 20),
+                                    SizedBox(
+                                      width: 100,
+                                      child: TextField(
+                                          decoration: InputDecoration(
+                                            labelText: 'All Cost',
+                                          ),
+                                          keyboardType: TextInputType.number,
+                                          onChanged: (value) {
+                                            setState(() {
+                                              allCost =
+                                                  double.tryParse(value) ??
+                                                      allCost;
+                                              _updateAllCost();
+                                            });
+                                          },
+                                          style: FontsTheme.hindBold_15()),
+                                    ),
+                                    Icon(Icons.attach_money,
+                                        color: Colors.green),
+                                    SizedBox(
+                                      width: 50,
+                                    ),
+                                    IconButton(
+                                      onPressed: () {},
+                                      icon: Icon(
+                                        Icons.info_rounded,
+                                        color: AppTheme.mainBlue,
+                                        size: 30,
+                                      ),
+                                    )
+                                  ],
+                                )),
                           ),
-                          child: Row(
-                            children: [
-                              SizedBox(
+                        ],
+                      ),
+                      Visibility(
+                        visible: isVisible,
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            //buildQuantityButton(Icons.remove),
+                            Text('Each piece',
+                                style: FontsTheme.mouseMemoirs_30Black()),
+
+                            Container(
+                              padding: EdgeInsets.symmetric(
+                                  horizontal: 12, vertical: 8),
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(10),
+                                color: Colors.white,
+                              ),
+                              child: SizedBox(
                                   width: 100,
                                   child: TextField(
                                       decoration: InputDecoration(
-                                        labelText: 'Cost',
+                                        labelText: 'Weight',
                                       ),
                                       keyboardType: TextInputType.number,
                                       onChanged: (value) {
@@ -801,28 +989,64 @@ class _AddFoodDetailsPageState extends State<addFoodDetails> {
                                             costPerPiece =
                                                 double.tryParse(value) ??
                                                     costPerPiece;
-                                            _updateCost();
+                                            _updateAllCost();
                                           });
                                         }
-                                        // Text(
-                                        //     '\$${updateWeight.toStringAsFixed(2)}');
-                                        // costPerPiece =
-                                        //     double.tryParse(value) ??
-                                        //         costPerPiece;
-                                        // _updateCost();
-                                        // );
                                       },
                                       controller: TextEditingController(
-                                          text: _updateCost().toString()),
+                                          text: _updateWeight()
+                                              .toString()), // Set initial text
+
                                       style: FontsTheme.hindBold_15())),
-                              Icon(Icons.attach_money, color: Colors.green),
-                            ],
-                          )),
+                            ),
+                            Container(
+                                padding: EdgeInsets.symmetric(
+                                    horizontal: 12, vertical: 8),
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(10),
+                                  color: Colors.white,
+                                ),
+                                child: Row(
+                                  children: [
+                                    SizedBox(
+                                        width: 100,
+                                        child: TextField(
+                                            decoration: InputDecoration(
+                                              labelText: 'Cost',
+                                            ),
+                                            keyboardType: TextInputType.number,
+                                            onChanged: (value) {
+                                              if (value.isNotEmpty) {
+                                                setState(() {
+                                                  costPerPiece =
+                                                      double.tryParse(value) ??
+                                                          costPerPiece;
+                                                  _updateCost();
+                                                });
+                                              }
+                                              // Text(
+                                              //     '\$${updateWeight.toStringAsFixed(2)}');
+                                              // costPerPiece =
+                                              //     double.tryParse(value) ??
+                                              //         costPerPiece;
+                                              // _updateCost();
+                                              // );
+                                            },
+                                            controller: TextEditingController(
+                                                text: _updateCost().toString()),
+                                            style: FontsTheme.hindBold_15())),
+                                    Icon(Icons.attach_money,
+                                        color: Colors.green),
+                                  ],
+                                )),
+                          ],
+                        ),
+                      ),
                     ],
-                  ),
-                ],
-              )),
-        ],
+                  )),
+            ],
+          ),
+        ),
       ),
     );
   }
@@ -858,12 +1082,6 @@ class _AddFoodDetailsPageState extends State<addFoodDetails> {
   void _updateAllCost() {
     setState(() {
       updateAllCost = allCost;
-    });
-  }
-
-  void _updateTotalCost() {
-    setState(() {
-      totalCost = quantity * costPerPiece;
     });
   }
 

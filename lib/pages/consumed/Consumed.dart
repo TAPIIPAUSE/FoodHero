@@ -60,35 +60,39 @@ class _ConsumedState extends State<Consumed> {
             ),
           ],
         ),
-        body: FutureBuilder<List<ConsumedfoodData>>(
-          future: _loadConsumedFood(),
-          builder: (context, snapshot) {
-            if (snapshot.connectionState == ConnectionState.waiting) {
-              return const Center(child: CircularProgressIndicator());
-            } else if (snapshot.hasError) {
-              return Center(child: Text('Error: ${snapshot.error}'));
-            } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
-              return const Center(
-                  child: Text('No consumed food data available.'));
-            } else {
-              return ListView.builder(
-                itemCount: snapshot.data!.length,
-                itemBuilder: (context, index) {
-                  final item = snapshot.data![index];
-                  return ConsumedListItem(
-                    cID: item.consumeId,
-                    thumbnail: item.url,
-                    foodname: item.foodName,
-                    expiry: item.expired ?? '',
-                    progressbar:
-                        10, // You might want to calculate this based on item data
-                    consuming: item.consuming,
-                    remaining: item.remaining,
-                  );
-                },
-              );
-            }
-          },
+        body: Container(
+          margin: const EdgeInsets.all(10),
+          child: FutureBuilder<List<ConsumedfoodData>>(
+            future: _loadConsumedFood(),
+            builder: (context, snapshot) {
+              if (snapshot.connectionState == ConnectionState.waiting) {
+                return const Center(child: CircularProgressIndicator());
+              } else if (snapshot.hasError) {
+                return Center(child: Text('Error: ${snapshot.error}'));
+              } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
+                return const Center(
+                    child: Text('No consumed food data available.'));
+              } else {
+                return ListView.builder(
+                  itemCount: snapshot.data!.length,
+                  itemBuilder: (context, index) {
+                    final item = snapshot.data![index];
+                    return ConsumedListItem(
+                      cID: item.consumeId,
+                      thumbnail: item.url,
+                      foodname: item.foodName,
+                      expiry: item.expired ?? '',
+                      progressbar:
+                          10, // You might want to calculate this based on item data
+                      consuming: item.consuming,
+                      remaining: item.remaining,
+                      isCountable: item.isCountable,
+                    );
+                  },
+                );
+              }
+            },
+          ),
         ),
       ),
     );

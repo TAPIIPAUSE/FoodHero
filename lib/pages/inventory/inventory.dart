@@ -218,6 +218,7 @@ class _InventoryState extends State<Inventory> {
                       ),
                     ),
                     Container(
+                      margin: const EdgeInsets.all(2),
                       padding: const EdgeInsets.all(10),
                       width: screenWidth,
                       decoration: const BoxDecoration(
@@ -315,6 +316,7 @@ class _InventoryState extends State<Inventory> {
                                           remaining: foodItem.remaining,
                                           foodid: foodItem.foodid,
                                           expired: foodItem.expired,
+                      
                                         );
                                       },
                                     ),
@@ -324,6 +326,9 @@ class _InventoryState extends State<Inventory> {
                         ],
                       ),
                     ),
+                    SizedBox(
+                      height: 10,
+                    )
                   ],
                 ),
               ),

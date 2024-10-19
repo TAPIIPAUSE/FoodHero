@@ -6,6 +6,7 @@ class ConsumedfoodData {
   final String consuming;
   final String remaining;
   final String url;
+  final bool isCountable;
 
   factory ConsumedfoodData.fromJson(Map<String, dynamic> json) {
     return ConsumedfoodData(
@@ -16,17 +17,19 @@ class ConsumedfoodData {
       remaining: json['Remaining'] as String? ?? 'test',
       foodId: json['Food_ID'] as int? ?? 0,
       consumeId: json['Consume_ID'] as int? ?? 0,
+      isCountable: json['isCountable'] as bool? ?? false,
     );
   }
 
-  ConsumedfoodData(
+  ConsumedfoodData( 
       {required this.consumeId,
       required this.foodId,
       required this.foodName,
       this.expired,
       required this.consuming,
       required this.remaining,
-      required this.url});
+      required this.url,
+      required this.isCountable,});
 
   @override
   String toString() {
