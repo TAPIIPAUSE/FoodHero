@@ -3,7 +3,7 @@ import { get_user_from_db } from "../service/user_service.js";
 import HouseholdScore from "../schema/score_module/HouseholdScoreSchema.js";
 import { authenticateToken } from "../service/jwt_auth.js";
 import User from "../schema/user_module/userSchema.js";
-import { preprocess_House_Score, preprocess_Org_Score } from "../service/score_service.js";
+import { preprocess_House_Score, preprocess_interOrg_Score, preprocess_Org_Score } from "../service/score_service.js";
 
 
 const router = express.Router();
@@ -52,4 +52,21 @@ router.get("/organization/score", authenticateToken, async (req, res) => {
   }
 });
 
+  // Show all consumed items within 1 fridge
+  router.get("/inter_organization/score", authenticateToken, async (req, res) => {
+
+
+    try {
+      // We get Score Array from this Function
+      const processed_score_array = await preprocess_interOrg_Score()
+  
+      
+      return res.status(200).send({
+        "Messages": "Successfully Retrieved Organization Score",
+        "Score List": processed_score_array
+      });
+    } catch (error) {
+      return res.status(400).send(`Error when retrieving organization score: ${error}`);
+    }
+  });
   export default router;
