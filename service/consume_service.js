@@ -47,7 +47,8 @@ export async function getFoodDetailForConsumeInventory(fID, cID) {
       "Expired": food.bestByDate,
       "Consuming": consume_msg,
       "Remaining": remain_msg,
-      "URL": food.img
+      "URL": food.img,
+      "isCountable": food.isCountable
     };
 
 
