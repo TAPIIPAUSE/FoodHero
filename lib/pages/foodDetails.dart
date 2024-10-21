@@ -15,8 +15,8 @@ import 'package:interactive_slider/interactive_slider.dart';
 
 class foodDetails extends StatefulWidget {
   final InventoryListItem item;
-
-  foodDetails({required this.item});
+  final bool isCountable;
+  foodDetails({required this.item, required this.isCountable});
 
   @override
   _FoodDetailsPageState createState() => _FoodDetailsPageState();
@@ -234,6 +234,7 @@ class _FoodDetailsPageState extends State<foodDetails> {
     xAlign = loginAlign;
     loginColor = selectedColor;
     signInColor = normalColor;
+    isCountable = widget.isCountable;
   }
 
   @override
@@ -1357,8 +1358,9 @@ class _FoodDetailsPageState extends State<foodDetails> {
     );
   }
 
-  bool isVisible = true;
+  bool showQuantity = true;
   Widget buildQuantityWeight() {
+    showQuantity = isCountable;
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 8),
       child: Column(
@@ -1375,92 +1377,8 @@ class _FoodDetailsPageState extends State<foodDetails> {
                 ),
                 child: Column(
                   children: [
-                    Center(
-                      child: Container(
-                        width: 300,
-                        height: 60,
-                        decoration: BoxDecoration(
-                          color: Colors.white,
-                          borderRadius: BorderRadius.all(
-                            Radius.circular(50.0),
-                          ),
-                        ),
-                        child: Stack(
-                          children: [
-                            AnimatedAlign(
-                              alignment: Alignment(xAlign, 0),
-                              duration: Duration(milliseconds: 300),
-                              child: Container(
-                                width: 300 * 0.5,
-                                height: 60,
-                                margin: const EdgeInsets.all(4),
-                                decoration: BoxDecoration(
-                                  color: AppTheme.softGreen,
-                                  border: Border.all(
-                                      color: AppTheme.greenMainTheme, width: 4),
-                                  borderRadius: BorderRadius.all(
-                                    Radius.circular(50.0),
-                                  ),
-                                ),
-                              ),
-                            ),
-                            GestureDetector(
-                              onTap: () {
-                                setState(() {
-                                  xAlign = loginAlign;
-                                  loginColor = selectedColor;
-                                  signInColor = normalColor;
-                                  isVisible = true;
-                                  isCountable = true;
-                                });
-                              },
-                              child: Align(
-                                alignment: Alignment(-1, 0),
-                                child: Container(
-                                  width: width * 0.5,
-                                  color: Colors.transparent,
-                                  alignment: Alignment.center,
-                                  child: Text(
-                                    'Countable',
-                                    style: FontsTheme.mouseMemoirs_30Black()
-                                        .copyWith(letterSpacing: 1),
-                                  ),
-                                ),
-                              ),
-                            ),
-                            GestureDetector(
-                              onTap: () {
-                                setState(() {
-                                  xAlign = signInAlign;
-                                  signInColor = selectedColor;
-                                  loginColor = normalColor;
-                                  isVisible = false;
-                                  isCountable = false;
-                                });
-                              },
-                              child: Align(
-                                alignment: Alignment(1, 0),
-                                child: Container(
-                                  width: width * 0.5,
-                                  color: Colors.transparent,
-                                  alignment: Alignment.center,
-                                  child: Text(
-                                    'Uncountable',
-                                    style: FontsTheme.mouseMemoirs_30Black()
-                                        .copyWith(letterSpacing: 1),
-                                  ),
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
-                    SizedBox(
-                      height: 10,
-                    ),
                     Visibility(
-                      visible: isVisible,
+                      visible: showQuantity,
                       child: Row(
                         children: [
                           Text('Quantity',
@@ -1519,6 +1437,7 @@ class _FoodDetailsPageState extends State<foodDetails> {
                       ),
                     ),
                     //Weight
+
                     Row(
                       children: [
                         Text('Weight',
@@ -1574,7 +1493,7 @@ class _FoodDetailsPageState extends State<foodDetails> {
                           ],
                         ),
                       ],
-                    )
+                    ),
                   ],
                 ),
               ),
@@ -1698,7 +1617,14 @@ class _FoodDetailsPageState extends State<foodDetails> {
     });
   }
 
+  bool showEachPiece = true;
   Widget buildEachPieceField() {
+    // if (isCountable = true) {
+    //   showEachPiece = isCountable;
+    // } else {
+    //   showEachPiece = isCountable;
+    // }
+    showEachPiece = isCountable;
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 8),
       child: SingleChildScrollView(
@@ -1769,7 +1695,7 @@ class _FoodDetailsPageState extends State<foodDetails> {
                         ],
                       ),
                       Visibility(
-                        visible: isVisible,
+                        visible: showEachPiece,
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [

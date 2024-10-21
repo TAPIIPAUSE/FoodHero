@@ -14,7 +14,7 @@ class InventoryListItem extends StatelessWidget {
   final String img;
   // final String location;
   // final String food_category;
-  // final bool isCountable;
+   final bool isCountable;
   // final String weight_type;
   // final String package_type;
   // final int current_amount;
@@ -43,7 +43,7 @@ class InventoryListItem extends StatelessWidget {
     required this.img,
     // required this.location,
     // required this.food_category,
-    // required this.isCountable,
+     required this.isCountable,
     // required this.weight_type,
     // required this.package_type,
     // required this.current_amount,
@@ -70,7 +70,7 @@ class InventoryListItem extends StatelessWidget {
 //       food_category: json['food_category'],
 //       weight_type: json['weight_type'],
 //       package_type: json['package_type'],
-//       isCountable: json['isCountable'],
+//      isCountable: json['isCountable'],
 //       current_amount: json['current_amount'],
 //       total_amount: (json['total_amount']),
 //       consumed_amount: (json['consumed_amount']),
@@ -95,7 +95,7 @@ class InventoryListItem extends StatelessWidget {
           context,
           MaterialPageRoute(
             builder: (context) => foodDetails(
-              item: this,
+              item: this, isCountable: isCountable,
             ),
           ),
         );

@@ -316,7 +316,7 @@ class _InventoryState extends State<Inventory> {
                                           remaining: foodItem.remaining,
                                           foodid: foodItem.foodid,
                                           expired: foodItem.expired,
-                      
+                                          isCountable: foodItem.isCountable,
                                         );
                                       },
                                     ),
