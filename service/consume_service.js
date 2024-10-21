@@ -3,7 +3,7 @@ import Location from "../schema/inventory_module/locationSchema.js";
 import PackageUnitType from "../schema/inventory_module/packageTypeSchema.js";
 import UnitType from "../schema/inventory_module/unitTypeSchema.js";
 import HouseholdScore from "../schema/score_module/HouseholdScoreSchema.js";
-import OrganizationScore from "../schema/score_module/OrganizationSchema.js";
+import OrganizationScore from "../schema/score_module/OrganizationScoreSchema.js"
 
 
 export async function getFoodDetailForConsumeInventory(fID, cID) {
@@ -203,7 +203,8 @@ export async function updateOrgScore(user,score, orgSize){
   const per_org_capita = score/orgSize
 
   var OrganizationObject = new OrganizationScore({
-    "orgID": user.hID,
+    "orgID": user.orgID,
+    "hID": user.hID,
     "Score": per_org_capita
   })
 

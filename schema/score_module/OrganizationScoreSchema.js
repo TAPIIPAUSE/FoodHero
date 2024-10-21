@@ -5,6 +5,10 @@ const organizationScoreSchema = new mongoose.Schema({
         type: Number, // Integer type for organization ID
         required: true
     },
+    hID:{
+        type: Number,
+        required: true
+    },
     Score: {
         type: mongoose.Types.Decimal128, // BSON Decimal for precision
         required: true
