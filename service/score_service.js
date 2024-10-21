@@ -2,7 +2,8 @@ import UnitType from "../schema/inventory_module/unitTypeSchema.js";
 import User from "../schema/user_module/userSchema.js";
 import Food from "../schema/inventory_module/foodInventorySchema.js";
 import HouseholdScore from "../schema/score_module/HouseholdScoreSchema.js";
-import OrganizationScore from "../schema/score_module/OrganizationSchema.js";
+import OrganizationScore from "../schema/score_module/OrganizationScoreSchema.js"
+import House from "../schema/user_module/houseSchema.js";
 
 export async function calculateScore(totalAmount, consumedPercen, weightType) {
     try {
@@ -175,28 +176,34 @@ export async function get_House_Member(hID){
 }
 
 export async function preprocess_Org_Score(org_ID){
-    const org_member = await User.find({orgID: org_ID})
+    const org_member = await OrganizationScore.find({orgID: org_ID})
 
-      var processed_org_member = org_member.map(member => member.assigned_ID)
+      var processed_in_org_score = org_member.map(member => member.hID)
+
+      const uniqueHouse = [...new Set(processed_in_org_score)];
 
       // Get score from HouseScore Table
       const score_array = await Promise.all(
-        processed_org_member.map(async (user) => {
-          const score_individual = await OrganizationScore.find({userID: user})
+        uniqueHouse.map(async (user) => {
+          const score_individual = await OrganizationScore.find({hID: user})
           return score_individual;
         })
       );
+
+    
       
 
-      const processed_score_array = score_array.map(person_score => {
+      const processed_score_array = score_array.map(house_score => {
         var acc = 0;
-        const acc_person_score = person_score.map(i_score=>{
+        const acc_person_score = house_score.map(i_score=>{
           acc += parseFloat(i_score.Score)
         })
         return parseFloat(acc.toFixed(2))
         
       })
 
+    //   In organization View, user will be seeing the housename instead, not username
+    // IMPORTANT!!!
       const member = await get_Org_Member(org_ID);
 
       const combined = member.map((m, index) => {
@@ -216,11 +223,13 @@ export async function preprocess_Org_Score(org_ID){
 
 
 export async function get_Org_Member(orgID){
-    const member = await User.find({orgID: orgID})
+    const member = await House.find({org_ID: orgID})
     
     const member_name = member.map(m => {
-        return m.username
+        return m.house_name
     })
     
+
+    console.log(member_name)
     return member_name
 }

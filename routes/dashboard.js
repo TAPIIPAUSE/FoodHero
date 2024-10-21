@@ -48,7 +48,7 @@ router.get("/organization/score", authenticateToken, async (req, res) => {
       "Score List": processed_score_array
     });
   } catch (error) {
-    return res.status(400).send(`Error when retrieving household score: ${error}`);
+    return res.status(400).send(`Error when retrieving organization score: ${error}`);
   }
 });
 
