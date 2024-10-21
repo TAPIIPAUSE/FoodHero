@@ -2092,6 +2092,7 @@ class _FoodDetailsPageState extends State<foodDetails> {
                       height: 10,
                     ),
                     //Weight
+
                     Row(
                       children: [
                         Text('Weight',

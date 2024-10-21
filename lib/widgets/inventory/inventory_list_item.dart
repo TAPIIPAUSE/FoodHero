@@ -80,7 +80,7 @@ class InventoryListItem extends StatelessWidget {
 //       food_category: json['food_category'],
 //       weight_type: json['weight_type'],
 //       package_type: json['package_type'],
-//       isCountable: json['isCountable'],
+//      isCountable: json['isCountable'],
 //       current_amount: json['current_amount'],
 //       total_amount: (json['total_amount']),
 //       consumed_amount: (json['consumed_amount']),
