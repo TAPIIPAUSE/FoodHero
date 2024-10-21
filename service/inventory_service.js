@@ -75,7 +75,8 @@ export async function save_consume_to_db(fID,user,retrievedAmount, retrievedQuan
         "Expired": food.bestByDate,
         "Consuming": consume_msg,
         "Remaining": remain_msg,
-        "URL": food.img
+        "URL": food.img,
+        "isCountable": food.isCountable
       };
   
   
