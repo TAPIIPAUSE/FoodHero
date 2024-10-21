@@ -2,6 +2,7 @@ import UnitType from "../schema/inventory_module/unitTypeSchema.js";
 import User from "../schema/user_module/userSchema.js";
 import Food from "../schema/inventory_module/foodInventorySchema.js";
 import HouseholdScore from "../schema/score_module/HouseholdScoreSchema.js";
+import OrganizationScore from "../schema/score_module/OrganizationSchema.js";
 
 export async function calculateScore(totalAmount, consumedPercen, weightType) {
     try {
@@ -165,6 +166,57 @@ export async function preprocess_House_Score(h_ID){
 
 export async function get_House_Member(hID){
     const member = await User.find({hID: hID})
+    
+    const member_name = member.map(m => {
+        return m.username
+    })
+    
+    return member_name
+}
+
+export async function preprocess_Org_Score(org_ID){
+    const org_member = await User.find({orgID: org_ID})
+
+      var processed_org_member = org_member.map(member => member.assigned_ID)
+
+      // Get score from HouseScore Table
+      const score_array = await Promise.all(
+        processed_org_member.map(async (user) => {
+          const score_individual = await OrganizationScore.find({userID: user})
+          return score_individual;
+        })
+      );
+      
+
+      const processed_score_array = score_array.map(person_score => {
+        var acc = 0;
+        const acc_person_score = person_score.map(i_score=>{
+          acc += parseFloat(i_score.Score)
+        })
+        return parseFloat(acc.toFixed(2))
+        
+      })
+
+      const member = await get_Org_Member(org_ID);
+
+      const combined = member.map((m, index) => {
+        return { "Rank": null ,"Username": m, "Score": processed_score_array[index] };
+      });
+
+      combined.sort((a, b) => b.Score - a.Score);
+
+      for (let i = 1; i <= combined.length; i++) {
+        combined[i-1].Rank = i
+      }    
+
+      
+
+      return combined
+}
+
+
+export async function get_Org_Member(orgID){
+    const member = await User.find({orgID: orgID})
     
     const member_name = member.map(m => {
         return m.username
