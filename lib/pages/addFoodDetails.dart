@@ -196,118 +196,123 @@ class _AddFoodDetailsPageState extends State<addFoodDetails> {
       ),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(16),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            Icon(
-              Icons.arrow_upward_rounded,
-              size: 50,
-            ),
-            Row(
-              children: [
-                GestureDetector(
-                  //add photo
-                  onTap: () => _chooseAddImageOption(context),
-                  child: Container(
-                    width: 100,
-                    height: 68,
-                    decoration: BoxDecoration(
-                      color: AppTheme.mainBlue,
-                      border: Border.all(color: Colors.black),
-                      borderRadius: BorderRadius.circular(10),
-                    ),
-                    child: _image == null
-                        ? Center(child: Icon(Icons.add_a_photo))
-                        : _isLoading
-                            ? Center(child: CircularProgressIndicator())
-                            : ClipRRect(
-                                borderRadius: BorderRadius.circular(8.0),
-                                child: Image(image: _image!, fit: BoxFit.cover),
-                              ),
-                  ),
-                ),
-                SizedBox(
-                  //itemName
-                  width: 200,
-                  child: TextField(
-                    style: FontsTheme.mouseMemoirs_50Black(),
-                    textAlign: TextAlign.center,
-                    decoration: InputDecoration(
-                        hintStyle: FontsTheme.mouseMemoirs_50Black(),
-                        hintText: 'Food name'),
-                  ),
-                ),
-              ],
-            ),
-            SizedBox(height: 16),
-            //buildDropdownField('Categories', "value", Icons.local_dining),
-            buildCategoriesField("Categories", "value", Icons.arrow_drop_down),
-            buildWhereField('Add to', 'value', Icons.kitchen),
-            buildDateField('Expiration date', ''),
-            buildReminderField('30 April 2024'),
-            buildQuantityWeight(),
-            buildEachPieceField(),
-            //buildCostField(),
-
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                ElevatedButton(
-                  onPressed: () => {},
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: AppTheme.softBlue,
-                    shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(10)),
-                  ),
-                  child: Text(
-                    'Previous',
-                    style: FontsTheme.mouseMemoirs_30Black()
-                        .copyWith(color: Colors.black),
-                  ),
-                ),
-                ElevatedButton(
-                  onPressed: () => {},
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: AppTheme.softOrange,
-                    shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(10)),
-                  ),
-                  child: Text(
-                    'Done',
-                    style: FontsTheme.mouseMemoirs_30Black()
-                        .copyWith(color: Colors.black),
-                  ),
-                ),
-                ElevatedButton(
-                  onPressed: () => {},
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: AppTheme.softBlue,
-                    shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(10)),
-                  ),
-                  child: Text(
-                    'Next',
-                    style: FontsTheme.mouseMemoirs_30Black()
-                        .copyWith(color: Colors.black),
-                  ),
-                ),
-              ],
-            ),
-            Center(
-              child: IconButton(
-                icon: Image.asset('assets/images/BackButton.png'),
-                iconSize: 50,
-                onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => Inventory(),
-                    ),
-                  );
-                },
+        child: SizedBox(
+          height: 1100,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              Icon(
+                Icons.arrow_upward_rounded,
+                size: 50,
               ),
-            )
-          ],
+              Row(
+                children: [
+                  GestureDetector(
+                    //add photo
+                    onTap: () => _chooseAddImageOption(context),
+                    child: Container(
+                      width: 100,
+                      height: 68,
+                      decoration: BoxDecoration(
+                        color: AppTheme.mainBlue,
+                        border: Border.all(color: Colors.black),
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      child: _image == null
+                          ? Center(child: Icon(Icons.add_a_photo))
+                          : _isLoading
+                              ? Center(child: CircularProgressIndicator())
+                              : ClipRRect(
+                                  borderRadius: BorderRadius.circular(8.0),
+                                  child:
+                                      Image(image: _image!, fit: BoxFit.cover),
+                                ),
+                    ),
+                  ),
+                  SizedBox(
+                    //itemName
+                    width: 200,
+                    child: TextField(
+                      style: FontsTheme.mouseMemoirs_50Black(),
+                      textAlign: TextAlign.center,
+                      decoration: InputDecoration(
+                          hintStyle: FontsTheme.mouseMemoirs_50Black(),
+                          hintText: 'Food name'),
+                    ),
+                  ),
+                ],
+              ),
+              SizedBox(height: 16),
+              //buildDropdownField('Categories', "value", Icons.local_dining),
+              buildCategoriesField(
+                  "Categories", "value", Icons.arrow_drop_down),
+              buildWhereField('Add to', 'value', Icons.kitchen),
+              buildDateField('Expiration date', ''),
+              buildReminderField('30 April 2024'),
+              buildQuantityWeight(),
+              buildEachPieceField(),
+              //buildCostField(),
+
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  ElevatedButton(
+                    onPressed: () => {},
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: AppTheme.softBlue,
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(10)),
+                    ),
+                    child: Text(
+                      'Previous',
+                      style: FontsTheme.mouseMemoirs_30Black()
+                          .copyWith(color: Colors.black),
+                    ),
+                  ),
+                  ElevatedButton(
+                    onPressed: () => {},
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: AppTheme.softOrange,
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(10)),
+                    ),
+                    child: Text(
+                      'Done',
+                      style: FontsTheme.mouseMemoirs_30Black()
+                          .copyWith(color: Colors.black),
+                    ),
+                  ),
+                  ElevatedButton(
+                    onPressed: () => {},
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: AppTheme.softBlue,
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(10)),
+                    ),
+                    child: Text(
+                      'Next',
+                      style: FontsTheme.mouseMemoirs_30Black()
+                          .copyWith(color: Colors.black),
+                    ),
+                  ),
+                ],
+              ),
+              Center(
+                child: IconButton(
+                  icon: Image.asset('assets/images/BackButton.png'),
+                  iconSize: 50,
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => Inventory(),
+                      ),
+                    );
+                  },
+                ),
+              )
+            ],
+          ),
         ),
       ),
     );

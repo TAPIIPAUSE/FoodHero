@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'dart:core';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:foodhero/pages/consumed/Consumed.dart';
 import 'package:foodhero/pages/consumed/consumedItemsProvider.dart';
@@ -15,8 +16,10 @@ import 'package:interactive_slider/interactive_slider.dart';
 
 class foodDetails extends StatefulWidget {
   final InventoryListItem item;
-
-  foodDetails({required this.item});
+  final String category;
+  final bool isCountable;
+  foodDetails(
+      {required this.item, required this.category, required this.isCountable});
 
   @override
   _FoodDetailsPageState createState() => _FoodDetailsPageState();
@@ -45,7 +48,8 @@ class _FoodDetailsPageState extends State<foodDetails> {
   double costPerPiece = 0;
   double updateAllCost = 0;
   int consumeQuantity = 0;
-  final TextEditingController foodname = TextEditingController();
+  late final String foodname;
+  late String category;
   late bool isCountable;
 
   // For countable uncountable option
@@ -178,7 +182,6 @@ class _FoodDetailsPageState extends State<foodDetails> {
   @override
   void dispose() {
     // Clean up the controller when the widget is disposed.
-    foodname.dispose();
     super.dispose();
   }
 
@@ -229,11 +232,13 @@ class _FoodDetailsPageState extends State<foodDetails> {
   @override
   void initState() {
     super.initState();
-    foodname.text = widget.item.foodname;
+    foodname = widget.item.foodname;
     //isCountable = widget.item.isCountable as bool;
     xAlign = loginAlign;
     loginColor = selectedColor;
     signInColor = normalColor;
+    category = widget.category;
+    isCountable = widget.isCountable;
   }
 
   @override
@@ -406,14 +411,10 @@ class _FoodDetailsPageState extends State<foodDetails> {
                                 ),
                                 SizedBox(
                                   width: 200,
-                                  child: TextField(
+                                  child: Text(
                                     style: FontsTheme.mouseMemoirs_50Black(),
                                     textAlign: TextAlign.center,
-                                    controller: foodname,
-                                    decoration: InputDecoration(
-                                        hintStyle:
-                                            FontsTheme.mouseMemoirs_50Black(),
-                                        hintText: 'Food name'),
+                                    foodname,
                                   ),
                                 ),
                               ],
@@ -763,7 +764,7 @@ class _FoodDetailsPageState extends State<foodDetails> {
     final newItem = ConsumedListItem(
       cID: 1,
       thumbnail: "assets/images/apples.jpg",
-      foodname: foodname.text,
+      foodname: foodname,
       expiry: "ssss",
       progressbar: 80,
       consuming: "12",
@@ -786,7 +787,7 @@ class _FoodDetailsPageState extends State<foodDetails> {
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
         content: Text(
-          '${foodname.text} added to consumed list',
+          '${foodname} added to consumed list',
           style: FontsTheme.hindBold_20(),
         ),
         duration: const Duration(seconds: 2),
@@ -800,7 +801,7 @@ class _FoodDetailsPageState extends State<foodDetails> {
   }
 
   void consumedModal(BuildContext context) {
-    String foodnameString = foodname.text;
+    String foodnameString = foodname;
     showDialog(
       context: context,
       builder: (BuildContext context) {
@@ -1169,28 +1170,9 @@ class _FoodDetailsPageState extends State<foodDetails> {
                                 color: AppTheme.greenMainTheme,
                                 width: 2.0), // Set border color and width
                           ),
-                          child: DropdownButtonHideUnderline(
-                            child: DropdownButton<String>(
-                              value: selectedValue,
-                              isExpanded: true,
-                              icon: Icon(icon),
-                              items: items.map((String item) {
-                                return DropdownMenuItem<String>(
-                                  value: item,
-                                  child: Text(
-                                    item,
-                                    style: FontsTheme.mouseMemoirs_30Black(),
-                                  ),
-                                );
-                              }).toList(),
-                              onChanged: (String? newValue) {
-                                if (newValue != null) {
-                                  setState(() {
-                                    selectedValue = newValue;
-                                  });
-                                }
-                              },
-                            ),
+                          child: Text(
+                            category,
+                            style: FontsTheme.mouseMemoirs_30Black(),
                           ),
                         )),
                   ],
@@ -1357,8 +1339,9 @@ class _FoodDetailsPageState extends State<foodDetails> {
     );
   }
 
-  bool isVisible = true;
+  bool showQuantity = true;
   Widget buildQuantityWeight() {
+    showQuantity = isCountable;
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 8),
       child: Column(
@@ -1375,92 +1358,8 @@ class _FoodDetailsPageState extends State<foodDetails> {
                 ),
                 child: Column(
                   children: [
-                    Center(
-                      child: Container(
-                        width: 300,
-                        height: 60,
-                        decoration: BoxDecoration(
-                          color: Colors.white,
-                          borderRadius: BorderRadius.all(
-                            Radius.circular(50.0),
-                          ),
-                        ),
-                        child: Stack(
-                          children: [
-                            AnimatedAlign(
-                              alignment: Alignment(xAlign, 0),
-                              duration: Duration(milliseconds: 300),
-                              child: Container(
-                                width: 300 * 0.5,
-                                height: 60,
-                                margin: const EdgeInsets.all(4),
-                                decoration: BoxDecoration(
-                                  color: AppTheme.softGreen,
-                                  border: Border.all(
-                                      color: AppTheme.greenMainTheme, width: 4),
-                                  borderRadius: BorderRadius.all(
-                                    Radius.circular(50.0),
-                                  ),
-                                ),
-                              ),
-                            ),
-                            GestureDetector(
-                              onTap: () {
-                                setState(() {
-                                  xAlign = loginAlign;
-                                  loginColor = selectedColor;
-                                  signInColor = normalColor;
-                                  isVisible = true;
-                                  isCountable = true;
-                                });
-                              },
-                              child: Align(
-                                alignment: Alignment(-1, 0),
-                                child: Container(
-                                  width: width * 0.5,
-                                  color: Colors.transparent,
-                                  alignment: Alignment.center,
-                                  child: Text(
-                                    'Countable',
-                                    style: FontsTheme.mouseMemoirs_30Black()
-                                        .copyWith(letterSpacing: 1),
-                                  ),
-                                ),
-                              ),
-                            ),
-                            GestureDetector(
-                              onTap: () {
-                                setState(() {
-                                  xAlign = signInAlign;
-                                  signInColor = selectedColor;
-                                  loginColor = normalColor;
-                                  isVisible = false;
-                                  isCountable = false;
-                                });
-                              },
-                              child: Align(
-                                alignment: Alignment(1, 0),
-                                child: Container(
-                                  width: width * 0.5,
-                                  color: Colors.transparent,
-                                  alignment: Alignment.center,
-                                  child: Text(
-                                    'Uncountable',
-                                    style: FontsTheme.mouseMemoirs_30Black()
-                                        .copyWith(letterSpacing: 1),
-                                  ),
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
-                    SizedBox(
-                      height: 10,
-                    ),
                     Visibility(
-                      visible: isVisible,
+                      visible: showQuantity,
                       child: Row(
                         children: [
                           Text('Quantity',
@@ -1519,6 +1418,7 @@ class _FoodDetailsPageState extends State<foodDetails> {
                       ),
                     ),
                     //Weight
+
                     Row(
                       children: [
                         Text('Weight',
@@ -1574,7 +1474,7 @@ class _FoodDetailsPageState extends State<foodDetails> {
                           ],
                         ),
                       ],
-                    )
+                    ),
                   ],
                 ),
               ),
@@ -1698,7 +1598,14 @@ class _FoodDetailsPageState extends State<foodDetails> {
     });
   }
 
+  bool showEachPiece = true;
   Widget buildEachPieceField() {
+    // if (isCountable = true) {
+    //   showEachPiece = isCountable;
+    // } else {
+    //   showEachPiece = isCountable;
+    // }
+    showEachPiece = isCountable;
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 8),
       child: SingleChildScrollView(
@@ -1769,7 +1676,7 @@ class _FoodDetailsPageState extends State<foodDetails> {
                         ],
                       ),
                       Visibility(
-                        visible: isVisible,
+                        visible: showEachPiece,
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [

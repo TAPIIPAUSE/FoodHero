@@ -55,9 +55,9 @@ class _ConsumedListItemState extends State<ConsumedListItem> {
           context,
           MaterialPageRoute(
             builder: (context) => ConsumedDetails(
+              foodname: widget.foodname,
               cID: widget.cID,
               isCountable: widget.isCountable 
-              
             ),
           ),
         );

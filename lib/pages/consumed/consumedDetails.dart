@@ -1,24 +1,22 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:flutter/material.dart';
-
 import 'package:foodhero/fonts.dart';
-import 'package:foodhero/main.dart';
 import 'package:foodhero/models/idconsumedfood_model.dart';
 import 'package:foodhero/pages/api/consumedfood_api.dart';
 import 'package:foodhero/pages/consumed/Consumed.dart';
 import 'package:foodhero/theme.dart';
-import 'package:foodhero/widgets/consumed/consumed_list_item.dart';
-import 'package:foodhero/widgets/inventory/inventory_list_item.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class ConsumedDetails extends StatefulWidget {
+  final int cID;
+  final String foodname;
   final bool isCountable;
   const ConsumedDetails({
     super.key,
+    required this.foodname,
     required this.cID,
     required this.isCountable,
   });
-  final int cID;
 
   //  final InventoryListItem item;
   // ConsumedDetails({required this.item});
@@ -31,7 +29,9 @@ class _ConsumedDetailsState extends State<ConsumedDetails> {
   int quantity = 1;
   double weight = 1; // in grams
   String weightReduced = ''; //make it proper for the decimals
-  final TextEditingController foodname = TextEditingController();
+  int consume = 1;
+  int waste = 1;
+  late final String foodname;
   int consumeQuantity = 0;
   late bool isCountable;
 
@@ -40,11 +40,13 @@ class _ConsumedDetailsState extends State<ConsumedDetails> {
       final prefs = await SharedPreferences.getInstance();
       final hID = prefs.getInt('hID');
       // final cID = prefs.getInt('consume_ID');
+      final foodname = widget.foodname;
       final cID = widget.cID;
       final isCountable = widget.isCountable;
       // if (hID == null) {
       //   throw Exception('hID not found in SharedPreferences');
       // }
+      print('foodname from SharedPreferences: $foodname'); // Debug print
       print('hID from SharedPreferences: $hID'); // Debug print
       print('cID from SharedPreferences: $cID'); // Debug print
       print('isCountable: $isCountable');
@@ -62,13 +64,14 @@ class _ConsumedDetailsState extends State<ConsumedDetails> {
   void initState() {
     super.initState();
     _loadConsumedFoodByID();
-    isCountable = widget.isCountable as bool;
+    foodname = widget.foodname;
+    isCountable = widget.isCountable;
   }
 
   @override
   void dispose() {
     // Clean up the controller when the widget is disposed.
-    foodname.dispose();
+
     super.dispose();
   }
 
@@ -125,15 +128,12 @@ class _ConsumedDetailsState extends State<ConsumedDetails> {
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
                                   children: [
-                                    SizedBox(
-                                      width: 200,
-                                      child: Text(
-                                        "foodname",
-                                        style:
-                                            FontsTheme.mouseMemoirs_50Black(),
-                                        textAlign: TextAlign.center,
-                                      ),
+                                    Text(
+                                      foodname,
+                                      style: FontsTheme.mouseMemoirs_50Black(),
+                                      textAlign: TextAlign.center,
                                     ),
                                   ],
                                 ),
@@ -144,7 +144,6 @@ class _ConsumedDetailsState extends State<ConsumedDetails> {
                                     Icons.arrow_drop_down),
                                 buildWhereField('In', 'value', Icons.kitchen),
                                 buildQuantityWeight(),
-
                                 buildConsumed(),
                                 buildWasted(),
                                 //buildCostField(),
@@ -170,15 +169,15 @@ class _ConsumedDetailsState extends State<ConsumedDetails> {
                                   ],
                                 ),
                                 SizedBox(height: 16),
-                                Center(
-                                  child: TextButton(
-                                    onPressed: () {},
-                                    child: Text(
-                                      'Delete item',
-                                      style: TextStyle(color: Colors.black),
-                                    ),
-                                  ),
-                                ),
+                                // Center(
+                                //   child: TextButton(
+                                //     onPressed: () {},
+                                //     child: Text(
+                                //       'Delete item',
+                                //       style: TextStyle(color: Colors.black),
+                                //     ),
+                                //   ),
+                                // ),
                                 SizedBox(height: 5),
                                 Center(
                                   child: IconButton(
@@ -350,7 +349,6 @@ class _ConsumedDetailsState extends State<ConsumedDetails> {
     });
   }
 
-  bool isVisible = true;
   Widget buildQuantityWeight() {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 8),
@@ -372,7 +370,7 @@ class _ConsumedDetailsState extends State<ConsumedDetails> {
                       height: 10,
                     ),
                     Visibility(
-                      visible: isVisible,
+                      visible: isCountable,
                       child: Row(
                         children: [
                           Text('Quantity',
@@ -400,6 +398,66 @@ class _ConsumedDetailsState extends State<ConsumedDetails> {
                                   ],
                                 ),
                               ),
+                              // SliderTheme(
+                              //   data: SliderTheme.of(context).copyWith(
+                              //     trackHeight: 10.0,
+                              //     thumbShape: SliderComponentShape.noThumb,
+                              //     overlayShape: RoundSliderOverlayShape(
+                              //         overlayRadius: 24.0),
+                              //     activeTrackColor: Colors.orange,
+                              //     inactiveTrackColor: Colors.orange[100],
+                              //     thumbColor: Colors.white,
+                              //     overlayColor: Colors.orange.withAlpha(32),
+                              //   ),
+                              //   child: Slider(
+                              //     value: quantity.toDouble(),
+                              //     min: 1,
+                              //     max: 100,
+                              //     divisions: 100,
+                              //     onChanged: (value) {
+                              //       setState(() {
+                              //         quantity = value.toInt();
+                              //         //_updateAllCost();
+                              //         consumeQuantity = quantity;
+                              //       });
+                              //     },
+                              //   ),
+                              // ),
+                            ],
+                          ),
+                        ],
+                      ),
+                    ),
+                    //Weight
+                    Visibility(
+                      visible: !isCountable,
+                      child: Row(
+                        children: [
+                          Text('Weight',
+                              style: FontsTheme.mouseMemoirs_30Black()),
+                          SizedBox(
+                            width: 55,
+                          ),
+                          Column(
+                            children: [
+                              Container(
+                                width: 200,
+                                padding: EdgeInsets.symmetric(
+                                    horizontal: 12, vertical: 8),
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(10),
+                                  color: Colors.white,
+                                ),
+                                child: Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Text('$weightReduced ',
+                                        style: FontsTheme.hindBold_20()),
+                                    buildWeightUnit('')
+                                  ],
+                                ),
+                              ),
                               SliderTheme(
                                 data: SliderTheme.of(context).copyWith(
                                   trackHeight: 10.0,
@@ -412,15 +470,15 @@ class _ConsumedDetailsState extends State<ConsumedDetails> {
                                   overlayColor: Colors.orange.withAlpha(32),
                                 ),
                                 child: Slider(
-                                  value: quantity.toDouble(),
+                                  value: weight,
                                   min: 1,
-                                  max: 100,
-                                  divisions: 100,
+                                  max: 10000,
+                                  divisions: 10000,
                                   onChanged: (value) {
                                     setState(() {
-                                      quantity = value.toInt();
-                                      //_updateAllCost();
-                                      consumeQuantity = quantity;
+                                      weight = value;
+
+                                      weightReduced = weight.toStringAsFixed(0);
                                     });
                                   },
                                 ),
@@ -429,63 +487,6 @@ class _ConsumedDetailsState extends State<ConsumedDetails> {
                           ),
                         ],
                       ),
-                    ),
-                    //Weight
-                    Row(
-                      children: [
-                        Text('Weight',
-                            style: FontsTheme.mouseMemoirs_30Black()),
-                        SizedBox(
-                          width: 55,
-                        ),
-                        Column(
-                          children: [
-                            Container(
-                              width: 200,
-                              padding: EdgeInsets.symmetric(
-                                  horizontal: 12, vertical: 8),
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(10),
-                                color: Colors.white,
-                              ),
-                              child: Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: [
-                                  Text('$weightReduced ',
-                                      style: FontsTheme.hindBold_20()),
-                                  buildWeightUnit('')
-                                ],
-                              ),
-                            ),
-                            SliderTheme(
-                              data: SliderTheme.of(context).copyWith(
-                                trackHeight: 10.0,
-                                thumbShape: SliderComponentShape.noThumb,
-                                overlayShape: RoundSliderOverlayShape(
-                                    overlayRadius: 24.0),
-                                activeTrackColor: Colors.orange,
-                                inactiveTrackColor: Colors.orange[100],
-                                thumbColor: Colors.white,
-                                overlayColor: Colors.orange.withAlpha(32),
-                              ),
-                              child: Slider(
-                                value: weight,
-                                min: 1,
-                                max: 10000,
-                                divisions: 10000,
-                                onChanged: (value) {
-                                  setState(() {
-                                    weight = value;
-
-                                    weightReduced = weight.toStringAsFixed(0);
-                                  });
-                                },
-                              ),
-                            ),
-                          ],
-                        ),
-                      ],
                     )
                   ],
                 ),
@@ -521,28 +522,32 @@ class _ConsumedDetailsState extends State<ConsumedDetails> {
                     SizedBox(
                       width: 100,
                       height: 30,
-                      child: DropdownButtonHideUnderline(
-                        child: DropdownButton<String>(
-                          value: selectedValue,
-                          isExpanded: true,
-                          items: items.map((String item) {
-                            return DropdownMenuItem<String>(
-                              value: item,
-                              child: Text(
-                                item,
-                                style: FontsTheme.hindBold_20(),
-                              ),
-                            );
-                          }).toList(),
-                          onChanged: (String? newValue) {
-                            if (newValue != null) {
-                              setState(() {
-                                selectedValue = newValue;
-                              });
-                            }
-                          },
-                        ),
+                      child: Text(
+                        'Piece',
+                        style: FontsTheme.hindBold_20(),
                       ),
+                      // child: DropdownButtonHideUnderline(
+                      //   child: DropdownButton<String>(
+                      //     value: selectedValue,
+                      //     isExpanded: true,
+                      //     items: items.map((String item) {
+                      //       return DropdownMenuItem<String>(
+                      //         value: item,
+                      //         child: Text(
+                      //           item,
+                      //           style: FontsTheme.hindBold_20(),
+                      //         ),
+                      //       );
+                      //     }).toList(),
+                      //     onChanged: (String? newValue) {
+                      //       if (newValue != null) {
+                      //         setState(() {
+                      //           selectedValue = newValue;
+                      //         });
+                      //       }
+                      //     },
+                      //   ),
+                      // ),
                     )
                   ],
                 ))
@@ -579,28 +584,32 @@ class _ConsumedDetailsState extends State<ConsumedDetails> {
                     SizedBox(
                       width: 100,
                       height: 30,
-                      child: DropdownButtonHideUnderline(
-                        child: DropdownButton<String>(
-                          value: selectedValue,
-                          isExpanded: true,
-                          items: items.map((String item) {
-                            return DropdownMenuItem<String>(
-                              value: item,
-                              child: Text(
-                                item,
-                                style: FontsTheme.hindBold_20(),
-                              ),
-                            );
-                          }).toList(),
-                          onChanged: (String? newValue) {
-                            if (newValue != null) {
-                              setState(() {
-                                selectedValue = newValue;
-                              });
-                            }
-                          },
-                        ),
+                      child: Text(
+                        'gram',
+                        style: FontsTheme.hindBold_20(),
                       ),
+                      // child: DropdownButtonHideUnderline(
+                      //   child: DropdownButton<String>(
+                      //     value: selectedValue,
+                      //     isExpanded: true,
+                      //     items: items.map((String item) {
+                      //       return DropdownMenuItem<String>(
+                      //         value: item,
+                      //         child: Text(
+                      //           item,
+                      //           style: FontsTheme.hindBold_20(),
+                      //         ),
+                      //       );
+                      //     }).toList(),
+                      //     onChanged: (String? newValue) {
+                      //       if (newValue != null) {
+                      //         setState(() {
+                      //           selectedValue = newValue;
+                      //         });
+                      //       }
+                      //     },
+                      //   ),
+                      // ),
                     )
                   ],
                 ))
@@ -657,7 +666,7 @@ class _ConsumedDetailsState extends State<ConsumedDetails> {
                                 mainAxisAlignment:
                                     MainAxisAlignment.spaceBetween,
                                 children: [
-                                  Text('$quantity ',
+                                  Text('$consume ',
                                       style: FontsTheme.hindBold_20()),
                                   Text(Piece, style: FontsTheme.hindBold_20()),
                                 ],
@@ -675,13 +684,13 @@ class _ConsumedDetailsState extends State<ConsumedDetails> {
                                 overlayColor: Colors.orange.withAlpha(32),
                               ),
                               child: Slider(
-                                value: quantity.toDouble(),
+                                value: consume.toDouble(),
                                 min: 1,
                                 max: 100,
                                 divisions: 100,
                                 onChanged: (value) {
                                   setState(() {
-                                    quantity = value.toInt();
+                                    consume = value.toInt();
                                   });
                                 },
                               ),
@@ -748,7 +757,7 @@ class _ConsumedDetailsState extends State<ConsumedDetails> {
                                 mainAxisAlignment:
                                     MainAxisAlignment.spaceBetween,
                                 children: [
-                                  Text('$quantity ',
+                                  Text('$waste ',
                                       style: FontsTheme.hindBold_20()),
                                   Text(Piece, style: FontsTheme.hindBold_20()),
                                 ],
@@ -766,13 +775,13 @@ class _ConsumedDetailsState extends State<ConsumedDetails> {
                                 overlayColor: Colors.orange.withAlpha(32),
                               ),
                               child: Slider(
-                                value: quantity.toDouble(),
+                                value: waste.toDouble(),
                                 min: 1,
                                 max: 100,
                                 divisions: 100,
                                 onChanged: (value) {
                                   setState(() {
-                                    quantity = value.toInt();
+                                    waste = value.toInt();
                                   });
                                 },
                               ),

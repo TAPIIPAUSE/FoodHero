@@ -9,6 +9,12 @@ class ConsumedfoodData {
   final bool isCountable;
 
   factory ConsumedfoodData.fromJson(Map<String, dynamic> json) {
+    // Log the entire JSON object for inspection
+    print('ConsumedfoodData.fromJson: $json');
+
+    // Extracting values with logging for specific fields
+    var isCountableValue = json['isCountable'];
+    print('isCountable value from JSON: $isCountableValue');
     return ConsumedfoodData(
       url: json['URL'],
       foodName: json['FoodName'] as String? ?? 'test',
@@ -17,22 +23,25 @@ class ConsumedfoodData {
       remaining: json['Remaining'] as String? ?? 'test',
       foodId: json['Food_ID'] as int? ?? 0,
       consumeId: json['Consume_ID'] as int? ?? 0,
-      isCountable: json['isCountable'] as bool? ?? false,
+      isCountable: (isCountableValue != null && isCountableValue is bool)
+          ? json['isCountable']
+          : true, // Default to false if not present or not a boolean
     );
   }
 
-  ConsumedfoodData( 
-      {required this.consumeId,
-      required this.foodId,
-      required this.foodName,
-      this.expired,
-      required this.consuming,
-      required this.remaining,
-      required this.url,
-      required this.isCountable,});
+  ConsumedfoodData({
+    required this.consumeId,
+    required this.foodId,
+    required this.foodName,
+    this.expired,
+    required this.consuming,
+    required this.remaining,
+    required this.url,
+    required this.isCountable,
+  });
 
   @override
   String toString() {
-    return 'ConsumedfoodData(consumeId: $consumeId, foodName: $foodName, expired: $expired, consuming: $consuming, remaining: $remaining)';
+    return 'ConsumedfoodData(consumeId: $consumeId, foodName: $foodName, expired: $expired, consuming: $consuming, remaining: $remaining, isCountable: $isCountable)';
   }
 }
