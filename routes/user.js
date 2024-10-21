@@ -132,7 +132,7 @@ router.post('/login', async (req, res) => {
   res.status(200).json({ success: true,message: 'Logged in successfully', token , hID: hID});
 })
 
-router.post('/create_house',async (req,res) => {
+router.post('/create_house',authenticateToken,async (req,res) => {
 
   const {house_name} = req.body;
 
@@ -158,7 +158,7 @@ router.post('/create_house',async (req,res) => {
   }
 })
 
-router.post('/join_house', async (req, res) => {
+router.post('/join_house',authenticateToken, async (req, res) => {
   const { housename } = req.body;
   const user = await get_user_from_db(req, res);
   const house = await get_housename_from_db(housename);
@@ -179,7 +179,7 @@ router.post('/join_house', async (req, res) => {
   console.log("House Joined");
 })
 
-router.post('/create_org',async (req,res) => {
+router.post('/create_org',authenticateToken,async (req,res) => {
 
   const {org_name} = req.body;
 
@@ -213,7 +213,7 @@ router.post('/create_org',async (req,res) => {
   }
 })
 
-router.post('/join_org', async (req, res) => {
+router.post('/join_org',authenticateToken,async (req, res) => {
   const { orgname } = req.body;
   const user = await get_user_from_db(req, res);
   const org = await get_orgname_from_db(orgname);
@@ -235,11 +235,13 @@ router.post('/join_org', async (req, res) => {
     return;
   }
   user.orgID = org.assigned_ID;
+  var house = await House.findOne({assigned_ID: user.hID})
+  house.org_ID = org.assigned_ID
+  await house.save();
   await user.save();
   res.status(200).send("Organization Joined");
   console.log("Organization Joined");
 })
-
 
 router.get('/test_jwt',async (req, res) => {
 
