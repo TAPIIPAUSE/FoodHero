@@ -132,6 +132,7 @@ export async function getFoodDetailForFoodDetail(fID) {
     return {
       "Food_ID": fID,
       "FoodName": food.food_name,
+      "Category": food.food_category,
       "Location": location,
       "Expired": food.bestByDate,
       "Remind": food.RemindDate,
