@@ -16,10 +16,11 @@ import 'package:interactive_slider/interactive_slider.dart';
 
 class foodDetails extends StatefulWidget {
   final InventoryListItem item;
-  final String category;
+  //final String category;
   final bool isCountable;
-  foodDetails(
-      {required this.item, required this.category, required this.isCountable});
+  foodDetails({required this.item, required this.isCountable
+      //required this.category,
+      });
 
   @override
   _FoodDetailsPageState createState() => _FoodDetailsPageState();
@@ -51,6 +52,7 @@ class _FoodDetailsPageState extends State<foodDetails> {
   late final String foodname;
   late String category;
   late bool isCountable;
+  int weightConsumeOption = 1;
 
   // For countable uncountable option
   late double xAlign;
@@ -237,13 +239,17 @@ class _FoodDetailsPageState extends State<foodDetails> {
     xAlign = loginAlign;
     loginColor = selectedColor;
     signInColor = normalColor;
-    category = widget.category;
+    //category = widget.category;
     isCountable = widget.isCountable;
   }
 
+  double screenHeight = 1100;
   @override
   Widget build(BuildContext context) {
     final keyboardHeight = MediaQuery.of(context).viewInsets.bottom;
+    if (isCountable == false) {
+      screenHeight = 900;
+    }
     return Scaffold(
         key: scaffoldKey,
         resizeToAvoidBottomInset: true,
@@ -338,7 +344,7 @@ class _FoodDetailsPageState extends State<foodDetails> {
             SingleChildScrollView(
                 padding: const EdgeInsets.all(16),
                 child: SizedBox(
-                  height: 1100,
+                  height: screenHeight,
                   child: Center(
                     child: Stack(
                       children: [
@@ -559,6 +565,7 @@ class _FoodDetailsPageState extends State<foodDetails> {
       });
     }
 
+    String weightConsumeOptionString = "";
     showDialog(
         context: context,
         builder: (BuildContext contetxt) {
@@ -621,7 +628,7 @@ class _FoodDetailsPageState extends State<foodDetails> {
                         child: Column(
                           children: <Widget>[
                             SizedBox(
-                              height: 30,
+                              height: 40,
                             ),
                             // SizedBox(
                             //   child: Container(
@@ -658,37 +665,93 @@ class _FoodDetailsPageState extends State<foodDetails> {
                             //         color: Colors.black, fontSize: 16),
                             //   ),
                             // ),
-
-                            Row(
-                              children: [
-                                SizedBox(
-                                  width: 50,
-                                ),
-                                Container(
-                                  width: 80,
-                                  height: 50,
-                                  padding: EdgeInsets.symmetric(
-                                      horizontal: 20, vertical: 8),
-                                  decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(10),
-                                    color: Colors.white,
+                            //Consume option if Countable show Quantity
+                            Visibility(
+                              visible: isCountable,
+                              child: Row(
+                                children: [
+                                  SizedBox(
+                                    width: 50,
                                   ),
-                                  child: Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      Text('$quantity ',
-                                          style: FontsTheme.hindBold_20()
-                                              .copyWith(color: Colors.black)),
-                                      //   buildConsumedQuantityUnit(''),
-                                    ],
+                                  Container(
+                                    width: 80,
+                                    height: 50,
+                                    padding: EdgeInsets.symmetric(
+                                        horizontal: 20, vertical: 8),
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(10),
+                                      color: Colors.white,
+                                    ),
+                                    child: Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        Text('$quantity ',
+                                            style: FontsTheme.hindBold_20()
+                                                .copyWith(color: Colors.black)),
+                                        //   buildConsumedQuantityUnit(''),
+                                      ],
+                                    ),
                                   ),
-                                ),
-                              ],
+                                ],
+                              ),
                             ),
-
+                            //Consume option if Not Countable show Weight
+                            Visibility(
+                              visible: !isCountable,
+                              child: Row(
+                                children: [
+                                  SizedBox(
+                                    width: 50,
+                                  ),
+                                  Container(
+                                    width: 100,
+                                    height: 50,
+                                    padding: EdgeInsets.symmetric(
+                                        horizontal: 20, vertical: 8),
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(10),
+                                      color: Colors.white,
+                                    ),
+                                    child: Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        Text('$weightConsumeOption',
+                                            style: FontsTheme.hindBold_20()
+                                                .copyWith(color: Colors.black)),
+                                        //   buildConsumedQuantityUnit(''),
+                                      ],
+                                    ),
+                                  ),
+                                  SizedBox(
+                                    width: 20,
+                                  ),
+                                  Container(
+                                    width: 120,
+                                    height: 50,
+                                    padding: EdgeInsets.symmetric(
+                                        horizontal: 20, vertical: 8),
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(10),
+                                      color: Colors.white,
+                                    ),
+                                    child: Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        Text('grams',
+                                            style: FontsTheme.hindBold_20()
+                                                .copyWith(color: Colors.black)),
+                                        //   buildConsumedQuantityUnit(''),
+                                      ],
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
                             SizedBox(
-                              height: 40,
+                              height: 20,
                             ),
                             // SizedBox(
                             //   width: 10,
@@ -703,17 +766,27 @@ class _FoodDetailsPageState extends State<foodDetails> {
                             //         size: 16,
                             //       )),
                             // ),
-
                             SizedBox(
                               child: InteractiveSlider(
                                 focusedHeight: 20,
-                                startIcon:
-                                    const Icon(Icons.remove_circle_rounded),
-                                endIcon: const Icon(Icons.add_circle_rounded),
-                                min: 1.0,
-                                max: 15.0,
-                                onChanged: (value) =>
-                                    setState(() => consumeQuantity),
+                                backgroundColor: AppTheme.softRed,
+                                startIcon: const Icon(
+                                  Icons.remove_circle_rounded,
+                                  color: Colors.black,
+                                ),
+                                endIcon: const Icon(
+                                  Icons.add_circle_rounded,
+                                  color: Colors.black,
+                                ),
+                                min: 100,
+                                max: weight,
+                                onChanged: (valueWeightConsumeOption) =>
+                                    setState(() {
+                                  weightConsumeOption =
+                                      valueWeightConsumeOption.toInt();
+
+                                  weightConsumeOption.toStringAsFixed(0);
+                                }),
                               ),
                             ),
                           ],
@@ -1171,7 +1244,7 @@ class _FoodDetailsPageState extends State<foodDetails> {
                                 width: 2.0), // Set border color and width
                           ),
                           child: Text(
-                            category,
+                            "category",
                             style: FontsTheme.mouseMemoirs_30Black(),
                           ),
                         )),
@@ -1387,33 +1460,61 @@ class _FoodDetailsPageState extends State<foodDetails> {
                                   ],
                                 ),
                               ),
-                              SliderTheme(
-                                data: SliderTheme.of(context).copyWith(
-                                  trackHeight: 10.0,
-                                  thumbShape: SliderComponentShape.noThumb,
-                                  overlayShape: RoundSliderOverlayShape(
-                                      overlayRadius: 24.0),
-                                  activeTrackColor: Colors.orange,
-                                  inactiveTrackColor: Colors.orange[100],
-                                  thumbColor: Colors.white,
-                                  overlayColor: Colors.orange.withAlpha(32),
-                                ),
-                                child: Slider(
-                                  value: quantity.toDouble(),
-                                  min: 1,
-                                  max: 100,
-                                  divisions: 100,
-                                  onChanged: (value) {
-                                    setState(() {
-                                      quantity = value.toInt();
-                                      _updateAllCost();
-                                      consumeQuantity = quantity;
-                                    });
-                                  },
-                                ),
-                              ),
+                              // SliderTheme(
+                              //   data: SliderTheme.of(context).copyWith(
+                              //     trackHeight: 10.0,
+                              //     thumbShape: SliderComponentShape.noThumb,
+                              //     overlayShape: RoundSliderOverlayShape(
+                              //         overlayRadius: 24.0),
+                              //     activeTrackColor: Colors.orange,
+                              //     inactiveTrackColor: Colors.orange[100],
+                              //     thumbColor: Colors.white,
+                              //     overlayColor: Colors.orange.withAlpha(32),
+                              //   ),
+                              //   child: Slider(
+                              //     value: quantity.toDouble(),
+                              //     min: 1,
+                              //     max: 100,
+                              //     divisions: 100,
+                              //     onChanged: (value) {
+                              //       setState(() {
+                              //         quantity = value.toInt();
+                              //         _updateAllCost();
+                              //         consumeQuantity = quantity;
+                              //       });
+                              //     },
+                              //   ),
+                              // ),
                             ],
                           ),
+                          Row(children: [
+                            SizedBox(
+                              width: 80,
+                            ),
+                            SizedBox(
+                              height: 60,
+                              width: 280,
+                              child: InteractiveSlider(
+                                focusedHeight: 20,
+                                backgroundColor: AppTheme.softRed,
+                                startIcon: const Icon(
+                                  Icons.remove_circle_rounded,
+                                  color: Colors.black,
+                                ),
+                                endIcon: const Icon(
+                                  Icons.add_circle_rounded,
+                                  color: Colors.black,
+                                ),
+                                min: 1,
+                                max: 100,
+                                onChanged: (value) => setState(() {
+                                  quantity = value.toInt();
+                                  _updateAllCost();
+                                  consumeQuantity = quantity;
+                                }),
+                              ),
+                            ),
+                          ]),
                         ],
                       ),
                     ),
@@ -1440,41 +1541,68 @@ class _FoodDetailsPageState extends State<foodDetails> {
                                 mainAxisAlignment:
                                     MainAxisAlignment.spaceBetween,
                                 children: [
-                                  Text('$weightReduced ',
+                                  Text('$weightReduced',
                                       style: FontsTheme.hindBold_20()),
                                   buildWeightUnit('')
                                 ],
                               ),
                             ),
-                            SliderTheme(
-                              data: SliderTheme.of(context).copyWith(
-                                trackHeight: 10.0,
-                                thumbShape: SliderComponentShape.noThumb,
-                                overlayShape: RoundSliderOverlayShape(
-                                    overlayRadius: 24.0),
-                                activeTrackColor: Colors.orange,
-                                inactiveTrackColor: Colors.orange[100],
-                                thumbColor: Colors.white,
-                                overlayColor: Colors.orange.withAlpha(32),
-                              ),
-                              child: Slider(
-                                value: weight,
-                                min: 1,
-                                max: 10000,
-                                divisions: 10000,
-                                onChanged: (value) {
-                                  setState(() {
-                                    weight = value;
+                            // SliderTheme(
+                            //   data: SliderTheme.of(context).copyWith(
+                            //     trackHeight: 10.0,
+                            //     thumbShape: SliderComponentShape.noThumb,
+                            //     overlayShape: RoundSliderOverlayShape(
+                            //         overlayRadius: 24.0),
+                            //     activeTrackColor: Colors.orange,
+                            //     inactiveTrackColor: Colors.orange[100],
+                            //     thumbColor: Colors.white,
+                            //     overlayColor: Colors.orange.withAlpha(32),
+                            //   ),
+                            //   child: Slider(
+                            //     value: weight,
+                            //     min: 1,
+                            //     max: 10000,
+                            //     divisions: 10000,
+                            //     onChanged: (value) {
+                            //       setState(() {
+                            //         weight = value;
 
-                                    weightReduced = weight.toStringAsFixed(0);
-                                  });
-                                },
-                              ),
-                            ),
+                            //         weightReduced = weight.toStringAsFixed(0);
+                            //       });
+                            //     },
+                            //   ),
+                            // ),
                           ],
                         ),
                       ],
                     ),
+                    Row(children: [
+                      SizedBox(
+                        width: 80,
+                      ),
+                      SizedBox(
+                        height: 60,
+                        width: 280,
+                        child: InteractiveSlider(
+                          focusedHeight: 20,
+                          backgroundColor: AppTheme.softRed,
+                          startIcon: const Icon(
+                            Icons.remove_circle_rounded,
+                            color: Colors.black,
+                          ),
+                          endIcon: const Icon(
+                            Icons.add_circle_rounded,
+                            color: Colors.black,
+                          ),
+                          min: 1,
+                          max: 100,
+                          onChanged: (value) => setState(() {
+                            weight = value;
+                            weightReduced = weight.toStringAsFixed(0);
+                          }),
+                        ),
+                      ),
+                    ]),
                   ],
                 ),
               ),

@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:foodhero/models/inventoryfood_model.dart';
-import 'package:foodhero/pages/api/ApiUserFood.dart';
 import 'package:foodhero/pages/foodDetails.dart';
 
 import 'package:foodhero/theme.dart';
@@ -95,7 +93,8 @@ class InventoryListItem extends StatelessWidget {
           context,
           MaterialPageRoute(
             builder: (context) => foodDetails(
-              item: this, isCountable: isCountable, category: '',
+              item: this, isCountable: isCountable, 
+              //category: '',
             ),
           ),
         );

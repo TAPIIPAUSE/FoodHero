@@ -315,15 +315,24 @@ class _InventoryState extends State<Inventory> {
                                           consuming: foodItem.consuming,
                                           remaining: foodItem.remaining,
                                           foodid: foodItem.foodid,
-                                          expired: foodItem.expired, 
+                                          expired: foodItem.expired,
                                           isCountable: foodItem.isCountable,
-                      
                                         );
                                       },
                                     ),
                                   );
                                 }
-                              })
+                              }),
+                          InventoryListItem(
+                            foodname: "Try food",
+                            img: "ssss",
+                            progressbar: 40,
+                            consuming: "2",
+                            remaining: "3",
+                            foodid: 10,
+                            expired: "2024-12-31",
+                            isCountable: false,
+                          ),
                         ],
                       ),
                     ),

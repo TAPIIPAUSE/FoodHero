@@ -28,7 +28,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 // }
 
 class InventoryFood {
-  static String baseurl = "http://$myip:3000/api/v1/inventory";
+  static String baseurl = "http://$myip:3000/api/v1/inventory/getFoodById";
   final authService = AuthService();
   final dio = Dio();
 
@@ -67,7 +67,7 @@ class InventoryFood {
           throw Exception(
               'Unexpected inventory response format: ${res.data.runtimeType}');
         }
-      }else{
+      } else {
         throw Exception('Failed to load inventory food data');
       }
     } catch (error) {
