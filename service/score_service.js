@@ -1,6 +1,10 @@
 import UnitType from "../schema/inventory_module/unitTypeSchema.js";
 import User from "../schema/user_module/userSchema.js";
 import Food from "../schema/inventory_module/foodInventorySchema.js";
+import HouseholdScore from "../schema/score_module/HouseholdScoreSchema.js";
+import OrganizationScore from "../schema/score_module/OrganizationScoreSchema.js"
+import House from "../schema/user_module/houseSchema.js";
+import Organization from "../schema/user_module/organizationSchema.js";
 
 export async function calculateScore(totalAmount, consumedPercen, weightType) {
     try {
@@ -120,4 +124,175 @@ export async function calculateSaveLostForConsume(food,consume, percent){
     const lost = (t_p*((c_a*((100 - percent)/100))/t_a))
 
     return {saved,lost}
+}
+
+export async function preprocess_House_Score(h_ID){
+    const house_member = await User.find({hID: h_ID})
+
+      var processed_h_member = house_member.map(member => member.assigned_ID)
+
+      // Get score from HouseScore Table
+      const score_array = await Promise.all(
+        processed_h_member.map(async (food) => {
+          const score_individual = await HouseholdScore.find({userID: food})
+          return score_individual;
+        })
+      );
+      
+
+      const processed_score_array = score_array.map(person_score => {
+        var acc = 0;
+        const acc_person_score = person_score.map(i_score=>{
+          acc += parseFloat(i_score.Score)
+        })
+        return parseFloat(acc.toFixed(2))
+        
+      })
+
+      const member = await get_House_Member(h_ID);
+
+      const combined = member.map((m, index) => {
+        return { "Rank": null ,"Username": m, "Score": processed_score_array[index] };
+      });
+
+      combined.sort((a, b) => b.Score - a.Score);
+
+      for (let i = 1; i <= combined.length; i++) {
+        combined[i-1].Rank = i
+      }    
+
+      
+
+      return combined
+}
+
+export async function get_House_Member(hID){
+    const member = await User.find({hID: hID})
+    
+    const member_name = member.map(m => {
+        return m.username
+    })
+    
+    return member_name
+}
+
+export async function preprocess_Org_Score(org_ID){
+    const org_member = await OrganizationScore.find({orgID: org_ID})
+
+      var processed_in_org_score = org_member.map(member => member.hID)
+
+      const uniqueHouse = [...new Set(processed_in_org_score)];
+
+      // Get score from HouseScore Table
+      const score_array = await Promise.all(
+        uniqueHouse.map(async (user) => {
+          const score_individual = await OrganizationScore.find({hID: user})
+          return score_individual;
+        })
+      );
+
+    
+      
+
+      const processed_score_array = score_array.map(house_score => {
+        var acc = 0;
+        const acc_person_score = house_score.map(i_score=>{
+          acc += parseFloat(i_score.Score)
+        })
+        return parseFloat(acc.toFixed(2))
+        
+      })
+
+    //   In organization View, user will be seeing the housename instead, not username
+    // IMPORTANT!!!
+      const member = await get_Org_Member(org_ID);
+
+      const combined = member.map((m, index) => {
+        return { "Rank": null ,"Housename": m, "Score": processed_score_array[index] };
+      });
+
+      combined.sort((a, b) => b.Score - a.Score);
+
+      for (let i = 1; i <= combined.length; i++) {
+        combined[i-1].Rank = i
+      }    
+
+      
+
+      return combined
+}
+
+
+export async function get_Org_Member(orgID){
+    const member = await House.find({org_ID: orgID})
+    
+    const member_name = member.map(m => {
+        return m.house_name
+    })
+    
+
+    console.log(member_name)
+    return member_name
+}
+
+export async function preprocess_interOrg_Score(){
+    const org_list = await OrganizationScore.find()
+
+      var processed_in_org_score = org_list.map(member => member.orgID)
+
+      const uniqueOrg = [...new Set(processed_in_org_score)];
+
+      
+
+      // Get score from HouseScore Table
+      const score_array = await Promise.all(
+        uniqueOrg.map(async (user) => {
+          const score_individual = await OrganizationScore.find({orgID: user})
+          return score_individual;
+        })
+      );
+      
+
+      const processed_score_array = score_array.map(house_score => {
+        var acc = 0;
+        house_score.map(i_score=>{
+          acc += parseFloat(i_score.Score)
+        })
+        return parseFloat(acc.toFixed(2))
+        
+      })
+
+      console.log(processed_score_array)
+
+    //   In organization View, user will be seeing the housename instead, not username
+    // IMPORTANT!!!
+      const member = await get_allOrg(uniqueOrg)
+
+      const combined = member.map((m, index) => {
+        return { "Rank": null ,"Orgname": m, "Score": processed_score_array[index] };
+      });
+
+      combined.sort((a, b) => b.Score - a.Score);
+
+      for (let i = 1; i <= combined.length; i++) {
+        combined[i-1].Rank = i
+      }    
+
+      
+
+      return combined
+}
+
+export async function get_allOrg(orgID_list){
+
+    const org_name_list = await Promise.all(
+        orgID_list.map(async org_ID => {
+          const member = await Organization.findOne({ assigned_ID: org_ID });
+          return member.org_name; // or return member.org_name if you want the name specifically
+        })
+      );
+      
+
+    
+    return org_name_list
 }

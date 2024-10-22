@@ -79,29 +79,37 @@ router.post("/confirmConsume", authenticateToken, async (req, res) => {
     // 2)Calculate Waste Amount 
     var {
       current_amount: actual_c_A,
-      current_quan: actual_c_Q, } = await calculateConsumedData(Percent, consumed_item)
+      current_quan: actual_c_Q, 
+    act_consumed_amount: actual_consumed_amount,
+    act_consumed_quan: actual_consumed_quantity} = await calculateConsumedData(Percent, consumed_item)
 
     // 3) Update in database
     // 3.1) Update in Food Inventory Database
     const updated_c_A = parseFloat(consumed_item.current_amount) - actual_c_A
     const updated_c_Q = parseFloat(consumed_item.current_quantity) - actual_c_Q
-      await updateCountableConsume(food, updated_c_A, updated_c_Q, actual_c_A, actual_c_Q)
+
+
+    await updateConsume(cID,food, updated_c_A, updated_c_Q, actual_c_A, actual_c_Q)
 
     const { saved: save, lost: lost } = await calculateSaveLostForConsume(food,consumed_item, Percent)
     // 3.2) Update Score in Personal Score Database
+
+    const leftover = parseFloat(consumed_item.current_amount) - actual_consumed_amount
+
+    
     
     var personObject = new PersonalScore({
       "userID": user.assigned_ID,
       "hID": user.hID,
       "orgID": user.orgID,
       "Score": score,
-      "Consume": actual_c_A,
-      "Waste": updated_c_A,
+      "Consume": actual_consumed_amount,
+      "Waste": leftover,
       "Saved": save,
       "Lost": lost,
     })
 
-    console.log(personObject)
+  
 
     await personObject.save()
 
@@ -123,8 +131,8 @@ router.post("/confirmConsume", authenticateToken, async (req, res) => {
       message: "Consume Successfully",
       cID: consumed_item.assigned_ID,
       Score: score,
-      Consumed_Amount: actual_c_A,
-      Consumed_Quantity: actual_c_Q,
+      Consumed_Amount: actual_consumed_amount,
+      Wasted_Amount: leftover,
       Saved: save,
       Lost: lost
     })

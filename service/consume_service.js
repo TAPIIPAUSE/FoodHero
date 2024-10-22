@@ -132,7 +132,10 @@ export async function calculateCompleteConsumedData(consumedPercent,food){
   var consume_amount = parseFloat(food.consumed_amount) + parseFloat(act_consumed_amount)
   var consume_quan = parseFloat(food.consumed_quantity) + parseFloat(act_consumed_quan)
 
-  return {current_amount, current_quan, consume_amount, consume_quan}
+  const waste = current_amount
+  const consumed = parseFloat(food.current_amount) - current_amount
+
+  return {current_amount, current_quan, consume_amount, consume_quan, waste, consumed}
 
 }
 
@@ -147,11 +150,11 @@ export async function calculateCompleteWasteData(consumedPercent,food){
   var consume_amount = parseFloat(food.consumed_amount) 
   var consume_quan = parseFloat(food.consumed_quantity) 
 
-  console.log("current_amount:", current_amount)
-  console.log("current_quan:", current_quan)
-  console.log("consume_amount:", consume_amount)
-  console.log("consume_quan:", consume_quan)
-  return {current_amount, current_quan, consume_amount, consume_quan}
+  const waste = act_consumed_amount
+  const consumed = 0
+
+
+  return {current_amount, current_quan, consume_amount, consume_quan, waste, consumed}
 
 }
 // This function is designed only for Confirm Consumption, Complete Consume will be calculated differently
