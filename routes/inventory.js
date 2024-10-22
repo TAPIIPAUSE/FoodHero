@@ -93,7 +93,7 @@ router.post("/addLocation", async (req, res) => {
   res.status(200).send("Location Registered");
 });
 
-router.post("/addFood", authenticateToken,async (req, res) => {
+router.post("/addFood", authenticateToken, async (req, res) => {
   const {
     food_name,
     img,
@@ -146,7 +146,7 @@ router.post("/addFood", authenticateToken,async (req, res) => {
   }
 });
 
-router.put("/editFood", authenticateToken,async (req, res) => {
+router.put("/editFood", authenticateToken, async (req, res) => {
   var hID = await get_houseID(user);
   var user = await get_user_from_db(req, res);
   const {
@@ -209,7 +209,7 @@ router.put("/editFood", authenticateToken,async (req, res) => {
 });
 
 // This function is created to retrieve all foods within that house
-router.get("/getFoodByHouse",authenticateToken, async (req, res) => {
+router.get("/getFoodByHouse", authenticateToken, async (req, res) => {
   // const {fID} = req.body
 
   var user = await get_user_from_db(req, res);
@@ -234,7 +234,7 @@ router.get("/getFoodByHouse",authenticateToken, async (req, res) => {
 });
 
 // This function is created to retrieve food within that house
-router.get("/getFoodById", authenticateToken,async (req, res) => {
+router.get("/getFoodById", authenticateToken, async (req, res) => {
   const { fID } = req.body;
 
   var user = await get_user_from_db(req, res);
@@ -255,7 +255,7 @@ router.get("/getFoodById", authenticateToken,async (req, res) => {
 });
 
 // Delete by the input's fID
-router.post("/deleteFoodById", authenticateToken,async (req, res) => {
+router.post("/deleteFoodById", authenticateToken, async (req, res) => {
   const { fID } = req.body;
   var user = await get_user_from_db(req, res);
   try {
@@ -277,7 +277,7 @@ router.post("/deleteFoodById", authenticateToken,async (req, res) => {
   }
 });
 
-router.post('/consume', authenticateToken,async(req,res)=>{
+router.post('/consume', authenticateToken, async (req, res) => {
 
   var { fID, retrievedAmount, retrievedQuantity } = req.body;
 
@@ -309,7 +309,7 @@ router.post('/consume', authenticateToken,async(req,res)=>{
 
       var newCurrentQuantity = currentQuantity - retrievedQuantity
 
-      var user = await get_user_from_db(req,res)
+      var user = await get_user_from_db(req, res)
       var user_ID = user.assigned_ID
       // Create consumed object
 
@@ -358,7 +358,7 @@ router.post('/consume', authenticateToken,async(req,res)=>{
 
 })
 
-router.post('/consume/all', authenticateToken,async (req, res) => {
+router.post('/consume/all', authenticateToken, async (req, res) => {
   const { fID } = req.body;
 
   try {
@@ -380,21 +380,25 @@ router.post('/consume/all', authenticateToken,async (req, res) => {
       current_amount: act_current_amount,
       current_quan: act_current_quan,
       consume_amount: act_consume_amount,
-      consume_quan: act_consume_quan } = await calculateCompleteConsumedData(consume_percen, food)
+      consume_quan: act_consume_quan,
+      waste: w,
+      consumed: c } = await calculateCompleteConsumedData(consume_percen, food)
+
+      
 
     // 3) Update in database
     // 3.1) Update in Food Inventory Database
     await updateConsume(food, act_current_amount, act_current_quan, act_consume_amount, act_consume_quan)
 
-    const {saved: save, lost: lost} = await calculateSaveLost(food, consume_percen)
+    const { saved: save, lost: lost } = await calculateSaveLost(food, consume_percen)
     // 3.2) Update Score in Personal Score Database
     var personObject = new PersonalScore({
       "userID": user.assigned_ID,
       "hID": user.hID,
       "orgID": user.orgID,
       "Score": score,
-      "Consume": act_consume_amount,
-      "Waste": act_current_amount,
+      "Consume": c,
+      "Waste": w,
       "Saved": save,
       "Lost": lost,
     })
@@ -405,13 +409,13 @@ router.post('/consume/all', authenticateToken,async (req, res) => {
 
     const HouseSize = await User.countDocuments({ hID: user.hID });
 
-    await updateHouseScore(user,score,HouseSize)
+    await updateHouseScore(user, score, HouseSize)
 
     // 3.4) Update Score in Organization Score Database
 
     const OrgSize = await User.countDocuments({ orgID: user.orgID });
 
-    await updateOrgScore(user,score,OrgSize)
+    await updateOrgScore(user, score, OrgSize)
 
 
     res.status(200).json({
@@ -426,7 +430,7 @@ router.post('/consume/all', authenticateToken,async (req, res) => {
   }
 });
 
-router.post('/complete_waste', authenticateToken,async (req, res) => {
+router.post('/complete_waste', authenticateToken, async (req, res) => {
   const { fID } = req.body;
 
   try {
@@ -448,21 +452,23 @@ router.post('/complete_waste', authenticateToken,async (req, res) => {
       current_amount: act_current_amount,
       current_quan: act_current_quan,
       consume_amount: act_consume_amount,
-      consume_quan: act_consume_quan } = await calculateCompleteWasteData(consume_percen, food)
+      consume_quan: act_consume_quan,
+      waste: w,
+      consumed: c } = await calculateCompleteWasteData(consume_percen, food)
 
     // 3) Update in database
     // 3.1) Update in Food Inventory Database
     await updateConsume(food, act_current_amount, act_current_quan, act_consume_amount, act_consume_quan)
 
-    const {saved: save, lost: lost} = await calculateSaveLost(food, consume_percen)
+    const { saved: save, lost: lost } = await calculateSaveLost(food, consume_percen)
     // 3.2) Update Score in Personal Score Database
     var personObject = new PersonalScore({
       "userID": user.assigned_ID,
       "hID": user.hID,
       "orgID": user.orgID,
       "Score": score,
-      "Consume": act_consume_amount,
-      "Waste": act_current_amount,
+      "Consume": c,
+      "Waste": w,
       "Saved": save,
       "Lost": lost,
     })
@@ -475,13 +481,13 @@ router.post('/complete_waste', authenticateToken,async (req, res) => {
 
     const HouseSize = await User.countDocuments({ hID: user.hID });
 
-    await updateHouseScore(user,score,HouseSize)
+    await updateHouseScore(user, score, HouseSize)
 
     // 3.4) Update Score in Organization Score Database
 
     const OrgSize = await User.countDocuments({ orgID: user.orgID });
 
-    await updateOrgScore(user,score,OrgSize)
+    await updateOrgScore(user, score, OrgSize)
 
 
     res.status(200).json({
