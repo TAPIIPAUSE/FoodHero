@@ -8,7 +8,7 @@ import Location from '../schema/inventory_module/locationSchema.js';
 import Food from '../schema/inventory_module/foodInventorySchema.js';
 import { get_user_from_db, get_houseID } from '../service/user_service.js';
 import { authenticateToken } from "../service/jwt_auth.js";
-import { getFoodDetailForFoodInventory } from "../service/inventory_service.js";
+import { getFoodDetailForFoodDetail, getFoodDetailForFoodInventory } from "../service/inventory_service.js";
 import { calculateSaveLost, calculateScore } from "../service/score_service.js";
 import ConsumedFood from "../schema/inventory_module/consumedFoodSchema.js";
 import { calculateCompleteConsumedData, updateConsume, updateHouseScore, updateOrgScore, calculateCompleteWasteData } from "../service/consume_service.js";
@@ -246,7 +246,9 @@ router.get("/getFoodById", authenticateToken,async (req, res) => {
     const assigned_ID = fID;
     const food = await Food.findOne({ assigned_ID });
 
-    return res.status(200).send(food);
+    const food_detail = await getFoodDetailForFoodDetail(food.assigned_ID)
+
+    return res.status(200).send(food_detail);
   } catch (error) {
     return res.status(400).send(`Error when getting Food's Info: ${error}`);
   }
