@@ -12,7 +12,7 @@ class OrgListScore extends StatelessWidget {
 
   final String orgname;
   final bool star;
-  final int point;
+  final double point;
 
   @override
   Widget build(BuildContext context) {

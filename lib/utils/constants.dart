@@ -5,7 +5,7 @@ const String foodTypeDry = 'Dry food';
 const String foodTypeInstant = 'Instant food';
 const String foodTypeAll = 'All food';
 
-const String hh = "Houshold";
+const String hh = "Household";
 const String org = "Organization";
 const String inter = "Inter organization";
 
