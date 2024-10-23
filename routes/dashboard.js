@@ -24,7 +24,7 @@ router.get("/household/score", authenticateToken, async (req, res) => {
       
       return res.status(200).send({
         "Messages": "Successfully Retrieved House Score",
-        "Score List": processed_score_array
+        "Score_List": processed_score_array
       });
     } catch (error) {
       return res.status(400).send(`Error when retrieving household score: ${error}`);
@@ -46,7 +46,7 @@ router.get("/organization/score", authenticateToken, async (req, res) => {
     
     return res.status(200).send({
       "Messages": "Successfully Retrieved Organization Score",
-      "Score List": processed_score_array
+      "Score_List": processed_score_array
     });
   } catch (error) {
     return res.status(400).send(`Error when retrieving organization score: ${error}`);
@@ -64,7 +64,7 @@ router.get("/inter_organization/score", authenticateToken, async (req, res) => {
     
     return res.status(200).send({
       "Messages": "Successfully Retrieved Inter Organization Score",
-      "Score List": processed_score_array
+      "Score_List": processed_score_array
     });
   } catch (error) {
     return res.status(400).send(`Error when retrieving inter organization score: ${error}`);
