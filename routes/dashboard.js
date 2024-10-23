@@ -112,5 +112,26 @@ router.get("/organization/fs-pie-chart", authenticateToken, async(req,res) =>{
     return res.status(400).send(`Error when retrieving household food saved pie chart: ${error}`);
   }
 })
+
+router.get("/inter_organization/fs-pie-chart", authenticateToken, async(req,res) =>{
+  try{
+
+    var user = await get_user_from_db(req, res);
+  
+    var org_ID = user.orgID;
+
+    const process_o_stat = await preprocess_Org_fs_pie_chart(org_ID)
+
+    return res.status(200).send({
+      "Messages": "Successfully Retrieved Organization Food Saved Data",
+      "Statistic": process_o_stat
+      // "Score List": processed_score_array
+    });
+
+
+  }catch(error){
+    return res.status(400).send(`Error when retrieving household food saved pie chart: ${error}`);
+  }
+})
 export default router;
 
