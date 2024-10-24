@@ -8,12 +8,13 @@ import Location from '../schema/inventory_module/locationSchema.js';
 import Food from '../schema/inventory_module/foodInventorySchema.js';
 import { get_user_from_db, get_houseID } from '../service/user_service.js';
 import { authenticateToken } from "../service/jwt_auth.js";
-import { getFoodDetailForFoodDetail, getFoodDetailForFoodInventory } from "../service/inventory_service.js";
+import { getFoodDetailForFoodDetail, getFoodDetailForFoodInventory,save_consume_to_db  } from "../service/inventory_service.js";
 import { calculateSaveLost, calculateScore } from "../service/score_service.js";
 import ConsumedFood from "../schema/inventory_module/consumedFoodSchema.js";
 import { calculateCompleteConsumedData, updateConsume, updateHouseScore, updateOrgScore, calculateCompleteWasteData } from "../service/consume_service.js";
 import PersonalScore from "../schema/score_module/PersonalScoreSchema.js";
 import User from "../schema/user_module/userSchema.js";
+
 
 const router = express.Router();
 

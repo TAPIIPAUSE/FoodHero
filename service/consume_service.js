@@ -1,3 +1,4 @@
+import ConsumedFood from "../schema/inventory_module/consumedFoodSchema.js";
 import Food from "../schema/inventory_module/foodInventorySchema.js";
 import Location from "../schema/inventory_module/locationSchema.js";
 import PackageUnitType from "../schema/inventory_module/packageTypeSchema.js";
@@ -166,20 +167,35 @@ export async function calculateConsumedData(consumedPercent,consumed){
   var current_amount = parseFloat(consumed.current_amount) - parseFloat(act_consumed_amount)
   var current_quan = parseFloat(consumed.current_quantity) - parseFloat(act_consumed_quan)
 
-  return {current_amount, current_quan}
+  // console.log("Actual Consumed Amount:", act_consumed_amount)
+  // console.log("Actual Consumed Quantity:", act_consumed_quan)
+  // console.log("Current Amount:", current_amount)
+  // console.log("Current Quantity:", current_quan)
+  return {current_amount, current_quan,act_consumed_amount,act_consumed_quan}
 
 }
 
-export async function updateConsume(food,cur_amount,cur_quan,con_a,con_quan){
+export async function updateConsume(cID,food,cur_amount,cur_quan,con_a,con_quan){
   try{
+    
     await Food.updateOne(
       { assigned_ID: food.assigned_ID }, // Filter by assigned_ID
       {
         $set: {
-          current_amount: cur_amount,
-          current_quantity: cur_quan,
-          consumed_amount: con_a,
-          consumed_quantity: con_quan,
+          consumed_amount: Number(food.consumed_amount) - con_a - cur_amount,
+          consumed_quantity: Number(food.consumed_quantity) - con_quan - cur_quan,
+        },
+      }
+    );
+
+    await ConsumedFood.updateOne(
+      { assigned_ID: cID }, // Filter by assigned_ID
+      {
+        $set: {
+          current_amount: 0,
+          current_quantity: 0,
+          consumed_amount: 0,
+          consumed_quantity: 0,
         },
       }
     );
