@@ -1,6 +1,7 @@
 import 'package:dio/dio.dart';
 import 'package:foodhero/models/score/housescore_model.dart';
 import 'package:foodhero/models/score/interscore_model.dart';
+import 'package:foodhero/models/score/orgscore_model.dart';
 import 'package:foodhero/pages/api/ApiClient.dart';
 import 'package:foodhero/utils/constants.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -74,7 +75,41 @@ class DashboardApi {
       }
     } catch (e) {
       print('Error: $e');
-      throw Exception('Failed to fetch house: ${e.toString()}');
+      throw Exception('Failed to fetch inter score: ${e.toString()}');
+    }
+  }
+
+  // get org score
+  Future<OrgScore> getOrgScore() async {
+    try {
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      final token = prefs.getString('user_token');
+      // print('token: $token');
+
+      final res = await dio.get(
+        '$baseurl/organization/score',
+        options: Options(
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer $token',
+          },
+        ),
+        // queryParameters: {'hID': hID},
+      );
+
+      print("===Org Score===");
+      print("Response status: ${res.statusCode}");
+      print("Response body: ${res.data}");
+
+      if (res.statusCode == 200) {
+        final Map<String, dynamic> data = res.data;
+        return OrgScore.fromJson(data);
+      } else {
+        throw Exception('Invalid response format: ${res.data.runtimeType}');
+      }
+    } catch (e) {
+      print('Error: $e');
+      throw Exception('Failed to fetch org score: ${e.toString()}');
     }
   }
 }

@@ -6,6 +6,7 @@ import 'package:foodhero/fonts.dart';
 import 'package:foodhero/main.dart';
 import 'package:foodhero/models/score/housescore_model.dart';
 import 'package:foodhero/models/score/interscore_model.dart';
+import 'package:foodhero/models/score/orgscore_model.dart';
 import 'package:foodhero/pages/api/dashboardapi.dart';
 import 'package:foodhero/theme.dart';
 import 'package:foodhero/utils/constants.dart';
@@ -67,7 +68,18 @@ class _InterOrganizationState extends State<InterOrganization> {
       print('Fetched inter score'); // Debug print
       return data;
     } catch (e) {
-      print('Error loading house score: $e');
+      print('Error loading inter score: $e');
+      rethrow;
+    }
+  }
+
+  Future<OrgScore> _getOrgScore() async {
+    try {
+      final data = await DashboardApi().getOrgScore();
+      print('Fetched org score'); // Debug print
+      return data;
+    } catch (e) {
+      print('Error loading org score: $e');
       rethrow;
     }
   }
@@ -226,13 +238,13 @@ class _InterOrganizationState extends State<InterOrganization> {
                           } else if (!snapshot.hasData) {
                             return const Text('No inter score available');
                           } else {
-                            final houseScore = snapshot.data!;
+                            final interScore = snapshot.data!;
                             return SizedBox(
                               child: ListView.builder(
                                 shrinkWrap: true,
-                                itemCount: houseScore.scoreList.length,
+                                itemCount: interScore.scoreList.length,
                                 itemBuilder: (context, index) {
-                                  final score = houseScore.scoreList[index];
+                                  final score = interScore.scoreList[index];
                                   return OrgListScore(
                                     orgname: score.orgname,
                                     star: score.rank == 1,
@@ -335,7 +347,7 @@ class _InterOrganizationState extends State<InterOrganization> {
                       ),
                       const Text(
                         "Thung Khru",
-                        style: TextStyle(color: Colors.white, fontSize: 20),
+                        style: TextStyle(color: Colors.white, fontSize: 16),
                       ),
                       IconButton(
                         onPressed: () {},
@@ -461,97 +473,104 @@ class _InterOrganizationState extends State<InterOrganization> {
             child: Column(
               children: [
                 Container(
-                    decoration: const BoxDecoration(
-                      color: AppTheme.softBlue,
-                      borderRadius: BorderRadius.all(Radius.circular(20)),
+                  margin: const EdgeInsets.all(5),
+                  padding: const EdgeInsets.all(10),
+                  width: screenWidth * 0.95,
+                  decoration: const BoxDecoration(
+                    color: AppTheme.mainBlue,
+                    borderRadius: BorderRadius.all(Radius.circular(20)),
+                  ),
+                  child: const Center(
+                    child: Text(
+                      "$org score board",
+                      style: TextStyle(color: Colors.white, fontSize: 24),
                     ),
-                    margin: const EdgeInsets.all(5),
-                    padding: const EdgeInsets.all(5),
-                    child: Column(children: [
-                      Container(
-                        margin: const EdgeInsets.all(5),
-                        padding: const EdgeInsets.all(10),
-                        width: screenWidth * 0.9,
-                        decoration: const BoxDecoration(
-                          color: AppTheme.mainBlue,
-                          borderRadius: BorderRadius.all(Radius.circular(20)),
-                        ),
-                        child: Center(
-                            child: Text(
-                          "$org score board",
-                          style: FontsTheme.mouseMemoirs_30White()
-                              .copyWith(color: Colors.white),
-                        )),
+                  ),
+                ),
+                Container(
+                  padding: const EdgeInsets.all(10),
+                  width: screenWidth * 0.95,
+                  decoration: const BoxDecoration(
+                    color: AppTheme.mainBlue,
+                    borderRadius: BorderRadius.all(Radius.circular(20)),
+                  ),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      const Icon(
+                        Icons.map_sharp,
+                        color: Colors.white,
                       ),
-                      Container(
-                          padding: const EdgeInsets.all(10),
-                          width: screenWidth * 0.9,
-                          decoration: const BoxDecoration(
-                            color: AppTheme.mainBlue,
-                            borderRadius: BorderRadius.all(Radius.circular(20)),
-                          ),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              const Icon(
-                                Icons.map_sharp,
-                                color: Colors.white,
-                              ),
-                              Text(
-                                "Thung Khru",
-                                style: FontsTheme.mouseMemoirs_25().copyWith(
-                                    color: Colors.white, letterSpacing: 1),
-                              ),
-                              IconButton(
-                                  onPressed: () {},
-                                  icon: const Icon(
-                                    Icons.change_circle,
-                                    color: Colors.white,
-                                  )),
-                            ],
-                          )),
-                      Container(
-                        margin: const EdgeInsets.all(10),
-                        padding: const EdgeInsets.all(10),
-                        width: screenWidth * 0.9,
-                        decoration: const BoxDecoration(
-                          color: AppTheme.mainBlue,
-                          borderRadius: BorderRadius.all(Radius.circular(20)),
-                        ),
-                        child: Column(
-                          children: [
-                            Text(
-                              '${NumberFormat('#,###').format(totalpoint)} points score',
-                              style: const TextStyle(color: Colors.white),
-                            ),
-                            const OrgListScore(
-                              orgname: 'You',
-                              star: true,
-                              point: 55555,
-                            ),
-                            const OrgListScore(
-                              orgname: 'Member#1',
-                              star: false,
-                              point: 5555555555,
-                            ),
-                            const OrgListScore(
-                              orgname: 'Member#2',
-                              star: false,
-                              point: 5,
-                            ),
-                            const OrgListScore(
-                              orgname: 'Member#3',
-                              star: false,
-                              point: 5,
-                            ),
-                          ],
+                      const Text(
+                        "Thung Khru",
+                        style: TextStyle(color: Colors.white, fontSize: 16),
+                      ),
+                      IconButton(
+                        onPressed: () {},
+                        icon: const Icon(
+                          Icons.change_circle,
+                          color: Colors.white,
                         ),
                       ),
-                    ])),
+                    ],
+                  ),
+                ),
                 Container(
                   margin: const EdgeInsets.all(10),
                   padding: const EdgeInsets.all(10),
-                  width: screenWidth * 0.9,
+                  width: screenWidth * 0.95,
+                  decoration: const BoxDecoration(
+                    color: AppTheme.mainBlue,
+                    borderRadius: BorderRadius.all(Radius.circular(20)),
+                  ),
+                  child: Column(
+                    children: [
+                      Text(
+                        '${NumberFormat('#,###').format(totalpoint)} points score',
+                        style:
+                            const TextStyle(color: Colors.white, fontSize: 24),
+                      ),
+                      FutureBuilder<OrgScore>(
+                        future: _getOrgScore(),
+                        builder: (context, snapshot) {
+                          if (snapshot.connectionState ==
+                              ConnectionState.waiting) {
+                            return const Center(
+                              child: CircularProgressIndicator(
+                                  color: Colors.white),
+                            );
+                          } else if (snapshot.hasError) {
+                            return Text('Error: ${snapshot.error}');
+                          } else if (!snapshot.hasData) {
+                            return const Text(
+                                'No organization score available');
+                          } else {
+                            final orgScore = snapshot.data!;
+                            return SizedBox(
+                              height: 200, // Adjust height as needed
+                              child: ListView.builder(
+                                shrinkWrap: true,
+                                itemCount: orgScore.scoreList.length,
+                                itemBuilder: (context, index) {
+                                  final score = orgScore.scoreList[index];
+                                  return OrgListScore(
+                                    orgname: score.housename,
+                                    star: score.rank == 1,
+                                    point: score.score!,
+                                  );
+                                },
+                              ),
+                            );
+                          }
+                        },
+                      ),
+                    ],
+                  ),
+                ),
+                Container(
+                  margin: const EdgeInsets.all(10),
+                  padding: const EdgeInsets.all(10),
+                  width: screenWidth * 0.95,
                   decoration: const BoxDecoration(
                     color: AppTheme.mainBlue,
                     borderRadius: BorderRadius.all(Radius.circular(20)),
@@ -559,17 +578,15 @@ class _InterOrganizationState extends State<InterOrganization> {
                   child: Column(
                     children: [
                       const Text(
-                        'Your organization have saved food',
-                        style: TextStyle(color: Colors.white),
+                        'Your organization prevented food waste',
+                        style: TextStyle(color: Colors.white, fontSize: 20),
                       ),
                       Text(
                         '${NumberFormat('#,###').format(wastedpoint)} grams',
-                        style: const TextStyle(color: Colors.white),
+                        style:
+                            const TextStyle(color: Colors.white, fontSize: 16),
                       ),
-                      const SizedBox(
-                        height: 2,
-                      ),
-                      // pie chart
+                      // Pie chart
                       Container(
                         padding: const EdgeInsets.all(10),
                         decoration: const BoxDecoration(
@@ -579,7 +596,6 @@ class _InterOrganizationState extends State<InterOrganization> {
                         child: Column(
                           children: [
                             const Row(
-                              // crossAxisAlignment: CrossAxisAlignment.center,
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
                                 Text(week),
@@ -590,9 +606,7 @@ class _InterOrganizationState extends State<InterOrganization> {
                           ],
                         ),
                       ),
-                      const SizedBox(
-                        height: 10,
-                      ),
+                      const SizedBox(height: 10),
                       ElevatedButton(
                         onPressed: () => context.push('/dashboard_inter'),
                         style: buttonStyle,
@@ -605,6 +619,142 @@ class _InterOrganizationState extends State<InterOrganization> {
             ),
           ),
         );
+      // case org:
+      //   return SingleChildScrollView(
+      //     child: Center(
+      //       child: Column(
+      //         children: [
+      //           Container(
+      //             margin: const EdgeInsets.all(5),
+      //             padding: const EdgeInsets.all(10),
+      //             width: screenWidth * 0.9,
+      //             decoration: const BoxDecoration(
+      //               color: AppTheme.mainBlue,
+      //               borderRadius: BorderRadius.all(Radius.circular(20)),
+      //             ),
+      //             child: const Center(
+      //                 child: Text(
+      //               "$org score board",
+      //               style: TextStyle(color: Colors.white),
+      //             )),
+      //           ),
+      //           Container(
+      //               padding: const EdgeInsets.all(10),
+      //               width: screenWidth * 0.9,
+      //               decoration: const BoxDecoration(
+      //                 color: AppTheme.mainBlue,
+      //                 borderRadius: BorderRadius.all(Radius.circular(20)),
+      //               ),
+      //               child: Row(
+      //                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      //                 children: [
+      //                   const Icon(
+      //                     Icons.map_sharp,
+      //                     color: Colors.white,
+      //                   ),
+      //                   const Text(
+      //                     "Thung Khru",
+      //                     style: TextStyle(color: Colors.white),
+      //                   ),
+      //                   IconButton(
+      //                       onPressed: () {},
+      //                       icon: const Icon(
+      //                         Icons.change_circle,
+      //                         color: Colors.white,
+      //                       )),
+      //                 ],
+      //               )),
+      //           Container(
+      //             margin: const EdgeInsets.all(10),
+      //             padding: const EdgeInsets.all(10),
+      //             width: screenWidth * 0.9,
+      //             decoration: const BoxDecoration(
+      //               color: AppTheme.mainBlue,
+      //               borderRadius: BorderRadius.all(Radius.circular(20)),
+      //             ),
+      //             child: Column(
+      //               children: [
+      //                 Text(
+      //                   '${NumberFormat('#,###').format(totalpoint)} points score',
+      //                   style: const TextStyle(color: Colors.white),
+      //                 ),
+      //                 const OrgListScore(
+      //                   orgname: 'You',
+      //                   star: true,
+      //                   point: 55555,
+      //                 ),
+      //                 const OrgListScore(
+      //                   orgname: 'Member#1',
+      //                   star: false,
+      //                   point: 5555555555,
+      //                 ),
+      //                 const OrgListScore(
+      //                   orgname: 'Member#2',
+      //                   star: false,
+      //                   point: 5,
+      //                 ),
+      //                 const OrgListScore(
+      //                   orgname: 'Member#3',
+      //                   star: false,
+      //                   point: 5,
+      //                 ),
+      //               ],
+      //             ),
+      //           ),
+      //           Container(
+      //             margin: const EdgeInsets.all(10),
+      //             padding: const EdgeInsets.all(10),
+      //             width: screenWidth * 0.9,
+      //             decoration: const BoxDecoration(
+      //               color: AppTheme.mainBlue,
+      //               borderRadius: BorderRadius.all(Radius.circular(20)),
+      //             ),
+      //             child: Column(
+      //               children: [
+      //                 const Text(
+      //                   'Your organization saved food wasted',
+      //                   style: TextStyle(color: Colors.white),
+      //                 ),
+      //                 Text(
+      //                   '${NumberFormat('#,###').format(wastedpoint)} grams',
+      //                   style: const TextStyle(color: Colors.white),
+      //                 ),
+      //                 // pie chart
+      //                 Container(
+      //                   padding: const EdgeInsets.all(10),
+      //                   decoration: const BoxDecoration(
+      //                     color: AppTheme.softBlue,
+      //                     borderRadius: BorderRadius.all(Radius.circular(20)),
+      //                   ),
+      //                   child: Column(
+      //                     children: [
+      //                       const Row(
+      //                         // crossAxisAlignment: CrossAxisAlignment.center,
+      //                         mainAxisAlignment: MainAxisAlignment.center,
+      //                         children: [
+      //                           Text(week),
+      //                           Text(month),
+      //                         ],
+      //                       ),
+      //                       _buildResponsiveChartLayout(screenWidth),
+      //                     ],
+      //                   ),
+      //                 ),
+      //                 const SizedBox(
+      //                   height: 10,
+      //                 ),
+      //                 ElevatedButton(
+      //                   onPressed: () => context.push('/dashboard_inter'),
+      //                   style: buttonStyle,
+      //                   child: const Text("see more"),
+      //                 ),
+      //               ],
+      //             ),
+      //           ),
+      //         ],
+      //       ),
+      //     ),
+      //   );
       default:
         return const LinearProgressIndicator();
     }
