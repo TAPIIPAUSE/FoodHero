@@ -37,7 +37,7 @@ class OrgListScore extends StatelessWidget {
                     orgname,
                     style: const TextStyle(
                       fontWeight: FontWeight.w500,
-                      fontSize: 14.0,
+                      fontSize: 16.0,
                     ),
                   ),
                 ),
@@ -59,10 +59,12 @@ class OrgListScore extends StatelessWidget {
                       child: Column(
                         children: [
                           Text(
-                            NumberFormat('#,###').format(point),
+                            point == 0
+                                ? '0'
+                                : NumberFormat('#,##0.00').format(point),
                             style: const TextStyle(
                               color: Colors.black,
-                              fontSize: 12.0,
+                              fontSize: 14.0,
                             ),
                           ),
                         ],
