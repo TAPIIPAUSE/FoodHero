@@ -193,9 +193,7 @@ export async function updateConsume(cID,food,cur_amount,cur_quan,con_a,con_quan)
       {
         $set: {
           current_amount: 0,
-          current_quantity: 0,
-          consumed_amount: 0,
-          consumed_quantity: 0,
+          current_quantity: 0
         },
       }
     );
@@ -205,6 +203,47 @@ export async function updateConsume(cID,food,cur_amount,cur_quan,con_a,con_quan)
   }
 
 }
+
+export async function updateCompleteConsume(food){
+  try{
+    
+    await Food.updateOne(
+      { assigned_ID: food.assigned_ID }, // Filter by assigned_ID
+      {
+        $set: {
+          current_amount: 0,
+          current_quantity: 0
+        },
+      }
+    );
+
+  }catch (error){
+    console.log("Error updating food inventory when consuming:", error)
+    throw error
+  }
+
+}
+
+export async function updateCompleteWaste(food){
+  try{
+    
+    await Food.updateOne(
+      { assigned_ID: food.assigned_ID }, // Filter by assigned_ID
+      {
+        $set: {
+          current_amount: 0,
+          current_quantity: 0
+        },
+      }
+    );
+
+  }catch (error){
+    console.log("Error updating food inventory when consuming:", error)
+    throw error
+  }
+
+}
+
 
 export async function updateHouseScore(user,score, housesize){
   const per_house_capita = score/housesize

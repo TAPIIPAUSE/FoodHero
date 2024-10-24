@@ -26,7 +26,7 @@ router.get("/showConsumedFood", authenticateToken, async (req, res) => {
     var user = await get_user_from_db(req, res);
 
     var h_ID = user.hID;
-
+    const consumed_number = await ConsumedFood.countDocuments({ h_ID });
     const consumed_items = await ConsumedFood.find({ h_ID });
     // Fetch food details for each consumed item using Promise.all to wait for all promises to resolve
     const food_array = await Promise.all(
@@ -36,7 +36,10 @@ router.get("/showConsumedFood", authenticateToken, async (req, res) => {
       })
     );
 
-    return res.status(200).send(food_array);
+    return res.status(200).send({
+      Document_Number: consumed_number,
+      food: food_array
+    });
   } catch (error) {
     return res.status(400).send("Error when showing consumed food list", error);
   }
@@ -139,6 +142,25 @@ router.post("/confirmConsume", authenticateToken, async (req, res) => {
     })
   } catch (error) {
     return res.status(400).send(`Error when Confirm Consume : ${error}`);
+  }
+})
+
+router.post("/compaction", authenticateToken, async(req,res)=>{
+  try{
+    await ConsumedFood.deleteMany({
+      current_amount: 0,
+      current_quantity: 0
+    });
+    
+
+    return res.status(200).send({
+      message: "Compact Consume Collection Successfully",
+    })
+  }catch (error){
+    return res.status(200).send({
+      message: "Error when compacting the Consume Collection",
+      error: error
+    })
   }
 })
 
