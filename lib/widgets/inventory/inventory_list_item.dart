@@ -10,9 +10,9 @@ class InventoryListItem extends StatelessWidget {
   final int foodid;
   final String foodname;
   final String img;
-  // final String location;
+  final String location;
   // final String food_category;
-   final bool isCountable;
+  final bool isCountable;
   // final String weight_type;
   // final String package_type;
   // final int current_amount;
@@ -24,8 +24,12 @@ class InventoryListItem extends StatelessWidget {
   // final int total_price;
   // final String bestByDate;
   final String consuming;
-  final String remaining;
+  final int remaining;
   final String expired;
+  final String remind;
+  final int TotalCost;
+  final int IndividualWeight; 
+  final int IndividualCost; 
 
   // final String thumbnail;
   // final String foodname;
@@ -39,9 +43,9 @@ class InventoryListItem extends StatelessWidget {
     required this.foodid,
     required this.foodname,
     required this.img,
-    // required this.location,
+    required this.location,
     // required this.food_category,
-   required this.isCountable,
+    required this.isCountable,
     // required this.weight_type,
     // required this.package_type,
     // required this.current_amount,
@@ -53,9 +57,10 @@ class InventoryListItem extends StatelessWidget {
     // required this.total_price,
     // required this.bestByDate,
     required this.expired,
+    required this.remind,
     required this.progressbar,
     required this.consuming,
-    required this.remaining,
+    required this.remaining, required this.TotalCost, required this.IndividualWeight, required this.IndividualCost,
   });
 
 //  factory InventoryListItem.fromJson(Map<String, dynamic> json) {
@@ -93,7 +98,8 @@ class InventoryListItem extends StatelessWidget {
           context,
           MaterialPageRoute(
             builder: (context) => foodDetails(
-              item: this, isCountable: isCountable, 
+              item: this, expired: expired, remind:remind,  isCountable: isCountable,
+              remaining: remaining, location: location,
               //category: '',
             ),
           ),
@@ -166,7 +172,7 @@ class _FoodDetail extends StatelessWidget {
   final DateTime expiry;
   final int progessbar;
   final String consumeing;
-  final String remaining;
+  final int remaining;
 
   @override
   Widget build(BuildContext context) {

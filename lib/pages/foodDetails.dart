@@ -17,10 +17,20 @@ import 'package:interactive_slider/interactive_slider.dart';
 class foodDetails extends StatefulWidget {
   final InventoryListItem item;
   //final String category;
+  final String location;
+  final String expired;
+  final String remind;
   final bool isCountable;
-  foodDetails({required this.item, required this.isCountable
-      //required this.category,
-      });
+  final int remaining;
+  foodDetails({
+    required this.item,
+    required this.isCountable,
+    required this.remaining,
+    required this.location,
+    required this.expired,
+    required this.remind,
+    //required this.category,
+  });
 
   @override
   _FoodDetailsPageState createState() => _FoodDetailsPageState();
@@ -42,8 +52,10 @@ class _FoodDetailsPageState extends State<foodDetails> {
   bool _showImageOption = false;
   DateTime expirationDate = DateTime(2024);
   DateTime reminderDate = DateTime(2024);
+  String expired = '';
+  String remind = '';
   int quantity = 1;
-  double weight = 1; // in grams
+  int weight = 1; // in grams
   String weightReduced = ''; //make it proper for the decimals
   double allCost = 0;
   double costPerPiece = 0;
@@ -51,6 +63,7 @@ class _FoodDetailsPageState extends State<foodDetails> {
   int consumeQuantity = 0;
   late final String foodname;
   late String category;
+  late String location;
   late bool isCountable;
   int weightConsumeOption = 1;
 
@@ -240,15 +253,22 @@ class _FoodDetailsPageState extends State<foodDetails> {
     loginColor = selectedColor;
     signInColor = normalColor;
     //category = widget.category;
+    //weightConsumeOption = weight as int;
+    expired = widget.expired;
+    remind = widget.remind;
+    location = widget.location;
     isCountable = widget.isCountable;
+    quantity = widget.remaining;
+    weight = widget.remaining;
+    weightReduced = weight.toString();
   }
 
-  double screenHeight = 1100;
+  double screenHeight = 950;
   @override
   Widget build(BuildContext context) {
     final keyboardHeight = MediaQuery.of(context).viewInsets.bottom;
     if (isCountable == false) {
-      screenHeight = 900;
+      screenHeight = 800;
     }
     return Scaffold(
         key: scaffoldKey,
@@ -431,7 +451,7 @@ class _FoodDetailsPageState extends State<foodDetails> {
                             buildCategoriesField(
                                 "Categories", "value", Icons.arrow_drop_down),
                             buildWhereField('In', 'value', Icons.kitchen),
-                            buildDateField('Expiration date', ''),
+                            buildExpireField('Expiration date', ''),
                             buildReminderField('30 April 2024'),
                             buildQuantityWeight(),
                             buildEachPieceField(),
@@ -615,7 +635,7 @@ class _FoodDetailsPageState extends State<foodDetails> {
                     ),
                     Container(
                       alignment: Alignment.topCenter,
-                      height: 180,
+                      height: 175,
                       width: 355,
                       margin: EdgeInsets.all(10),
                       foregroundDecoration: BoxDecoration(
@@ -687,6 +707,29 @@ class _FoodDetailsPageState extends State<foodDetails> {
                                           MainAxisAlignment.spaceBetween,
                                       children: [
                                         Text('$quantity ',
+                                            style: FontsTheme.hindBold_20()
+                                                .copyWith(color: Colors.black)),
+                                        //   buildConsumedQuantityUnit(''),
+                                      ],
+                                    ),
+                                  ),
+                                  SizedBox(
+                                    width: 20,
+                                  ),
+                                  Container(
+                                    width: 120,
+                                    height: 50,
+                                    padding: EdgeInsets.symmetric(
+                                        horizontal: 20, vertical: 8),
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(10),
+                                      color: Colors.white,
+                                    ),
+                                    child: Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        Text('Pieces',
                                             style: FontsTheme.hindBold_20()
                                                 .copyWith(color: Colors.black)),
                                         //   buildConsumedQuantityUnit(''),
@@ -779,7 +822,7 @@ class _FoodDetailsPageState extends State<foodDetails> {
                                   color: Colors.black,
                                 ),
                                 min: 100,
-                                max: weight,
+                                max: weight.toDouble(),
                                 onChanged: (valueWeightConsumeOption) =>
                                     setState(() {
                                   weightConsumeOption =
@@ -1296,37 +1339,42 @@ class _FoodDetailsPageState extends State<foodDetails> {
                     SizedBox(
                         width: 215,
                         child: Container(
-                          padding: EdgeInsets.symmetric(horizontal: 10.0),
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(5.0),
-                            border: Border.all(
-                                color: AppTheme.mainBlue,
-                                width: 2.0), // Set border color and width
-                          ),
-                          child: DropdownButtonHideUnderline(
-                            child: DropdownButton<String>(
-                              value: selectedValue,
-                              isExpanded: true,
-                              icon: Icon(icon),
-                              items: items.map((String item) {
-                                return DropdownMenuItem<String>(
-                                  value: item,
-                                  child: Text(
-                                    item,
-                                    style: FontsTheme.mouseMemoirs_30Black(),
-                                  ),
-                                );
-                              }).toList(),
-                              onChanged: (String? newValue) {
-                                if (newValue != null) {
-                                  setState(() {
-                                    selectedValue = newValue;
-                                  });
-                                }
-                              },
+                            padding: EdgeInsets.symmetric(horizontal: 10.0),
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(5.0),
+                              border: Border.all(
+                                  color: AppTheme.mainBlue,
+                                  width: 2.0), // Set border color and width
                             ),
-                          ),
-                        )),
+                            child: Text(
+                              location,
+                              style: FontsTheme.mouseMemoirs_30Black(),
+                            )
+
+                            // DropdownButtonHideUnderline(
+                            //   child: DropdownButton<String>(
+                            //     value: selectedValue,
+                            //     isExpanded: true,
+                            //     icon: Icon(icon),
+                            //     items: items.map((String item) {
+                            //       return DropdownMenuItem<String>(
+                            //         value: item,
+                            //         child: Text(
+                            //           item,
+                            //           style: FontsTheme.mouseMemoirs_30Black(),
+                            //         ),
+                            //       );
+                            //     }).toList(),
+                            //     onChanged: (String? newValue) {
+                            //       if (newValue != null) {
+                            //         setState(() {
+                            //           selectedValue = newValue;
+                            //         });
+                            //       }
+                            //     },
+                            //   ),
+                            // ),
+                            )),
                   ],
                 ))
           ],
@@ -1335,7 +1383,7 @@ class _FoodDetailsPageState extends State<foodDetails> {
     });
   }
 
-  Widget buildDateField(String label, String date) {
+  Widget buildExpireField(String label, String date) {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 8),
       child: Column(
@@ -1358,9 +1406,7 @@ class _FoodDetailsPageState extends State<foodDetails> {
                 SizedBox(
                   width: 200,
                   child: ListTile(
-                    title: Text(
-                        '${expirationDate.toLocal().toString().split(' ')[0]}',
-                        style: FontsTheme.hind_20()),
+                    title: Text(expired, style: FontsTheme.hind_20()),
                     trailing: Icon(Icons.calendar_month_rounded),
                     onTap: _selectExDate,
                   ),
@@ -1397,9 +1443,7 @@ class _FoodDetailsPageState extends State<foodDetails> {
                 SizedBox(
                   width: 200,
                   child: ListTile(
-                    title: Text(
-                        '${reminderDate.toLocal().toString().split(' ')[0]}',
-                        style: FontsTheme.hind_20()),
+                    title: Text(remind, style: FontsTheme.hind_20()),
                     trailing: Icon(Icons.calendar_month_rounded),
                     onTap: _selectReDate,
                   ),
@@ -1491,29 +1535,29 @@ class _FoodDetailsPageState extends State<foodDetails> {
                             SizedBox(
                               width: 80,
                             ),
-                            SizedBox(
-                              height: 60,
-                              width: 280,
-                              child: InteractiveSlider(
-                                focusedHeight: 20,
-                                backgroundColor: AppTheme.softRed,
-                                startIcon: const Icon(
-                                  Icons.remove_circle_rounded,
-                                  color: Colors.black,
-                                ),
-                                endIcon: const Icon(
-                                  Icons.add_circle_rounded,
-                                  color: Colors.black,
-                                ),
-                                min: 1,
-                                max: 100,
-                                onChanged: (value) => setState(() {
-                                  quantity = value.toInt();
-                                  _updateAllCost();
-                                  consumeQuantity = quantity;
-                                }),
-                              ),
-                            ),
+                            // SizedBox(
+                            //   height: 60,
+                            //   width: 280,
+                            //   child: InteractiveSlider(
+                            //     focusedHeight: 20,
+                            //     backgroundColor: AppTheme.softRed,
+                            //     startIcon: const Icon(
+                            //       Icons.remove_circle_rounded,
+                            //       color: Colors.black,
+                            //     ),
+                            //     endIcon: const Icon(
+                            //       Icons.add_circle_rounded,
+                            //       color: Colors.black,
+                            //     ),
+                            //     min: 1,
+                            //     max: 100,
+                            //     onChanged: (value) => setState(() {
+                            //       quantity = value.toInt();
+                            //       _updateAllCost();
+                            //       consumeQuantity = quantity;
+                            //     }),
+                            //   ),
+                            // ),
                           ]),
                         ],
                       ),
@@ -1580,28 +1624,28 @@ class _FoodDetailsPageState extends State<foodDetails> {
                       SizedBox(
                         width: 80,
                       ),
-                      SizedBox(
-                        height: 60,
-                        width: 280,
-                        child: InteractiveSlider(
-                          focusedHeight: 20,
-                          backgroundColor: AppTheme.softRed,
-                          startIcon: const Icon(
-                            Icons.remove_circle_rounded,
-                            color: Colors.black,
-                          ),
-                          endIcon: const Icon(
-                            Icons.add_circle_rounded,
-                            color: Colors.black,
-                          ),
-                          min: 1,
-                          max: 100,
-                          onChanged: (value) => setState(() {
-                            weight = value;
-                            weightReduced = weight.toStringAsFixed(0);
-                          }),
-                        ),
-                      ),
+                      // SizedBox(
+                      //   height: 60,
+                      //   width: 280,
+                      //   child: InteractiveSlider(
+                      //     focusedHeight: 20,
+                      //     backgroundColor: AppTheme.softRed,
+                      //     startIcon: const Icon(
+                      //       Icons.remove_circle_rounded,
+                      //       color: Colors.black,
+                      //     ),
+                      //     endIcon: const Icon(
+                      //       Icons.add_circle_rounded,
+                      //       color: Colors.black,
+                      //     ),
+                      //     min: 1,
+                      //     max: 100,
+                      //     onChanged: (value) => setState(() {
+                      //       weight = value;
+                      //       weightReduced = weight.toStringAsFixed(0);
+                      //     }),
+                      //   ),
+                      // ),
                     ]),
                   ],
                 ),

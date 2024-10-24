@@ -1,4 +1,3 @@
-import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 import 'package:foodhero/fonts.dart';
@@ -7,7 +6,6 @@ import 'package:foodhero/models/inventoryfood_model.dart';
 import 'package:foodhero/pages/addFoodDetails.dart';
 import 'package:foodhero/pages/api/ApiUserFood.dart';
 import 'package:foodhero/theme.dart';
-import 'package:foodhero/utils/constants.dart';
 import 'package:foodhero/widgets/inventory/circle_progressbar.dart';
 import 'package:foodhero/widgets/inventory/inventory_dropdown.dart';
 import 'package:foodhero/widgets/inventory/inventory_list_item.dart';
@@ -311,12 +309,19 @@ class _InventoryState extends State<Inventory> {
                                         return InventoryListItem(
                                           foodname: foodItem.foodname,
                                           img: foodItem.url,
+                                          location: foodItem.location,
                                           progressbar: 40,
                                           consuming: foodItem.consuming,
                                           remaining: foodItem.remaining,
                                           foodid: foodItem.foodid,
                                           expired: foodItem.expired,
+                                          remind: foodItem.remind,
                                           isCountable: foodItem.isCountable,
+                                          TotalCost: foodItem.TotalCost,
+                                          IndividualWeight:
+                                              foodItem.IndividualWeight,
+                                          IndividualCost:
+                                              foodItem.IndividualCost,
                                         );
                                       },
                                     ),
@@ -326,12 +331,18 @@ class _InventoryState extends State<Inventory> {
                           InventoryListItem(
                             foodname: "Try food",
                             img: "ssss",
+                            location: "Pantry try",
+                            expired: "2024-12-30",
+                            remind: "2024-11-24",
                             progressbar: 40,
                             consuming: "2",
-                            remaining: "3",
+                            remaining: 3,
                             foodid: 10,
-                            expired: "2024-12-31",
-                            isCountable: false,
+                            //expired: "2024-12-31",
+                            isCountable: true,
+                            TotalCost: 50,
+                            IndividualWeight: 100,
+                            IndividualCost: 10,
                           ),
                         ],
                       ),
