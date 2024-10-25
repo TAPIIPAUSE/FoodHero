@@ -58,4 +58,9 @@ const reson = [
 ];
 
 //const myip="192.168.183.213";
-const myip = "192.168.1.41";
+
+//Pause
+//mac
+//const myip = "192.168.1.41";
+//win
+const myip = "10.4.148.102";
