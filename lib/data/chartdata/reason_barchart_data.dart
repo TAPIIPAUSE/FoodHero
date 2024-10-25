@@ -1,11 +1,16 @@
 import 'package:fl_chart/fl_chart.dart';
+import 'package:flutter/material.dart';
 import 'package:foodhero/theme.dart';
 
 const dcolor = AppTheme.softRedCancleWasted;
 
 List<BarChartGroupData> reasonbarChartGroupData = [
   BarChartGroupData(x: 1, barRods: [
-    BarChartRodData(toY: 10, color: dcolor, width: 15),
+    BarChartRodData(
+        toY: 10,
+        color: Colors.amber,
+        width: 15,
+        borderRadius: BorderRadius.circular(20)),
   ]),
   BarChartGroupData(x: 2, barRods: [
     BarChartRodData(toY: 8.5, color: dcolor, width: 15),

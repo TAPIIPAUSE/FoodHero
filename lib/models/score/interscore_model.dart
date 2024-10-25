@@ -10,7 +10,7 @@ class InterScore {
   factory InterScore.fromJson(Map<String, dynamic> json) {
     return InterScore(
       message: json['Messages'],
-      scoreList: (json['Score List'] as List)
+      scoreList: (json['Score_List'] as List)
           .map((score) => Score.fromJson(score))
           .toList(),
     );

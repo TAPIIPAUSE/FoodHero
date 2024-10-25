@@ -65,6 +65,7 @@ class FontsTheme {
     return GoogleFonts.mouseMemoirs(
       fontWeight: fontWeight,
       fontSize: fontSize,
+      color: color,
     );
   }
 

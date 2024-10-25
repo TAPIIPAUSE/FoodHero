@@ -153,7 +153,6 @@ class _InterOrganizationState extends State<InterOrganization> {
 
   Widget _buildContent() {
     final screenWidth = MediaQuery.of(context).size.width;
-    const totalpoint = 40500;
     const wastedpoint = 5000;
 
     final ButtonStyle buttonStyle = IconButton.styleFrom(
@@ -176,7 +175,7 @@ class _InterOrganizationState extends State<InterOrganization> {
                   ),
                   child: const Center(
                     child: Text(
-                      "$inter score board",
+                      inter,
                       style: TextStyle(color: Colors.white, fontSize: 24),
                     ),
                   ),
@@ -219,10 +218,9 @@ class _InterOrganizationState extends State<InterOrganization> {
                   ),
                   child: Column(
                     children: [
-                      Text(
-                        '${NumberFormat('#,###').format(totalpoint)} points score',
-                        style:
-                            const TextStyle(color: Colors.white, fontSize: 24),
+                      const Text(
+                        'Score board',
+                        style: TextStyle(color: Colors.white, fontSize: 24),
                       ),
                       FutureBuilder<InterScore>(
                         future: _getInterScore(),
@@ -270,7 +268,7 @@ class _InterOrganizationState extends State<InterOrganization> {
                   child: Column(
                     children: [
                       const Text(
-                        'We prevented food waste',
+                        'We saved food',
                         style: TextStyle(color: Colors.white, fontSize: 24),
                       ),
                       Text(
@@ -300,7 +298,7 @@ class _InterOrganizationState extends State<InterOrganization> {
                       ),
                       const SizedBox(height: 10),
                       ElevatedButton(
-                        onPressed: () => context.push('/dashboard_inter'),
+                        onPressed: () => context.push('/dashboard_inter/inter'),
                         style: buttonStyle,
                         child: const Text("see more"),
                       ),
@@ -326,7 +324,7 @@ class _InterOrganizationState extends State<InterOrganization> {
                   ),
                   child: const Center(
                     child: Text(
-                      "$hh score board",
+                      hh,
                       style: TextStyle(color: Colors.white, fontSize: 24),
                     ),
                   ),
@@ -369,10 +367,9 @@ class _InterOrganizationState extends State<InterOrganization> {
                   ),
                   child: Column(
                     children: [
-                      Text(
-                        '${NumberFormat('#,###').format(totalpoint)} points score',
-                        style:
-                            const TextStyle(color: Colors.white, fontSize: 24),
+                      const Text(
+                        'Score board',
+                        style: TextStyle(color: Colors.white, fontSize: 24),
                       ),
                       FutureBuilder<HouseScore>(
                         future: _getHouseScore(),
@@ -395,7 +392,6 @@ class _InterOrganizationState extends State<InterOrganization> {
                           } else {
                             final houseScore = snapshot.data!;
                             return SizedBox(
-                              height: 200, // Adjust height as needed
                               child: ListView.builder(
                                 shrinkWrap: true,
                                 itemCount: houseScore.scoreList.length,
@@ -426,8 +422,8 @@ class _InterOrganizationState extends State<InterOrganization> {
                   child: Column(
                     children: [
                       const Text(
-                        'Your household prevented food waste',
-                        style: TextStyle(color: Colors.white, fontSize: 20),
+                        'Your household saved food',
+                        style: TextStyle(color: Colors.white, fontSize: 24),
                       ),
                       Text(
                         '${NumberFormat('#,###').format(wastedpoint)} grams',
@@ -456,7 +452,7 @@ class _InterOrganizationState extends State<InterOrganization> {
                       ),
                       const SizedBox(height: 10),
                       ElevatedButton(
-                        onPressed: () => context.push('/dashboard_inter'),
+                        onPressed: () => context.push('/dashboard_inter/hh'),
                         style: buttonStyle,
                         child: const Text("see more"),
                       ),
@@ -482,7 +478,7 @@ class _InterOrganizationState extends State<InterOrganization> {
                   ),
                   child: const Center(
                     child: Text(
-                      "$org score board",
+                      org,
                       style: TextStyle(color: Colors.white, fontSize: 24),
                     ),
                   ),
@@ -525,10 +521,9 @@ class _InterOrganizationState extends State<InterOrganization> {
                   ),
                   child: Column(
                     children: [
-                      Text(
-                        '${NumberFormat('#,###').format(totalpoint)} points score',
-                        style:
-                            const TextStyle(color: Colors.white, fontSize: 24),
+                      const Text(
+                        'Score board',
+                        style: TextStyle(color: Colors.white, fontSize: 24),
                       ),
                       FutureBuilder<OrgScore>(
                         future: _getOrgScore(),
@@ -547,7 +542,6 @@ class _InterOrganizationState extends State<InterOrganization> {
                           } else {
                             final orgScore = snapshot.data!;
                             return SizedBox(
-                              height: 200, // Adjust height as needed
                               child: ListView.builder(
                                 shrinkWrap: true,
                                 itemCount: orgScore.scoreList.length,
@@ -578,13 +572,13 @@ class _InterOrganizationState extends State<InterOrganization> {
                   child: Column(
                     children: [
                       const Text(
-                        'Your organization prevented food waste',
-                        style: TextStyle(color: Colors.white, fontSize: 20),
+                        'Your organization saved food',
+                        style: TextStyle(color: Colors.white, fontSize: 24),
                       ),
                       Text(
                         '${NumberFormat('#,###').format(wastedpoint)} grams',
                         style:
-                            const TextStyle(color: Colors.white, fontSize: 16),
+                            const TextStyle(color: Colors.white, fontSize: 20),
                       ),
                       // Pie chart
                       Container(
@@ -608,7 +602,7 @@ class _InterOrganizationState extends State<InterOrganization> {
                       ),
                       const SizedBox(height: 10),
                       ElevatedButton(
-                        onPressed: () => context.push('/dashboard_inter'),
+                        onPressed: () => context.push('/dashboard_inter/org'),
                         style: buttonStyle,
                         child: const Text("see more"),
                       ),
@@ -619,142 +613,6 @@ class _InterOrganizationState extends State<InterOrganization> {
             ),
           ),
         );
-      // case org:
-      //   return SingleChildScrollView(
-      //     child: Center(
-      //       child: Column(
-      //         children: [
-      //           Container(
-      //             margin: const EdgeInsets.all(5),
-      //             padding: const EdgeInsets.all(10),
-      //             width: screenWidth * 0.9,
-      //             decoration: const BoxDecoration(
-      //               color: AppTheme.mainBlue,
-      //               borderRadius: BorderRadius.all(Radius.circular(20)),
-      //             ),
-      //             child: const Center(
-      //                 child: Text(
-      //               "$org score board",
-      //               style: TextStyle(color: Colors.white),
-      //             )),
-      //           ),
-      //           Container(
-      //               padding: const EdgeInsets.all(10),
-      //               width: screenWidth * 0.9,
-      //               decoration: const BoxDecoration(
-      //                 color: AppTheme.mainBlue,
-      //                 borderRadius: BorderRadius.all(Radius.circular(20)),
-      //               ),
-      //               child: Row(
-      //                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      //                 children: [
-      //                   const Icon(
-      //                     Icons.map_sharp,
-      //                     color: Colors.white,
-      //                   ),
-      //                   const Text(
-      //                     "Thung Khru",
-      //                     style: TextStyle(color: Colors.white),
-      //                   ),
-      //                   IconButton(
-      //                       onPressed: () {},
-      //                       icon: const Icon(
-      //                         Icons.change_circle,
-      //                         color: Colors.white,
-      //                       )),
-      //                 ],
-      //               )),
-      //           Container(
-      //             margin: const EdgeInsets.all(10),
-      //             padding: const EdgeInsets.all(10),
-      //             width: screenWidth * 0.9,
-      //             decoration: const BoxDecoration(
-      //               color: AppTheme.mainBlue,
-      //               borderRadius: BorderRadius.all(Radius.circular(20)),
-      //             ),
-      //             child: Column(
-      //               children: [
-      //                 Text(
-      //                   '${NumberFormat('#,###').format(totalpoint)} points score',
-      //                   style: const TextStyle(color: Colors.white),
-      //                 ),
-      //                 const OrgListScore(
-      //                   orgname: 'You',
-      //                   star: true,
-      //                   point: 55555,
-      //                 ),
-      //                 const OrgListScore(
-      //                   orgname: 'Member#1',
-      //                   star: false,
-      //                   point: 5555555555,
-      //                 ),
-      //                 const OrgListScore(
-      //                   orgname: 'Member#2',
-      //                   star: false,
-      //                   point: 5,
-      //                 ),
-      //                 const OrgListScore(
-      //                   orgname: 'Member#3',
-      //                   star: false,
-      //                   point: 5,
-      //                 ),
-      //               ],
-      //             ),
-      //           ),
-      //           Container(
-      //             margin: const EdgeInsets.all(10),
-      //             padding: const EdgeInsets.all(10),
-      //             width: screenWidth * 0.9,
-      //             decoration: const BoxDecoration(
-      //               color: AppTheme.mainBlue,
-      //               borderRadius: BorderRadius.all(Radius.circular(20)),
-      //             ),
-      //             child: Column(
-      //               children: [
-      //                 const Text(
-      //                   'Your organization saved food wasted',
-      //                   style: TextStyle(color: Colors.white),
-      //                 ),
-      //                 Text(
-      //                   '${NumberFormat('#,###').format(wastedpoint)} grams',
-      //                   style: const TextStyle(color: Colors.white),
-      //                 ),
-      //                 // pie chart
-      //                 Container(
-      //                   padding: const EdgeInsets.all(10),
-      //                   decoration: const BoxDecoration(
-      //                     color: AppTheme.softBlue,
-      //                     borderRadius: BorderRadius.all(Radius.circular(20)),
-      //                   ),
-      //                   child: Column(
-      //                     children: [
-      //                       const Row(
-      //                         // crossAxisAlignment: CrossAxisAlignment.center,
-      //                         mainAxisAlignment: MainAxisAlignment.center,
-      //                         children: [
-      //                           Text(week),
-      //                           Text(month),
-      //                         ],
-      //                       ),
-      //                       _buildResponsiveChartLayout(screenWidth),
-      //                     ],
-      //                   ),
-      //                 ),
-      //                 const SizedBox(
-      //                   height: 10,
-      //                 ),
-      //                 ElevatedButton(
-      //                   onPressed: () => context.push('/dashboard_inter'),
-      //                   style: buttonStyle,
-      //                   child: const Text("see more"),
-      //                 ),
-      //               ],
-      //             ),
-      //           ),
-      //         ],
-      //       ),
-      //     ),
-      //   );
       default:
         return const LinearProgressIndicator();
     }

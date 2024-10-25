@@ -5,7 +5,7 @@ const dcolor = AppTheme.softRedCancleWasted;
 
 List<BarChartGroupData> wastebarChartGroupData = [
   BarChartGroupData(x: 1, barRods: [
-    BarChartRodData(toY: 10, color: dcolor, width: 20),
+    BarChartRodData(toY: 100, color: dcolor, width: 20),
   ]),
   BarChartGroupData(x: 2, barRods: [
     BarChartRodData(toY: 8.5, color: dcolor, width: 20),

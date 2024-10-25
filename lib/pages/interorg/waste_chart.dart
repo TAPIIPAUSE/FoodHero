@@ -4,7 +4,7 @@ import 'package:foodhero/theme.dart';
 import 'package:foodhero/widgets/interorg/heatmap.dart';
 import 'package:foodhero/widgets/interorg/price_piechart.dart';
 import 'package:foodhero/widgets/interorg/reason_piechart.dart';
-import 'package:foodhero/widgets/interorg/waste_barchart.dart';
+import 'package:foodhero/widgets/interorg/barchart.dart';
 import 'package:foodhero/widgets/interorg/waste_piechart.dart';
 import 'package:foodhero/widgets/interorg/wastetype_piechart.dart';
 import 'package:go_router/go_router.dart';
@@ -99,14 +99,14 @@ class WasteChart extends StatelessWidget {
                   const SizedBox(
                     height: 10,
                   ),
-                  Container(
-                    padding: const EdgeInsets.all(10),
-                    decoration: const BoxDecoration(
-                      color: AppTheme.softBlue,
-                      borderRadius: BorderRadius.all(Radius.circular(20)),
-                    ),
-                    child: const WastePiechart(),
-                  ),
+                  // Container(
+                  //   padding: const EdgeInsets.all(10),
+                  //   decoration: const BoxDecoration(
+                  //     color: AppTheme.softBlue,
+                  //     borderRadius: BorderRadius.all(Radius.circular(20)),
+                  //   ),
+                  //   child: const WastePiechart(),
+                  // ),
                 ],
               ))
         ]),

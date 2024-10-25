@@ -5,7 +5,10 @@ import 'package:foodhero/theme.dart';
 import 'package:foodhero/utils/constants.dart';
 
 class WastePiechart extends StatefulWidget {
-  const WastePiechart({super.key});
+  const WastePiechart(
+      {super.key, required this.wastepercent, required this.eatenpercent});
+  final double eatenpercent;
+  final double wastepercent;
 
   @override
   State<WastePiechart> createState() => _WastePiechartState();
@@ -13,10 +16,17 @@ class WastePiechart extends StatefulWidget {
 
 class _WastePiechartState extends State<WastePiechart> {
   int touchedIndex = -1;
-  final List<ChartData> chartData = [
-    ChartData(eaten, 25, AppTheme.softBrightGreen),
-    ChartData(waste, 75, AppTheme.softRedCancleWasted),
-  ];
+
+  late List<ChartData> chartData;
+
+  @override
+  void initState() {
+    super.initState();
+    chartData = [
+      ChartData(eaten, widget.eatenpercent, AppTheme.softBrightGreen),
+      ChartData(waste, widget.wastepercent, AppTheme.softRedCancleWasted),
+    ];
+  }
 
   @override
   Widget build(BuildContext context) {

@@ -70,7 +70,7 @@ class WasteBarChartContent extends StatelessWidget {
           ),
           leftTitles: AxisTitles(
             sideTitles: SideTitles(
-              interval: 4,
+              interval: 25,
               showTitles: true,
               getTitlesWidget: (value, meta) {
                 if (value.toInt() == 0) return const SizedBox.shrink();
@@ -78,7 +78,7 @@ class WasteBarChartContent extends StatelessWidget {
                   value.toInt().toString(),
                   style: const TextStyle(
                     color: Colors.black,
-                    fontSize: 14,
+                    fontSize: 12,
                     fontWeight: FontWeight.bold,
                   ),
                 );
@@ -90,7 +90,8 @@ class WasteBarChartContent extends StatelessWidget {
           border: Border.all(color: Colors.black, width: 0.5),
         ),
         alignment: BarChartAlignment.spaceEvenly,
-        maxY: 16,
+        maxY: 100,
+        minY: 0,
         barGroups: wastebarChartGroupData,
       ),
     );
@@ -153,7 +154,7 @@ class ReasonBarChartContent extends StatelessWidget {
           ),
           leftTitles: AxisTitles(
             sideTitles: SideTitles(
-              interval: 4,
+              interval: 25,
               showTitles: true,
               getTitlesWidget: (value, meta) {
                 if (value.toInt() == 0) return const SizedBox.shrink();
@@ -161,7 +162,7 @@ class ReasonBarChartContent extends StatelessWidget {
                   value.toInt().toString(),
                   style: const TextStyle(
                     color: Colors.black,
-                    fontSize: 14,
+                    fontSize: 12,
                     fontWeight: FontWeight.bold,
                   ),
                 );
@@ -173,7 +174,7 @@ class ReasonBarChartContent extends StatelessWidget {
           border: Border.all(color: Colors.black, width: 0.5),
         ),
         alignment: BarChartAlignment.spaceEvenly,
-        maxY: 16,
+        maxY: 100,
         barGroups: reasonbarChartGroupData,
       ),
     );

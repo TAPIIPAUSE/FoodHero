@@ -121,9 +121,10 @@ final GoRouter _router = GoRouter(
           },
         ),
         GoRoute(
-          path: 'dashboard_inter',
+          path: 'dashboard_inter/:page',
           builder: (BuildContext context, GoRouterState state) {
-            return const InterDashboard();
+            final page = state.pathParameters['page'] ?? 'default';
+            return InterDashboard(page: page,);
           },
         ),
         GoRoute(
