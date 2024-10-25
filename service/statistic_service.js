@@ -32,16 +32,23 @@ import PersonalScore from "../schema/score_module/PersonalScoreSchema.js";
 
     const output = weekly_list.map(item => {
         
-        var acc = 0
+        var con_acc = 0
+        var total = 0
         item.items.map( i => {
-            acc = acc + Number(i.Consume)
+            con_acc = con_acc + Number(i.Consume)
+            total = total + Number(i.Consume) + Number(i.Waste)
         })
+
+        const result = (con_acc && total) ? ((con_acc / total) * 100).toFixed(2) : "0.00";
+
+
         return {
             Date: item.date,
-            Statistic: acc
+            Consume: con_acc,
+            Total: total,
+            Percent: Number(result)
         }
     })
-
     return output
   }
 
@@ -76,13 +83,21 @@ import PersonalScore from "../schema/score_module/PersonalScoreSchema.js";
 
     const output = weekly_list.map(item => {
         
-        var acc = 0
+        var con_acc = 0
+        var total = 0
         item.items.map( i => {
-            acc = acc + Number(i.Consume)
+            con_acc = con_acc + Number(i.Consume)
+            total = total + Number(i.Consume) + Number(i.Waste)
         })
+
+        const result = (con_acc && total) ? ((con_acc / total) * 100).toFixed(2) : "0.00";
+
+
         return {
             Date: item.date,
-            Statistic: acc
+            Consume: con_acc,
+            Total: total,
+            Percent: Number(result)
         }
     })
 
