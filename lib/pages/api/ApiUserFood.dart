@@ -25,7 +25,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 // }
 
 class InventoryFood {
-  static String baseurl = "http://$myip:3000/api/v1/inventory/getFoodById";
+  static String baseurl = "http://$myip:3000/api/v1/inventory";
   final authService = AuthService();
   final dio = Dio();
 
