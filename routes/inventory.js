@@ -8,12 +8,13 @@ import Location from '../schema/inventory_module/locationSchema.js';
 import Food from '../schema/inventory_module/foodInventorySchema.js';
 import { get_user_from_db, get_houseID } from '../service/user_service.js';
 import { authenticateToken } from "../service/jwt_auth.js";
-import { getFoodDetailForFoodDetail, getFoodDetailForFoodInventory } from "../service/inventory_service.js";
+import { getFoodDetailForFoodDetail, getFoodDetailForFoodInventory,save_consume_to_db  } from "../service/inventory_service.js";
 import { calculateSaveLost, calculateScore } from "../service/score_service.js";
 import ConsumedFood from "../schema/inventory_module/consumedFoodSchema.js";
-import { calculateCompleteConsumedData, updateConsume, updateHouseScore, updateOrgScore, calculateCompleteWasteData } from "../service/consume_service.js";
+import { calculateCompleteConsumedData, updateConsume, updateHouseScore, updateOrgScore, calculateCompleteWasteData, updateCompleteConsume, updateCompleteWaste } from "../service/consume_service.js";
 import PersonalScore from "../schema/score_module/PersonalScoreSchema.js";
 import User from "../schema/user_module/userSchema.js";
+
 
 const router = express.Router();
 
@@ -219,6 +220,7 @@ router.get("/getFoodByHouse", authenticateToken, async (req, res) => {
   try {
     // search foods by the house ID
     const house_fridge = await Food.find({ hID });
+    const food_size = await Food.countDocuments({ hID });
 
     const food_array = await Promise.all(
       house_fridge.map(async (food) => {
@@ -227,7 +229,10 @@ router.get("/getFoodByHouse", authenticateToken, async (req, res) => {
       })
     );
 
-    return res.status(200).send(food_array);
+    return res.status(200).send({
+      Document_Number: food_size,
+      food: food_array
+    });
   } catch (error) {
     return res.status(400).send(`Error when getting Food's Info: ${error}`);
   }
@@ -388,7 +393,7 @@ router.post('/consume/all', authenticateToken, async (req, res) => {
 
     // 3) Update in database
     // 3.1) Update in Food Inventory Database
-    await updateConsume(food, act_current_amount, act_current_quan, act_consume_amount, act_consume_quan)
+    await updateCompleteConsume(food)
 
     const { saved: save, lost: lost } = await calculateSaveLost(food, consume_percen)
     // 3.2) Update Score in Personal Score Database
@@ -458,7 +463,7 @@ router.post('/complete_waste', authenticateToken, async (req, res) => {
 
     // 3) Update in database
     // 3.1) Update in Food Inventory Database
-    await updateConsume(food, act_current_amount, act_current_quan, act_consume_amount, act_consume_quan)
+    await updateCompleteWaste(food)
 
     const { saved: save, lost: lost } = await calculateSaveLost(food, consume_percen)
     // 3.2) Update Score in Personal Score Database
@@ -501,5 +506,26 @@ router.post('/complete_waste', authenticateToken, async (req, res) => {
     res.status(500).json({ message: 'An error occurred while processing your request' });
   }
 });
+
+router.post("/compaction", authenticateToken, async(req,res)=>{
+  try{
+    await Food.deleteMany({
+      current_amount: 0,
+      current_quantity: 0,
+      consumed_amount: 0,
+      consumed_quantity: 0,
+    });
+    
+
+    return res.status(200).send({
+      message: "Compact Food Inventory Collection Successfully",
+    })
+  }catch (error){
+    return res.status(200).send({
+      message: "Error when compacting the Food Inventory Collection",
+      error: error
+    })
+  }
+})
 
 export default router;

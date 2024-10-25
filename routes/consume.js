@@ -26,7 +26,7 @@ router.get("/showConsumedFood", authenticateToken, async (req, res) => {
     var user = await get_user_from_db(req, res);
 
     var h_ID = user.hID;
-
+    const consumed_number = await ConsumedFood.countDocuments({ h_ID });
     const consumed_items = await ConsumedFood.find({ h_ID });
     // Fetch food details for each consumed item using Promise.all to wait for all promises to resolve
     const food_array = await Promise.all(
@@ -36,7 +36,10 @@ router.get("/showConsumedFood", authenticateToken, async (req, res) => {
       })
     );
 
-    return res.status(200).send(food_array);
+    return res.status(200).send({
+      Document_Number: consumed_number,
+      food: food_array
+    });
   } catch (error) {
     return res.status(400).send("Error when showing consumed food list", error);
   }
@@ -65,6 +68,7 @@ router.post("/confirmConsume", authenticateToken, async (req, res) => {
     const user = await User.findOne({username: req.user.username})
     const consumed_item = await ConsumedFood.findOne({ assigned_ID: cID })
     const food = await Food.findOne({ assigned_ID: consumed_item.food_ID })
+  
     const { t_a: t_A,
       t_q: t_Q,
       t_p: t_P,
@@ -90,7 +94,7 @@ router.post("/confirmConsume", authenticateToken, async (req, res) => {
 
 
     await updateConsume(cID,food, updated_c_A, updated_c_Q, actual_c_A, actual_c_Q)
-
+// CHECKPOINT1
     const { saved: save, lost: lost } = await calculateSaveLostForConsume(food,consumed_item, Percent)
     // 3.2) Update Score in Personal Score Database
 
@@ -109,20 +113,20 @@ router.post("/confirmConsume", authenticateToken, async (req, res) => {
       "Lost": lost,
     })
 
-  
-
+    console.log(personObject)
+// CHECKPOINT2
     await personObject.save()
 
     // 3.3) Update Score in Household Score Database
 
     const HouseSize = await User.countDocuments({ hID: user.hID });
-
+// CHECKPOINT3
     await updateHouseScore(user,score,HouseSize)
 
     // 3.4) Update Score in Organization Score Database
 
     const OrgSize = await User.countDocuments({ orgID: user.orgID });
-
+// CHECKPOINT4
     await updateOrgScore(user,score,OrgSize)
 
 
@@ -137,7 +141,26 @@ router.post("/confirmConsume", authenticateToken, async (req, res) => {
       Lost: lost
     })
   } catch (error) {
-    return res.status(400).send(`Error when Consfirm Consume : ${error}`);
+    return res.status(400).send(`Error when Confirm Consume : ${error}`);
+  }
+})
+
+router.post("/compaction", authenticateToken, async(req,res)=>{
+  try{
+    await ConsumedFood.deleteMany({
+      current_amount: 0,
+      current_quantity: 0
+    });
+    
+
+    return res.status(200).send({
+      message: "Compact Consume Collection Successfully",
+    })
+  }catch (error){
+    return res.status(200).send({
+      message: "Error when compacting the Consume Collection",
+      error: error
+    })
   }
 })
 
