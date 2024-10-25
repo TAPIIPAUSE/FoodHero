@@ -71,7 +71,6 @@ router.get("/inter_organization/score", authenticateToken, async (req, res) => {
   }
 });
 
-
 router.get("/inter_organization/fs-pie-chart", authenticateToken, async(req,res) =>{
   try{
 
@@ -93,21 +92,44 @@ router.get("/inter_organization/fs-pie-chart", authenticateToken, async(req,res)
   }
 })
 
+router.get("/household/foodtype_pie_chart", authenticateToken, async(req,res) =>{
+  try{
+
+    var user = await get_user_from_db(req, res);
+  
+    var hID = user.hID;
+
+    
+
+    return res.status(200).send({
+      "Messages": "Successfully Retrieved Organization Food Saved Data",
+      "Statistic": process_pie_chart
+      // "Score List": processed_score_array
+    });
+
+
+  }catch(error){
+    return res.status(400).send(`Error when retrieving household food saved pie chart: ${error}`);
+  }
+})
+
+
+
 // BEYOND THIS will be visualization module, which is sub module of dashboard based on household/organization
 
 
-router.get("/household/visualization/bar_chart", authenticateToken, async (req,res)=>{
-  try{
-    return res.status(200).send({
-      message: "Successfully show bar chart for household module",
-    })
-  }catch (error){
-    return res.status(400).send({
-      message: "Error has occur when getting barchart for household visualization",
-      error: error
-    })
-  }
-})
+// router.get("/household/visualization/bar_chart", authenticateToken, async (req,res)=>{
+//   try{
+//     return res.status(200).send({
+//       message: "Successfully show bar chart for household module",
+//     })
+//   }catch (error){
+//     return res.status(400).send({
+//       message: "Error has occur when getting barchart for household visualization",
+//       error: error
+//     })
+//   }
+// })
 
 router.get("/household/visualization/fs-pie-chart", authenticateToken, async(req,res) =>{
   try{

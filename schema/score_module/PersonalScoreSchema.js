@@ -8,6 +8,10 @@ const PersonalScoreSchema = new mongoose.Schema({
         type: Number, // Integer type for household ID
         required: true
     },
+    FoodType: {
+        type: Number, // Integer type for household ID
+        required: true
+    },
     orgID: {
         type: Number, // Integer type for organization ID
         required: true

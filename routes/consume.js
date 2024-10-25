@@ -111,6 +111,7 @@ router.post("/confirmConsume", authenticateToken, async (req, res) => {
       "Waste": leftover,
       "Saved": save,
       "Lost": lost,
+      "FoodType": food.food_category
     })
 
     console.log(personObject)

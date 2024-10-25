@@ -406,6 +406,7 @@ router.post('/consume/all', authenticateToken, async (req, res) => {
       "Waste": w,
       "Saved": save,
       "Lost": lost,
+      "FoodType": food.food_category
     })
 
     await personObject.save()
@@ -476,6 +477,7 @@ router.post('/complete_waste', authenticateToken, async (req, res) => {
       "Waste": w,
       "Saved": save,
       "Lost": lost,
+      "FoodType": food.food_category
     })
 
     console.log(score)
