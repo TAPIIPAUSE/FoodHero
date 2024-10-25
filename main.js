@@ -23,7 +23,7 @@ import userRoute from './routes/user.js'
 import inventoryRoute from './routes/inventory.js'
 import consumeRoute from './routes/consume.js'
 import dashboardRoute from './routes/dashboard.js'
-import statisticRoute from './routes/statistic.js'
+import houseorgRoute from './routes/houseorg.js'
 
 if(userRoute){
     console.log("Found the directory")
@@ -67,7 +67,7 @@ app.use('/api/v1/users', userRoute)
 app.use('/api/v1/inventory', inventoryRoute)
 app.use('/api/v1/consume', consumeRoute)
 app.use('/api/v1/dashboard', dashboardRoute)
-app.use('/api/v1/statistic', statisticRoute)
+app.use('/api/v1/houseorg', houseorgRoute)
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocs))
 
 app.listen(3000, () => {

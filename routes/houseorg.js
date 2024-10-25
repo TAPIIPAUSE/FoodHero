@@ -2,7 +2,7 @@ import express from "express";
 import { get_user_from_db } from "../service/user_service.js";
 import { preprocess_House_Score, preprocess_Org_Score } from "../service/score_service.js";
 import { authenticateToken } from "../service/jwt_auth.js";
-import { preprocess_house_barchart, preprocess_org_barchart} from "../service/statistic_service.js";
+import { preprocess_house_barchart, preprocess_org_barchart} from "../service/houseorg_service.js";
 
 const router = express.Router();
 
