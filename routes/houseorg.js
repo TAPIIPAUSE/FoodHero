@@ -50,7 +50,6 @@ router.get("/organization/score", authenticateToken, async (req, res) => {
     }
   });
 
-  
 router.get("/household/weekly_fs-bar", authenticateToken, async (req, res) => {
 
 
@@ -73,27 +72,27 @@ router.get("/household/weekly_fs-bar", authenticateToken, async (req, res) => {
     }
   });
 
-  router.get("/organization/weekly_fs-bar", authenticateToken, async (req, res) => {
+router.get("/organization/weekly_fs-bar", authenticateToken, async (req, res) => {
 
 
-    try {
-      var user = await get_user_from_db(req, res);
-  
-      var orgID = user.orgID;
-  
-      // We get Score Array from this Function
-      const processed_score_array = await preprocess_org_barchart(orgID)
+  try {
+    var user = await get_user_from_db(req, res);
 
-      
-      return res.status(200).send({
-        "Messages": "Successfully Retrieved Organization Barchart",
-        "Document_Number": processed_score_array.length,
-        "Week_List": processed_score_array
-      });
-    } catch (error) {
-      return res.status(400).send(`Error when retrieving household score: ${error}`);
-    }
-  });
+    var orgID = user.orgID;
+
+    // We get Score Array from this Function
+    const processed_score_array = await preprocess_org_barchart(orgID)
+
+    
+    return res.status(200).send({
+      "Messages": "Successfully Retrieved Organization Barchart",
+      "Document_Number": processed_score_array.length,
+      "Week_List": processed_score_array
+    });
+  } catch (error) {
+    return res.status(400).send(`Error when retrieving household score: ${error}`);
+  }
+});
 
 
 export default router;

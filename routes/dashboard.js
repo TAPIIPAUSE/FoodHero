@@ -71,28 +71,8 @@ router.get("/inter_organization/score", authenticateToken, async (req, res) => {
   }
 });
 
-router.get("/household/fs-pie-chart", authenticateToken, async(req,res) =>{
-  try{
 
-    var user = await get_user_from_db(req, res);
-  
-    var h_ID = user.hID;
-
-    const process_h_stat = await preprocess_House_fs_pie_chart(h_ID)
-
-    return res.status(200).send({
-      "Messages": "Successfully Retrieved Household Food Saved Data",
-      "Statistic": process_h_stat
-      // "Score List": processed_score_array
-    });
-
-
-  }catch(error){
-    return res.status(400).send(`Error when retrieving household food saved pie chart: ${error}`);
-  }
-})
-
-router.get("/organization/fs-pie-chart", authenticateToken, async(req,res) =>{
+router.get("/inter_organization/fs-pie-chart", authenticateToken, async(req,res) =>{
   try{
 
     var user = await get_user_from_db(req, res);
@@ -113,7 +93,45 @@ router.get("/organization/fs-pie-chart", authenticateToken, async(req,res) =>{
   }
 })
 
-router.get("/inter_organization/fs-pie-chart", authenticateToken, async(req,res) =>{
+// BEYOND THIS will be visualization module, which is sub module of dashboard based on household/organization
+const house_submodule = "/household/visualization"
+
+router.get(`${house_submodule}/bar_chart`, authenticateToken, async (req,res)=>{
+  try{
+    return res.status(200).send({
+      message: "Successfully show bar chart for household module",
+    })
+  }catch (error){
+    return res.status(400).send({
+      message: "Error has occur when getting barchart for household visualization",
+      error: error
+    })
+  }
+})
+
+router.get(`${house_submodule}/fs-pie-chart`, authenticateToken, async(req,res) =>{
+  try{
+
+    var user = await get_user_from_db(req, res);
+  
+    var h_ID = user.hID;
+
+    const process_h_stat = await preprocess_House_fs_pie_chart(h_ID)
+
+    return res.status(200).send({
+      "Messages": "Successfully Retrieved Household Food Saved Data",
+      "Statistic": process_h_stat
+      // "Score List": processed_score_array
+    });
+
+
+  }catch(error){
+    return res.status(400).send(`Error when retrieving household food saved pie chart: ${error}`);
+  }
+})
+const org_submodule = "/organization/visualization"
+
+router.get(`${org_submodule}/fs-pie-chart`, authenticateToken, async(req,res) =>{
   try{
 
     var user = await get_user_from_db(req, res);
