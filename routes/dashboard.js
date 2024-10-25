@@ -94,9 +94,9 @@ router.get("/inter_organization/fs-pie-chart", authenticateToken, async(req,res)
 })
 
 // BEYOND THIS will be visualization module, which is sub module of dashboard based on household/organization
-const house_submodule = "/household/visualization"
 
-router.get(`${house_submodule}/bar_chart`, authenticateToken, async (req,res)=>{
+
+router.get("/household/visualization/bar_chart", authenticateToken, async (req,res)=>{
   try{
     return res.status(200).send({
       message: "Successfully show bar chart for household module",
@@ -109,7 +109,7 @@ router.get(`${house_submodule}/bar_chart`, authenticateToken, async (req,res)=>{
   }
 })
 
-router.get(`${house_submodule}/fs-pie-chart`, authenticateToken, async(req,res) =>{
+router.get("/household/visualization/fs-pie-chart", authenticateToken, async(req,res) =>{
   try{
 
     var user = await get_user_from_db(req, res);
@@ -129,9 +129,9 @@ router.get(`${house_submodule}/fs-pie-chart`, authenticateToken, async(req,res) 
     return res.status(400).send(`Error when retrieving household food saved pie chart: ${error}`);
   }
 })
-const org_submodule = "/organization/visualization"
 
-router.get(`${org_submodule}/fs-pie-chart`, authenticateToken, async(req,res) =>{
+
+router.get("/organization/visualization/fs-pie-chart", authenticateToken, async(req,res) =>{
   try{
 
     var user = await get_user_from_db(req, res);
