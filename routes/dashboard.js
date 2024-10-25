@@ -4,7 +4,7 @@ import HouseholdScore from "../schema/score_module/HouseholdScoreSchema.js";
 import { authenticateToken } from "../service/jwt_auth.js";
 import User from "../schema/user_module/userSchema.js";
 import { preprocess_House_Score, preprocess_interOrg_Score, preprocess_Org_Score } from "../service/score_service.js";
-import { preprocess_House_fs_pie_chart, preprocess_Org_fs_pie_chart } from "../service/dashboard_service.js";
+import { preprocess_House_foodtype_pie_chart, preprocess_House_fs_pie_chart, preprocess_Org_fs_pie_chart, preprocess_org_foodtype_pie_chart} from "../service/dashboard_service.js";
 
 
 const router = express.Router();
@@ -99,6 +99,8 @@ router.get("/household/foodtype_pie_chart", authenticateToken, async(req,res) =>
   
     var hID = user.hID;
 
+    const process_pie_chart = await preprocess_House_foodtype_pie_chart(hID)
+
     
 
     return res.status(200).send({
@@ -112,6 +114,30 @@ router.get("/household/foodtype_pie_chart", authenticateToken, async(req,res) =>
     return res.status(400).send(`Error when retrieving household food saved pie chart: ${error}`);
   }
 })
+
+router.get("/organization/foodtype_pie_chart", authenticateToken, async(req,res) =>{
+  try{
+
+    var user = await get_user_from_db(req, res);
+  
+    var orgID = user.orgID;
+
+    const process_pie_chart = await preprocess_org_foodtype_pie_chart(orgID)
+
+    
+
+    return res.status(200).send({
+      "Messages": "Successfully Retrieved Organization Food Saved Data",
+      "Statistic": process_pie_chart
+      // "Score List": processed_score_array
+    });
+
+
+  }catch(error){
+    return res.status(400).send(`Error when retrieving household food saved pie chart: ${error}`);
+  }
+})
+
 
 
 
