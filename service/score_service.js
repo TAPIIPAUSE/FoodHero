@@ -152,7 +152,7 @@ export async function preprocess_House_Score(h_ID){
       const member = await get_House_Member(h_ID);
 
       const combined = member.map((m, index) => {
-        return { "Rank": null ,"Username": m, "Score": processed_score_array[index] };
+        return { "Rank": null ,"Username": m, "Score": processed_score_array[index] !== undefined ? processed_score_array[index] : 0 };
       });
 
       combined.sort((a, b) => b.Score - a.Score);
@@ -206,9 +206,12 @@ export async function preprocess_Org_Score(org_ID){
     //   In organization View, user will be seeing the housename instead, not username
     // IMPORTANT!!!
       const member = await get_Org_Member(org_ID);
-
+      console.log(processed_score_array)
       const combined = member.map((m, index) => {
-        return { "Rank": null ,"Housename": m, "Score": processed_score_array[index] };
+        return { 
+          "Rank": null ,
+          "Housename": m,
+          "Score": processed_score_array[index] !== undefined ? processed_score_array[index] : 0};
       });
 
       combined.sort((a, b) => b.Score - a.Score);
@@ -269,7 +272,7 @@ export async function preprocess_interOrg_Score(){
       const member = await get_allOrg(uniqueOrg)
 
       const combined = member.map((m, index) => {
-        return { "Rank": null ,"Orgname": m, "Score": processed_score_array[index] };
+        return { "Rank": null ,"Orgname": m, "Score":processed_score_array[index] !== undefined ? processed_score_array[index] : 0 };
       });
 
       combined.sort((a, b) => b.Score - a.Score);
