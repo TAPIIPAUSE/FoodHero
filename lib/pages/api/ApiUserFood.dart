@@ -1,6 +1,10 @@
+import 'dart:convert';
+
 import 'package:dio/dio.dart';
+import 'package:foodhero/models/fooddetail_model.dart';
 import 'package:foodhero/models/inventoryfood_model.dart';
 import 'package:foodhero/pages/api/ApiClient.dart';
+import 'package:foodhero/pages/foodDetails.dart';
 import 'package:foodhero/utils/constants.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -30,12 +34,12 @@ class InventoryFood {
   final dio = Dio();
 
   // get
-  Future<List<InventoryFoodData>> getInventoryFood(int hID) async {
+  Future<InventoryFoodData?> getInventoryFood(int hID) async {
     try {
       SharedPreferences prefs = await SharedPreferences.getInstance();
       final token = prefs.getString('user_token');
       print('token: $token');
-
+      print('Getting inventory for hID: $hID');
       // print("Attempting to log in with hID: $hID");
       final res = await dio.get(
         "$baseurl/getFoodByHouse",
@@ -52,24 +56,100 @@ class InventoryFood {
       print("Response body: ${res.data}");
 
       if (res.statusCode == 200) {
-        if (res.data is List) {
-          List<InventoryFoodData> inventoryFoodList = (res.data as List)
-              .map((e) => InventoryFoodData.fromJson(e as Map<String, dynamic>))
-              .toList();
-          if (inventoryFoodList.isNotEmpty) {
-            await prefs.setInt('inventory_id', inventoryFoodList.first.foodid);
-          }
-          return inventoryFoodList;
-        } else {
-          throw Exception(
-              'Unexpected inventory response format: ${res.data.runtimeType}');
-        }
+        // if (res.data is List) {
+        //    inventoryFoodList = (res.data as List)
+        //       .map((e) => InventoryFoodData.fromJson(e as Map<String, dynamic>))
+        //       .toList();
+        //   if (inventoryFoodList.isNotEmpty) {
+        //     await prefs.setInt('inventory_id', inventoryFoodList.first.foodid);
+        //   }
+        //   return inventoryFoodList;
+        // }
+        final inventoryData = InventoryFoodData.fromJson(res.data);
+        print(
+            "Parsed inventory data: ${inventoryData.foodItems.length} foods"); // Debug log
+        return inventoryData;
       } else {
-        throw Exception('Failed to load inventory food data');
+        throw Exception('Failed to load inventory foods');
       }
     } catch (error) {
-      print("Error during inventory request: $error");
-      return [];
+      print("Error during inventory request: $error"); // Debug log
+      return null;
+    }
+  }
+
+  Future<FoodDetailData?> getFoodDetail(int foodId) async {
+    try {
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      final token = prefs.getString('user_token');
+      print('Getting food details for fID: $foodId'); // Debug log
+
+      final res = await dio.get(
+        "$baseurl/getFoodById",
+        options: Options(
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer $token',
+          },
+          validateStatus: (status) {
+            return status! < 500; // Accept all responses below 500
+          },
+        ),
+        queryParameters: {'fID': foodId},
+      );
+      print("Request URL: $baseurl/getFoodById");
+      print("Food Detail Response status: ${res.statusCode}"); // Debug log
+      print("Food Detail Response body: ${res.data}"); // Debug log
+
+      if (res.statusCode == 201) {
+        final foodDetail = FoodDetailData.fromJson(res.data);
+        print("Parsed food detail data: ${foodDetail.foodName}"); // Debug log
+        return foodDetail;
+      } else {
+        throw Exception('Failed to load food details');
+      }
+    } catch (error) {
+      print("Error during food detail request: $error"); // Debug log
+      return null;
     }
   }
 }
+
+  // Future<Type> getFoodDetail(int hID) async {
+  //   try {
+  //     SharedPreferences prefs = await SharedPreferences.getInstance();
+  //     final token = prefs.getString('user_token');
+  //     print('token: $token');
+
+  //     // print("Attempting to log in with hID: $hID");
+  //     final res = await dio.get(
+  //       "$foodDetailurl/getFoodByHouse",
+  //       options: Options(
+  //         headers: {
+  //           'Content-Type': 'application/json',
+  //           'Authorization': 'Bearer $token',
+  //         },
+  //       ),
+  //       queryParameters: {'hID': hID},
+  //     );
+
+  //     print("Response status: ${res.statusCode}");
+  //     print("Response body: ${res.data}");
+
+  //     if (res.statusCode == 200) {
+  //       if (res.data) {
+
+  //         return foodDetails;
+  //       } else {
+  //         throw Exception(
+  //             'Unexpected inventory response format: ${res.data.runtimeType}');
+  //       }
+  //     } else {
+  //       throw Exception('Failed to load inventory food data');
+  //     }
+  //   } catch (error) {
+  //     print("Error during inventory request: $error");
+
+  //   }
+  // }
+

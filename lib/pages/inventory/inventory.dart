@@ -5,6 +5,7 @@ import 'package:foodhero/main.dart';
 import 'package:foodhero/models/inventoryfood_model.dart';
 import 'package:foodhero/pages/addFoodDetails.dart';
 import 'package:foodhero/pages/api/ApiUserFood.dart';
+import 'package:foodhero/pages/foodDetails.dart';
 import 'package:foodhero/theme.dart';
 import 'package:foodhero/widgets/inventory/circle_progressbar.dart';
 import 'package:foodhero/widgets/inventory/inventory_dropdown.dart';
@@ -25,16 +26,17 @@ class Inventory extends StatefulWidget {
 
 class _InventoryState extends State<Inventory> {
   late int hID;
-
   int selectedRouteIndex = 0;
   late String foodCategory;
+  final ScrollController _InventoryScrollController = ScrollController();
+  bool _isButtonVisible = false;
   final List<Segment> segments = [
     Segment(value: 26, color: AppTheme.greenMainTheme, label: "On Time"),
     Segment(value: 4, color: AppTheme.softOrange, label: "Nearly Expired"),
     Segment(value: 70, color: AppTheme.softRedCancleWasted, label: "Wasted"),
   ];
   // late Future<List<InventoryListItem>> inventoryItems;
-  Future<List<InventoryFoodData>> _loadInventoryFood() async {
+  Future<InventoryFoodData?> _loadInventoryFood() async {
     try {
       final prefs = await SharedPreferences.getInstance();
       final hID = prefs.getInt('hID');
@@ -83,6 +85,12 @@ class _InventoryState extends State<Inventory> {
     // inventoryItems = fetchUserFood(hID!);
     // this.hID = hID;
     // _updateDate();
+    _InventoryScrollController.addListener(() {
+      setState(() {
+        _isButtonVisible = _InventoryScrollController.offset >
+            50; // Adjust this value as needed
+      });
+    });
   }
 
   // Future<int> fetchHId() async {
@@ -124,10 +132,19 @@ class _InventoryState extends State<Inventory> {
     {"name": "Mom", "score": 18547},
     {"name": "Brother", "score": 17245},
   ];
+  void _scrollToTop() {
+    _InventoryScrollController.animateTo(
+      0,
+      duration: Duration(milliseconds: 300),
+      curve: Curves.easeInOut,
+    );
+  }
+
+  final ScrollController foodList = ScrollController();
 
   @override
   Widget build(BuildContext context) {
-    // final screenHeight = MediaQuery.of(context).size.height;
+    final screenHeight = MediaQuery.of(context).size.height;
     final screenWidth = MediaQuery.of(context).size.width;
     final progressBar = PrimerCircularProgressBar(segments: segments);
     //final foodItems = Provider.of<FoodItemsProvider>(context).consumedItems;
@@ -162,197 +179,244 @@ class _InventoryState extends State<Inventory> {
           ),
           body: Stack(
             children: [
-              SingleChildScrollView(
-                child: Column(
-                  children: [
-                    Container(
-                      margin: const EdgeInsets.all(10),
-                      padding: const EdgeInsets.all(10),
-                      // height: screenHeight * 0.2,
-                      width: screenWidth * 0.9,
-                      decoration: const BoxDecoration(
-                        color: AppTheme.mainBlue,
-                        borderRadius: BorderRadius.all(Radius.circular(20)),
-                      ),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text('Today $_todayDate',
-                              style: FontsTheme.mouseMemoirs_30White()
-                                  .copyWith(color: Colors.white)),
-                          Text(
-                            'Things you should eat today:',
-                            style: FontsTheme.hind_15()
-                                .copyWith(color: Colors.white),
+              RawScrollbar(
+                  thumbColor: AppTheme.greenMainTheme,
+                  child: SingleChildScrollView(
+                    controller: _InventoryScrollController,
+                    child: Column(
+                      children: [
+                        Container(
+                          margin: const EdgeInsets.all(10),
+                          padding: const EdgeInsets.all(10),
+                          // height: screenHeight * 0.2,
+                          width: screenWidth * 0.9,
+                          decoration: const BoxDecoration(
+                            color: AppTheme.mainBlue,
+                            borderRadius: BorderRadius.all(Radius.circular(20)),
                           ),
-                          Text(
-                            '- Tomatos expire tomorrow',
-                            style: FontsTheme.hind_15()
-                                .copyWith(color: Colors.white),
-                          ),
-                          Text(
-                            '- Lettuce expire in 2 days',
-                            style: FontsTheme.hind_15()
-                                .copyWith(color: Colors.white),
-                          ),
-                          Text(
-                            '- Tomatos expire tomorrow',
-                            style: FontsTheme.hind_15()
-                                .copyWith(color: Colors.white),
-                          ),
-                          Text(
-                            'Yogurt should be eaten before the next 3 days',
-                            style: FontsTheme.hind_15()
-                                .copyWith(color: Colors.white),
-                          ),
-                          const SizedBox(
-                            height: 20,
-                          ),
-                          Center(child: progressBar),
-                          const SizedBox(
-                            height: 10,
-                          )
-                        ],
-                      ),
-                    ),
-                    Container(
-                      margin: const EdgeInsets.all(2),
-                      padding: const EdgeInsets.all(10),
-                      width: screenWidth,
-                      decoration: const BoxDecoration(
-                        color: AppTheme.mainBlue,
-                        borderRadius: BorderRadius.all(Radius.circular(20)),
-                      ),
-                      child: Column(
-                        children: [
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              const InventoryDropdownMenu(),
-                              Container(
-                                margin: const EdgeInsets.only(left: 10.0),
-                                padding: const EdgeInsets.all(5.0),
-                                decoration: BoxDecoration(
-                                  color: AppTheme.softGreen,
-                                  borderRadius: BorderRadius.circular(10.0),
-                                ),
-                                child: Column(
-                                  children: [
-                                    GestureDetector(
-                                      onTap: () {
-                                        context.push('/category');
-                                      },
-                                      child: Row(
-                                        children: [
-                                          Text(
-                                            foodCategory,
-                                            style: FontsTheme.hind_15(),
-                                          ),
-                                          IconButton(
-                                            onPressed: () =>
-                                                context.go('/category'),
-                                            icon: const Icon(
-                                                Icons.arrow_drop_down_rounded),
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                    // Row(
-                                    //   children: [
-                                    //     IconButton(
-                                    //       onPressed: () => context.go('/category'),
-                                    //       icon: const Icon(Icons.swipe_down_alt),
-                                    //     ),
-                                    //     IconButton(
-                                    //       onPressed: () => context.go('/inventory'),
-                                    //       icon: const Icon(Icons.circle_outlined),
-                                    //     ),
-                                    //     IconButton(
-                                    //         onPressed: () => context.go('/inventory'),
-                                    //         icon: const Icon(Icons.swipe_up_alt)),
-                                    //   ],
-                                    // )
-                                  ],
-                                ),
+                              Text('Today $_todayDate',
+                                  style: FontsTheme.mouseMemoirs_30White()
+                                      .copyWith(color: Colors.white)),
+                              Text(
+                                'Things you should eat today:',
+                                style: FontsTheme.hind_15()
+                                    .copyWith(color: Colors.white),
+                              ),
+                              Text(
+                                '- Tomatos expire tomorrow',
+                                style: FontsTheme.hind_15()
+                                    .copyWith(color: Colors.white),
+                              ),
+                              Text(
+                                '- Lettuce expire in 2 days',
+                                style: FontsTheme.hind_15()
+                                    .copyWith(color: Colors.white),
+                              ),
+                              Text(
+                                '- Tomatos expire tomorrow',
+                                style: FontsTheme.hind_15()
+                                    .copyWith(color: Colors.white),
+                              ),
+                              Text(
+                                'Yogurt should be eaten before the next 3 days',
+                                style: FontsTheme.hind_15()
+                                    .copyWith(color: Colors.white),
+                              ),
+                              const SizedBox(
+                                height: 20,
+                              ),
+                              Center(child: progressBar),
+                              const SizedBox(
+                                height: 10,
                               )
                             ],
                           ),
-                          const SizedBox(
-                            height: 10,
+                        ),
+                        Container(
+                          margin: const EdgeInsets.all(2),
+                          padding:
+                              const EdgeInsets.only(top: 8, bottom: 8, left: 8),
+                          width: screenWidth,
+                          decoration: const BoxDecoration(
+                            color: AppTheme.mainBlue,
+                            borderRadius: BorderRadius.all(Radius.circular(20)),
                           ),
-                          FutureBuilder<List<InventoryFoodData>>(
-                              future: _loadInventoryFood(),
-                              builder: (context, snapshot) {
-                                if (snapshot.connectionState ==
-                                    ConnectionState.waiting) {
-                                  return const Center(
-                                    child: CircularProgressIndicator(),
-                                  );
-                                } else if (snapshot.hasError) {
-                                  return Center(
-                                      child: Text('Error: ${snapshot.error}'));
-                                } else if (!snapshot.hasData ||
-                                    snapshot.data!.isEmpty) {
-                                  return const Center(
-                                      child:
-                                          Text('Loading...')); // Loading state
-                                } else if (snapshot.data!.isEmpty) {
-                                  return const Center(
-                                      child: Text('No food items found'));
-                                } else {
-                                  return SizedBox(
-                                    height: 400,
-                                    child: ListView.builder(
-                                      itemCount: snapshot.data!.length,
-                                      itemBuilder: (context, index) {
-                                        final foodItem = snapshot.data![index];
-                                        return InventoryListItem(
-                                          foodname: foodItem.foodname,
-                                          img: foodItem.url,
-                                          // location: foodItem.location,
-                                          progressbar: 40,
-                                          consuming: foodItem.consuming,
-                                          remaining: foodItem.remaining,
-                                          foodid: foodItem.foodid,
-                                          expired: foodItem.expired,
-                                          // remind: foodItem.remind,
-                                          // isCountable: foodItem.isCountable,
-                                          // TotalCost: foodItem.TotalCost,
-                                          // IndividualWeight:
-                                          // foodItem.IndividualWeight,
-                                          // IndividualCost:
-                                          // foodItem.IndividualCost,
-                                        );
-                                      },
+                          child: Column(
+                            children: [
+                              Column(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  const InventoryDropdownMenu(),
+                                  Container(
+                                    margin: const EdgeInsets.only(left: 5.0),
+                                    padding: const EdgeInsets.all(5.0),
+                                    decoration: BoxDecoration(
+                                      color: AppTheme.softGreen,
+                                      borderRadius: BorderRadius.circular(10.0),
                                     ),
-                                  );
-                                }
-                              }),
-                          // InventoryListItem(
-                          //   foodname: "Try food",
-                          //   img: "ssss",
-                          //   // location: "Pantry try",
-                          //   expired: "2024-12-30",
-                          //   // remind: "2024-11-24",
-                          //   progressbar: 40,
-                          //   consuming: "2",
-                          //   // remaining: 3,
-                          //   foodid: 10,
-                          //   //expired: "2024-12-31",
-                          //   // isCountable: true,
-                          //   // TotalCost: 50,
-                          //   // IndividualWeight: 100,
-                          //   // IndividualCost: 10,
-                          // ),
-                        ],
-                      ),
+                                    child: Column(
+                                      children: [
+                                        GestureDetector(
+                                          onTap: () {
+                                            context.push('/category');
+                                          },
+                                          child: Container(
+                                            width: 150,
+                                            height: 30,
+                                            child: Row(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.center,
+                                              children: [
+                                                Text(
+                                                  foodCategory,
+                                                  style: FontsTheme
+                                                          .mouseMemoirs_20()
+                                                      .copyWith(
+                                                          letterSpacing: 1),
+                                                ),
+                                                IconButton(
+                                                  onPressed: () =>
+                                                      context.go('/category'),
+                                                  icon: const Icon(Icons
+                                                      .arrow_drop_down_circle_rounded),
+                                                ),
+                                              ],
+                                            ),
+                                          ),
+                                        ),
+                                        // Row(
+                                        //   children: [
+                                        //     IconButton(
+                                        //       onPressed: () => context.go('/category'),
+                                        //       icon: const Icon(Icons.swipe_down_alt),
+                                        //     ),
+                                        //     IconButton(
+                                        //       onPressed: () => context.go('/inventory'),
+                                        //       icon: const Icon(Icons.circle_outlined),
+                                        //     ),
+                                        //     IconButton(
+                                        //         onPressed: () => context.go('/inventory'),
+                                        //         icon: const Icon(Icons.swipe_up_alt)),
+                                        //   ],
+                                        // )
+                                      ],
+                                    ),
+                                  )
+                                ],
+                              ),
+                              const SizedBox(
+                                height: 10,
+                              ),
+                              FutureBuilder<InventoryFoodData?>(
+                                  future: _loadInventoryFood(),
+                                  builder: (context, snapshot) {
+                                    if (snapshot.connectionState ==
+                                        ConnectionState.waiting) {
+                                      return const Center(
+                                        child: CircularProgressIndicator(),
+                                      );
+                                    } else if (snapshot.hasError) {
+                                      return Center(
+                                          child:
+                                              Text('Error: ${snapshot.error}'));
+                                    }
+                                    // else if (!snapshot.hasData ||
+                                    //     snapshot.data!.isEmpty) {
+                                    //   return const Center(
+                                    //       child:
+                                    //           Text('Loading...')); // Loading state
+                                    // } else if (snapshot.data!.isEmpty) {
+                                    //   return const Center(
+                                    //       child: Text('No food items found'));
+                                    // }
+                                    else {
+                                      return SizedBox(
+                                        //FoodList Blue background
+                                        height: screenHeight - 300,
+                                        child: RawScrollbar(
+                                          controller: foodList,
+                                          thumbColor: AppTheme.greenMainTheme,
+                                          child: ListView.builder(
+                                            controller: foodList,
+                                            itemCount:
+                                                snapshot.data!.foodItems.length,
+                                            itemBuilder: (context, index) {
+                                              final foodItem = snapshot
+                                                      .data!.foodItems[
+                                                  index]; // Cast to Food type
+                                              return GestureDetector(
+                                                  onTap: () async {
+                                                    //FoodDetailData foodDetail = await getFoodDetail(fID);
+                                                    print(
+                                                        'Navigating to food details for ID: ${foodItem.foodId}');
+                                                    Navigator.push(
+                                                      context,
+                                                      MaterialPageRoute(
+                                                        builder: (context) =>
+                                                            foodDetails(
+                                                          FoodID:
+                                                              foodItem.foodId,
+                                                        ),
+                                                      ),
+                                                    );
+                                                  },
+                                                  child: InventoryListItem(
+                                                    foodname: foodItem
+                                                        .foodName, // Use 'foodName' from model
+                                                    img: foodItem
+                                                        .url, // Use 'url' from model
+                                                    progressbar:
+                                                        40, // Static or calculated value
+                                                    consuming: foodItem
+                                                        .consuming, // Use 'consuming' from model
+                                                    remaining: foodItem
+                                                        .remaining, // Use 'remaining' from model
+                                                    foodid: foodItem
+                                                        .foodId, // Use 'foodId' from model
+                                                    expired: foodItem
+                                                        .expired, // Use 'expired' from model
+                                                    // Uncomment and use additional properties if needed
+                                                    // remind: foodItem.remind,
+                                                    // isCountable: foodItem.isCountable,
+                                                    // TotalCost: foodItem.TotalCost,
+                                                    // IndividualWeight: foodItem.IndividualWeight,
+                                                    // IndividualCost: foodItem.IndividualCost,
+                                                  ));
+                                            },
+                                          ),
+                                        ),
+                                      );
+                                    }
+                                  }),
+                              // InventoryListItem(
+                              //   foodname: "Try food",
+                              //   img: "ssss",
+                              //   // location: "Pantry try",
+                              //   expired: "2024-12-30",
+                              //   // remind: "2024-11-24",
+                              //   progressbar: 40,
+                              //   consuming: "2",
+                              //   // remaining: 3,
+                              //   foodid: 10, remaining: '5 pieces',
+                              //   //expired: "2024-12-31",
+                              //   // isCountable: true,
+                              //   // TotalCost: 50,
+                              //   // IndividualWeight: 100,
+                              //   // IndividualCost: 10,
+                              // ),
+                            ],
+                          ),
+                        ),
+                        SizedBox(
+                          height: 10,
+                        )
+                      ],
                     ),
-                    SizedBox(
-                      height: 10,
-                    )
-                  ],
-                ),
-              ),
+                  )),
               Stack(
                 children: [
                   Align(
@@ -375,6 +439,16 @@ class _InventoryState extends State<Inventory> {
                       ),
                     ),
                   ),
+                  if (_isButtonVisible)
+                    Positioned(
+                      bottom: 16,
+                      right: 16,
+                      child: FloatingActionButton(
+                        onPressed: _scrollToTop,
+                        child: Icon(Icons.arrow_upward),
+                        backgroundColor: AppTheme.greenMainTheme,
+                      ),
+                    ),
                   Align(
                     alignment: Alignment.bottomRight,
                     child: Padding(

@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:foodhero/fonts.dart';
 import 'package:foodhero/theme.dart';
+import 'package:foodhero/utils/constants.dart';
 
-const List<String> list = <String>['Refrigerator', 'Pantry'];
+const List<String> list = <String>['Refrigerator ', 'Pantry'];
 
 class InventoryDropdownMenu extends StatefulWidget {
   const InventoryDropdownMenu({super.key});
@@ -23,7 +25,7 @@ class _DropdownMenuExampleState extends State<InventoryDropdownMenu> {
         Icons.switch_left_rounded,
         color: Colors.white,
       ),
-      style: const TextStyle(color: Colors.white),
+      style: FontsTheme.mouseMemoirs_20().copyWith(letterSpacing: 1),
       onChanged: (String? value) {
         setState(
           () {

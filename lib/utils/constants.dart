@@ -61,6 +61,6 @@ const reson = [
 
 //Pause
 //mac
-//const myip = "192.168.1.41";
+const myip = "192.168.1.41";
 //win
-const myip = "10.4.148.102";
+//const myip = "10.4.148.102";
