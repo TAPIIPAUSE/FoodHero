@@ -30,6 +30,7 @@ class _InventoryState extends State<Inventory> {
   late String foodCategory;
   final ScrollController _InventoryScrollController = ScrollController();
   bool _isButtonVisible = false;
+  late double someValue;
   final List<Segment> segments = [
     Segment(value: 26, color: AppTheme.greenMainTheme, label: "On Time"),
     Segment(value: 4, color: AppTheme.softOrange, label: "Nearly Expired"),
@@ -85,12 +86,28 @@ class _InventoryState extends State<Inventory> {
     // inventoryItems = fetchUserFood(hID!);
     // this.hID = hID;
     // _updateDate();
+
     _InventoryScrollController.addListener(() {
-      setState(() {
-        _isButtonVisible = _InventoryScrollController.offset >
-            50; // Adjust this value as needed
-      });
+      // Check if scrolled to the bottom
+      if (_InventoryScrollController.position.pixels ==
+          _InventoryScrollController.position.maxScrollExtent) {
+        setState(() {
+          _isButtonVisible = true; // Show button when at the bottom
+        });
+      } else {
+        setState(() {
+          _isButtonVisible = false; // Hide button otherwise
+        });
+      }
     });
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    // Safe to use context here
+    final mediaQuery = MediaQuery.of(context);
+    someValue = mediaQuery.size.height; // Example usage
   }
 
   // Future<int> fetchHId() async {
@@ -180,9 +197,9 @@ class _InventoryState extends State<Inventory> {
           body: Stack(
             children: [
               RawScrollbar(
+                  controller: _InventoryScrollController,
                   thumbColor: AppTheme.greenMainTheme,
                   child: SingleChildScrollView(
-                    controller: _InventoryScrollController,
                     child: Column(
                       children: [
                         Container(
@@ -202,21 +219,16 @@ class _InventoryState extends State<Inventory> {
                                       .copyWith(color: Colors.white)),
                               Text(
                                 'Things you should eat today:',
+                                style: FontsTheme.hind_20()
+                                    .copyWith(color: Colors.white),
+                              ),
+                              Text(
+                                ' - Tomatos expire tomorrow',
                                 style: FontsTheme.hind_15()
                                     .copyWith(color: Colors.white),
                               ),
                               Text(
-                                '- Tomatos expire tomorrow',
-                                style: FontsTheme.hind_15()
-                                    .copyWith(color: Colors.white),
-                              ),
-                              Text(
-                                '- Lettuce expire in 2 days',
-                                style: FontsTheme.hind_15()
-                                    .copyWith(color: Colors.white),
-                              ),
-                              Text(
-                                '- Tomatos expire tomorrow',
+                                ' - Lettuce expire in 2 days',
                                 style: FontsTheme.hind_15()
                                     .copyWith(color: Colors.white),
                               ),
@@ -226,7 +238,17 @@ class _InventoryState extends State<Inventory> {
                                     .copyWith(color: Colors.white),
                               ),
                               const SizedBox(
-                                height: 20,
+                                height: 3,
+                              ),
+                              Center(
+                                child: Text(
+                                  'Current Status',
+                                  style: FontsTheme.hindBold_20()
+                                      .copyWith(color: AppTheme.softOrange),
+                                ),
+                              ),
+                              const SizedBox(
+                                height: 5,
                               ),
                               Center(child: progressBar),
                               const SizedBox(
@@ -246,66 +268,73 @@ class _InventoryState extends State<Inventory> {
                           ),
                           child: Column(
                             children: [
-                              Column(
+                              Row(
                                 mainAxisAlignment:
                                     MainAxisAlignment.spaceBetween,
-                                children: [
-                                  const InventoryDropdownMenu(),
-                                  Container(
-                                    margin: const EdgeInsets.only(left: 5.0),
-                                    padding: const EdgeInsets.all(5.0),
-                                    decoration: BoxDecoration(
-                                      color: AppTheme.softGreen,
-                                      borderRadius: BorderRadius.circular(10.0),
-                                    ),
-                                    child: Column(
-                                      children: [
-                                        GestureDetector(
-                                          onTap: () {
-                                            context.push('/category');
-                                          },
-                                          child: Container(
-                                            width: 150,
-                                            height: 30,
-                                            child: Row(
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment.center,
-                                              children: [
-                                                Text(
-                                                  foodCategory,
-                                                  style: FontsTheme
-                                                          .mouseMemoirs_20()
-                                                      .copyWith(
-                                                          letterSpacing: 1),
-                                                ),
-                                                IconButton(
-                                                  onPressed: () =>
-                                                      context.go('/category'),
-                                                  icon: const Icon(Icons
-                                                      .arrow_drop_down_circle_rounded),
-                                                ),
-                                              ],
+                                children: <Widget>[
+                                  Padding(
+                                      padding:
+                                          EdgeInsets.only(right: 8, left: 8),
+                                      child: Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
+                                        children: <Widget>[
+                                          InventoryDropdownMenu(),
+                                          Container(
+                                            margin: const EdgeInsets.only(
+                                                left: 5.0),
+                                            padding: const EdgeInsets.all(5.0),
+                                            decoration: BoxDecoration(
+                                              color: AppTheme.softGreen,
+                                              borderRadius:
+                                                  BorderRadius.circular(10.0),
                                             ),
+                                            child: GestureDetector(
+                                              onTap: () {
+                                                context.push('/category');
+                                              },
+                                              child: Container(
+                                                width: 130,
+                                                height: 30,
+                                                child: Row(
+                                                  mainAxisAlignment:
+                                                      MainAxisAlignment.center,
+                                                  children: [
+                                                    Text(
+                                                      foodCategory,
+                                                      style: FontsTheme
+                                                              .mouseMemoirs_20()
+                                                          .copyWith(
+                                                              letterSpacing: 1),
+                                                    ),
+                                                    IconButton(
+                                                      onPressed: () => context
+                                                          .go('/category'),
+                                                      icon: const Icon(Icons
+                                                          .arrow_drop_down_circle_rounded),
+                                                    ),
+                                                  ],
+                                                ),
+                                              ),
+                                            ),
+                                            // Row(
+                                            //   children: [
+                                            //     IconButton(
+                                            //       onPressed: () => context.go('/category'),
+                                            //       icon: const Icon(Icons.swipe_down_alt),
+                                            //     ),
+                                            //     IconButton(
+                                            //       onPressed: () => context.go('/inventory'),
+                                            //       icon: const Icon(Icons.circle_outlined),
+                                            //     ),
+                                            //     IconButton(
+                                            //         onPressed: () => context.go('/inventory'),
+                                            //         icon: const Icon(Icons.swipe_up_alt)),
+                                            //   ],
+                                            // )
                                           ),
-                                        ),
-                                        // Row(
-                                        //   children: [
-                                        //     IconButton(
-                                        //       onPressed: () => context.go('/category'),
-                                        //       icon: const Icon(Icons.swipe_down_alt),
-                                        //     ),
-                                        //     IconButton(
-                                        //       onPressed: () => context.go('/inventory'),
-                                        //       icon: const Icon(Icons.circle_outlined),
-                                        //     ),
-                                        //     IconButton(
-                                        //         onPressed: () => context.go('/inventory'),
-                                        //         icon: const Icon(Icons.swipe_up_alt)),
-                                        //   ],
-                                        // )
-                                      ],
-                                    ),
-                                  )
+                                        ],
+                                      ))
                                 ],
                               ),
                               const SizedBox(
@@ -392,22 +421,22 @@ class _InventoryState extends State<Inventory> {
                                       );
                                     }
                                   }),
-                              // InventoryListItem(
-                              //   foodname: "Try food",
-                              //   img: "ssss",
-                              //   // location: "Pantry try",
-                              //   expired: "2024-12-30",
-                              //   // remind: "2024-11-24",
-                              //   progressbar: 40,
-                              //   consuming: "2",
-                              //   // remaining: 3,
-                              //   foodid: 10, remaining: '5 pieces',
-                              //   //expired: "2024-12-31",
-                              //   // isCountable: true,
-                              //   // TotalCost: 50,
-                              //   // IndividualWeight: 100,
-                              //   // IndividualCost: 10,
-                              // ),
+                              InventoryListItem(
+                                foodname: "Try food",
+                                img: "ssss",
+                                // location: "Pantry try",
+                                expired: DateTime(2024, 0012, 30),
+                                // remind: "2024-11-24",
+                                progressbar: 40,
+                                consuming: "2",
+                                // remaining: 3,
+                                foodid: 10, remaining: '5 pieces',
+                                //expired: "2024-12-31",
+                                // isCountable: true,
+                                // TotalCost: 50,
+                                // IndividualWeight: 100,
+                                // IndividualCost: 10,
+                              ),
                             ],
                           ),
                         ),
@@ -439,16 +468,6 @@ class _InventoryState extends State<Inventory> {
                       ),
                     ),
                   ),
-                  if (_isButtonVisible)
-                    Positioned(
-                      bottom: 16,
-                      right: 16,
-                      child: FloatingActionButton(
-                        onPressed: _scrollToTop,
-                        child: Icon(Icons.arrow_upward),
-                        backgroundColor: AppTheme.greenMainTheme,
-                      ),
-                    ),
                   Align(
                     alignment: Alignment.bottomRight,
                     child: Padding(
@@ -564,8 +583,24 @@ class _InventoryState extends State<Inventory> {
                   ),
                 ],
               ),
+              if (_isButtonVisible)
+                Positioned(
+                  bottom: 16,
+                  left: 16,
+                  child: FloatingActionButton(
+                    onPressed: _scrollToTop,
+                    child: Icon(Icons.arrow_upward),
+                    backgroundColor: AppTheme.greenMainTheme,
+                  ),
+                ),
             ],
           )),
     );
+  }
+
+  @override
+  void dispose() {
+    _InventoryScrollController.dispose();
+    super.dispose();
   }
 }

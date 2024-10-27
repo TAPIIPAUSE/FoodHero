@@ -25,7 +25,7 @@ class _DropdownMenuExampleState extends State<InventoryDropdownMenu> {
         Icons.switch_left_rounded,
         color: Colors.white,
       ),
-      style: FontsTheme.mouseMemoirs_20().copyWith(letterSpacing: 1),
+      style: FontsTheme.mouseMemoirs_30Black().copyWith(letterSpacing: 1),
       onChanged: (String? value) {
         setState(
           () {

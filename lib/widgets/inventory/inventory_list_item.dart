@@ -99,59 +99,59 @@ class InventoryListItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return //Blue Food banner 
-    Padding(
-        padding: EdgeInsets.only(right: 8),
-        child: Column(
-          children: [
-            Container(
-              padding: const EdgeInsets.all(5.0),
-              decoration: BoxDecoration(
-                color: AppTheme.softBlue,
-                borderRadius: BorderRadius.circular(10.0),
-              ),
-              child: Padding(
-                padding: const EdgeInsets.symmetric(vertical: 5.0),
-                child: Row(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: <Widget>[
-                    Expanded(
-                      flex: 2,
-                      child: ClipRRect(
-                        borderRadius: BorderRadius.circular(
-                            10.0), // Adjust the value as needed
-                        child: Image.network(
-                          img.toString(),
-                          fit: BoxFit.cover,
-                          width: MediaQuery.of(context).size.width * 0.1,
-                          height: MediaQuery.of(context).size.height * 0.12,
-                          errorBuilder: (context, error, stackTrace) {
-                            return Image.network(
-                                "https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcTKrjn08eRggR5MYJ-xIoB_bIv0Rlb8PjpKKZal_Vw6y7Yb-Ayz&usqp=CAU");
-                          },
+    return //Blue Food banner
+        Padding(
+            padding: EdgeInsets.only(right: 8),
+            child: Column(
+              children: [
+                Container(
+                  padding: const EdgeInsets.all(5.0),
+                  decoration: BoxDecoration(
+                    color: AppTheme.softBlue,
+                    borderRadius: BorderRadius.circular(10.0),
+                  ),
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 5.0),
+                    child: Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: <Widget>[
+                        Expanded(
+                          flex: 2,
+                          child: ClipRRect(
+                            borderRadius: BorderRadius.circular(
+                                10.0), // Adjust the value as needed
+                            child: Image.network(
+                              img.toString(),
+                              fit: BoxFit.cover,
+                              width: MediaQuery.of(context).size.width * 0.1,
+                              height: MediaQuery.of(context).size.height * 0.12,
+                              errorBuilder: (context, error, stackTrace) {
+                                return Image.network(
+                                    "https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcTKrjn08eRggR5MYJ-xIoB_bIv0Rlb8PjpKKZal_Vw6y7Yb-Ayz&usqp=CAU");
+                              },
+                            ),
+                          ),
                         ),
-                      ),
+                        Expanded(
+                          flex: 3,
+                          child: _FoodDetail(
+                            foodname: foodname,
+                            expiry: expired,
+                            progessbar: 10,
+                            consumeing: consuming,
+                            remaining: remaining,
+                          ),
+                        ),
+                      ],
                     ),
-                    Expanded(
-                      flex: 3,
-                      child: _FoodDetail(
-                        foodname: foodname,
-                        expiry: expired,
-                        progessbar: 10,
-                        consumeing: consuming,
-                        remaining: remaining,
-                      ),
-                    ),
-                  ],
+                  ),
                 ),
-              ),
-            ),
-            const SizedBox(
-              height: 10,
-            ),
-          ],
-        ));
+                const SizedBox(
+                  height: 10,
+                ),
+              ],
+            ));
   }
 }
 
@@ -184,8 +184,8 @@ class _FoodDetail extends StatelessWidget {
                 padding: EdgeInsets.symmetric(vertical: 1.0),
               ),
               Text(foodname,
-                  style:
-                      FontsTheme.mouseMemoirs_20().copyWith(letterSpacing: 1)),
+                  style: FontsTheme.mouseMemoirs_30Black()
+                      .copyWith(letterSpacing: 1)),
               Column(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   crossAxisAlignment: CrossAxisAlignment.start,

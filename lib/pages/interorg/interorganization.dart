@@ -80,7 +80,10 @@ class _InterOrganizationState extends State<InterOrganization> {
                       .map<DropdownMenuItem<String>>((String value) {
                     return DropdownMenuItem<String>(
                       value: value,
-                      child: Text(value),
+                      child: Text(
+                        value,
+                        style: FontsTheme.mouseMemoirs_30Black(),
+                      ),
                     );
                   }).toList(),
                 ),
@@ -109,82 +112,93 @@ class _InterOrganizationState extends State<InterOrganization> {
             child: Column(
               children: [
                 Container(
-                  margin: const EdgeInsets.all(5),
-                  padding: const EdgeInsets.all(10),
-                  width: screenWidth * 0.9,
-                  decoration: const BoxDecoration(
-                    color: AppTheme.mainBlue,
-                    borderRadius: BorderRadius.all(Radius.circular(20)),
-                  ),
-                  child: const Center(
-                      child: Text(
-                    "$inter score board",
-                    style: TextStyle(color: Colors.white),
-                  )),
-                ),
-                Container(
-                    padding: const EdgeInsets.all(10),
-                    width: screenWidth * 0.9,
                     decoration: const BoxDecoration(
-                      color: AppTheme.mainBlue,
+                      color: AppTheme.softBlue,
                       borderRadius: BorderRadius.all(Radius.circular(20)),
                     ),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        const Icon(
-                          Icons.map_sharp,
-                          color: Colors.white,
+                    margin: const EdgeInsets.all(5),
+                    padding: const EdgeInsets.all(5),
+                    child: Column(children: [
+                      Container(
+                        margin: const EdgeInsets.all(5),
+                        padding: const EdgeInsets.all(10),
+                        width: screenWidth * 0.9,
+                        decoration: const BoxDecoration(
+                          color: AppTheme.mainBlue,
+                          borderRadius: BorderRadius.all(Radius.circular(20)),
                         ),
-                        const Text(
-                          "Thung Khru",
-                          style: TextStyle(color: Colors.white),
+                        child: Center(
+                            child: Text(
+                          "$inter score board",
+                          style: FontsTheme.mouseMemoirs_30White()
+                              .copyWith(color: Colors.white),
+                        )),
+                      ),
+                      Container(
+                          padding: const EdgeInsets.all(10),
+                          width: screenWidth * 0.9,
+                          decoration: const BoxDecoration(
+                            color: AppTheme.mainBlue,
+                            borderRadius: BorderRadius.all(Radius.circular(20)),
+                          ),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              const Icon(
+                                Icons.map_sharp,
+                                color: Colors.white,
+                              ),
+                              Text(
+                                "Thung Khru",
+                                style: FontsTheme.mouseMemoirs_25().copyWith(
+                                    color: Colors.white, letterSpacing: 1),
+                              ),
+                              IconButton(
+                                  onPressed: () {},
+                                  icon: const Icon(
+                                    Icons.change_circle,
+                                    color: Colors.white,
+                                  )),
+                            ],
+                          )),
+                      Container(
+                        margin: const EdgeInsets.all(10),
+                        padding: const EdgeInsets.all(10),
+                        width: screenWidth * 0.9,
+                        decoration: const BoxDecoration(
+                          color: AppTheme.mainBlue,
+                          borderRadius: BorderRadius.all(Radius.circular(20)),
                         ),
-                        IconButton(
-                            onPressed: () {},
-                            icon: const Icon(
-                              Icons.change_circle,
-                              color: Colors.white,
-                            )),
-                      ],
-                    )),
-                Container(
-                  margin: const EdgeInsets.all(10),
-                  padding: const EdgeInsets.all(10),
-                  width: screenWidth * 0.9,
-                  decoration: const BoxDecoration(
-                    color: AppTheme.mainBlue,
-                    borderRadius: BorderRadius.all(Radius.circular(20)),
-                  ),
-                  child: Column(
-                    children: [
-                      Text(
-                        '${NumberFormat('#,###').format(totalpoint)} points score',
-                        style: const TextStyle(color: Colors.white),
+                        child: Column(
+                          children: [
+                            Text(
+                              '${NumberFormat('#,###').format(totalpoint)} points score',
+                              style: const TextStyle(color: Colors.white),
+                            ),
+                            const OrgListScore(
+                              orgname: 'KMUTT',
+                              star: true,
+                              point: 55555,
+                            ),
+                            const OrgListScore(
+                              orgname: 'CU',
+                              star: false,
+                              point: 5555555555,
+                            ),
+                            const OrgListScore(
+                              orgname: 'MU',
+                              star: false,
+                              point: 5,
+                            ),
+                            const OrgListScore(
+                              orgname: 'KMUTL',
+                              star: false,
+                              point: 5,
+                            ),
+                          ],
+                        ),
                       ),
-                      const OrgListScore(
-                        orgname: 'KMUTT',
-                        star: true,
-                        point: 55555,
-                      ),
-                      const OrgListScore(
-                        orgname: 'CU',
-                        star: false,
-                        point: 5555555555,
-                      ),
-                      const OrgListScore(
-                        orgname: 'MU',
-                        star: false,
-                        point: 5,
-                      ),
-                      const OrgListScore(
-                        orgname: 'KMUTL',
-                        star: true,
-                        point: 5,
-                      ),
-                    ],
-                  ),
-                ),
+                    ])),
                 Container(
                   margin: const EdgeInsets.all(10),
                   padding: const EdgeInsets.all(10),
@@ -196,12 +210,15 @@ class _InterOrganizationState extends State<InterOrganization> {
                   child: Column(
                     children: [
                       const Text(
-                        'We saved food wasted',
+                        'We have reduced food waste',
                         style: TextStyle(color: Colors.white),
                       ),
                       Text(
                         '${NumberFormat('#,###').format(wastedpoint)} grams',
                         style: const TextStyle(color: Colors.white),
+                      ),
+                      const SizedBox(
+                        height: 2,
                       ),
                       // pie chart
                       Container(
@@ -245,77 +262,88 @@ class _InterOrganizationState extends State<InterOrganization> {
             child: Column(
               children: [
                 Container(
-                  margin: const EdgeInsets.all(5),
-                  padding: const EdgeInsets.all(10),
-                  width: screenWidth * 0.9,
-                  decoration: const BoxDecoration(
-                    color: AppTheme.mainBlue,
-                    borderRadius: BorderRadius.all(Radius.circular(20)),
-                  ),
-                  child: const Center(
-                      child: Text(
-                    "$hh score board",
-                    style: TextStyle(color: Colors.white),
-                  )),
-                ),
-                Container(
-                    padding: const EdgeInsets.all(10),
-                    width: screenWidth * 0.9,
                     decoration: const BoxDecoration(
-                      color: AppTheme.mainBlue,
+                      color: AppTheme.softBlue,
                       borderRadius: BorderRadius.all(Radius.circular(20)),
                     ),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        const Icon(
-                          Icons.map_sharp,
-                          color: Colors.white,
+                    margin: const EdgeInsets.all(5),
+                    padding: const EdgeInsets.all(5),
+                    child: Column(children: [
+                      Container(
+                        margin: const EdgeInsets.all(5),
+                        padding: const EdgeInsets.all(10),
+                        width: screenWidth * 0.9,
+                        decoration: const BoxDecoration(
+                          color: AppTheme.mainBlue,
+                          borderRadius: BorderRadius.all(Radius.circular(20)),
                         ),
-                        const Text(
-                          "Thung Khru",
-                          style: TextStyle(color: Colors.white),
+                        child: Center(
+                            child: Text(
+                          "$hh score board",
+                          style: FontsTheme.mouseMemoirs_30White()
+                              .copyWith(color: Colors.white),
+                        )),
+                      ),
+                      Container(
+                          padding: const EdgeInsets.all(10),
+                          width: screenWidth * 0.9,
+                          decoration: const BoxDecoration(
+                            color: AppTheme.mainBlue,
+                            borderRadius: BorderRadius.all(Radius.circular(20)),
+                          ),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              const Icon(
+                                Icons.map_sharp,
+                                color: Colors.white,
+                              ),
+                              Text(
+                                "Thung Khru",
+                                style: FontsTheme.mouseMemoirs_25().copyWith(
+                                    color: Colors.white, letterSpacing: 1),
+                              ),
+                              IconButton(
+                                  onPressed: () {},
+                                  icon: const Icon(
+                                    Icons.change_circle,
+                                    color: Colors.white,
+                                  )),
+                            ],
+                          )),
+                      Container(
+                        margin: const EdgeInsets.all(10),
+                        padding: const EdgeInsets.all(10),
+                        width: screenWidth * 0.9,
+                        decoration: const BoxDecoration(
+                          color: AppTheme.mainBlue,
+                          borderRadius: BorderRadius.all(Radius.circular(20)),
                         ),
-                        IconButton(
-                            onPressed: () {},
-                            icon: const Icon(
-                              Icons.change_circle,
-                              color: Colors.white,
-                            )),
-                      ],
-                    )),
-                Container(
-                  margin: const EdgeInsets.all(10),
-                  padding: const EdgeInsets.all(10),
-                  width: screenWidth * 0.9,
-                  decoration: const BoxDecoration(
-                    color: AppTheme.mainBlue,
-                    borderRadius: BorderRadius.all(Radius.circular(20)),
-                  ),
-                  child: Column(
-                    children: [
-                      Text(
-                        '${NumberFormat('#,###').format(totalpoint)} points score',
-                        style: const TextStyle(color: Colors.white),
+                        child: Column(
+                          children: [
+                            Text(
+                              '${NumberFormat('#,###').format(totalpoint)} points score',
+                              style: const TextStyle(color: Colors.white),
+                            ),
+                            const OrgListScore(
+                              orgname: 'You',
+                              star: true,
+                              point: 55555,
+                            ),
+                            const OrgListScore(
+                              orgname: 'Member',
+                              star: false,
+                              point: 5555555555,
+                            ),
+                            const OrgListScore(
+                              orgname: 'Member',
+                              star: false,
+                              point: 5,
+                            ),
+                          ],
+                        ),
                       ),
-                      const OrgListScore(
-                        orgname: 'You',
-                        star: true,
-                        point: 55555,
-                      ),
-                      const OrgListScore(
-                        orgname: 'Member',
-                        star: false,
-                        point: 5555555555,
-                      ),
-                      const OrgListScore(
-                        orgname: 'Member',
-                        star: false,
-                        point: 5,
-                      ),
-                    ],
-                  ),
-                ),
+                    ])),
                 Container(
                   margin: const EdgeInsets.all(10),
                   padding: const EdgeInsets.all(10),
@@ -327,12 +355,15 @@ class _InterOrganizationState extends State<InterOrganization> {
                   child: Column(
                     children: [
                       const Text(
-                        'Your household saved food wasted',
+                        'Your household have reduced food waste',
                         style: TextStyle(color: Colors.white),
                       ),
                       Text(
                         '${NumberFormat('#,###').format(wastedpoint)} grams',
                         style: const TextStyle(color: Colors.white),
+                      ),
+                      const SizedBox(
+                        height: 2,
                       ),
                       // pie chart
                       Container(
@@ -376,82 +407,93 @@ class _InterOrganizationState extends State<InterOrganization> {
             child: Column(
               children: [
                 Container(
-                  margin: const EdgeInsets.all(5),
-                  padding: const EdgeInsets.all(10),
-                  width: screenWidth * 0.9,
-                  decoration: const BoxDecoration(
-                    color: AppTheme.mainBlue,
-                    borderRadius: BorderRadius.all(Radius.circular(20)),
-                  ),
-                  child: const Center(
-                      child: Text(
-                    "$org score board",
-                    style: TextStyle(color: Colors.white),
-                  )),
-                ),
-                Container(
-                    padding: const EdgeInsets.all(10),
-                    width: screenWidth * 0.9,
                     decoration: const BoxDecoration(
-                      color: AppTheme.mainBlue,
+                      color: AppTheme.softBlue,
                       borderRadius: BorderRadius.all(Radius.circular(20)),
                     ),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        const Icon(
-                          Icons.map_sharp,
-                          color: Colors.white,
+                    margin: const EdgeInsets.all(5),
+                    padding: const EdgeInsets.all(5),
+                    child: Column(children: [
+                      Container(
+                        margin: const EdgeInsets.all(5),
+                        padding: const EdgeInsets.all(10),
+                        width: screenWidth * 0.9,
+                        decoration: const BoxDecoration(
+                          color: AppTheme.mainBlue,
+                          borderRadius: BorderRadius.all(Radius.circular(20)),
                         ),
-                        const Text(
-                          "Thung Khru",
-                          style: TextStyle(color: Colors.white),
+                        child: Center(
+                            child: Text(
+                          "$org score board",
+                          style: FontsTheme.mouseMemoirs_30White()
+                              .copyWith(color: Colors.white),
+                        )),
+                      ),
+                      Container(
+                          padding: const EdgeInsets.all(10),
+                          width: screenWidth * 0.9,
+                          decoration: const BoxDecoration(
+                            color: AppTheme.mainBlue,
+                            borderRadius: BorderRadius.all(Radius.circular(20)),
+                          ),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              const Icon(
+                                Icons.map_sharp,
+                                color: Colors.white,
+                              ),
+                              Text(
+                                "Thung Khru",
+                                style: FontsTheme.mouseMemoirs_25().copyWith(
+                                    color: Colors.white, letterSpacing: 1),
+                              ),
+                              IconButton(
+                                  onPressed: () {},
+                                  icon: const Icon(
+                                    Icons.change_circle,
+                                    color: Colors.white,
+                                  )),
+                            ],
+                          )),
+                      Container(
+                        margin: const EdgeInsets.all(10),
+                        padding: const EdgeInsets.all(10),
+                        width: screenWidth * 0.9,
+                        decoration: const BoxDecoration(
+                          color: AppTheme.mainBlue,
+                          borderRadius: BorderRadius.all(Radius.circular(20)),
                         ),
-                        IconButton(
-                            onPressed: () {},
-                            icon: const Icon(
-                              Icons.change_circle,
-                              color: Colors.white,
-                            )),
-                      ],
-                    )),
-                Container(
-                  margin: const EdgeInsets.all(10),
-                  padding: const EdgeInsets.all(10),
-                  width: screenWidth * 0.9,
-                  decoration: const BoxDecoration(
-                    color: AppTheme.mainBlue,
-                    borderRadius: BorderRadius.all(Radius.circular(20)),
-                  ),
-                  child: Column(
-                    children: [
-                      Text(
-                        '${NumberFormat('#,###').format(totalpoint)} points score',
-                        style: const TextStyle(color: Colors.white),
+                        child: Column(
+                          children: [
+                            Text(
+                              '${NumberFormat('#,###').format(totalpoint)} points score',
+                              style: const TextStyle(color: Colors.white),
+                            ),
+                            const OrgListScore(
+                              orgname: 'You',
+                              star: true,
+                              point: 55555,
+                            ),
+                            const OrgListScore(
+                              orgname: 'Member#1',
+                              star: false,
+                              point: 5555555555,
+                            ),
+                            const OrgListScore(
+                              orgname: 'Member#2',
+                              star: false,
+                              point: 5,
+                            ),
+                            const OrgListScore(
+                              orgname: 'Member#3',
+                              star: false,
+                              point: 5,
+                            ),
+                          ],
+                        ),
                       ),
-                      const OrgListScore(
-                        orgname: 'You',
-                        star: true,
-                        point: 55555,
-                      ),
-                      const OrgListScore(
-                        orgname: 'Member#1',
-                        star: false,
-                        point: 5555555555,
-                      ),
-                      const OrgListScore(
-                        orgname: 'Member#2',
-                        star: false,
-                        point: 5,
-                      ),
-                      const OrgListScore(
-                        orgname: 'Member#3',
-                        star: false,
-                        point: 5,
-                      ),
-                    ],
-                  ),
-                ),
+                    ])),
                 Container(
                   margin: const EdgeInsets.all(10),
                   padding: const EdgeInsets.all(10),
@@ -463,12 +505,15 @@ class _InterOrganizationState extends State<InterOrganization> {
                   child: Column(
                     children: [
                       const Text(
-                        'Your organization saved food wasted',
+                        'Your organization have reduced food waste',
                         style: TextStyle(color: Colors.white),
                       ),
                       Text(
                         '${NumberFormat('#,###').format(wastedpoint)} grams',
                         style: const TextStyle(color: Colors.white),
+                      ),
+                      const SizedBox(
+                        height: 2,
                       ),
                       // pie chart
                       Container(

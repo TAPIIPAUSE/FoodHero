@@ -68,6 +68,17 @@ class FontsTheme {
     );
   }
 
+  static TextStyle mouseMemoirs_25({
+    FontWeight fontWeight = FontWeight.w400,
+    double fontSize = 25,
+    Color color = Colors.black,
+  }) {
+    return GoogleFonts.mouseMemoirs(
+      fontWeight: fontWeight,
+      fontSize: fontSize,
+    );
+  }
+
   static TextStyle mouseMemoirs_20({
     FontWeight fontWeight = FontWeight.w400,
     double fontSize = 20,

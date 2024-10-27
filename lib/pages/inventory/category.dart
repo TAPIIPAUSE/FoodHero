@@ -43,14 +43,14 @@ class _ChooseCategoryState extends State<ChooseCategory> {
       backgroundColor: AppTheme.lightGreenBackground,
       appBar: AppBar(
         title: const Text('Inventory'),
+        toolbarHeight: 90,
         centerTitle: true,
         backgroundColor: AppTheme.greenMainTheme,
         titleTextStyle: FontsTheme.mouseMemoirs_64Black(),
-        leading: IconButton.filled(
+        leading: IconButton(
           onPressed: () => context.push('/user_profile'),
           icon: const Icon(
             Icons.person_sharp,
-            color: Colors.white,
           ),
         ),
       ),
@@ -92,7 +92,7 @@ class _ChooseCategoryState extends State<ChooseCategory> {
                               const SizedBox(height: 8),
                               Text(
                                 foodTypes[index % foodTypes.length],
-                                style: const TextStyle(fontSize: 20),
+                                style: FontsTheme.mouseMemoirs_40(),
                               ),
                             ],
                           ),
