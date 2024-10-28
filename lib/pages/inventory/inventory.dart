@@ -42,7 +42,7 @@ class _InventoryState extends State<Inventory> {
       final prefs = await SharedPreferences.getInstance();
       final hID = prefs.getInt('hID');
       print('hID from SharedPreferences: $hID'); // Debug print
-      final data = await InventoryFood().getInventoryFood(hID!);
+      final data = await APIFood().getInventoryFood(hID!);
       print('Fetched inventory food data: $data'); // Debug print
       // print('Fetched data: ${data.map((item) => item.toString())}');
       return data;
@@ -382,6 +382,8 @@ class _InventoryState extends State<Inventory> {
                                                     //FoodDetailData foodDetail = await getFoodDetail(fID);
                                                     print(
                                                         'Navigating to food details for ID: ${foodItem.foodId}');
+                                                    print(
+                                                        'Food Item: $foodItem');
                                                     Navigator.push(
                                                       context,
                                                       MaterialPageRoute(

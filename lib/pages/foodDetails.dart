@@ -13,7 +13,6 @@ import 'package:foodhero/fonts.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 import 'package:interactive_slider/interactive_slider.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 class foodDetails extends StatefulWidget {
   final int FoodID;
@@ -76,9 +75,9 @@ class _FoodDetailsPageState extends State<foodDetails> {
   late Color signInColor;
   Future<FoodDetailData?> _loadFoodDetail() async {
     try {
-      print('Loading food details for ID: ${widget.FoodID}'); // Debug log
-
-      final data = await InventoryFood().getFoodDetail(widget.FoodID);
+      // Debug log
+      print('Loading food details for ID: ${widget.FoodID}');
+      final data = await APIFood().getFoodDetail(widget.FoodID);
 
       if (data != null) {
         print(
@@ -370,8 +369,7 @@ class _FoodDetailsPageState extends State<foodDetails> {
           ),
         ],
       ),
-      body: 
-      FutureBuilder<FoodDetailData?>(
+      body: FutureBuilder<FoodDetailData?>(
           future: _loadFoodDetail(),
           builder: (context, snapshot) {
             if (snapshot.connectionState == ConnectionState.waiting) {
@@ -395,8 +393,7 @@ class _FoodDetailsPageState extends State<foodDetails> {
             double screenHeight = isCountable ? 800 : 600;
 
             print('this is iscountable: $isCountable');
-            return 
-            Stack(
+            return Stack(
               children: [
                 // Container(
                 //   //for make border
@@ -1075,197 +1072,205 @@ class _FoodDetailsPageState extends State<foodDetails> {
                             ),
                           ),
                         ),
-                         Container(
-                        width: 350,
-                        child: Column(
-                          children: <Widget>[
-                            SizedBox(
-                              height: 40,
-                            ),
-                            // SizedBox(
-                            //   child: Container(
-                            //     width: 300,
-                            //     height: 200,
-                            //     padding: EdgeInsets.all(3),
-                            // decoration: BoxDecoration(
-                            //     borderRadius: BorderRadius.circular(5),
-                            //     color: AppTheme.softRed),
-
-                            // SizedBox(
-                            //   width: 10,
-                            //   height: 10,
-                            //   child: InkWell(
-                            //       onTap: () {
-                            //         consumeQuantity - 1;
-                            //       },
-                            //       child: Icon(
-                            //         Icons.remove,
-                            //         color: Colors.white,
-                            //         size: 16,
-                            //       )),
-                            // ),
-                            // Container(
-                            //   margin: EdgeInsets.symmetric(horizontal: 3),
-                            //   padding: EdgeInsets.symmetric(
-                            //       horizontal: 3, vertical: 2),
-                            //   decoration: BoxDecoration(
-                            //       borderRadius: BorderRadius.circular(3),
-                            //       color: Colors.white),
-                            //   child: Text(
-                            //     "$consumeQuantity",
-                            //     style: TextStyle(
-                            //         color: Colors.black, fontSize: 16),
-                            //   ),
-                            // ),
-                            //Consume option if Countable show Quantity
-                            Visibility(
-                              visible: food.isCountable,
-                              child: Row(
-                                children: [
-                                  SizedBox(
-                                    width: 50,
-                                  ),
-                                  Container(
-                                    width: 80,
-                                    height: 50,
-                                    padding: EdgeInsets.symmetric(
-                                        horizontal: 20, vertical: 8),
-                                    decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(10),
-                                      color: Colors.white,
-                                    ),
-                                    child: Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
-                                      children: [
-                                        Text('$quantity ',
-                                            style: FontsTheme.hindBold_20()
-                                                .copyWith(color: Colors.black)),
-                                        //   buildConsumedQuantityUnit(''),
-                                      ],
-                                    ),
-                                  ),
-                                  SizedBox(
-                                    width: 20,
-                                  ),
-                                  Container(
-                                    width: 120,
-                                    height: 50,
-                                    padding: EdgeInsets.symmetric(
-                                        horizontal: 20, vertical: 8),
-                                    decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(10),
-                                      color: Colors.white,
-                                    ),
-                                    child: Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
-                                      children: [
-                                        Text('Pieces',
-                                            style: FontsTheme.hindBold_20()
-                                                .copyWith(color: Colors.black)),
-                                        //   buildConsumedQuantityUnit(''),
-                                      ],
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                            //Consume option if Not Countable show Weight
-                            Visibility(
-                              visible: !food.isCountable,
-                              child: Row(
-                                children: [
-                                  SizedBox(
-                                    width: 50,
-                                  ),
-                                  Container(
-                                    width: 100,
-                                    height: 50,
-                                    padding: EdgeInsets.symmetric(
-                                        horizontal: 20, vertical: 8),
-                                    decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(10),
-                                      color: Colors.white,
-                                    ),
-                                    child: Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
-                                      children: [
-                                        Text('$weightConsumeOption',
-                                            style: FontsTheme.hindBold_20()
-                                                .copyWith(color: Colors.black)),
-                                        //   buildConsumedQuantityUnit(''),
-                                      ],
-                                    ),
-                                  ),
-                                  SizedBox(
-                                    width: 20,
-                                  ),
-                                  Container(
-                                    width: 120,
-                                    height: 50,
-                                    padding: EdgeInsets.symmetric(
-                                        horizontal: 20, vertical: 8),
-                                    decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(10),
-                                      color: Colors.white,
-                                    ),
-                                    child: Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
-                                      children: [
-                                        Text('grams',
-                                            style: FontsTheme.hindBold_20()
-                                                .copyWith(color: Colors.black)),
-                                        //   buildConsumedQuantityUnit(''),
-                                      ],
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                            SizedBox(
-                              height: 20,
-                            ),
-                            // SizedBox(
-                            //   width: 10,
-                            //   height: 10,
-                            //   child: InkWell(
-                            //       onTap: () {
-                            //         consumeQuantity + 1;
-                            //       },
-                            //       child: Icon(
-                            //         Icons.add,
-                            //         color: Colors.white,
-                            //         size: 16,
-                            //       )),
-                            // ),
-                            SizedBox(
-                              child: InteractiveSlider(
-                                focusedHeight: 20,
-                                backgroundColor: AppTheme.softRed,
-                                startIcon: const Icon(
-                                  Icons.remove_circle_rounded,
-                                  color: Colors.black,
+                        Container(
+                            width: 350,
+                            child: Column(
+                              children: <Widget>[
+                                SizedBox(
+                                  height: 40,
                                 ),
-                                endIcon: const Icon(
-                                  Icons.add_circle_rounded,
-                                  color: Colors.black,
-                                ),
-                                min: 100,
-                                max: weight.toDouble(),
-                                onChanged: (valueWeightConsumeOption) =>
-                                    setState(() {
-                                  weightConsumeOption =
-                                      valueWeightConsumeOption.toInt();
+                                // SizedBox(
+                                //   child: Container(
+                                //     width: 300,
+                                //     height: 200,
+                                //     padding: EdgeInsets.all(3),
+                                // decoration: BoxDecoration(
+                                //     borderRadius: BorderRadius.circular(5),
+                                //     color: AppTheme.softRed),
 
-                                  weightConsumeOption.toStringAsFixed(0);
-                                }),
-                              ),
-                            ),
-                          ],
-                        )),
+                                // SizedBox(
+                                //   width: 10,
+                                //   height: 10,
+                                //   child: InkWell(
+                                //       onTap: () {
+                                //         consumeQuantity - 1;
+                                //       },
+                                //       child: Icon(
+                                //         Icons.remove,
+                                //         color: Colors.white,
+                                //         size: 16,
+                                //       )),
+                                // ),
+                                // Container(
+                                //   margin: EdgeInsets.symmetric(horizontal: 3),
+                                //   padding: EdgeInsets.symmetric(
+                                //       horizontal: 3, vertical: 2),
+                                //   decoration: BoxDecoration(
+                                //       borderRadius: BorderRadius.circular(3),
+                                //       color: Colors.white),
+                                //   child: Text(
+                                //     "$consumeQuantity",
+                                //     style: TextStyle(
+                                //         color: Colors.black, fontSize: 16),
+                                //   ),
+                                // ),
+                                //Consume option if Countable show Quantity
+                                Visibility(
+                                  visible: food.isCountable,
+                                  child: Row(
+                                    children: [
+                                      SizedBox(
+                                        width: 50,
+                                      ),
+                                      Container(
+                                        width: 80,
+                                        height: 50,
+                                        padding: EdgeInsets.symmetric(
+                                            horizontal: 20, vertical: 8),
+                                        decoration: BoxDecoration(
+                                          borderRadius:
+                                              BorderRadius.circular(10),
+                                          color: Colors.white,
+                                        ),
+                                        child: Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceBetween,
+                                          children: [
+                                            Text('$quantity ',
+                                                style: FontsTheme.hindBold_20()
+                                                    .copyWith(
+                                                        color: Colors.black)),
+                                            //   buildConsumedQuantityUnit(''),
+                                          ],
+                                        ),
+                                      ),
+                                      SizedBox(
+                                        width: 20,
+                                      ),
+                                      Container(
+                                        width: 120,
+                                        height: 50,
+                                        padding: EdgeInsets.symmetric(
+                                            horizontal: 20, vertical: 8),
+                                        decoration: BoxDecoration(
+                                          borderRadius:
+                                              BorderRadius.circular(10),
+                                          color: Colors.white,
+                                        ),
+                                        child: Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceBetween,
+                                          children: [
+                                            Text('Pieces',
+                                                style: FontsTheme.hindBold_20()
+                                                    .copyWith(
+                                                        color: Colors.black)),
+                                            //   buildConsumedQuantityUnit(''),
+                                          ],
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                                //Consume option if Not Countable show Weight
+                                Visibility(
+                                  visible: !food.isCountable,
+                                  child: Row(
+                                    children: [
+                                      SizedBox(
+                                        width: 50,
+                                      ),
+                                      Container(
+                                        width: 100,
+                                        height: 50,
+                                        padding: EdgeInsets.symmetric(
+                                            horizontal: 20, vertical: 8),
+                                        decoration: BoxDecoration(
+                                          borderRadius:
+                                              BorderRadius.circular(10),
+                                          color: Colors.white,
+                                        ),
+                                        child: Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceBetween,
+                                          children: [
+                                            Text('$weightConsumeOption',
+                                                style: FontsTheme.hindBold_20()
+                                                    .copyWith(
+                                                        color: Colors.black)),
+                                            //   buildConsumedQuantityUnit(''),
+                                          ],
+                                        ),
+                                      ),
+                                      SizedBox(
+                                        width: 20,
+                                      ),
+                                      Container(
+                                        width: 120,
+                                        height: 50,
+                                        padding: EdgeInsets.symmetric(
+                                            horizontal: 20, vertical: 8),
+                                        decoration: BoxDecoration(
+                                          borderRadius:
+                                              BorderRadius.circular(10),
+                                          color: Colors.white,
+                                        ),
+                                        child: Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceBetween,
+                                          children: [
+                                            Text('grams',
+                                                style: FontsTheme.hindBold_20()
+                                                    .copyWith(
+                                                        color: Colors.black)),
+                                            //   buildConsumedQuantityUnit(''),
+                                          ],
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                                SizedBox(
+                                  height: 20,
+                                ),
+                                // SizedBox(
+                                //   width: 10,
+                                //   height: 10,
+                                //   child: InkWell(
+                                //       onTap: () {
+                                //         consumeQuantity + 1;
+                                //       },
+                                //       child: Icon(
+                                //         Icons.add,
+                                //         color: Colors.white,
+                                //         size: 16,
+                                //       )),
+                                // ),
+                                SizedBox(
+                                  child: InteractiveSlider(
+                                    focusedHeight: 20,
+                                    backgroundColor: AppTheme.softRed,
+                                    startIcon: const Icon(
+                                      Icons.remove_circle_rounded,
+                                      color: Colors.black,
+                                    ),
+                                    endIcon: const Icon(
+                                      Icons.add_circle_rounded,
+                                      color: Colors.black,
+                                    ),
+                                    min: 100,
+                                    max: weight.toDouble(),
+                                    onChanged: (valueWeightConsumeOption) =>
+                                        setState(() {
+                                      weightConsumeOption =
+                                          valueWeightConsumeOption.toInt();
+
+                                      weightConsumeOption.toStringAsFixed(0);
+                                    }),
+                                  ),
+                                ),
+                              ],
+                            )),
                       ],
                     ),
                   ),

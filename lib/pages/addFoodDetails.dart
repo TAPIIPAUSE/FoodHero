@@ -1,10 +1,13 @@
 import 'dart:io';
 import 'dart:async';
 import 'package:flutter/material.dart';
+import 'package:foodhero/models/addfood_model.dart';
+import 'package:foodhero/pages/api/ApiUserFood.dart';
 import 'package:foodhero/pages/inventory/inventory.dart';
 import 'package:foodhero/theme.dart';
 import 'package:foodhero/fonts.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:interactive_slider/interactive_slider.dart';
 
 class addFoodDetails extends StatefulWidget {
   @override
@@ -27,19 +30,22 @@ class _AddFoodDetailsPageState extends State<addFoodDetails> {
   DateTime expirationDate = DateTime(2024);
   DateTime reminderDate = DateTime(2024);
   int quantity = 1;
-  double weight = 1; // in grams
-  String weightReduced = ''; //make it proper for the decimals
+  double weightDouble = 1; // in grams
+  String weight = ''; //make it proper for the decimals
   double allCost = 0;
   double costPerPiece = 0;
   double updateAllCost = 0;
   int consumeQuantity = 0;
   final TextEditingController foodname = TextEditingController();
-
-  // For countable uncountable option
+  late String selectedCategory = '';
+  int selectedCategoryIndex = 0;
+  String selectedLocation = '';
+  int selectedLocationIndex = 0;
+  bool isCountable = true;
   late double xAlign;
   late Color loginColor;
   late Color signInColor;
-
+  final APIFood addFoodAPI = APIFood();
   void _pickImage() async {
     // Implement your image picking logic here (e.g., using image_picker)
     final pickedFile =
@@ -167,6 +173,7 @@ class _AddFoodDetailsPageState extends State<addFoodDetails> {
     xAlign = loginAlign;
     loginColor = selectedColor;
     signInColor = normalColor;
+    quantity = quantity;
   }
 
   @override
@@ -197,7 +204,7 @@ class _AddFoodDetailsPageState extends State<addFoodDetails> {
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(16),
         child: SizedBox(
-          height: 1100,
+          height: 1200,
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
@@ -233,6 +240,7 @@ class _AddFoodDetailsPageState extends State<addFoodDetails> {
                     //itemName
                     width: 200,
                     child: TextField(
+                      controller: foodname,
                       style: FontsTheme.mouseMemoirs_50Black(),
                       textAlign: TextAlign.center,
                       decoration: InputDecoration(
@@ -254,47 +262,122 @@ class _AddFoodDetailsPageState extends State<addFoodDetails> {
               //buildCostField(),
 
               Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  ElevatedButton(
-                    onPressed: () => {},
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: AppTheme.softBlue,
-                      shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(10)),
-                    ),
-                    child: Text(
-                      'Previous',
-                      style: FontsTheme.mouseMemoirs_30Black()
-                          .copyWith(color: Colors.black),
-                    ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      // Container(
+                      //   width: 120,
+                      //   child: ElevatedButton(
+                      //     onPressed: () => {},
+                      //     style: ElevatedButton.styleFrom(
+                      //       backgroundColor: AppTheme.softBlue,
+                      //       shape: RoundedRectangleBorder(
+                      //           borderRadius: BorderRadius.circular(10)),
+                      //     ),
+                      //     child: Text(
+                      //       'Previous',
+                      //       style: FontsTheme.mouseMemoirs_30Black()
+                      //           .copyWith(color: Colors.black),
+                      //     ),
+                      //   ),
+                      // )
+                    ],
                   ),
-                  ElevatedButton(
-                    onPressed: () => {},
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: AppTheme.softOrange,
-                      shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(10)),
-                    ),
-                    child: Text(
-                      'Done',
-                      style: FontsTheme.mouseMemoirs_30Black()
-                          .copyWith(color: Colors.black),
-                    ),
-                  ),
-                  ElevatedButton(
-                    onPressed: () => {},
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: AppTheme.softBlue,
-                      shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(10)),
-                    ),
-                    child: Text(
-                      'Next',
-                      style: FontsTheme.mouseMemoirs_30Black()
-                          .copyWith(color: Colors.black),
-                    ),
-                  ),
+                  //Done button
+                  Container(
+                      width: 150,
+                      child: ElevatedButton(
+                        onPressed: () async {
+                          if (isCountable == true) {
+                            String foodName = foodname.text;
+                            //int category = selectedCategoryIndex;
+                            //String location = selectedLocation;
+                            AddFood addNewFood = AddFood(
+                              foodName: foodName,
+                              category: selectedCategoryIndex,
+                              location: selectedLocationIndex,
+                              expired: expirationDate,
+                              remind: reminderDate,
+                              totalCost: allCost,
+                              individualWeight: weightDouble,
+                              individualCost: costPerPiece,
+                              remaining: "remaining",
+                              url: " ",
+                              isCountable: isCountable,
+                              weight_type: 0,
+                              package_type: 0,
+                            );
+                            try {
+                              await addFoodAPI.addFood(addNewFood);
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                SnackBar(
+                                    content: Text('Food added successfully!')),
+                              );
+                            } catch (e) {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                SnackBar(
+                                    content: Text('Failed to add food: $e')),
+                              );
+                            }
+                          } else {
+                            String foodName = foodname.text;
+                            //int category = selectedCategoryIndex;
+                            //String location = selectedLocation;
+                            AddFood addNewFood = AddFood(
+                              foodName: foodName,
+                              category: selectedCategoryIndex,
+                              location: selectedLocationIndex,
+                              expired: expirationDate,
+                              remind: reminderDate,
+                              totalCost: allCost,
+                              individualWeight: weightDouble,
+                              individualCost: costPerPiece,
+                              remaining: "remaining",
+                              url: " ",
+                              isCountable: isCountable,
+                              weight_type: 0,
+                              package_type: 0,
+                            );
+                            try {
+                              await addFoodAPI.addFood(addNewFood);
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                SnackBar(
+                                    content: Text('Food added successfully!')),
+                              );
+                            } catch (e) {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                SnackBar(
+                                    content: Text('Failed to add food: $e')),
+                              );
+                            }
+                          }
+                        },
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: AppTheme.softOrange,
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(10)),
+                        ),
+                        child: Text(
+                          'Done',
+                          style: FontsTheme.mouseMemoirs_30Black()
+                              .copyWith(color: Colors.black),
+                        ),
+                      )),
+                  // ElevatedButton(
+                  //   onPressed: () async {},
+                  //   style: ElevatedButton.styleFrom(
+                  //     backgroundColor: AppTheme.softBlue,
+                  //     shape: RoundedRectangleBorder(
+                  //         borderRadius: BorderRadius.circular(10)),
+                  //   ),
+                  //   child: Text(
+                  //     'Next',
+                  //     style: FontsTheme.mouseMemoirs_30Black()
+                  //         .copyWith(color: Colors.black),
+                  //   ),
+                  // ),
                 ],
               ),
               Center(
@@ -318,15 +401,16 @@ class _AddFoodDetailsPageState extends State<addFoodDetails> {
     );
   }
 
+  List<String> itemCategory = [
+    "Cooked food",
+    "Fresh food",
+    "Frozen food",
+    "Dried food",
+    "Instant food"
+  ];
+
   Widget buildCategoriesField(String label, String value, IconData icon) {
-    List<String> items = [
-      "Cooked food",
-      "Fresh food",
-      "Frozen food",
-      "Dried food",
-      "Instant food"
-    ];
-    String selectedValue = items[0];
+    selectedCategory = itemCategory[0];
     return StatefulBuilder(
         builder: (BuildContext context, StateSetter setState) {
       return Padding(
@@ -370,10 +454,10 @@ class _AddFoodDetailsPageState extends State<addFoodDetails> {
                           ),
                           child: DropdownButtonHideUnderline(
                             child: DropdownButton<String>(
-                              value: selectedValue,
+                              value: selectedCategory,
                               isExpanded: true,
                               icon: Icon(icon),
-                              items: items.map((String item) {
+                              items: itemCategory.map((String item) {
                                 return DropdownMenuItem<String>(
                                   value: item,
                                   child: Text(
@@ -385,7 +469,9 @@ class _AddFoodDetailsPageState extends State<addFoodDetails> {
                               onChanged: (String? newValue) {
                                 if (newValue != null) {
                                   setState(() {
-                                    selectedValue = newValue;
+                                    selectedCategory = newValue;
+                                    selectedCategoryIndex =
+                                        itemCategory.indexOf(newValue);
                                   });
                                 }
                               },
@@ -400,12 +486,12 @@ class _AddFoodDetailsPageState extends State<addFoodDetails> {
     });
   }
 
+  List<String> itemLocation = [
+    "Refrigerator",
+    "Pantry",
+  ];
   Widget buildWhereField(String label, String value, IconData icon) {
-    List<String> items = [
-      "Refrigerator",
-      "Pantry",
-    ];
-    String selectedValue = items[0];
+    selectedLocation = itemLocation[0];
     return StatefulBuilder(
         builder: (BuildContext context, StateSetter setState) {
       return Padding(
@@ -449,10 +535,10 @@ class _AddFoodDetailsPageState extends State<addFoodDetails> {
                           ),
                           child: DropdownButtonHideUnderline(
                             child: DropdownButton<String>(
-                              value: selectedValue,
+                              value: selectedLocation,
                               isExpanded: true,
                               icon: Icon(icon),
-                              items: items.map((String item) {
+                              items: itemLocation.map((String item) {
                                 return DropdownMenuItem<String>(
                                   value: item,
                                   child: Text(
@@ -464,7 +550,9 @@ class _AddFoodDetailsPageState extends State<addFoodDetails> {
                               onChanged: (String? newValue) {
                                 if (newValue != null) {
                                   setState(() {
-                                    selectedValue = newValue;
+                                    selectedLocation = newValue;
+                                    selectedLocationIndex =
+                                        itemLocation.indexOf(newValue);
                                   });
                                 }
                               },
@@ -610,6 +698,7 @@ class _AddFoodDetailsPageState extends State<addFoodDetails> {
                                   loginColor = selectedColor;
                                   signInColor = normalColor;
                                   isVisible = true;
+                                  isCountable = true;
                                 });
                               },
                               child: Align(
@@ -633,6 +722,7 @@ class _AddFoodDetailsPageState extends State<addFoodDetails> {
                                   signInColor = selectedColor;
                                   loginColor = normalColor;
                                   isVisible = false;
+                                  isCountable = false;
                                 });
                               },
                               child: Align(
@@ -657,64 +747,91 @@ class _AddFoodDetailsPageState extends State<addFoodDetails> {
                       height: 10,
                     ),
                     Visibility(
-                      visible: isVisible,
-                      child: Row(
-                        children: [
-                          Text('Quantity',
-                              style: FontsTheme.mouseMemoirs_30Black()),
-                          SizedBox(
-                            width: 40,
-                          ),
-                          Column(
-                            children: [
-                              Container(
-                                width: 200,
-                                padding: EdgeInsets.symmetric(
-                                    horizontal: 12, vertical: 8),
-                                decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(10),
-                                  color: Colors.white,
+                        visible: isVisible,
+                        child: Column(
+                          children: [
+                            Row(
+                              children: [
+                                Text('Quantity',
+                                    style: FontsTheme.mouseMemoirs_30Black()),
+                                SizedBox(
+                                  width: 40,
                                 ),
-                                child: Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
+                                Column(
                                   children: [
-                                    Text('$quantity ',
-                                        style: FontsTheme.hindBold_20()),
-                                    buildQuantityUnit('')
+                                    Container(
+                                      width: 200,
+                                      padding: EdgeInsets.symmetric(
+                                          horizontal: 12, vertical: 8),
+                                      decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(10),
+                                        color: Colors.white,
+                                      ),
+                                      child: Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          Text('$quantity ',
+                                              style: FontsTheme.hindBold_20()),
+                                          buildQuantityUnit('')
+                                        ],
+                                      ),
+                                    ),
+                                    SliderTheme(
+                                      data: SliderTheme.of(context).copyWith(
+                                        trackHeight: 10.0,
+                                        thumbShape:
+                                            SliderComponentShape.noThumb,
+                                        overlayShape: RoundSliderOverlayShape(
+                                            overlayRadius: 24.0),
+                                        activeTrackColor: Colors.orange,
+                                        inactiveTrackColor: Colors.orange[100],
+                                        thumbColor: Colors.white,
+                                        overlayColor:
+                                            Colors.orange.withAlpha(32),
+                                      ),
+                                      child: Slider(
+                                        value: quantity.toDouble(),
+                                        min: 1,
+                                        max: 100,
+                                        divisions: 100,
+                                        onChanged: (value) {
+                                          setState(() {
+                                            quantity = value.toInt();
+                                            _updateAllCost();
+                                            consumeQuantity = quantity;
+                                          });
+                                        },
+                                      ),
+                                    ),
                                   ],
                                 ),
-                              ),
-                              SliderTheme(
-                                data: SliderTheme.of(context).copyWith(
-                                  trackHeight: 10.0,
-                                  thumbShape: SliderComponentShape.noThumb,
-                                  overlayShape: RoundSliderOverlayShape(
-                                      overlayRadius: 24.0),
-                                  activeTrackColor: Colors.orange,
-                                  inactiveTrackColor: Colors.orange[100],
-                                  thumbColor: Colors.white,
-                                  overlayColor: Colors.orange.withAlpha(32),
+                              ],
+                            ),
+                            SizedBox(
+                              child: InteractiveSlider(
+                                focusedHeight: 20,
+                                backgroundColor: AppTheme.softRed,
+                                startIcon: const Icon(
+                                  Icons.remove_circle_rounded,
+                                  color: Colors.black,
                                 ),
-                                child: Slider(
-                                  value: quantity.toDouble(),
-                                  min: 1,
-                                  max: 100,
-                                  divisions: 100,
-                                  onChanged: (value) {
-                                    setState(() {
-                                      quantity = value.toInt();
-                                      _updateAllCost();
-                                      consumeQuantity = quantity;
-                                    });
-                                  },
+                                endIcon: const Icon(
+                                  Icons.add_circle_rounded,
+                                  color: Colors.black,
                                 ),
+                                min: 1,
+                                max: 100,
+                                onChanged: (valueQuantity) => setState(() {
+                                  quantity = valueQuantity.toInt();
+                                  _updateAllCost();
+                                  consumeQuantity = quantity;
+                                }),
                               ),
-                            ],
-                          ),
-                        ],
-                      ),
-                    ),
+                            ),
+                          ],
+                        )),
+
                     //Weight
                     Row(
                       children: [
@@ -737,7 +854,7 @@ class _AddFoodDetailsPageState extends State<addFoodDetails> {
                                 mainAxisAlignment:
                                     MainAxisAlignment.spaceBetween,
                                 children: [
-                                  Text('$weightReduced ',
+                                  Text('$weight ',
                                       style: FontsTheme.hindBold_20()),
                                   buildWeightUnit('')
                                 ],
@@ -755,15 +872,15 @@ class _AddFoodDetailsPageState extends State<addFoodDetails> {
                                 overlayColor: Colors.orange.withAlpha(32),
                               ),
                               child: Slider(
-                                value: weight,
+                                value: weightDouble,
                                 min: 1,
                                 max: 10000,
                                 divisions: 10000,
                                 onChanged: (value) {
                                   setState(() {
-                                    weight = value;
+                                    weightDouble = value;
 
-                                    weightReduced = weight.toStringAsFixed(0);
+                                    weight = weightDouble.toStringAsFixed(0);
                                   });
                                 },
                               ),
@@ -841,7 +958,7 @@ class _AddFoodDetailsPageState extends State<addFoodDetails> {
     String Gram = "Gram";
     if (weight == 1) {
       Gram = "Gram";
-    } else if (weight > 1) {
+    } else if (weightDouble > 1) {
       Gram = "Grams";
     }
     List<String> items = [Gram];
@@ -1096,7 +1213,7 @@ class _AddFoodDetailsPageState extends State<addFoodDetails> {
   }
 
   String _updateWeight() {
-    double updateWeight = weight / quantity;
+    double updateWeight = weightDouble / quantity;
     return updateWeight.toStringAsFixed(2);
   }
 
@@ -1112,5 +1229,25 @@ class _AddFoodDetailsPageState extends State<addFoodDetails> {
         expirationDate = picked;
       });
     }
+  }
+
+  Future<void> _remaining() async {
+    final DateTime? picked = await showDatePicker(
+      context: context,
+      initialDate: expirationDate,
+      firstDate: DateTime(2020),
+      lastDate: DateTime(2030),
+    );
+    if (picked != null && picked != expirationDate) {
+      setState(() {
+        expirationDate = picked;
+      });
+    }
+  }
+
+  @override
+  void dispose() {
+    foodname.dispose();
+    super.dispose();
   }
 }

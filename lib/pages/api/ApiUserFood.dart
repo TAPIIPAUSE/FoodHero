@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:dio/dio.dart';
+import 'package:foodhero/models/addfood_model.dart';
 import 'package:foodhero/models/fooddetail_model.dart';
 import 'package:foodhero/models/inventoryfood_model.dart';
 import 'package:foodhero/pages/api/ApiClient.dart';
@@ -28,7 +29,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 //   }
 // }
 
-class InventoryFood {
+class APIFood {
   static String baseurl = "http://$myip:3000/api/v1/inventory";
   final authService = AuthService();
   final dio = Dio();
@@ -52,7 +53,7 @@ class InventoryFood {
         queryParameters: {'hID': hID},
       );
 
-      print("Response status: ${res.statusCode}");
+      print("Response status inventory: ${res.statusCode}");
       print("Response body: ${res.data}");
 
       if (res.statusCode == 200) {
@@ -82,7 +83,8 @@ class InventoryFood {
     try {
       SharedPreferences prefs = await SharedPreferences.getInstance();
       final token = prefs.getString('user_token');
-      print('Getting food details for fID: $foodId'); // Debug log
+      print(
+          'Getting food details for fID: $foodId with token: $token'); // Debug log
 
       final res = await dio.get(
         "$baseurl/getFoodById",
@@ -98,22 +100,44 @@ class InventoryFood {
         queryParameters: {'fID': foodId},
       );
       print("Request URL: $baseurl/getFoodById");
+      print("Respon: $res");
       print("Food Detail Response status: ${res.statusCode}"); // Debug log
       print("Food Detail Response body: ${res.data}"); // Debug log
+      print("Requesting food details with fID: $foodId and token: $token");
 
-      if (res.statusCode == 201) {
+      if (res.statusCode == 200) {
         final foodDetail = FoodDetailData.fromJson(res.data);
         print("Parsed food detail data: ${foodDetail.foodName}"); // Debug log
         return foodDetail;
       } else {
-        throw Exception('Failed to load food details');
+        print("Failed to load food details: Status ${res.statusCode}");
+        //return null;
+        throw Exception(
+            'Failed to load food details, status code: ${res.statusCode}');
       }
     } catch (error) {
       print("Error during food detail request: $error"); // Debug log
       return null;
     }
   }
+
+  Future<void> addFood(AddFood food) async {
+     try {
+      final response = await dio.post('$baseurl/addFood', data: food.toJson());
+      
+      if (response.statusCode == 200) {
+        print('Food added successfully: ${response.data}');
+      } else {
+        print('Failed to add food: ${response.statusCode}');
+      }
+    } catch (e) {
+      print('Error adding food: $e');
+    }
+  }
+ 
 }
+
+
 
   // Future<Type> getFoodDetail(int hID) async {
   //   try {

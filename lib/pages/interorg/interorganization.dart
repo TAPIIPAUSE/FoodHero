@@ -210,7 +210,7 @@ class _InterOrganizationState extends State<InterOrganization> {
                   child: Column(
                     children: [
                       const Text(
-                        'We have reduced food waste',
+                        'We have saved food',
                         style: TextStyle(color: Colors.white),
                       ),
                       Text(
@@ -355,7 +355,7 @@ class _InterOrganizationState extends State<InterOrganization> {
                   child: Column(
                     children: [
                       const Text(
-                        'Your household have reduced food waste',
+                        'Your household have saved food',
                         style: TextStyle(color: Colors.white),
                       ),
                       Text(
@@ -505,7 +505,7 @@ class _InterOrganizationState extends State<InterOrganization> {
                   child: Column(
                     children: [
                       const Text(
-                        'Your organization have reduced food waste',
+                        'Your organization have saved food',
                         style: TextStyle(color: Colors.white),
                       ),
                       Text(
