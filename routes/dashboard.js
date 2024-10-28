@@ -4,7 +4,7 @@ import HouseholdScore from "../schema/score_module/HouseholdScoreSchema.js";
 import { authenticateToken } from "../service/jwt_auth.js";
 import User from "../schema/user_module/userSchema.js";
 import { preprocess_House_Score, preprocess_interOrg_Score, preprocess_Org_Score } from "../service/score_service.js";
-import { preprocess_House_fe_pie_chart, preprocess_House_foodtype_pie_chart, preprocess_House_fs_pie_chart, preprocess_Org_fs_pie_chart, preprocess_org_foodtype_pie_chart, preprocess_Org_fe_pie_chart} from "../service/dashboard_service.js";
+import { preprocess_House_fe_pie_chart, preprocess_House_foodtype_pie_chart, preprocess_House_fs_pie_chart, preprocess_Org_fs_pie_chart, preprocess_org_foodtype_pie_chart, preprocess_Org_fe_pie_chart, preprocess_house_heatmap} from "../service/dashboard_service.js";
 import { preprocess_house_barchart,preprocess_org_barchart } from "../service/houseorg_service.js";
 
 
@@ -72,18 +72,20 @@ router.get("/inter_organization/score", authenticateToken, async (req, res) => {
   }
 });
 
-router.get("/inter_organization/fs-pie-chart", authenticateToken, async(req,res) =>{
+router.get("/inter_organization/foodtype_pie_chart", authenticateToken, async(req,res) =>{
   try{
 
     var user = await get_user_from_db(req, res);
   
-    var org_ID = user.orgID;
+    var orgID = user.orgID;
 
-    const process_o_stat = await preprocess_Org_fs_pie_chart(org_ID)
+    const process_pie_chart = await preprocess_org_foodtype_pie_chart(orgID)
+
+    
 
     return res.status(200).send({
-      "Messages": "Successfully Retrieved Organization Food Saved Data",
-      "Statistic": process_o_stat
+      "Messages": "Successfully Retrieved Organization Food Saved based on Food Type Data",
+      "Statistic": process_pie_chart
       // "Score List": processed_score_array
     });
 
@@ -318,6 +320,25 @@ router.get("/organization/visualization/fe-pie-chart", authenticateToken, async(
 
   }catch(error){
     return res.status(400).send(`Error when retrieving household food expense pie chart: ${error}`);
+  }
+})
+
+router.get("/household/visualization/heatmap", authenticateToken, async(req,res) => {
+  try{
+
+    var user = await get_user_from_db(req, res);
+  
+    var h_id = user.hID;
+
+    const output = await preprocess_house_heatmap(h_id)
+
+
+    return res.status(200).send({
+      message: "Successfully get the heatmap for household.",
+      Statistic: output
+    })
+  }catch(error){
+    return res.status(400).send(`Error when retrieving household heatmap: ${error}`);
   }
 })
 export default router;
