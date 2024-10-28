@@ -5,7 +5,7 @@ export async function preprocess_Org_fs_pie_chart(orgID){
 
       var processed_org_member = org_stat.map(member => {
 
-      return { "Waste": Number(member.Waste),
+      return {"Lost": Number(member.Waste),
         "Consume": Number(member.Consume)}
       })
 
@@ -93,19 +93,21 @@ export async function preprocess_House_foodtype_pie_chart(h_ID){
 
     
       return acc;
-    }, []);
+    }, {});
 
-    console.log(result)
+    const resultArray = Object.values(result);
+
+    
 
     // console.log(result)
     var totalOfConsumption = 0;
 
-    result.map(item => {
+    resultArray.map(item => {
       totalOfConsumption = totalOfConsumption + item.TotalConsume
     })
     
 
-    const output = result.map(category => {
+    const output = resultArray.map(category => {
       const percent = (category.TotalConsume/totalOfConsumption)*100
       return{
         Category: category.Category,
@@ -150,19 +152,18 @@ export async function preprocess_org_foodtype_pie_chart(orgID){
 
     
       return acc;
-    }, []);
-
-    console.log(result)
-
+    }, {});
+    const resultArray = Object.values(result);
+    
     // console.log(result)
     var totalOfConsumption = 0;
 
-    result.map(item => {
+    resultArray.map(item => {
       totalOfConsumption = totalOfConsumption + item.TotalConsume
     })
     
 
-    const output = result.map(category => {
+    const output = resultArray.map(category => {
       const percent = (category.TotalConsume/totalOfConsumption)*100
       return{
         Category: category.Category,
@@ -176,4 +177,74 @@ export async function preprocess_org_foodtype_pie_chart(orgID){
 
 
     return output
+}
+
+export async function preprocess_House_fe_pie_chart(h_ID){
+  const house_stat = await PersonalScore.find({hID: h_ID})
+
+    var processed_h_member = house_stat.map(member => {
+
+    return { "Saved": Number(member.Saved),
+      "Lost": Number(member.Lost)}
+    })
+
+    console.log(processed_h_member)
+
+    var total_lost = 0;
+    var total_saved = 0;
+
+    processed_h_member.map(m => {
+      total_lost = total_lost + m.Lost
+      total_saved = total_saved + m.Saved
+    })
+
+    const total_food = total_saved + total_lost
+
+    const percent_saved = (total_saved/total_food)*100
+    const percent_lost = (total_lost/total_food)*100
+
+
+
+    return {
+      "Lost": total_lost,
+      "Saved": total_saved,
+      "Total": total_food,
+      "Percent_Saved": Number(percent_saved.toFixed(2)),
+      "Percent_Lost": Number(percent_lost.toFixed(2))
+    }
+}
+
+export async function preprocess_Org_fe_pie_chart(org_ID){
+  const org_stat = await PersonalScore.find({orgID: org_ID})
+
+    var processed_org_member = org_stat.map(member => {
+
+    return { "Saved": Number(member.Saved),
+      "Lost": Number(member.Lost)}
+    })
+
+    console.log(processed_org_member)
+
+    var total_lost = 0;
+    var total_saved = 0;
+
+    processed_org_member.map(m => {
+      total_lost = total_lost + m.Lost
+      total_saved = total_saved + m.Saved
+    })
+
+    const total_food = total_saved + total_lost
+
+    const percent_saved = (total_saved/total_food)*100
+    const percent_lost = (total_lost/total_food)*100
+
+
+
+    return {
+      "Lost": total_lost,
+      "Saved": total_saved,
+      "Total": total_food,
+      "Percent_Saved": Number(percent_saved.toFixed(2)),
+      "Percent_Lost": Number(percent_lost.toFixed(2))
+    }
 }
