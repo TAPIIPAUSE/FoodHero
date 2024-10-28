@@ -8,7 +8,7 @@ import 'package:foodhero/widgets/interorg/price_piechart.dart';
 import 'package:foodhero/widgets/interorg/reason_piechart.dart';
 import 'package:foodhero/widgets/interorg/barchart.dart';
 import 'package:foodhero/widgets/interorg/waste_piechart.dart';
-import 'package:foodhero/widgets/interorg/wastetype_piechart.dart';
+import 'package:foodhero/widgets/interorg/foodtype_piechart.dart';
 import 'package:go_router/go_router.dart';
 
 class InterDashboard extends StatefulWidget {
@@ -198,7 +198,7 @@ class _InterDashboardState extends State<InterDashboard> {
                     "Type of food waste",
                     style: FontsTheme.mouseMemoirs_30White(),
                   ),
-                  const WasteTypePiechart(),
+                  // const WasteTypePiechart(),
                   const SizedBox(
                     height: 10,
                   ),
@@ -206,7 +206,7 @@ class _InterDashboardState extends State<InterDashboard> {
                     "Price of food waste",
                     style: FontsTheme.mouseMemoirs_30White(),
                   ),
-                  const PricePiechart(),
+                  // const PricePiechart(),
                 ],
               ),
             ),
@@ -227,7 +227,7 @@ class _InterDashboardState extends State<InterDashboard> {
                     "Reason of food waste",
                     style: FontsTheme.mouseMemoirs_30White(),
                   ),
-                  const ReasonPiechart(),
+                  // const ReasonPiechart(),
                   const SizedBox(
                     height: 10,
                   ),

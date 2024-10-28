@@ -1,4 +1,5 @@
 import 'package:dio/dio.dart';
+import 'package:foodhero/models/chart/interorgfoodtypepie_model.dart';
 import 'package:foodhero/models/chart/wastepie/hhwastepie_model.dart';
 import 'package:foodhero/models/chart/wastepie/interorgwastepie_model.dart';
 import 'package:foodhero/models/chart/wastepie/orgwastepie_model.dart';
@@ -187,6 +188,7 @@ class DashboardApi {
   // ! get inter org waste pie data น่าจะไม่มี
   Future<InterFoodWastePieData> getInterWastePie() async {
     try {
+      print("===Inter Org waste pie===");
       SharedPreferences prefs = await SharedPreferences.getInstance();
       final token = prefs.getString('user_token');
       // print('token: $token');
@@ -202,7 +204,7 @@ class DashboardApi {
         // queryParameters: {'hID': hID},
       );
 
-      print("===Inter Org waste pie===");
+      
       print("Response status: ${res.statusCode}");
       print("Response body: ${res.data}");
 
@@ -219,5 +221,37 @@ class DashboardApi {
   }
 
   // get food type pie
+  Future<InterOrgFoodTypePie> getInterOrgFoodTypePie() async {
+    try {
+      print("===Org food type pie===");
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      final token = prefs.getString('user_token');
+      // print('token: $token');
 
+      final res = await dio.get(
+        '$baseurl/inter_organization/foodtype_pie_chart',
+        options: Options(
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer $token',
+          },
+        ),
+      );
+
+      print("Response status: ${res.statusCode}");
+      print("Response body: ${res.data}");
+
+      if (res.statusCode == 200) {
+        final Map<String, dynamic> data = res.data;
+        return InterOrgFoodTypePie.fromJson(data);
+      } else {
+        throw Exception('Invalid response format: ${res.data.runtimeType}');
+      }
+    } catch (e) {
+      print('Error: $e');
+      throw Exception('Failed to fetch Org food type pie: ${e.toString()}');
+    }
+  }
+
+      
 }

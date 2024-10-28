@@ -2,8 +2,10 @@ import 'dart:async';
 
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
+import 'package:foodhero/example/post.dart';
 import 'package:foodhero/fonts.dart';
 import 'package:foodhero/main.dart';
+import 'package:foodhero/models/chart/interorgfoodtypepie_model.dart';
 import 'package:foodhero/models/score/housescore_model.dart';
 import 'package:foodhero/models/score/interscore_model.dart';
 import 'package:foodhero/models/score/orgscore_model.dart';
@@ -11,6 +13,7 @@ import 'package:foodhero/pages/api/dashboardapi.dart';
 import 'package:foodhero/theme.dart';
 import 'package:foodhero/utils/constants.dart';
 import 'package:foodhero/widgets/interorg/org_listscore.dart';
+import 'package:foodhero/widgets/interorg/foodtype_piechart.dart';
 import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 
@@ -18,8 +21,13 @@ class ChartData {
   final String name;
   final double value;
   final Color color;
+  final int category;
 
-  ChartData(this.name, this.value, this.color);
+  ChartData(
+      {required this.name,
+      required this.value,
+      required this.color,
+      required this.category});
 }
 
 class InterOrganization extends StatefulWidget {
@@ -31,15 +39,6 @@ class InterOrganization extends StatefulWidget {
 
 class _InterOrganizationState extends State<InterOrganization> {
   String selectedValue = inter;
-  // pie data
-  int touchedIndex = -1;
-  final List<ChartData> chartData = [
-    ChartData(foodTypeCooked, 25, AppTheme.softRedCancleWasted),
-    ChartData(foodTypeDry, 25, AppTheme.softOrange),
-    ChartData(foodTypeFresh, 20, AppTheme.softRedBrown),
-    ChartData(foodTypeFrozen, 15, AppTheme.orangeGray),
-    ChartData(foodTypeInstant, 15, AppTheme.spoiledBrown),
-  ];
 
   Future<HouseScore> _getHouseScore() async {
     try {
@@ -83,6 +82,61 @@ class _InterOrganizationState extends State<InterOrganization> {
       rethrow;
     }
   }
+
+  Future<InterOrgFoodTypePie> _getInterOrgFoodTypePie() async {
+    try {
+      final data = await DashboardApi().getInterOrgFoodTypePie();
+      print('Fetched inter org food type pie'); // Debug print
+      return data;
+    } catch (e) {
+      print('Error loading inter org food type pie: $e');
+      rethrow;
+    }
+  }
+
+  String _getFoodTypeName(int category) {
+    switch (category) {
+      case 1:
+        return foodTypeCooked;
+      case 2:
+        return foodTypeFresh;
+      case 3:
+        return foodTypeDry;
+      case 4:
+        return foodTypeInstant;
+      case 5:
+        return foodTypeFrozen;
+      default:
+        return 'Unknown';
+    }
+  }
+
+  Color _getFoodTypeColor(int category) {
+    switch (category) {
+      case 1:
+        return AppTheme.softRedCancleWasted;
+      case 2:
+        return AppTheme.softOrange;
+      case 3:
+        return AppTheme.softRedBrown;
+      case 4:
+        return AppTheme.orangeGray;
+      case 5:
+        return AppTheme.spoiledBrown;
+      default:
+        return Colors.grey;
+    }
+  }
+
+  // pie data
+  // int touchedIndex = -1;
+  // final List<ChartData> chartData = [
+  //   ChartData(foodTypeCooked, 25, AppTheme.softRedCancleWasted),
+  //   ChartData(foodTypeDry, 25, AppTheme.softOrange),
+  //   ChartData(foodTypeFresh, 20, AppTheme.softRedBrown),
+  //   ChartData(foodTypeFrozen, 15, AppTheme.orangeGray),
+  //   ChartData(foodTypeInstant, 15, AppTheme.spoiledBrown),
+  // ];
 
   @override
   void initState() {
@@ -281,30 +335,81 @@ class _InterOrganizationState extends State<InterOrganization> {
                       ),
                       // Pie chart
                       Container(
+                        // height: 800,
                         padding: const EdgeInsets.all(10),
                         decoration: const BoxDecoration(
                           color: AppTheme.softBlue,
                           borderRadius: BorderRadius.all(Radius.circular(20)),
                         ),
-                        child: Column(
-                          children: [
-                            const Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Text(week),
-                                Text(month),
-                              ],
-                            ),
-                            _buildResponsiveChartLayout(screenWidth),
-                          ],
+                        child:
+                            // const Column(
+                            // children: [
+                            // Row(
+                            //   mainAxisAlignment: MainAxisAlignment.center,
+                            //   children: [
+                            //     Text(week),
+                            //     Text(month),
+                            //   ],
+                            // ),
+                            // _buildResponsiveChartLayout(screenWidth),
+                            FutureBuilder<InterOrgFoodTypePie>(
+                          future: _getInterOrgFoodTypePie(),
+                          builder: (context, snapshot) {
+                            if (snapshot.connectionState ==
+                                ConnectionState.waiting) {
+                              return const Center(
+                                child: CircularProgressIndicator(),
+                              );
+                            } else if (snapshot.hasError) {
+                              return Text('Error: ${snapshot.error}');
+                            } else if (!snapshot.hasData ||
+                                snapshot.data!.statistic.isEmpty) {
+                              // Check if the data is null or if the statistic list is empty
+                              return const Text('No data available');
+                            } else {
+                              final data = snapshot.data!;
+                              // final statistic = data.statistic;
+                              // Assuming you want to loop over each statistic for the pie chart
+                              return Column(
+                                children: [
+                                  // map each statistic to a WasteTypePiechart widget
+                                  WasteTypePiechart(
+                                    chartData: data.statistic
+                                        .map((stat) => ChartData(
+                                              category: stat.category,
+                                              value: stat.percent,
+                                              name: _getFoodTypeName(
+                                                  stat.category),
+                                              color: _getFoodTypeColor(
+                                                  stat.category),
+                                            ))
+                                        .toList(),
+                                  ),
+                                  BuildPieLegend(
+                                    chartData: data.statistic
+                                        .map((stat) => ChartData(
+                                              category: stat.category,
+                                              value: stat.percent,
+                                              name: _getFoodTypeName(
+                                                  stat.category),
+                                              color: _getFoodTypeColor(
+                                                  stat.category),
+                                            ))
+                                        .toList(),
+                                  )
+                                ],
+                              );
+                            }
+                          },
                         ),
                       ),
-                      const SizedBox(height: 10),
-                      ElevatedButton(
-                        onPressed: () => context.push('/dashboard_inter/inter'),
-                        style: buttonStyle,
-                        child: const Text("see more"),
-                      ),
+                      // ),
+                      // const SizedBox(height: 10),
+                      // ElevatedButton(
+                      //   onPressed: () => context.push('/dashboard_inter/inter'),
+                      //   style: buttonStyle,
+                      //   child: const Text("see more"),
+                      // ),
                     ],
                   ),
                 ),
@@ -443,16 +548,24 @@ class _InterOrganizationState extends State<InterOrganization> {
                           color: AppTheme.softBlue,
                           borderRadius: BorderRadius.all(Radius.circular(20)),
                         ),
-                        child: Column(
+                        child:
+                            // const Column(
+                            //   children: [
+                            //     Row(
+                            //       mainAxisAlignment: MainAxisAlignment.center,
+                            //       children: [
+                            //         Text(week),
+                            //         Text(month),
+                            //       ],
+                            //     ),
+                            //     // _buildResponsiveChartLayout(screenWidth),
+                            //     WasteTypePiechart(),
+                            //   ],
+                            // ),
+                            Column(
                           children: [
-                            const Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Text(week),
-                                Text(month),
-                              ],
-                            ),
-                            _buildResponsiveChartLayout(screenWidth),
+                            // const WasteTypePiechart(),
+                            // BuildPieLegend()
                           ],
                         ),
                       ),
@@ -596,16 +709,24 @@ class _InterOrganizationState extends State<InterOrganization> {
                           color: AppTheme.softBlue,
                           borderRadius: BorderRadius.all(Radius.circular(20)),
                         ),
-                        child: Column(
+                        child:
+                            // const Column(
+                            //   children: [
+                            //     Row(
+                            //       mainAxisAlignment: MainAxisAlignment.center,
+                            //       children: [
+                            //         Text(week),
+                            //         Text(month),
+                            //       ],
+                            //     ),
+                            //     // _buildResponsiveChartLayout(screenWidth),
+                            //     WasteTypePiechart(),
+                            //   ],
+                            // ),
+                            Column(
                           children: [
-                            const Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Text(week),
-                                Text(month),
-                              ],
-                            ),
-                            _buildResponsiveChartLayout(screenWidth),
+                            // const WasteTypePiechart(),
+                            // BuildPieLegend()
                           ],
                         ),
                       ),
@@ -627,101 +748,101 @@ class _InterOrganizationState extends State<InterOrganization> {
     }
   }
 
-  Widget _buildResponsiveChartLayout(double screenWidth) {
-    if (screenWidth <= 320) {
-      return Column(
-        children: [
-          SizedBox(
-            height: 200,
-            child: _buildPie(),
-          ),
-          SizedBox(
-            // height: 150,
-            child: _buildLegend(),
-          ),
-        ],
-      );
-    } else {
-      return SizedBox(
-        height: 200,
-        child: Row(
-          children: [
-            Expanded(child: _buildPie()),
-            Expanded(child: _buildLegend()),
-          ],
-        ),
-      );
-    }
-  }
+  // Widget _buildResponsiveChartLayout(double screenWidth) {
+  //   if (screenWidth <= 320) {
+  //     return Column(
+  //       children: [
+  //         SizedBox(
+  //           height: 200,
+  //           child: _buildPie(),
+  //         ),
+  //         SizedBox(
+  //           // height: 150,
+  //           child: _buildLegend(),
+  //         ),
+  //       ],
+  //     );
+  //   } else {
+  //     return SizedBox(
+  //       height: 200,
+  //       child: Row(
+  //         children: [
+  //           Expanded(child: _buildPie()),
+  //           Expanded(child: _buildLegend()),
+  //         ],
+  //       ),
+  //     );
+  //   }
+  // }
 
-  Widget _buildPie() {
-    return PieChart(
-      PieChartData(
-        pieTouchData: PieTouchData(
-          touchCallback: (FlTouchEvent event, pieTouchResponse) {
-            setState(() {
-              if (!event.isInterestedForInteractions ||
-                  pieTouchResponse == null ||
-                  pieTouchResponse.touchedSection == null) {
-                touchedIndex = -1;
-                return;
-              }
-              touchedIndex =
-                  pieTouchResponse.touchedSection!.touchedSectionIndex;
-            });
-          },
-        ),
-        sections: getPieSections(),
-        sectionsSpace: 0,
-        centerSpaceRadius: 0,
-      ),
-    );
-  }
+  // Widget _buildPie() {
+  //   return PieChart(
+  //     PieChartData(
+  //       pieTouchData: PieTouchData(
+  //         touchCallback: (FlTouchEvent event, pieTouchResponse) {
+  //           setState(() {
+  //             if (!event.isInterestedForInteractions ||
+  //                 pieTouchResponse == null ||
+  //                 pieTouchResponse.touchedSection == null) {
+  //               touchedIndex = -1;
+  //               return;
+  //             }
+  //             touchedIndex =
+  //                 pieTouchResponse.touchedSection!.touchedSectionIndex;
+  //           });
+  //         },
+  //       ),
+  //       sections: getPieSections(),
+  //       sectionsSpace: 0,
+  //       centerSpaceRadius: 0,
+  //     ),
+  //   );
+  // }
 
-  List<PieChartSectionData> getPieSections() {
-    return List.generate(chartData.length, (index) {
-      final isTouched = index == touchedIndex;
-      final data = chartData[index];
-      final double fontSize = isTouched ? 16 : 0;
-      final double radius = isTouched ? 80 : 70;
+  // List<PieChartSectionData> getPieSections() {
+  //   return List.generate(chartData.length, (index) {
+  //     final isTouched = index == touchedIndex;
+  //     final data = chartData[index];
+  //     final double fontSize = isTouched ? 16 : 0;
+  //     final double radius = isTouched ? 80 : 70;
 
-      return PieChartSectionData(
-        color: data.color,
-        value: data.value,
-        title: '${data.value.toStringAsFixed(0)}%',
-        radius: radius,
-        titleStyle: TextStyle(
-          fontSize: fontSize,
-          fontWeight: FontWeight.bold,
-          color: Colors.black,
-        ),
-      );
-    });
-  }
+  //     return PieChartSectionData(
+  //       color: data.color,
+  //       value: data.value,
+  //       title: '${data.value.toStringAsFixed(0)}%',
+  //       radius: radius,
+  //       titleStyle: TextStyle(
+  //         fontSize: fontSize,
+  //         fontWeight: FontWeight.bold,
+  //         color: Colors.black,
+  //       ),
+  //     );
+  //   });
+  // }
 
-  Widget _buildLegend() {
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.center,
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: chartData.map((data) {
-        return Padding(
-          padding: const EdgeInsets.symmetric(vertical: 8.0),
-          child: Row(
-            children: [
-              Container(
-                width: 15,
-                height: 15,
-                color: data.color,
-              ),
-              const SizedBox(width: 4),
-              Text(
-                '${data.name}: ${data.value.toStringAsFixed(0)}%',
-                style: const TextStyle(fontSize: 14, color: Colors.black),
-              ),
-            ],
-          ),
-        );
-      }).toList(),
-    );
-  }
+  // Widget _buildLegend() {
+  //   return Column(
+  //     mainAxisAlignment: MainAxisAlignment.center,
+  //     crossAxisAlignment: CrossAxisAlignment.start,
+  //     children: chartData.map((data) {
+  //       return Padding(
+  //         padding: const EdgeInsets.symmetric(vertical: 8.0),
+  //         child: Row(
+  //           children: [
+  //             Container(
+  //               width: 15,
+  //               height: 15,
+  //               color: data.color,
+  //             ),
+  //             const SizedBox(width: 4),
+  //             Text(
+  //               '${data.name}: ${data.value.toStringAsFixed(0)}%',
+  //               style: const TextStyle(fontSize: 14, color: Colors.black),
+  //             ),
+  //           ],
+  //         ),
+  //       );
+  //     }).toList(),
+  //   );
+  // }
 }

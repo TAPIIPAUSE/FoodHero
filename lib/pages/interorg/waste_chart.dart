@@ -6,7 +6,7 @@ import 'package:foodhero/widgets/interorg/price_piechart.dart';
 import 'package:foodhero/widgets/interorg/reason_piechart.dart';
 import 'package:foodhero/widgets/interorg/barchart.dart';
 import 'package:foodhero/widgets/interorg/waste_piechart.dart';
-import 'package:foodhero/widgets/interorg/wastetype_piechart.dart';
+import 'package:foodhero/widgets/interorg/foodtype_piechart.dart';
 import 'package:go_router/go_router.dart';
 
 class WasteChart extends StatelessWidget {

@@ -7,7 +7,7 @@ import 'package:foodhero/widgets/interorg/price_piechart.dart';
 import 'package:foodhero/widgets/interorg/reason_piechart.dart';
 import 'package:foodhero/widgets/interorg/barchart.dart';
 import 'package:foodhero/widgets/interorg/waste_piechart.dart';
-import 'package:foodhero/widgets/interorg/wastetype_piechart.dart';
+import 'package:foodhero/widgets/interorg/foodtype_piechart.dart';
 import 'package:go_router/go_router.dart';
 
 class orgaStatistics extends StatefulWidget {
@@ -134,13 +134,13 @@ class _orgaStatisticState extends State<orgaStatistics> {
                     "Type of food waste",
                     style: TextStyle(color: Colors.white),
                   ),
-                  WasteTypePiechart(),
+                  // WasteTypePiechart(),
                   SizedBox(
                     height: 10,
                   ),
                   Text("Price of food waste",
                       style: TextStyle(color: Colors.white)),
-                  PricePiechart(),
+                  // PricePiechart(),
                 ],
               ),
             ),
@@ -161,7 +161,7 @@ class _orgaStatisticState extends State<orgaStatistics> {
                     "Reason of food waste",
                     style: TextStyle(color: Colors.white),
                   ),
-                  ReasonPiechart(),
+                  // ReasonPiechart(),
                   SizedBox(
                     height: 10,
                   ),

@@ -75,7 +75,7 @@ class _InventoryState extends State<Inventory> {
     super.initState();
     _todayDate = dateFormatter.format(DateTime.now());
     foodCategory = widget.initialFoodCategory;
-    _loadInventoryFood();
+    // _loadInventoryFood();
     // SharedPreferences.getInstance().then((prefs) {
     // final hID = prefs.getInt('hID');
     // inventoryItems = fetchUserFood(hID!);

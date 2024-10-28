@@ -4,6 +4,14 @@ import 'package:foodhero/pages/interorg/interorganization.dart';
 import 'package:foodhero/theme.dart';
 import 'package:foodhero/utils/constants.dart';
 
+class PieData {
+  final String name;
+  final double value;
+  final Color color;
+
+  PieData(this.name, this.value, this.color);
+}
+
 class WastePiechart extends StatefulWidget {
   const WastePiechart(
       {super.key, required this.wastepercent, required this.eatenpercent});
@@ -17,14 +25,14 @@ class WastePiechart extends StatefulWidget {
 class _WastePiechartState extends State<WastePiechart> {
   int touchedIndex = -1;
 
-  late List<ChartData> chartData;
+  late List<PieData> chartData;
 
   @override
   void initState() {
     super.initState();
     chartData = [
-      ChartData(eaten, widget.eatenpercent, AppTheme.softBrightGreen),
-      ChartData(waste, widget.wastepercent, AppTheme.softRedCancleWasted),
+      PieData(eaten, widget.eatenpercent, AppTheme.softBrightGreen),
+      PieData(waste, widget.wastepercent, AppTheme.softRedCancleWasted),
     ];
   }
 
@@ -171,23 +179,23 @@ class _WastePiechartState extends State<WastePiechart> {
   }
 }
 
-class TabItem extends StatelessWidget {
-  const TabItem({super.key, required this.title, required this.count});
-  final String title;
-  final int count;
+// class TabItem extends StatelessWidget {
+//   const TabItem({super.key, required this.title, required this.count});
+//   final String title;
+//   final int count;
 
-  @override
-  Widget build(BuildContext context) {
-    return Tab(
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Text(
-            title,
-            overflow: TextOverflow.ellipsis,
-          ),
-        ],
-      ),
-    );
-  }
-}
+//   @override
+//   Widget build(BuildContext context) {
+//     return Tab(
+//       child: Row(
+//         mainAxisAlignment: MainAxisAlignment.center,
+//         children: [
+//           Text(
+//             title,
+//             overflow: TextOverflow.ellipsis,
+//           ),
+//         ],
+//       ),
+//     );
+//   }
+// }
