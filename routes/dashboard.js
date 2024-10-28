@@ -4,7 +4,7 @@ import HouseholdScore from "../schema/score_module/HouseholdScoreSchema.js";
 import { authenticateToken } from "../service/jwt_auth.js";
 import User from "../schema/user_module/userSchema.js";
 import { preprocess_House_Score, preprocess_interOrg_Score, preprocess_Org_Score } from "../service/score_service.js";
-import { preprocess_House_fe_pie_chart, preprocess_House_foodtype_pie_chart, preprocess_House_fs_pie_chart, preprocess_Org_fs_pie_chart, preprocess_org_foodtype_pie_chart, preprocess_Org_fe_pie_chart, preprocess_house_heatmap} from "../service/dashboard_service.js";
+import { preprocess_House_fe_pie_chart, preprocess_House_foodtype_pie_chart, preprocess_House_fs_pie_chart, preprocess_Org_fs_pie_chart, preprocess_org_foodtype_pie_chart, preprocess_Org_fe_pie_chart, preprocess_house_heatmap, preprocess_Org_heatmap} from "../service/dashboard_service.js";
 import { preprocess_house_barchart,preprocess_org_barchart } from "../service/houseorg_service.js";
 
 
@@ -339,6 +339,25 @@ router.get("/household/visualization/heatmap", authenticateToken, async(req,res)
     })
   }catch(error){
     return res.status(400).send(`Error when retrieving household heatmap: ${error}`);
+  }
+})
+
+router.get("/organization/visualization/heatmap", authenticateToken, async(req,res) => {
+  try{
+
+    var user = await get_user_from_db(req, res);
+  
+    var orgID = user.orgID;
+
+    const output = await preprocess_Org_heatmap(orgID)
+
+
+    return res.status(200).send({
+      message: "Successfully get the heatmap for Organization.",
+      Statistic: output
+    })
+  }catch(error){
+    return res.status(400).send(`Error when retrieving Organization heatmap: ${error}`);
   }
 })
 export default router;
