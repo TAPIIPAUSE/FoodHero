@@ -220,7 +220,10 @@ class _InterOrganizationState extends State<InterOrganization> {
                     children: [
                       const Text(
                         'Score board',
-                        style: TextStyle(color: Colors.white, fontSize: 24),
+                        style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 24,
+                            fontWeight: FontWeight.bold),
                       ),
                       FutureBuilder<InterScore>(
                         future: _getInterScore(),
@@ -243,8 +246,8 @@ class _InterOrganizationState extends State<InterOrganization> {
                                 itemCount: interScore.scoreList.length,
                                 itemBuilder: (context, index) {
                                   final score = interScore.scoreList[index];
-                                  return OrgListScore(
-                                    orgname: score.orgname,
+                                  return ListScore(
+                                    name: score.orgname,
                                     star: score.rank == 1,
                                     point: score.score,
                                   );
@@ -369,7 +372,10 @@ class _InterOrganizationState extends State<InterOrganization> {
                     children: [
                       const Text(
                         'Score board',
-                        style: TextStyle(color: Colors.white, fontSize: 24),
+                        style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 24,
+                            fontWeight: FontWeight.bold),
                       ),
                       FutureBuilder<HouseScore>(
                         future: _getHouseScore(),
@@ -397,8 +403,8 @@ class _InterOrganizationState extends State<InterOrganization> {
                                 itemCount: houseScore.scoreList.length,
                                 itemBuilder: (context, index) {
                                   final score = houseScore.scoreList[index];
-                                  return OrgListScore(
-                                    orgname: score.username,
+                                  return ListScore(
+                                    name: score.username,
                                     star: score.rank == 1,
                                     point: score.score,
                                   );
@@ -523,7 +529,10 @@ class _InterOrganizationState extends State<InterOrganization> {
                     children: [
                       const Text(
                         'Score board',
-                        style: TextStyle(color: Colors.white, fontSize: 24),
+                        style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 24,
+                            fontWeight: FontWeight.bold),
                       ),
                       FutureBuilder<OrgScore>(
                         future: _getOrgScore(),
@@ -547,10 +556,10 @@ class _InterOrganizationState extends State<InterOrganization> {
                                 itemCount: orgScore.scoreList.length,
                                 itemBuilder: (context, index) {
                                   final score = orgScore.scoreList[index];
-                                  return OrgListScore(
-                                    orgname: score.housename,
+                                  return ListScore(
+                                    name: score.housename,
                                     star: score.rank == 1,
-                                    point: score.score!,
+                                    point: score.score,
                                   );
                                 },
                               ),

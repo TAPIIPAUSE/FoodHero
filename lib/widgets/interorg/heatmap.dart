@@ -14,7 +14,7 @@ class _HeatMapChartState extends State<HeatMapChart> {
   Map<DateTime, int> dateMap = {};
   Random random = Random();
   // Define the start and end dates
-  DateTime startDate = DateTime(2024, 1, 1);
+  DateTime startDate = DateTime(2024, 10, 1);
   DateTime endDate = DateTime(2024, 12, 31);
   void addDateMap() {
     for (DateTime date = startDate;
@@ -24,7 +24,7 @@ class _HeatMapChartState extends State<HeatMapChart> {
       bool shouldAdd = random.nextBool(); // 50% chance to skip or add
       if (shouldAdd) {
         // Assign a random value between 1 and 3 (inclusive)
-        int randomValue = random.nextInt(13) + 1;
+        int randomValue = random.nextInt(100) + 1;
         dateMap[date] = randomValue;
       }
     }
@@ -46,13 +46,16 @@ class _HeatMapChartState extends State<HeatMapChart> {
       textColor: Colors.white,
       weekTextColor: Colors.black,
       colorsets: const {
-        1: Colors.red,
-        3: Colors.orange,
-        5: Colors.yellow,
-        7: Colors.green,
-        9: Colors.blue,
-        11: Colors.indigo,
-        13: Colors.purple,
+        0: Colors.red,
+        25: Colors.redAccent,
+        // 3: Colors.orange,
+        // 5: Colors.yellow,
+        50: Colors.greenAccent,
+        75: Colors.green,
+        100: Colors.green,
+        // 9: Colors.blue,
+        // 11: Colors.indigo,
+        // 13: Colors.purple,
       },
       // onClick: (value) {
       //   ScaffoldMessenger.of(context)

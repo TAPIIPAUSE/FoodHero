@@ -2,15 +2,15 @@ import 'package:flutter/material.dart';
 import 'package:foodhero/theme.dart';
 import 'package:intl/intl.dart';
 
-class OrgListScore extends StatelessWidget {
-  const OrgListScore({
+class ListScore extends StatelessWidget {
+  const ListScore({
     super.key,
-    required this.orgname,
+    required this.name,
     required this.star,
     required this.point,
   });
 
-  final String orgname;
+  final String name;
   final bool star;
   final double point;
 
@@ -34,7 +34,7 @@ class OrgListScore extends StatelessWidget {
                 Expanded(
                   flex: 3,
                   child: Text(
-                    orgname,
+                    name,
                     style: const TextStyle(
                       fontWeight: FontWeight.w500,
                       fontSize: 16.0,

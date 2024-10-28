@@ -1,11 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:foodhero/main.dart';
+import 'package:foodhero/pages/House&Orga/Household/household.dart';
 import 'package:foodhero/pages/House&Orga/Organization/organization.dart';
 import 'package:foodhero/pages/api/createAndjoinHousehold.dart';
 import 'package:foodhero/theme.dart';
 import 'package:foodhero/fonts.dart';
 
 class join extends StatefulWidget {
+  const join({super.key});
+
   @override
   _JoinState createState() => _JoinState();
 }
@@ -24,7 +27,7 @@ class _JoinState extends State<join> {
       // Handle successful creation
     } else {
       ScaffoldMessenger.of(context)
-          .showSnackBar(SnackBar(content: Text('Please enter a name')));
+          .showSnackBar(const SnackBar(content: Text('Please enter a name')));
     }
   }
 
@@ -38,8 +41,8 @@ class _JoinState extends State<join> {
       await joinHousehold(householdId);
       // Handle successful joining
     } else {
-      ScaffoldMessenger.of(context)
-          .showSnackBar(SnackBar(content: Text('Please enter a household ID')));
+      ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Please enter a household ID')));
     }
   }
 
@@ -53,15 +56,15 @@ class _JoinState extends State<join> {
           backgroundColor: AppTheme.greenMainTheme,
           toolbarHeight: 90,
           centerTitle: true,
-          title: Text('Join'),
+          title: const Text('Join'),
           titleTextStyle: FontsTheme.mouseMemoirs_64Black(),
           leading: IconButton(
-            icon: Icon(Icons.person),
+            icon: const Icon(Icons.person),
             onPressed: () {},
           ),
           actions: [
             IconButton(
-              icon: Icon(Icons.notifications),
+              icon: const Icon(Icons.notifications),
               onPressed: () {},
             ),
           ],
@@ -87,10 +90,10 @@ class _JoinState extends State<join> {
                           style: TextButton.styleFrom(
                               backgroundColor: AppTheme.greenMainTheme,
                               foregroundColor: Colors.white),
-                          child: Text('Create'),
+                          child: const Text('Create'),
                         ),
                       ),
-                      SizedBox(
+                      const SizedBox(
                         width: 50,
                       ),
                       SizedBox(
@@ -101,7 +104,7 @@ class _JoinState extends State<join> {
                           style: TextButton.styleFrom(
                               backgroundColor: AppTheme.mainBlue,
                               foregroundColor: Colors.white),
-                          child: Text(
+                          child: const Text(
                             'Join',
                           ),
                         ),
@@ -109,7 +112,7 @@ class _JoinState extends State<join> {
                     ],
                   ),
 
-                  SizedBox(
+                  const SizedBox(
                     height: 120,
                   ),
                   Text(
@@ -126,10 +129,10 @@ class _JoinState extends State<join> {
                           style: TextButton.styleFrom(
                               backgroundColor: AppTheme.greenMainTheme,
                               foregroundColor: Colors.white),
-                          child: Text('Create'),
+                          child: const Text('Create'),
                         ),
                       ),
-                      SizedBox(
+                      const SizedBox(
                         width: 50,
                       ),
                       SizedBox(
@@ -140,7 +143,7 @@ class _JoinState extends State<join> {
                           style: TextButton.styleFrom(
                               backgroundColor: AppTheme.mainBlue,
                               foregroundColor: Colors.white),
-                          child: Text('Join'),
+                          child: const Text('Join'),
                         ),
                       ),
                     ],
@@ -181,7 +184,6 @@ class _JoinState extends State<join> {
           ),
           actions: [
             TextButton(
-              child: const Text("Create"),
               style: TextButton.styleFrom(
                   backgroundColor: AppTheme.greenMainTheme,
                   foregroundColor: Colors.white),
@@ -189,10 +191,11 @@ class _JoinState extends State<join> {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => organization(),
+                    builder: (context) => household(),
                   ),
                 );
               },
+              child: const Text("Create"),
             ),
           ],
         );
@@ -227,7 +230,6 @@ class _JoinState extends State<join> {
           ),
           actions: [
             TextButton(
-              child: const Text("Join"),
               style: TextButton.styleFrom(
                   backgroundColor: AppTheme.mainBlue,
                   foregroundColor: Colors.white),
@@ -240,6 +242,7 @@ class _JoinState extends State<join> {
                 //   ),
                 // );
               },
+              child: const Text("Join"),
             ),
           ],
         );
@@ -274,7 +277,6 @@ class _JoinState extends State<join> {
           ),
           actions: [
             TextButton(
-              child: const Text("Create"),
               style: TextButton.styleFrom(
                   backgroundColor: AppTheme.greenMainTheme,
                   foregroundColor: Colors.white),
@@ -286,6 +288,7 @@ class _JoinState extends State<join> {
                   ),
                 );
               },
+              child: const Text("Create"),
             ),
           ],
         );

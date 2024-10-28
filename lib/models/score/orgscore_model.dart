@@ -27,19 +27,19 @@ class OrgScore {
 class Score {
   final int rank;
   final String housename;
-  final double? score;
+  final double score;
 
   Score({
     required this.rank,
     required this.housename,
-    this.score,
+    required this.score,
   });
 
   factory Score.fromJson(Map<String, dynamic> json) {
     return Score(
       rank: json['Rank'],
       housename: json['Housename'],
-      score: json['Score'] != null ? (json['Score'] as num).toDouble() : null,
+      score: (json['Score'] as num).toDouble(),
     );
   }
 

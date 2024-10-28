@@ -1,7 +1,7 @@
 import 'package:dio/dio.dart';
-import 'package:foodhero/models/chart/hhwastepie_model.dart';
-import 'package:foodhero/models/chart/interorgwastepie_model.dart';
-import 'package:foodhero/models/chart/orgwastepie_model.dart';
+import 'package:foodhero/models/chart/wastepie/hhwastepie_model.dart';
+import 'package:foodhero/models/chart/wastepie/interorgwastepie_model.dart';
+import 'package:foodhero/models/chart/wastepie/orgwastepie_model.dart';
 import 'package:foodhero/models/score/housescore_model.dart';
 import 'package:foodhero/models/score/interscore_model.dart';
 import 'package:foodhero/models/score/orgscore_model.dart';
@@ -11,7 +11,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 class DashboardApi {
   final Dio dio = Dio();
-  final String baseurl = 'http://$myip:3000/api/v1/dashboard';
+  final String baseurl = '$myip/api/v1/dashboard';
   final authService = AuthService();
 
   // get house score
@@ -44,7 +44,7 @@ class DashboardApi {
       }
     } catch (e) {
       print('Error: $e');
-      throw Exception('Failed to fetch house: ${e.toString()}');
+      throw Exception('Failed to fetch house score: ${e.toString()}');
     }
   }
 
@@ -184,7 +184,7 @@ class DashboardApi {
     }
   }
 
-  // get inter org waste pie data
+  // ! get inter org waste pie data น่าจะไม่มี
   Future<InterFoodWastePieData> getInterWastePie() async {
     try {
       SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -202,7 +202,7 @@ class DashboardApi {
         // queryParameters: {'hID': hID},
       );
 
-      print("===Org waste pie===");
+      print("===Inter Org waste pie===");
       print("Response status: ${res.statusCode}");
       print("Response body: ${res.data}");
 
@@ -214,7 +214,10 @@ class DashboardApi {
       }
     } catch (e) {
       print('Error: $e');
-      throw Exception('Failed to fetch Org waste pie: ${e.toString()}');
+      throw Exception('Failed to fetch Inter Org waste pie: ${e.toString()}');
     }
   }
+
+  // get food type pie
+
 }
