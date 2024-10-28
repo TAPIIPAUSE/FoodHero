@@ -293,15 +293,15 @@ export async function preprocess_house_heatmap(hID){
           total = total + Number(i.Consume) + Number(i.Waste)
       })
 
-      const result = (waste_acc && total) ? ((con_acc / total) * 100).toFixed(2) : "0.00";
+      const result = (waste_acc && total) ? ((waste_acc / total) * 100).toFixed(2) : "0.00";
 
 
       return {
           Date: item.date,
           Waste: waste_acc,
           Total: total,
-          Percent: Number(result)
+          Percent_Waste: Number(result)
       }
   })
-  return weekly_list
+  return output
 }
