@@ -5,7 +5,7 @@ export async function preprocess_Org_fs_pie_chart(orgID){
 
       var processed_org_member = org_stat.map(member => {
 
-      return {"Lost": Number(member.Waste),
+      return {"Waste": Number(member.Waste),
         "Consume": Number(member.Consume)}
       })
 
