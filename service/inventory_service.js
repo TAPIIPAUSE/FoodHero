@@ -4,6 +4,7 @@ import Food from "../schema/inventory_module/foodInventorySchema.js";
 import PackageUnitType from "../schema/inventory_module/packageTypeSchema.js";
 import UnitType from "../schema/inventory_module/unitTypeSchema.js";
 import Location from "../schema/inventory_module/locationSchema.js";
+import FoodType from "../schema/inventory_module/foodTypeSchema.js";
 
 export async function save_consume_to_db(fID, user, retrievedAmount, retrievedQuantity) {
   try {
@@ -98,6 +99,7 @@ export async function getFoodDetailForFoodDetail(fID) {
 
     // Get the food item
     var food = await Food.findOne({ assigned_ID })
+    const category = await FoodType.findOne({assigned_ID: food.food_category})
 
     var consume_msg = ""
     var remain_msg = ""
@@ -132,7 +134,7 @@ export async function getFoodDetailForFoodDetail(fID) {
     return {
       "Food_ID": fID,
       "FoodName": food.food_name,
-      "Category": food.food_category,
+      "Category": category.type,
       "Location": location,
       "Expired": food.bestByDate,
       "Remind": food.RemindDate,
