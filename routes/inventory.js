@@ -252,7 +252,7 @@ router.get("/getFoodById", authenticateToken, async (req, res) => {
     const food = await Food.findOne({ assigned_ID: fID });
 
     const food_detail = await getFoodDetailForFoodDetail(fID)
-
+    console.log('This is food detail retrieved from DataBase...', food_detail)
     return res.status(200).send(food_detail);
   } catch (error) {
     return res.status(400).send(`Error when getting Food's Info for Food Detail: ${error}`);
