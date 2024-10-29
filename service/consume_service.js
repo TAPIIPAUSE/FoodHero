@@ -62,25 +62,33 @@ export async function getFoodDetailForConsumeInventory(fID, cID) {
 
 export async function getFoodDetailForConsumeDetail(fID,cID){
   try{
-    var assigned_ID = fID
-    var food = await Food.findOne({ assigned_ID })
+    
+    var food = await Food.findOne({ assigned_ID: fID })
+    var consumed_food = await ConsumedFood.findOne({ assigned_ID: cID })
     var location = await Location.findOne({assigned_ID: food.location})
-
-    var package_id = food.package_type
-    var package_type = await mapPackageType(package_id)
-
+    var unit = await UnitType.findOne({assigned_ID: food.weight_type})
+   
     var food_name = food.food_name
     var location = location.location
-    var unit = ""
-    var saved_msg = ""
-    var lost_msg = ""
-
+ 
     if(food.isCountable){
-    
-    
-    
+      var package_id = food.package_type
+      var package_type = await mapPackageType(package_id)
 
-      
+      return {
+        FoodName: food_name,
+        QuantityMessage: `${consumed_food.current_quantity} ${package_type}${consumed_food.current_quantity > 1 ? "s" : ""}`,
+        Package: package_type,
+        Location: location
+      }
+    }else{
+
+      return {
+        FoodName: food_name,
+        AmountMessage: `${consumed_food.current_amount} ${unit.type}${consumed_food.current_amount > 1 ? "s" : ""}`,
+        Unit: unit,
+        Location: location
+      }
     }
 
   }catch(error){

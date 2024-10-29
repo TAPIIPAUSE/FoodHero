@@ -6,7 +6,7 @@ import ConsumedFood from "../schema/inventory_module/consumedFoodSchema.js";
 import { get_user_from_db, get_houseID } from '../service/user_service.js';
 import { save_consume_to_db } from '../service/inventory_service.js';
 import { authenticateToken } from "../service/jwt_auth.js";
-import { getFoodDetailForConsumeInventory, mapAmountQuan } from "../service/consume_service.js";
+import { getFoodDetailForConsumeDetail, getFoodDetailForConsumeInventory, mapAmountQuan } from "../service/consume_service.js";
 import { calculateScore,calculateSaveLost, calculateSaveLostForConsume } from "../service/score_service.js";
 import { calculateConsumedData, updateConsume } from "../service/consume_service.js";
 import PersonalScore from "../schema/score_module/PersonalScoreSchema.js";
@@ -52,10 +52,13 @@ router.get("/getConsumeById", authenticateToken, async (req, res) => {
     // search foods by the food ID
     const assigned_ID = cID;
     const consumedFood = await ConsumedFood.findOne({ assigned_ID });
+    const fID = consumedFood.food_ID
 
-    return res.status(200).send(consumedFood);
+    const response = await getFoodDetailForConsumeDetail(fID, cID)
+
+    return res.status(200).send({message: response});
   } catch (error) {
-    return res.status(400).send(`Error when getting Food's Info: ${error}`);
+    return res.status(400).send(`Error when getting Consumed Food's Info: ${error}`);
   }
 });
 

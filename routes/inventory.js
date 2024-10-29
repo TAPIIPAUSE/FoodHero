@@ -355,7 +355,7 @@ router.post('/consume', authenticateToken, async (req, res) => {
 
     }
 
-    res.status(200).send(`Successfully consume food: ${food}\n`)
+    res.status(200).send({message:`Successfully consume food`, Food: food})
 
   } catch (error) {
     return res.status(400).send(`Error when consuming Food: ${error}`)
