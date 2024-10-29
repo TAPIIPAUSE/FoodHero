@@ -100,7 +100,7 @@ class APIFood {
         data: {'fID': foodId},
       );
       print("Request URL: $baseurl/getFoodById");
-      print("Respon: $res");
+      print("Respon: $res.data");
       print("Food Detail Response status: ${res.statusCode}"); // Debug log
       print("Food Detail Response body: ${res.data}"); // Debug log
       print("Requesting food details with fID: $foodId and token: $token");

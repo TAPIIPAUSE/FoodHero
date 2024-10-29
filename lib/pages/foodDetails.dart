@@ -60,6 +60,8 @@ class _FoodDetailsPageState extends State<foodDetails> {
   String remindString = '';
   String remindDate = '';
   String quantityString = '';
+  String weightString = '';
+  String allCostString = '';
   //
   String expired = '';
   String remind = '';
@@ -407,9 +409,10 @@ class _FoodDetailsPageState extends State<foodDetails> {
             remindString = food.Remind.toString();
             DateTime remind = DateTime.parse(remindString);
             remindDate = DateFormat('dd-MM-yyyy').format(remind);
-            // quantityString = food.Remaining;
-
-            double screenHeight = food.isCountable ? 800 : 600;
+            quantityString = food.Remaining;
+            weightString = food.Remaining;
+            allCostString = food.total_price.toString();
+            double screenHeight = food.isCountable ? 900 : 600;
 
             print('this is iscountable: $isCountable');
             return Stack(
@@ -1730,7 +1733,7 @@ class _FoodDetailsPageState extends State<foodDetails> {
                                   children: [
                                     Text(quantityString,
                                         style: FontsTheme.hindBold_20()),
-                                    buildQuantityUnit('')
+                                    //buildQuantityUnit('')
                                   ],
                                 ),
                               ),
@@ -1761,39 +1764,41 @@ class _FoodDetailsPageState extends State<foodDetails> {
                               // ),
                             ],
                           ),
-                          Row(children: [
-                            SizedBox(
-                              width: 80,
-                            ),
-                            // SizedBox(
-                            //   height: 60,
-                            //   width: 280,
-                            //   child: InteractiveSlider(
-                            //     focusedHeight: 20,
-                            //     backgroundColor: AppTheme.softRed,
-                            //     startIcon: const Icon(
-                            //       Icons.remove_circle_rounded,
-                            //       color: Colors.black,
-                            //     ),
-                            //     endIcon: const Icon(
-                            //       Icons.add_circle_rounded,
-                            //       color: Colors.black,
-                            //     ),
-                            //     min: 1,
-                            //     max: 100,
-                            //     onChanged: (value) => setState(() {
-                            //       quantity = value.toInt();
-                            //       _updateAllCost();
-                            //       consumeQuantity = quantity;
-                            //     }),
-                            //   ),
-                            // ),
-                          ]),
+                          // Row(children: [
+                          //   SizedBox(
+                          //     width: 80,
+                          //   ),
+                          // SizedBox(
+                          //   height: 60,
+                          //   width: 280,
+                          //   child: InteractiveSlider(
+                          //     focusedHeight: 20,
+                          //     backgroundColor: AppTheme.softRed,
+                          //     startIcon: const Icon(
+                          //       Icons.remove_circle_rounded,
+                          //       color: Colors.black,
+                          //     ),
+                          //     endIcon: const Icon(
+                          //       Icons.add_circle_rounded,
+                          //       color: Colors.black,
+                          //     ),
+                          //     min: 1,
+                          //     max: 100,
+                          //     onChanged: (value) => setState(() {
+                          //       quantity = value.toInt();
+                          //       _updateAllCost();
+                          //       consumeQuantity = quantity;
+                          //     }),
+                          //   ),
+                          // ),
+                          //  ]),
                         ],
                       ),
                     ),
+                    const SizedBox(
+                      height: 10,
+                    ),
                     //Weight
-
                     Row(
                       children: [
                         Text('Weight',
@@ -1815,9 +1820,9 @@ class _FoodDetailsPageState extends State<foodDetails> {
                                 mainAxisAlignment:
                                     MainAxisAlignment.spaceBetween,
                                 children: [
-                                  Text('$weightReduced',
+                                  Text(weightString,
                                       style: FontsTheme.hindBold_20()),
-                                  buildWeightUnit('')
+                                  // buildWeightUnit('')
                                 ],
                               ),
                             ),
@@ -2049,7 +2054,7 @@ class _FoodDetailsPageState extends State<foodDetails> {
                                       width: 100,
                                       child: TextField(
                                           decoration: InputDecoration(
-                                            labelText: 'All Cost',
+                                            labelText: allCostString,
                                           ),
                                           keyboardType: TextInputType.number,
                                           onChanged: (value) {

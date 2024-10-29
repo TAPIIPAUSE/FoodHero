@@ -30,6 +30,7 @@ dependencies:
   decimal: ^3.0.2
   webview_flutter: ^4.8.0
   firebase_core: ^3.6.0
+  
 
 
 dev_dependencies:

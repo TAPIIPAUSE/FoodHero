@@ -11,7 +11,9 @@ class FoodDetailData {
   final String Remaining;
   final String URL;
   final bool isCountable;
-  final int current_quantity;
+
+  final int total_price; 
+  // final int current_quantity;
   //   "weight_type": 3,
   // "package_type": 2,
   // "current_amount": 500,
@@ -36,7 +38,9 @@ class FoodDetailData {
     required this.Remaining,
     required this.URL,
     required this.isCountable,
-    required this.current_quantity,
+
+    required this.total_price,
+    // required this.current_quantity,
   });
 
   // Convert Food instance to a Map
@@ -72,7 +76,8 @@ class FoodDetailData {
       Remaining: json['Remaining'],
       URL: json['URL'],
       isCountable: json['isCountable'],
-      current_quantity: json['current_quantity']
+      // current_quantity: json['current_quantity']
+      total_price: json['total_price']
     );
   }
 
@@ -90,7 +95,8 @@ class FoodDetailData {
     String? Remaining,
     String? URL,
     bool? isCountable,
-    int? current_quantity,
+    //int? current_quantity,
+    int? total_price
   }) {
     return FoodDetailData(
       Food_ID: Food_ID ?? this.Food_ID,
@@ -105,7 +111,8 @@ class FoodDetailData {
       Remaining: Remaining ?? this.Remaining,
       URL: URL ?? this.URL,
       isCountable: isCountable ?? this.isCountable,
-      current_quantity: current_quantity ?? this.current_quantity
+      // current_quantity: current_quantity ?? this.current_quantity
+      total_price: total_price ?? this.total_price
     );
   }
 
@@ -115,6 +122,7 @@ class FoodDetailData {
         'Location: $Location, Expired: $Expired, Remind: $Remind, '
         'TotalCost: $TotalCost, IndividualWeight: $IndividualWeight, '
         'IndividualCost: $IndividualCost, Remaining: $Remaining, '
-        'URL: $URL, isCountable: $isCountable, current_quantity: $current_quantity)';
+        'URL: $URL, isCountable: $isCountable, total_price: $total_price )';
+    // current_quantity: $current_quantity
   }
 }
