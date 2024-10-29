@@ -9,6 +9,7 @@ import cookieParser from 'cookie-parser';
 import swaggerDocs from './utils/swagger-output.json' assert { type: 'json' };
 import swaggerUi from "swagger-ui-express";
 
+
 const app = express();
 app.use(express.urlencoded({extended:true})) 
 app.use(express.static('public')) //static file for hosting
@@ -93,5 +94,24 @@ inventoryRoute.get('/', async (req, res) => {
       res.status(500).json({ error: 'Server error' });
     }
   });
+
+  // Firebase Configuration
   
- // module.exports = inventoryRoute;
+  import admin from "firebase-admin";
+  import { readFile } from 'fs/promises';
+  
+  const serviceAccountPath = './foodhero-2291b-firebase-adminsdk-p4bdk-7c0448b3ea.json';
+  
+  // Load service account credentials asynchronously
+  const serviceAccount = JSON.parse(
+    await readFile(new URL(serviceAccountPath, import.meta.url))
+  );
+  
+  admin.initializeApp({
+    credential: admin.credential.cert(serviceAccount),
+    storageBucket: 'gs://foodhero-2291b.appspot.com', // replace with your Firebase project bucket ID
+  });
+  
+  const bucket = admin.storage().bucket();
+  
+  export { bucket };

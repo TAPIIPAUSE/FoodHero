@@ -528,4 +528,33 @@ router.post("/compaction", authenticateToken, async(req,res)=>{
   }
 })
 
+import multer from 'multer';
+import uploadFile  from "../service/upload_service.js";
+
+const upload = multer({ storage: multer.memoryStorage() });
+
+router.post('/uploadImage', upload.single('file'), async (req, res) => {
+  try {
+    const fID = req.body.fID;
+
+    if (!req.file) {
+      return res.status(400).send('No file uploaded.');
+    }
+
+    const publicUrl = await uploadFile(req.file.buffer, `images/${Date.now()}_${req.file.originalname}`, req.file.mimetype);
+
+    await Food.updateOne(
+      { assigned_ID: fID }, // Query to find the food item
+      { img: publicUrl }      // Update the url field
+    );
+
+    const updateResult = await Food.findOne({assigned_ID: fID})
+    
+    res.status(200).send({ url: publicUrl , result: updateResult});
+  } catch (error) {
+    res.status(500).send(`Error uploading image: ${error.message}`);
+  }
+});
+
+
 export default router;
