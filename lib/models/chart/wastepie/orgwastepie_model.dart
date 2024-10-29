@@ -26,8 +26,8 @@ class Statistic {
   final int waste;
   final int consume;
   final int total;
-  final double percentConsume;
-  final double percentWaste;
+  final double? percentConsume;
+  final double? percentWaste;
 
   Statistic({
     required this.waste,
@@ -42,8 +42,12 @@ class Statistic {
       waste: json['Waste'],
       consume: json['Consume'],
       total: json['Total'],
-      percentConsume: (json['Percent_Consume'] as num).toDouble(),
-      percentWaste: (json['Percent_Waste'] as num).toDouble(),
+      percentConsume: json['Percent_Consume'] != null
+          ? (json['Percent_Consume'] as num).toDouble()
+          : null,
+      percentWaste: json['Percent_Waste'] != null
+          ? (json['Percent_Waste'] as num).toDouble()
+          : null,
     );
   }
 

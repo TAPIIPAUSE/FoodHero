@@ -3,12 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:foodhero/fonts.dart';
 import 'package:foodhero/pages/api/dashboardapi.dart';
 import 'package:foodhero/theme.dart';
-import 'package:foodhero/widgets/interorg/heatmap.dart';
-import 'package:foodhero/widgets/interorg/price_piechart.dart';
-import 'package:foodhero/widgets/interorg/reason_piechart.dart';
 import 'package:foodhero/widgets/interorg/barchart.dart';
+import 'package:foodhero/widgets/interorg/heatmap.dart';
 import 'package:foodhero/widgets/interorg/waste_piechart.dart';
-import 'package:foodhero/widgets/interorg/foodtype_piechart.dart';
 import 'package:go_router/go_router.dart';
 
 class InterDashboard extends StatefulWidget {
@@ -89,14 +86,31 @@ class _InterDashboardState extends State<InterDashboard> {
             return const Center(child: CircularProgressIndicator());
           } else if (snapshot.hasError) {
             return Text('Error: ${snapshot.error}');
-          } else if (!snapshot.hasData) {
+          } else if (!snapshot.hasData || snapshot.data == null) {
             return const Center(child: Text('No data available'));
           } else {
             final data = snapshot.data!;
+
+            // Safely handle null values with null-aware operators and provide defaults
             final double wastePercent =
-                data.statistic.percentWaste; // Fetch waste percentage
+                data.statistic.percentWaste ?? 0; // Fetch waste percentage
             final double eatenPercent =
-                data.statistic.percentConsume; // Fetch eaten percentage
+                data.statistic.percentConsume ?? 0; // Fetch eaten percentage
+
+            // If both percentages are 0, show a message instead of an empty chart
+            if (wastePercent == 0 && eatenPercent == 0) {
+              return Container(
+                  padding: const EdgeInsets.all(10),
+                  decoration: const BoxDecoration(
+                    color: AppTheme.softBlue,
+                    borderRadius: BorderRadius.all(Radius.circular(20)),
+                  ),
+                  child: const Center(
+                      child: Text(
+                    'No data available',
+                    style: TextStyle(fontSize: 20),
+                  )));
+            }
 
             return Container(
               padding: const EdgeInsets.all(10),

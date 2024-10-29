@@ -7,6 +7,7 @@ import 'package:foodhero/fonts.dart';
 import 'package:foodhero/main.dart';
 import 'package:foodhero/models/chart/hhfoodtypepie_model.dart';
 import 'package:foodhero/models/chart/interorgfoodtypepie_model.dart';
+import 'package:foodhero/models/chart/orgfoodtypepie_model.dart';
 import 'package:foodhero/models/score/housescore_model.dart';
 import 'package:foodhero/models/score/interscore_model.dart';
 import 'package:foodhero/models/score/orgscore_model.dart';
@@ -106,6 +107,17 @@ class _InterOrganizationState extends State<InterOrganization> {
     }
   }
 
+  Future<OrgFoodTypePie> _getOrgFoodTypePie() async {
+    try {
+      final data = await DashboardApi().getOrgFoodTypePie();
+      print('Fetched org food type pie'); // Debug print
+      return data;
+    } catch (e) {
+      print('Error loading org food type pie: $e');
+      rethrow;
+    }
+  }
+
   String _getFoodTypeName(int category) {
     switch (category) {
       case 1:
@@ -126,15 +138,15 @@ class _InterOrganizationState extends State<InterOrganization> {
   Color _getFoodTypeColor(int category) {
     switch (category) {
       case 1:
-        return AppTheme.softRedCancleWasted;
+        return Colors.redAccent;
       case 2:
-        return AppTheme.softOrange;
+        return Colors.greenAccent.shade400;
       case 3:
-        return AppTheme.softRedBrown;
+        return Colors.brown.shade300;
       case 4:
-        return AppTheme.orangeGray;
+        return Colors.yellow.shade400;
       case 5:
-        return AppTheme.spoiledBrown;
+        return Colors.lightBlue;
       default:
         return Colors.grey;
     }
@@ -775,11 +787,50 @@ class _InterOrganizationState extends State<InterOrganization> {
                             //     WasteTypePiechart(),
                             //   ],
                             // ),
-                            Column(
-                          children: [
-                            // const WasteTypePiechart(),
-                            // BuildPieLegend()
-                          ],
+                            FutureBuilder(
+                          future: _getOrgFoodTypePie(),
+                          builder: (context, snapshot) {
+                            if (snapshot.connectionState ==
+                                ConnectionState.waiting) {
+                              return const Center(
+                                child: CircularProgressIndicator(),
+                              );
+                            } else if (snapshot.hasError) {
+                              return Text('Error: ${snapshot.error}');
+                            } else if (!snapshot.hasData ||
+                                snapshot.data!.statistic.isEmpty) {
+                              return const Text('No data available');
+                            } else {
+                              final data = snapshot.data!;
+                              return Column(
+                                children: [
+                                  WasteTypePiechart(
+                                    chartData: data.statistic
+                                        .map((stat) => ChartData(
+                                            name:
+                                                _getFoodTypeName(stat.category),
+                                            value: stat.percent,
+                                            color: _getFoodTypeColor(
+                                                stat.category),
+                                            category: stat.category))
+                                        .toList(),
+                                  ),
+                                  BuildPieLegend(
+                                    chartData: data.statistic
+                                        .map((stat) => ChartData(
+                                            name:
+                                                _getFoodTypeName(stat.category),
+                                            value: stat.percent,
+                                            color: _getFoodTypeColor(
+                                                stat.category),
+                                            category: stat.category))
+                                        .toList(),
+                                    title: 'Food Type',
+                                  ),
+                                ],
+                              );
+                            }
+                          },
                         ),
                       ),
                       const SizedBox(height: 10),
