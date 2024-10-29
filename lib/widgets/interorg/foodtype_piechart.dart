@@ -13,19 +13,19 @@ class WasteTypePiechart extends StatefulWidget {
 class _WasteBarPieState extends State<WasteTypePiechart> {
   // int touchedIndex = -1;
 
-  @override
-  void initState() {
-    super.initState();
+  // @override
+  // void initState() {
+  //   super.initState();
 
-    // Initialize `chartData` with dynamic data based on widget's `percent` and `category`
-    // final List<ChartData> chartData = [
-    //   ChartData(foodTypeCooked, widget.chartData==1?widget.percent:0, AppTheme.softRedCancleWasted),
-    //   ChartData(foodTypeDry, 30, AppTheme.softOrange),
-    //   ChartData(foodTypeFresh, 25, AppTheme.softRedBrown),
-    //   ChartData(foodTypeFrozen, 20, AppTheme.orangeGray),
-    //   ChartData(foodTypeInstant, 5, AppTheme.spoiledBrown),
-    // ];
-  }
+  //   // Initialize `chartData` with dynamic data based on widget's `percent` and `category`
+  //   // final List<ChartData> chartData = [
+  //   //   ChartData(foodTypeCooked, widget.chartData==1?widget.percent:0, AppTheme.softRedCancleWasted),
+  //   //   ChartData(foodTypeDry, 30, AppTheme.softOrange),
+  //   //   ChartData(foodTypeFresh, 25, AppTheme.softRedBrown),
+  //   //   ChartData(foodTypeFrozen, 20, AppTheme.orangeGray),
+  //   //   ChartData(foodTypeInstant, 5, AppTheme.spoiledBrown),
+  //   // ];
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -33,16 +33,19 @@ class _WasteBarPieState extends State<WasteTypePiechart> {
       height: 400,
       child: PieChart(
         PieChartData(
-          sections: widget.chartData.asMap().entries.map((e) {
-            return PieChartSectionData(
+          sections: widget.chartData.asMap().entries.map(
+            (e) {
+              return PieChartSectionData(
                 radius: 100,
                 color: e.value.color,
                 value: e.value.value,
                 title: '${e.value.value}%',
                 titleStyle: const TextStyle(
                   fontSize: 24,
-                ));
-          }).toList(),
+                ),
+              );
+            },
+          ).toList(),
         ),
       ),
     );

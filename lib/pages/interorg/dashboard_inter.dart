@@ -2,9 +2,13 @@ import 'package:carousel_slider/carousel_slider.dart' as cs;
 import 'package:flutter/material.dart';
 import 'package:foodhero/fonts.dart';
 import 'package:foodhero/pages/api/dashboardapi.dart';
+import 'package:foodhero/pages/interorg/interorganization.dart';
 import 'package:foodhero/theme.dart';
+import 'package:foodhero/utils/constants.dart';
 import 'package:foodhero/widgets/interorg/barchart.dart';
+import 'package:foodhero/widgets/interorg/foodtype_piechart.dart';
 import 'package:foodhero/widgets/interorg/heatmap.dart';
+import 'package:foodhero/widgets/interorg/price_piechart.dart';
 import 'package:foodhero/widgets/interorg/waste_piechart.dart';
 import 'package:go_router/go_router.dart';
 
@@ -21,15 +25,17 @@ class _InterDashboardState extends State<InterDashboard> {
       cs.CarouselSliderController();
 
   late String currentPage = widget.page;
-  late Future<dynamic> apiData;
+  late Future<dynamic> apiWasteData;
+  late Future<dynamic> apiWasteByTyepData;
 
   @override
   void initState() {
     super.initState();
-    apiData = _fetchData(currentPage);
+    apiWasteData = _fetchWasteData(currentPage);
+    apiWasteByTyepData = _fetchWasteByTypeData(currentPage);
   }
 
-  Future<dynamic> _fetchData(String page) async {
+  Future<dynamic> _fetchWasteData(String page) async {
     try {
       if (page == 'hh') {
         return await DashboardApi().getHHWastePie(); // Call HH API
@@ -41,11 +47,62 @@ class _InterDashboardState extends State<InterDashboard> {
         throw Exception('Invalid page type: $page');
       }
     } catch (e) {
-      print('Error loading data: $e');
+      print('Error loading waste data: $e');
       return Future.error(e); // Return the error message
     }
   }
 
+  Future<dynamic> _fetchWasteByTypeData(String page) async {
+    try {
+      if (page == 'hh') {
+        return await DashboardApi().getHHWasteTypePie();
+      } else if (page == 'org') {
+        return await DashboardApi().getOrgWasteTypePie(); // Call Org API
+      }
+      // else if (page == 'inter') {
+      //   return await DashboardApi().getInterWastePie(); // Call Inter Org API
+      // } else {
+      //   throw Exception('Invalid page type: $page');
+      // }
+    } catch (e) {
+      print('Error loading waste type data: $e');
+      return Future.error(e);
+    }
+  }
+
+  String _getFoodTypeName(int category) {
+    switch (category) {
+      case 1:
+        return foodTypeCooked;
+      case 2:
+        return foodTypeFresh;
+      case 3:
+        return foodTypeDry;
+      case 4:
+        return foodTypeInstant;
+      case 5:
+        return foodTypeFrozen;
+      default:
+        return 'Unknown';
+    }
+  }
+
+  Color _getFoodTypeColor(int category) {
+    switch (category) {
+      case 1:
+        return Colors.redAccent;
+      case 2:
+        return Colors.greenAccent.shade400;
+      case 3:
+        return Colors.brown.shade300;
+      case 4:
+        return Colors.yellow.shade400;
+      case 5:
+        return Colors.lightBlue;
+      default:
+        return Colors.grey;
+    }
+  }
   // void _changePage(String page) {
   //   setState(() {
   //     currentPage = page;
@@ -80,7 +137,7 @@ class _InterDashboardState extends State<InterDashboard> {
         ),
       ),
       FutureBuilder<dynamic>(
-        future: apiData,
+        future: apiWasteData,
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return const Center(child: CircularProgressIndicator());
@@ -212,6 +269,55 @@ class _InterDashboardState extends State<InterDashboard> {
                     "Type of food waste",
                     style: FontsTheme.mouseMemoirs_30White(),
                   ),
+                  Container(
+                    padding: const EdgeInsets.all(10),
+                    decoration: const BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.all(Radius.circular(20)),
+                    ),
+                    child: FutureBuilder<dynamic>(
+                      future: apiWasteByTyepData,
+                      builder: (context, snapshot) {
+                        if (snapshot.connectionState ==
+                            ConnectionState.waiting) {
+                          return const Center(
+                            child: CircularProgressIndicator(),
+                          );
+                        } else if (snapshot.hasError) {
+                          return Text('Error: ${snapshot.error}');
+                        } else if (!snapshot.hasData || snapshot.data == null) {
+                          return const Center(
+                            child: Text('No data available'),
+                          );
+                        } else {
+                          // final data = snapshot.data!;
+                          // Ensure the data is mapped correctly
+                          final data =
+                              (snapshot.data!.statistic as List<dynamic>)
+                                  .map((stat) {
+                            return ChartData(
+                              name: _getFoodTypeName(stat.category),
+                              value: stat.percentWaste,
+                              color: _getFoodTypeColor(stat.category),
+                              category: stat.category,
+                            );
+                          }).toList();
+
+                          return Column(
+                            children: [
+                              WasteTypePiechart(
+                                chartData: data,
+                              ),
+                              BuildPieLegend(
+                                chartData: data,
+                                title: "Food type",
+                              )
+                            ],
+                          );
+                        }
+                      },
+                    ),
+                  ),
                   // const WasteTypePiechart(),
                   const SizedBox(
                     height: 10,
@@ -220,6 +326,7 @@ class _InterDashboardState extends State<InterDashboard> {
                     "Price of food waste",
                     style: FontsTheme.mouseMemoirs_30White(),
                   ),
+
                   // const PricePiechart(),
                 ],
               ),

@@ -1,10 +1,12 @@
 import 'package:dio/dio.dart';
-import 'package:foodhero/models/chart/hhfoodtypepie_model.dart';
-import 'package:foodhero/models/chart/interorgfoodtypepie_model.dart';
-import 'package:foodhero/models/chart/orgfoodtypepie_model.dart';
+import 'package:foodhero/models/chart/savetypepie/hhfoodtypepie_model.dart';
+import 'package:foodhero/models/chart/savetypepie/interorgfoodtypepie_model.dart';
+import 'package:foodhero/models/chart/savetypepie/orgfoodtypepie_model.dart';
 import 'package:foodhero/models/chart/wastepie/hhwastepie_model.dart';
 import 'package:foodhero/models/chart/wastepie/interorgwastepie_model.dart';
 import 'package:foodhero/models/chart/wastepie/orgwastepie_model.dart';
+import 'package:foodhero/models/chart/wastetypepie/hhwastetypepie_model.dart';
+import 'package:foodhero/models/chart/wastetypepie/orgwastetypepie_model.dart';
 import 'package:foodhero/models/score/housescore_model.dart';
 import 'package:foodhero/models/score/interscore_model.dart';
 import 'package:foodhero/models/score/orgscore_model.dart';
@@ -14,7 +16,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 class DashboardApi {
   final Dio dio = Dio();
-  final String baseurl = '$myip/api/v1/dashboard';
+  final String baseurl = 'http://$myip:3000/api/v1/dashboard';
   final authService = AuthService();
 
   // get house score
@@ -250,7 +252,8 @@ class DashboardApi {
       }
     } catch (e) {
       print('Error: $e');
-      throw Exception('Failed to fetch Org food type pie: ${e.toString()}');
+      throw Exception(
+          'Failed to fetch Inter Org food type pie: ${e.toString()}');
     }
   }
 
@@ -317,6 +320,71 @@ class DashboardApi {
     } catch (e) {
       print('Error: $e');
       throw Exception('Failed to fetch Org food type pie: ${e.toString()}');
+    }
+  }
+
+  // waste food by type pie
+  Future<HHWasteTypePie> getHHWasteTypePie() async {
+    try {
+      print("===HH waste type pie===");
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      final token = prefs.getString('user_token');
+      // print('token: $token');
+
+      final res = await dio.get(
+        '$baseurl/household/visualization/foodtype_pie_chart',
+        options: Options(
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer $token',
+          },
+        ),
+      );
+
+      print("Response status: ${res.statusCode}");
+      print("Response body: ${res.data}");
+
+      if (res.statusCode == 200) {
+        final Map<String, dynamic> data = res.data;
+        return HHWasteTypePie.fromJson(data);
+      } else {
+        throw Exception('Invalid response format: ${res.data.runtimeType}');
+      }
+    } catch (e) {
+      print('Error: $e');
+      throw Exception('Failed to fetch HH waste type pie: ${e.toString()}');
+    }
+  }
+
+  Future<OrgWasteTypePie> getOrgWasteTypePie() async {
+    try {
+      print("===Org waste type pie===");
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      final token = prefs.getString("user_token");
+      // print('token: $token');
+
+      final res = await dio.get(
+        '$baseurl/organization/visualization/foodtype_pie_chart',
+        options: Options(
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer $token',
+          },
+        ),
+      );
+
+      print("Response status: ${res.statusCode}");
+      print("Response body: ${res.data}");
+
+      if (res.statusCode == 200) {
+        final Map<String, dynamic> data = res.data;
+        return OrgWasteTypePie.fromJson(data);
+      } else {
+        throw Exception('Invalid response format: ${res.data.runtimeType}');
+      }
+    } catch (e) {
+      print('Error: $e');
+      throw Exception('Failed to fetch Org waste type pie: ${e.toString()}');
     }
   }
 }

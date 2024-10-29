@@ -1,21 +1,19 @@
 import 'dart:async';
 
-import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
-import 'package:foodhero/example/post.dart';
 import 'package:foodhero/fonts.dart';
 import 'package:foodhero/main.dart';
-import 'package:foodhero/models/chart/hhfoodtypepie_model.dart';
-import 'package:foodhero/models/chart/interorgfoodtypepie_model.dart';
-import 'package:foodhero/models/chart/orgfoodtypepie_model.dart';
+import 'package:foodhero/models/chart/savetypepie/hhfoodtypepie_model.dart';
+import 'package:foodhero/models/chart/savetypepie/interorgfoodtypepie_model.dart';
+import 'package:foodhero/models/chart/savetypepie/orgfoodtypepie_model.dart';
 import 'package:foodhero/models/score/housescore_model.dart';
 import 'package:foodhero/models/score/interscore_model.dart';
 import 'package:foodhero/models/score/orgscore_model.dart';
 import 'package:foodhero/pages/api/dashboardapi.dart';
 import 'package:foodhero/theme.dart';
 import 'package:foodhero/utils/constants.dart';
-import 'package:foodhero/widgets/interorg/org_listscore.dart';
 import 'package:foodhero/widgets/interorg/foodtype_piechart.dart';
+import 'package:foodhero/widgets/interorg/org_listscore.dart';
 import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 
@@ -352,17 +350,17 @@ class _InterOrganizationState extends State<InterOrganization> {
                         'We saved food',
                         style: TextStyle(color: Colors.white, fontSize: 24),
                       ),
-                      Text(
-                        '${NumberFormat('#,###').format(wastedpoint)} grams',
-                        style:
-                            const TextStyle(color: Colors.white, fontSize: 20),
-                      ),
+                      // Text(
+                      //   '${NumberFormat('#,###').format(wastedpoint)} grams',
+                      //   style:
+                      //       const TextStyle(color: Colors.white, fontSize: 20),
+                      // ),
                       // Pie chart
                       Container(
                         // height: 800,
                         padding: const EdgeInsets.all(10),
                         decoration: const BoxDecoration(
-                          color: AppTheme.softBlue,
+                          color: Colors.white,
                           borderRadius: BorderRadius.all(Radius.circular(20)),
                         ),
                         child:
@@ -401,7 +399,7 @@ class _InterOrganizationState extends State<InterOrganization> {
                                     chartData: data.statistic
                                         .map((stat) => ChartData(
                                               category: stat.category,
-                                              value: stat.percent,
+                                              value: stat.percentConsume,
                                               name: _getFoodTypeName(
                                                   stat.category),
                                               color: _getFoodTypeColor(
@@ -413,7 +411,7 @@ class _InterOrganizationState extends State<InterOrganization> {
                                     chartData: data.statistic
                                         .map((stat) => ChartData(
                                               category: stat.category,
-                                              value: stat.percent,
+                                              value: stat.percentConsume,
                                               name: _getFoodTypeName(
                                                   stat.category),
                                               color: _getFoodTypeColor(
@@ -561,16 +559,16 @@ class _InterOrganizationState extends State<InterOrganization> {
                         'Your household saved food',
                         style: TextStyle(color: Colors.white, fontSize: 24),
                       ),
-                      Text(
-                        '${NumberFormat('#,###').format(wastedpoint)} grams',
-                        style:
-                            const TextStyle(color: Colors.white, fontSize: 20),
-                      ),
+                      // Text(
+                      //   '${NumberFormat('#,###').format(wastedpoint)} grams',
+                      //   style:
+                      //       const TextStyle(color: Colors.white, fontSize: 20),
+                      // ),
                       // Pie chart
                       Container(
                         padding: const EdgeInsets.all(10),
                         decoration: const BoxDecoration(
-                          color: AppTheme.softBlue,
+                          color: Colors.white,
                           borderRadius: BorderRadius.all(Radius.circular(20)),
                         ),
                         child:
@@ -610,7 +608,7 @@ class _InterOrganizationState extends State<InterOrganization> {
                                         .map((stat) => ChartData(
                                             name:
                                                 _getFoodTypeName(stat.category),
-                                            value: stat.percent,
+                                            value: stat.percentConsume,
                                             color: _getFoodTypeColor(
                                                 stat.category),
                                             category: stat.category))
@@ -621,7 +619,7 @@ class _InterOrganizationState extends State<InterOrganization> {
                                           .map((stat) => ChartData(
                                               name: _getFoodTypeName(
                                                   stat.category),
-                                              value: stat.percent,
+                                              value: stat.percentConsume,
                                               color: _getFoodTypeColor(
                                                   stat.category),
                                               category: stat.category))
@@ -761,16 +759,16 @@ class _InterOrganizationState extends State<InterOrganization> {
                         'Your organization saved food',
                         style: TextStyle(color: Colors.white, fontSize: 24),
                       ),
-                      Text(
-                        '${NumberFormat('#,###').format(wastedpoint)} grams',
-                        style:
-                            const TextStyle(color: Colors.white, fontSize: 20),
-                      ),
+                      // Text(
+                      //   '${NumberFormat('#,###').format(wastedpoint)} grams',
+                      //   style:
+                      //       const TextStyle(color: Colors.white, fontSize: 20),
+                      // ),
                       // Pie chart
                       Container(
                         padding: const EdgeInsets.all(10),
                         decoration: const BoxDecoration(
-                          color: AppTheme.softBlue,
+                          color: Colors.white,
                           borderRadius: BorderRadius.all(Radius.circular(20)),
                         ),
                         child:
@@ -809,7 +807,7 @@ class _InterOrganizationState extends State<InterOrganization> {
                                         .map((stat) => ChartData(
                                             name:
                                                 _getFoodTypeName(stat.category),
-                                            value: stat.percent,
+                                            value: stat.percentConsume,
                                             color: _getFoodTypeColor(
                                                 stat.category),
                                             category: stat.category))
@@ -820,7 +818,7 @@ class _InterOrganizationState extends State<InterOrganization> {
                                         .map((stat) => ChartData(
                                             name:
                                                 _getFoodTypeName(stat.category),
-                                            value: stat.percent,
+                                            value: stat.percentConsume,
                                             color: _getFoodTypeColor(
                                                 stat.category),
                                             category: stat.category))
