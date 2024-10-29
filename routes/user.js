@@ -94,42 +94,42 @@ router.post('/register', async (req, res) => {
 
 router.post('/login', async (req, res) => {
 
-  const { username, password } = req.body;
+  try{
+    const { username, password } = req.body;
 
-  console.log("Username:", username)
-  console.log("Password", password)
-
-  const user = await User.findOne({ username });
-  const hID = user.hID
-
-  if (!user) {
-    res.status(400).send(`There is no username registered as: ${username}`)
-    console.log(`There is no username registered as: ${username}`);
-    return;
-  } else {
-    console.log(`Found username: ${username}`);
+    console.log("Username:", username)
+    console.log("Password", password)
+  
+    const user = await User.findOne({ username });
+    
+  
+    if (!user) {
+      return res.status(400).send({success: false,message:`There is no username registered as: ${username}`})
+    } else {
+      console.log(`Found username: ${username}`);
+    }
+    const hID = user.hID
+  
+    const passwordMatch = await bcrypt.compare(password, user.password)
+  
+    if(!passwordMatch){
+      return res.status(400).send({ success: false,message: "Password Doesn't match"})
+    }
+    console.log("TOKEN_SECRET during signing:", process.env.TOKEN_SECRET);
+  
+      // Generate JWT Token
+    const token = jwt.sign(
+      { userId: user._id, username: user.username },
+      process.env.TOKEN_SECRET,
+      { expiresIn: '4h' }
+    );
+    console.log("Token received for signing:", token);
+    return res.status(200).json({ success: true,message: 'Logged in successfully', token , hID: hID});
+  }catch(error){
+    return res.status(400).json({ success: false,message: 'Logged in failed', Error: `${error}`});
   }
 
-  const passwordMatch = await bcrypt.compare(password, user.password)
 
-  if(!passwordMatch){
-    res.status(400).send("Password doesn't match!!!")
-    return;
-  }
-  console.log("TOKEN_SECRET during signing:", process.env.TOKEN_SECRET);
-
-    // Generate JWT Token
-  const token = jwt.sign(
-    { userId: user._id, username: user.username },
-    process.env.TOKEN_SECRET,
-    { expiresIn: '4h' }
-  );
-
-
-
-
-  console.log("Token received for signing:", token);
-  res.status(200).json({ success: true,message: 'Logged in successfully', token , hID: hID});
 })
 
 router.post('/create_house',authenticateToken,async (req,res) => {
