@@ -101,7 +101,7 @@ export async function getFoodDetailForFoodDetail(fID) {
 
     var consume_msg = ""
     var remain_msg = ""
-
+    console.log('This is food detail retrieved from DataBase...', food)
     const isCountable = food.isCountable
 
     if (food.isCountable) {
