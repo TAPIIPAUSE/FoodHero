@@ -251,7 +251,7 @@ router.get("/getFoodById", authenticateToken, async (req, res) => {
     
     const food = await Food.findOne({ assigned_ID: fID });
 
-    const food_detail = await getFoodDetailForFoodDetail(food.assigned_ID)
+    const food_detail = await getFoodDetailForFoodDetail(fID)
 
     return res.status(200).send(food_detail);
   } catch (error) {
