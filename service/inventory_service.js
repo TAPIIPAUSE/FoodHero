@@ -102,7 +102,7 @@ export async function getFoodDetailForFoodDetail(fID) {
     var consume_msg = ""
     var remain_msg = ""
 
-
+    const isCountable = food.isCountable
 
     if (food.isCountable) {
       var package_id = food.package_type
