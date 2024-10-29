@@ -101,20 +101,24 @@ export async function preprocess_House_foodtype_pie_chart(h_ID){
 
     // console.log(result)
     var totalOfConsumption = 0;
+    var totalOfWaste = 0;
 
     resultArray.map(item => {
       totalOfConsumption = totalOfConsumption + item.TotalConsume
+      totalOfWaste = totalOfWaste + item.TotalWaste
     })
     
 
     const output = resultArray.map(category => {
-      const percent = (category.TotalConsume/totalOfConsumption)*100
+      const percent_consume = (category.TotalConsume/totalOfConsumption)*100
+      const percent_waste = (category.TotalWaste/totalOfWaste)*100
       return{
         Category: category.Category,
         Waste: category.TotalWaste,
         Consume: category.TotalConsume,
         Total: category.TotallyTotal,
-        Percent: Number(percent.toFixed(2))
+        Percent_Consume: Number(percent_consume.toFixed(2)),
+        Percent_Waste: Number(percent_waste.toFixed(2))
       }
     })
 
@@ -155,22 +159,26 @@ export async function preprocess_org_foodtype_pie_chart(orgID){
     }, {});
     const resultArray = Object.values(result);
     
-    // console.log(result)
+
     var totalOfConsumption = 0;
+    var totalOfWaste = 0;
 
     resultArray.map(item => {
       totalOfConsumption = totalOfConsumption + item.TotalConsume
+      totalOfWaste = totalOfWaste + item.TotalWaste
     })
     
 
     const output = resultArray.map(category => {
-      const percent = (category.TotalConsume/totalOfConsumption)*100
+      const percent_consume = (category.TotalConsume/totalOfConsumption)*100
+      const percent_waste = (category.TotalWaste/totalOfWaste)*100
       return{
         Category: category.Category,
         Waste: category.TotalWaste,
         Consume: category.TotalConsume,
         Total: category.TotallyTotal,
-        Percent: Number(percent.toFixed(2))
+        Percent_Consume: Number(percent_consume.toFixed(2)),
+        Percent_Waste: Number(percent_waste.toFixed(2))
       }
     })
 
