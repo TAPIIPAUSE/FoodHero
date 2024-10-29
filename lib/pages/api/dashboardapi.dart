@@ -1,4 +1,5 @@
 import 'package:dio/dio.dart';
+import 'package:foodhero/models/chart/hhfoodtypepie_model.dart';
 import 'package:foodhero/models/chart/interorgfoodtypepie_model.dart';
 import 'package:foodhero/models/chart/wastepie/hhwastepie_model.dart';
 import 'package:foodhero/models/chart/wastepie/interorgwastepie_model.dart';
@@ -204,7 +205,6 @@ class DashboardApi {
         // queryParameters: {'hID': hID},
       );
 
-      
       print("Response status: ${res.statusCode}");
       print("Response body: ${res.data}");
 
@@ -220,7 +220,7 @@ class DashboardApi {
     }
   }
 
-  // get food type pie
+  // get food type pie for inter org
   Future<InterOrgFoodTypePie> getInterOrgFoodTypePie() async {
     try {
       print("===Org food type pie===");
@@ -253,5 +253,36 @@ class DashboardApi {
     }
   }
 
-      
+  // get food type pie for hh
+  Future<HHFoodTypePie> getHHFoodTypePie() async {
+    try {
+      print("===HH food type pie===");
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      final token = prefs.getString('user_token');
+      // print('token: $token');
+
+      final res = await dio.get(
+        '$baseurl/household/foodtype_pie_chart',
+        options: Options(
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer $token',
+          },
+        ),
+      );
+
+      print("Response status: ${res.statusCode}");
+      print("Response body: ${res.data}");
+
+      if (res.statusCode == 200) {
+        final Map<String, dynamic> data = res.data;
+        return HHFoodTypePie.fromJson(data);
+      } else {
+        throw Exception('Invalid response format: ${res.data.runtimeType}');
+      }
+    } catch (e) {
+      print('Error: $e');
+      throw Exception('Failed to fetch HH food type pie: ${e.toString()}');
+    }
+  }
 }

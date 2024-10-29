@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:foodhero/example/post.dart';
 import 'package:foodhero/fonts.dart';
 import 'package:foodhero/main.dart';
+import 'package:foodhero/models/chart/hhfoodtypepie_model.dart';
 import 'package:foodhero/models/chart/interorgfoodtypepie_model.dart';
 import 'package:foodhero/models/score/housescore_model.dart';
 import 'package:foodhero/models/score/interscore_model.dart';
@@ -90,6 +91,17 @@ class _InterOrganizationState extends State<InterOrganization> {
       return data;
     } catch (e) {
       print('Error loading inter org food type pie: $e');
+      rethrow;
+    }
+  }
+
+  Future<HHFoodTypePie> _getHHFoodTypePie() async {
+    try {
+      final data = await DashboardApi().getHHFoodTypePie();
+      print('Fetched hh food type pie'); // Debug print
+      return data;
+    } catch (e) {
+      print('Error loading hh food type pie: $e');
       rethrow;
     }
   }
@@ -396,6 +408,7 @@ class _InterOrganizationState extends State<InterOrganization> {
                                                   stat.category),
                                             ))
                                         .toList(),
+                                    title: 'Food Type',
                                   )
                                 ],
                               );
@@ -562,11 +575,50 @@ class _InterOrganizationState extends State<InterOrganization> {
                             //     WasteTypePiechart(),
                             //   ],
                             // ),
-                            Column(
-                          children: [
-                            // const WasteTypePiechart(),
-                            // BuildPieLegend()
-                          ],
+                            // Column(
+                            FutureBuilder<HHFoodTypePie>(
+                          future: _getHHFoodTypePie(),
+                          builder: (context, snapshot) {
+                            if (snapshot.connectionState ==
+                                ConnectionState.waiting) {
+                              return const Center(
+                                child: CircularProgressIndicator(),
+                              );
+                            } else if (snapshot.hasError) {
+                              return Text('Error: ${snapshot.error}');
+                            } else if (!snapshot.hasData ||
+                                snapshot.data!.statistic.isEmpty) {
+                              return const Text('No data available');
+                            } else {
+                              final data = snapshot.data!;
+                              return Column(
+                                children: [
+                                  WasteTypePiechart(
+                                    chartData: data.statistic
+                                        .map((stat) => ChartData(
+                                            name:
+                                                _getFoodTypeName(stat.category),
+                                            value: stat.percent,
+                                            color: _getFoodTypeColor(
+                                                stat.category),
+                                            category: stat.category))
+                                        .toList(),
+                                  ),
+                                  BuildPieLegend(
+                                      chartData: data.statistic
+                                          .map((stat) => ChartData(
+                                              name: _getFoodTypeName(
+                                                  stat.category),
+                                              value: stat.percent,
+                                              color: _getFoodTypeColor(
+                                                  stat.category),
+                                              category: stat.category))
+                                          .toList(),
+                                      title: 'Food Type')
+                                ],
+                              );
+                            }
+                          },
                         ),
                       ),
                       const SizedBox(height: 10),

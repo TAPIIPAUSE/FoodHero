@@ -213,7 +213,9 @@ class _WasteBarPieState extends State<WasteTypePiechart> {
 
 class BuildPieLegend extends StatelessWidget {
   final List<ChartData> chartData;
-  const BuildPieLegend({super.key, required this.chartData});
+  final String title;
+  const BuildPieLegend(
+      {super.key, required this.chartData, required this.title});
 
   // final List<ChartData> chartData = [
   //   ChartData(foodTypeCooked, 20, AppTheme.softRedCancleWasted),
@@ -226,32 +228,43 @@ class BuildPieLegend extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Column(
-      mainAxisAlignment: MainAxisAlignment.center,
+      // mainAxisAlignment: MainAxisAlignment.start,
       crossAxisAlignment: CrossAxisAlignment.start,
-      children: chartData.map((data) {
-        return Padding(
-          padding: const EdgeInsets.symmetric(vertical: 8.0),
-          child: Row(
-            children: [
-              Container(
-                width: 30,
-                height: 30,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(10),
-                  color: data.color,
-                ),
+      children: [
+        Text(
+          title,
+          style: const TextStyle(
+              fontSize: 20, color: Colors.black, fontWeight: FontWeight.bold),
+        ),
+        Column(
+          // mainAxisAlignment: MainAxisAlignment.center,
+          // crossAxisAlignment: CrossAxisAlignment.start,
+          children: chartData.map((data) {
+            return Padding(
+              padding: const EdgeInsets.symmetric(vertical: 8.0),
+              child: Row(
+                children: [
+                  Container(
+                    width: 30,
+                    height: 30,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(10),
+                      color: data.color,
+                    ),
+                  ),
+                  const SizedBox(width: 4),
+                  Text(
+                    // '${data.name}: ${data.value.toStringAsFixed(0)}%',
+                    '${data.name}: ${data.value}%',
+                    // data.name,
+                    style: const TextStyle(fontSize: 20, color: Colors.black),
+                  ),
+                ],
               ),
-              const SizedBox(width: 4),
-              Text(
-                // '${data.name}: ${data.value.toStringAsFixed(0)}%',
-                '${data.name}: ${data.value}%',
-                // data.name,
-                style: const TextStyle(fontSize: 20, color: Colors.black),
-              ),
-            ],
-          ),
-        );
-      }).toList(),
+            );
+          }).toList(),
+        ),
+      ],
     );
   }
 }
