@@ -248,8 +248,8 @@ router.get("/getFoodById", authenticateToken, async (req, res) => {
 
   try {
     // search foods by the food ID
-    const assigned_ID = fID;
-    const food = await Food.findOne({ assigned_ID });
+    
+    const food = await Food.findOne({ assigned_ID: fID });
 
     const food_detail = await getFoodDetailForFoodDetail(food.assigned_ID)
 
