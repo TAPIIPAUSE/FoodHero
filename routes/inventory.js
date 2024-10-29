@@ -242,14 +242,12 @@ router.get("/getFoodByHouse", authenticateToken, async (req, res) => {
 router.get("/getFoodById", authenticateToken, async (req, res) => {
   const { fID } = req.body;
 
-  var user = await get_user_from_db(req, res);
-
-  var hID = user.hID;
-
   try {
     // search foods by the food ID
     
     const food = await Food.findOne({ assigned_ID: fID });
+    console.log("Here is your request body:", req.body)
+    console.log("THis is message from inventory module, here is your food:", food)
 
     const food_detail = await getFoodDetailForFoodDetail(fID)
     
