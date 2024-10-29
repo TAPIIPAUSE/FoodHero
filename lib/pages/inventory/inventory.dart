@@ -42,7 +42,7 @@ class _InventoryState extends State<Inventory> {
       final prefs = await SharedPreferences.getInstance();
       final hID = prefs.getInt('hID');
       print('hID from SharedPreferences: $hID'); // Debug print
-      final data = await APIFood().getInventoryFood(hID!);
+      final data = await APIFood().getInventoryFood(hID!); //pervent null?
       print('Fetched inventory food data: $data'); // Debug print
       // print('Fetched data: ${data.map((item) => item.toString())}');
       return data;
@@ -365,7 +365,7 @@ class _InventoryState extends State<Inventory> {
                                     else {
                                       return SizedBox(
                                         //FoodList Blue background
-                                        height: screenHeight - 300,
+                                        height: screenHeight - 315,
                                         child: RawScrollbar(
                                           controller: foodList,
                                           thumbColor: AppTheme.greenMainTheme,
@@ -423,22 +423,25 @@ class _InventoryState extends State<Inventory> {
                                       );
                                     }
                                   }),
-                              InventoryListItem(
-                                foodname: "Try food",
-                                img: "ssss",
-                                // location: "Pantry try",
-                                expired: DateTime(2024, 0012, 30),
-                                // remind: "2024-11-24",
-                                progressbar: 40,
-                                consuming: "2",
-                                // remaining: 3,
-                                foodid: 10, remaining: '5 pieces',
-                                //expired: "2024-12-31",
-                                // isCountable: true,
-                                // TotalCost: 50,
-                                // IndividualWeight: 100,
-                                // IndividualCost: 10,
-                              ),
+                              // InventoryListItem(
+                              //   foodname: "Try food",
+                              //   img: "ssss",
+                              //   // location: "Pantry try",
+                              //   expired: DateTime(2024, 0012, 30),
+                              //   // remind: "2024-11-24",
+                              //   progressbar: 40,
+                              //   consuming: "2",
+                              //   // remaining: 3,
+                              //   foodid: 10, remaining: '5 pieces',
+                              //   //expired: "2024-12-31",
+                              //   // isCountable: true,
+                              //   // TotalCost: 50,
+                              //   // IndividualWeight: 100,
+                              //   // IndividualCost: 10,
+                              // ),
+                              const SizedBox(
+                                height: 55,
+                              )
                             ],
                           ),
                         ),

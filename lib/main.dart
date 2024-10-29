@@ -15,9 +15,11 @@ import 'package:foodhero/theme.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:firebase_core/firebase_core.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp(); // Initialize Firebase
   SharedPreferences prefs = await SharedPreferences.getInstance();
   String? token = prefs.getString('james');
 

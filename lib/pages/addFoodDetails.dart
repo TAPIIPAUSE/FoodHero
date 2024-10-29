@@ -777,33 +777,33 @@ class _AddFoodDetailsPageState extends State<addFoodDetails> {
                                         ],
                                       ),
                                     ),
-                                    SliderTheme(
-                                      data: SliderTheme.of(context).copyWith(
-                                        trackHeight: 10.0,
-                                        thumbShape:
-                                            SliderComponentShape.noThumb,
-                                        overlayShape: RoundSliderOverlayShape(
-                                            overlayRadius: 24.0),
-                                        activeTrackColor: Colors.orange,
-                                        inactiveTrackColor: Colors.orange[100],
-                                        thumbColor: Colors.white,
-                                        overlayColor:
-                                            Colors.orange.withAlpha(32),
-                                      ),
-                                      child: Slider(
-                                        value: quantity.toDouble(),
-                                        min: 1,
-                                        max: 100,
-                                        divisions: 100,
-                                        onChanged: (value) {
-                                          setState(() {
-                                            quantity = value.toInt();
-                                            _updateAllCost();
-                                            consumeQuantity = quantity;
-                                          });
-                                        },
-                                      ),
-                                    ),
+                                    // SliderTheme(
+                                    //   data: SliderTheme.of(context).copyWith(
+                                    //     trackHeight: 10.0,
+                                    //     thumbShape:
+                                    //         SliderComponentShape.noThumb,
+                                    //     overlayShape: RoundSliderOverlayShape(
+                                    //         overlayRadius: 24.0),
+                                    //     activeTrackColor: Colors.orange,
+                                    //     inactiveTrackColor: Colors.orange[100],
+                                    //     thumbColor: Colors.white,
+                                    //     overlayColor:
+                                    //         Colors.orange.withAlpha(32),
+                                    //   ),
+                                    //   child: Slider(
+                                    //     value: quantity.toDouble(),
+                                    //     min: 1,
+                                    //     max: 100,
+                                    //     divisions: 100,
+                                    //     onChanged: (value) {
+                                    //       setState(() {
+                                    //         quantity = value.toInt();
+                                    //         _updateAllCost();
+                                    //         consumeQuantity = quantity;
+                                    //       });
+                                    //     },
+                                    //   ),
+                                    // ),
                                   ],
                                 ),
                               ],
@@ -831,61 +831,88 @@ class _AddFoodDetailsPageState extends State<addFoodDetails> {
                             ),
                           ],
                         )),
-
+                    const SizedBox(
+                      height: 10,
+                    ),
                     //Weight
-                    Row(
+                    Column(
                       children: [
-                        Text('Weight',
-                            style: FontsTheme.mouseMemoirs_30Black()),
-                        SizedBox(
-                          width: 55,
-                        ),
-                        Column(
+                        Row(
                           children: [
-                            Container(
-                              width: 200,
-                              padding: EdgeInsets.symmetric(
-                                  horizontal: 12, vertical: 8),
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(10),
-                                color: Colors.white,
-                              ),
-                              child: Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: [
-                                  Text('$weight ',
-                                      style: FontsTheme.hindBold_20()),
-                                  buildWeightUnit('')
-                                ],
-                              ),
+                            Text('Weight',
+                                style: FontsTheme.mouseMemoirs_30Black()),
+                            SizedBox(
+                              width: 55,
                             ),
-                            SliderTheme(
-                              data: SliderTheme.of(context).copyWith(
-                                trackHeight: 10.0,
-                                thumbShape: SliderComponentShape.noThumb,
-                                overlayShape: RoundSliderOverlayShape(
-                                    overlayRadius: 24.0),
-                                activeTrackColor: Colors.orange,
-                                inactiveTrackColor: Colors.orange[100],
-                                thumbColor: Colors.white,
-                                overlayColor: Colors.orange.withAlpha(32),
-                              ),
-                              child: Slider(
-                                value: weightDouble,
-                                min: 1,
-                                max: 10000,
-                                divisions: 10000,
-                                onChanged: (value) {
-                                  setState(() {
-                                    weightDouble = value;
+                            Column(
+                              children: [
+                                Container(
+                                  width: 200,
+                                  padding: EdgeInsets.symmetric(
+                                      horizontal: 12, vertical: 8),
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(10),
+                                    color: Colors.white,
+                                  ),
+                                  child: Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Text('$weight ',
+                                          style: FontsTheme.hindBold_20()),
+                                      buildWeightUnit('')
+                                    ],
+                                  ),
+                                ),
+                                // SliderTheme(
+                                //   data: SliderTheme.of(context).copyWith(
+                                //     trackHeight: 10.0,
+                                //     thumbShape: SliderComponentShape.noThumb,
+                                //     overlayShape: RoundSliderOverlayShape(
+                                //         overlayRadius: 24.0),
+                                //     activeTrackColor: Colors.orange,
+                                //     inactiveTrackColor: Colors.orange[100],
+                                //     thumbColor: Colors.white,
+                                //     overlayColor: Colors.orange.withAlpha(32),
+                                //   ),
+                                //   child: Slider(
+                                //     value: weightDouble,
+                                //     min: 1,
+                                //     max: 10000,
+                                //     divisions: 10000,
+                                //     onChanged: (value) {
+                                //       setState(() {
+                                //         weightDouble = value;
 
-                                    weight = weightDouble.toStringAsFixed(0);
-                                  });
-                                },
-                              ),
+                                //         weight =
+                                //             weightDouble.toStringAsFixed(0);
+                                //       });
+                                //     },
+                                //   ),
+                                // ),
+                              ],
                             ),
                           ],
+                        ),
+                        SizedBox(
+                          child: InteractiveSlider(
+                            focusedHeight: 20,
+                            backgroundColor: AppTheme.softRed,
+                            startIcon: const Icon(
+                              Icons.remove_circle_rounded,
+                              color: Colors.black,
+                            ),
+                            endIcon: const Icon(
+                              Icons.add_circle_rounded,
+                              color: Colors.black,
+                            ),
+                            min: 1,
+                            max: 1000,
+                            onChanged: (valueWeight) => setState(() {
+                              weightDouble = valueWeight;
+                              weight = weightDouble.toStringAsFixed(0);
+                            }),
+                          ),
                         ),
                       ],
                     )

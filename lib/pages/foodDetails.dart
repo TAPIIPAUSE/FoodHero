@@ -11,6 +11,7 @@ import 'package:foodhero/widgets/consumed/consumed_list_item.dart';
 import 'package:foodhero/theme.dart';
 import 'package:foodhero/fonts.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:interactive_slider/interactive_slider.dart';
 
@@ -51,8 +52,15 @@ class _FoodDetailsPageState extends State<foodDetails> {
   // Image provider for the selected image
   bool _isLoading = false; // Flag to indicate image loading state
   bool _showImageOption = false;
+  //From API
   DateTime expirationDate = DateTime(2024);
+  String expireString = '';
+  String expireDate = '';
   DateTime reminderDate = DateTime(2024);
+  String remindString = '';
+  String remindDate = '';
+  String quantityString = '';
+  //
   String expired = '';
   String remind = '';
   String remaining = '';
@@ -78,10 +86,10 @@ class _FoodDetailsPageState extends State<foodDetails> {
       // Debug log
       print('Loading food details for ID: ${widget.FoodID}');
       final data = await APIFood().getFoodDetail(widget.FoodID);
-
+      print(data);
       if (data != null) {
         print(
-            'Successfully loaded food details: ${data.foodName}'); // Debug log
+            'Successfully loaded food details: ${data.FoodName}'); // Debug log
         return data;
       } else {
         print('No food details found'); // Debug log
@@ -269,7 +277,7 @@ class _FoodDetailsPageState extends State<foodDetails> {
   void initState() {
     super.initState();
     //foodname = widget.item.foodname;
-    //isCountable = widget.item.isCountable as bool;
+    //isCountable = isCountable;
     xAlign = loginAlign;
     loginColor = selectedColor;
     signInColor = normalColor;
@@ -387,10 +395,21 @@ class _FoodDetailsPageState extends State<foodDetails> {
             }
 
             final food = snapshot.data!;
-            print('Rendering food details for: ${food.foodName}'); // Debug log
+            print('Rendering food details for: ${food.FoodName}'); // Debug log
 
             // Adjust screen height based on isCountable
-            double screenHeight = isCountable ? 800 : 600;
+            category = food.Category;
+            location = food.Location;
+            isCountable = food.isCountable;
+            expireString = food.Expired.toString();
+            DateTime expire = DateTime.parse(expireString);
+            expireDate = DateFormat('dd-MM-yyyy').format(expire);
+            remindString = food.Remind.toString();
+            DateTime remind = DateTime.parse(remindString);
+            remindDate = DateFormat('dd-MM-yyyy').format(remind);
+            // quantityString = food.Remaining;
+
+            double screenHeight = food.isCountable ? 800 : 600;
 
             print('this is iscountable: $isCountable');
             return Stack(
@@ -487,7 +506,7 @@ class _FoodDetailsPageState extends State<foodDetails> {
                                         style:
                                             FontsTheme.mouseMemoirs_50Black(),
                                         textAlign: TextAlign.center,
-                                        foodname,
+                                        food.FoodName,
                                       ),
                                     ),
                                   ],
@@ -1498,7 +1517,7 @@ class _FoodDetailsPageState extends State<foodDetails> {
                                 width: 2.0), // Set border color and width
                           ),
                           child: Text(
-                            "category",
+                            category,
                             style: FontsTheme.mouseMemoirs_30Black(),
                           ),
                         )),
@@ -1617,7 +1636,7 @@ class _FoodDetailsPageState extends State<foodDetails> {
                 SizedBox(
                   width: 200,
                   child: ListTile(
-                    title: Text(expired, style: FontsTheme.hind_20()),
+                    title: Text(expireDate, style: FontsTheme.hind_20()),
                     trailing: Icon(Icons.calendar_month_rounded),
                     onTap: _selectExDate,
                   ),
@@ -1654,7 +1673,7 @@ class _FoodDetailsPageState extends State<foodDetails> {
                 SizedBox(
                   width: 200,
                   child: ListTile(
-                    title: Text(remind, style: FontsTheme.hind_20()),
+                    title: Text(remindDate, style: FontsTheme.hind_20()),
                     trailing: Icon(Icons.calendar_month_rounded),
                     onTap: _selectReDate,
                   ),
@@ -1709,7 +1728,7 @@ class _FoodDetailsPageState extends State<foodDetails> {
                                   mainAxisAlignment:
                                       MainAxisAlignment.spaceBetween,
                                   children: [
-                                    Text(remaining,
+                                    Text(quantityString,
                                         style: FontsTheme.hindBold_20()),
                                     buildQuantityUnit('')
                                   ],
@@ -1890,31 +1909,34 @@ class _FoodDetailsPageState extends State<foodDetails> {
                 child: Row(
                   children: [
                     SizedBox(
-                      width: 100,
-                      height: 30,
-                      child: DropdownButtonHideUnderline(
-                        child: DropdownButton<String>(
-                          value: selectedValue,
-                          isExpanded: true,
-                          items: items.map((String item) {
-                            return DropdownMenuItem<String>(
-                              value: item,
-                              child: Text(
-                                item,
-                                style: FontsTheme.hindBold_20(),
-                              ),
-                            );
-                          }).toList(),
-                          onChanged: (String? newValue) {
-                            if (newValue != null) {
-                              setState(() {
-                                selectedValue = newValue;
-                              });
-                            }
-                          },
-                        ),
-                      ),
-                    )
+                        width: 100,
+                        height: 30,
+                        child: Container(
+                          child: Text(''),
+                        )
+                        // DropdownButtonHideUnderline(
+                        //   child: DropdownButton<String>(
+                        //     value: selectedValue,
+                        //     isExpanded: true,
+                        //     items: items.map((String item) {
+                        //       return DropdownMenuItem<String>(
+                        //         value: item,
+                        //         child: Text(
+                        //           item,
+                        //           style: FontsTheme.hindBold_20(),
+                        //         ),
+                        //       );
+                        //     }).toList(),
+                        //     onChanged: (String? newValue) {
+                        //       if (newValue != null) {
+                        //         setState(() {
+                        //           selectedValue = newValue;
+                        //         });
+                        //       }
+                        //     },
+                        //   ),
+                        // ),
+                        )
                   ],
                 ))
           ],
