@@ -255,7 +255,7 @@ router.get("/getFoodById", authenticateToken, async (req, res) => {
 
     return res.status(200).send(food_detail);
   } catch (error) {
-    return res.status(400).send(`Error when getting Food's Info: ${error}`);
+    return res.status(400).send(`Error when getting Food's Info for Food Detail: ${error}`);
   }
 });
 
