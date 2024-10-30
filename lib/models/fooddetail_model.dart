@@ -9,10 +9,11 @@ class FoodDetailData {
   final double IndividualWeight;
   final double IndividualCost;
   final String Remaining;
+  final String Remaining_amount;
   final String URL;
   final bool isCountable;
 
-  final int total_price; 
+  //final int total_price;
   // final int current_quantity;
   //   "weight_type": 3,
   // "package_type": 2,
@@ -36,10 +37,11 @@ class FoodDetailData {
     required this.IndividualWeight,
     required this.IndividualCost,
     required this.Remaining,
+    required this.Remaining_amount,
     required this.URL,
     required this.isCountable,
 
-    required this.total_price,
+    // required this.total_price,
     // required this.current_quantity,
   });
 
@@ -56,6 +58,7 @@ class FoodDetailData {
       'IndividualWeight': IndividualWeight,
       'IndividualCost': IndividualCost,
       'Remaining': Remaining,
+      'Remaining_amount': Remaining_amount,
       'URL': URL,
       'isCountable': isCountable,
     };
@@ -74,10 +77,12 @@ class FoodDetailData {
       IndividualWeight: json['IndividualWeight'].toDouble(),
       IndividualCost: json['IndividualCost'].toDouble(),
       Remaining: json['Remaining'],
+      Remaining_amount: json['Remaining_amount'],
       URL: json['URL'],
       isCountable: json['isCountable'],
+
       // current_quantity: json['current_quantity']
-      total_price: json['total_price']
+      // total_price: json['total_price']
     );
   }
 
@@ -93,10 +98,12 @@ class FoodDetailData {
     double? IndividualWeight,
     double? IndividualCost,
     String? Remaining,
+    String? Remaining_amount,
     String? URL,
     bool? isCountable,
+    double? total_amount,
     //int? current_quantity,
-    int? total_price
+    // int? total_price
   }) {
     return FoodDetailData(
       Food_ID: Food_ID ?? this.Food_ID,
@@ -109,10 +116,12 @@ class FoodDetailData {
       IndividualWeight: IndividualWeight ?? this.IndividualWeight,
       IndividualCost: IndividualCost ?? this.IndividualCost,
       Remaining: Remaining ?? this.Remaining,
+      Remaining_amount: Remaining_amount ?? this.Remaining_amount,
       URL: URL ?? this.URL,
       isCountable: isCountable ?? this.isCountable,
+
       // current_quantity: current_quantity ?? this.current_quantity
-      total_price: total_price ?? this.total_price
+      //  total_price: total_price ?? this.total_price
     );
   }
 
@@ -121,8 +130,9 @@ class FoodDetailData {
     return 'Food(Food_ID: $Food_ID, FoodName: $FoodName, Category: $Category, '
         'Location: $Location, Expired: $Expired, Remind: $Remind, '
         'TotalCost: $TotalCost, IndividualWeight: $IndividualWeight, '
-        'IndividualCost: $IndividualCost, Remaining: $Remaining, '
-        'URL: $URL, isCountable: $isCountable, total_price: $total_price )';
+        'IndividualCost: $IndividualCost, Remaining: $Remaining, Remaining_amount: $Remaining_amount, '
+        'URL: $URL, isCountable: $isCountable,)';
     // current_quantity: $current_quantity
+    // total_price: $total_price
   }
 }

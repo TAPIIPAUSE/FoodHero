@@ -42,12 +42,13 @@ class _InterOrganizationState extends State<InterOrganization> {
       child: Scaffold(
         backgroundColor: AppTheme.lightGreenBackground,
         appBar: PreferredSize(
-          preferredSize: const Size.fromHeight(120.0),
+          preferredSize: const Size.fromHeight(140.0),
           child: Container(
             color: AppTheme.greenMainTheme,
             child: Column(
               children: [
                 AppBar(
+                  toolbarHeight: 90,
                   title: const Text('Dashboard'),
                   centerTitle: true,
                   backgroundColor: AppTheme.greenMainTheme,

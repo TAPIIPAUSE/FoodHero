@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:io';
 import 'dart:async';
 import 'package:flutter/material.dart';
@@ -30,12 +31,16 @@ class _AddFoodDetailsPageState extends State<addFoodDetails> {
   DateTime expirationDate = DateTime(2024);
   DateTime reminderDate = DateTime(2024);
   int quantity = 1;
+  TextEditingController quantityController = TextEditingController();
   double weightDouble = 1; // in grams
   String weight = ''; //make it proper for the decimals
+  TextEditingController weightController = TextEditingController();
   double allCost = 0;
   double costPerPiece = 0;
   double updateAllCost = 0;
   int consumeQuantity = 0;
+  int current_amount = 0;
+  //double consumed_amount = //
   final TextEditingController foodname = TextEditingController();
   late String selectedCategory = '';
   int selectedCategoryIndex = 0;
@@ -167,6 +172,19 @@ class _AddFoodDetailsPageState extends State<addFoodDetails> {
     );
   }
 
+  void updateQuantityfromSlider() {
+    setState(() {
+      quantityController.text =
+          quantity.toString(); // Update the controller's text
+    });
+  }
+
+  void updateWeightfromSlider() {
+    setState(() {
+      weightController.text = weight.toString(); // Update the controller's text
+    });
+  }
+
   @override
   void initState() {
     super.initState();
@@ -174,231 +192,284 @@ class _AddFoodDetailsPageState extends State<addFoodDetails> {
     loginColor = selectedColor;
     signInColor = normalColor;
     quantity = quantity;
+    weightController.text = weight.toString();
   }
 
   @override
   Widget build(BuildContext context) {
+    final keyboardHeight = MediaQuery.of(context).viewInsets.bottom;
     return Scaffold(
-      backgroundColor: AppTheme.lightGreenBackground,
-      appBar: AppBar(
-        backgroundColor: AppTheme.greenMainTheme,
-        toolbarHeight: 90,
-        centerTitle: true,
-        title: Text('Inventory'),
-        titleTextStyle: FontsTheme.mouseMemoirs_64Black(),
-        shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.only(
-                bottomLeft: Radius.circular(25),
-                bottomRight: Radius.circular(25))),
-        leading: IconButton(
-          icon: Icon(Icons.person),
-          onPressed: () {},
-        ),
-        actions: [
-          IconButton(
-            icon: Icon(Icons.notifications),
+        backgroundColor: AppTheme.lightGreenBackground,
+        appBar: AppBar(
+          backgroundColor: AppTheme.greenMainTheme,
+          toolbarHeight: 90,
+          centerTitle: true,
+          title: Text('Inventory'),
+          titleTextStyle: FontsTheme.mouseMemoirs_64Black(),
+          shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.only(
+                  bottomLeft: Radius.circular(25),
+                  bottomRight: Radius.circular(25))),
+          leading: IconButton(
+            icon: Icon(Icons.person),
             onPressed: () {},
           ),
-        ],
-      ),
-      body: SingleChildScrollView(
-        padding: const EdgeInsets.all(16),
-        child: SizedBox(
-          height: 1200,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              Icon(
-                Icons.arrow_upward_rounded,
-                size: 50,
-              ),
-              Row(
-                children: [
-                  GestureDetector(
-                    //add photo
-                    onTap: () => _chooseAddImageOption(context),
-                    child: Container(
-                      width: 100,
-                      height: 68,
-                      decoration: BoxDecoration(
-                        color: AppTheme.mainBlue,
-                        border: Border.all(color: Colors.black),
-                        borderRadius: BorderRadius.circular(10),
-                      ),
-                      child: _image == null
-                          ? Center(child: Icon(Icons.add_a_photo))
-                          : _isLoading
-                              ? Center(child: CircularProgressIndicator())
-                              : ClipRRect(
-                                  borderRadius: BorderRadius.circular(8.0),
-                                  child:
-                                      Image(image: _image!, fit: BoxFit.cover),
-                                ),
-                    ),
-                  ),
-                  SizedBox(
-                    //itemName
-                    width: 200,
-                    child: TextField(
-                      controller: foodname,
-                      style: FontsTheme.mouseMemoirs_50Black(),
-                      textAlign: TextAlign.center,
-                      decoration: InputDecoration(
-                          hintStyle: FontsTheme.mouseMemoirs_50Black(),
-                          hintText: 'Food name'),
-                    ),
-                  ),
-                ],
-              ),
-              SizedBox(height: 16),
-              //buildDropdownField('Categories', "value", Icons.local_dining),
-              buildCategoriesField(
-                  "Categories", "value", Icons.arrow_drop_down),
-              buildWhereField('Add to', 'value', Icons.kitchen),
-              buildDateField('Expiration date', ''),
-              buildReminderField('30 April 2024'),
-              buildQuantityWeight(),
-              buildEachPieceField(),
-              //buildCostField(),
-
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    children: [
-                      // Container(
-                      //   width: 120,
-                      //   child: ElevatedButton(
-                      //     onPressed: () => {},
-                      //     style: ElevatedButton.styleFrom(
-                      //       backgroundColor: AppTheme.softBlue,
-                      //       shape: RoundedRectangleBorder(
-                      //           borderRadius: BorderRadius.circular(10)),
-                      //     ),
-                      //     child: Text(
-                      //       'Previous',
-                      //       style: FontsTheme.mouseMemoirs_30Black()
-                      //           .copyWith(color: Colors.black),
-                      //     ),
-                      //   ),
-                      // )
-                    ],
-                  ),
-                  //Done button
-                  Container(
-                      width: 150,
-                      child: ElevatedButton(
-                        onPressed: () async {
-                          if (isCountable == true) {
-                            String foodName = foodname.text;
-                            //int category = selectedCategoryIndex;
-                            //String location = selectedLocation;
-                            AddFood addNewFood = AddFood(
-                              foodName: foodName,
-                              category: selectedCategoryIndex,
-                              location: selectedLocationIndex,
-                              expired: expirationDate,
-                              remind: reminderDate,
-                              totalCost: allCost,
-                              individualWeight: weightDouble,
-                              individualCost: costPerPiece,
-                              remaining: "remaining",
-                              url: " ",
-                              isCountable: isCountable,
-                              weight_type: 0,
-                              package_type: 0,
-                            );
-                            try {
-                              await addFoodAPI.addFood(addNewFood);
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                SnackBar(
-                                    content: Text('Food added successfully!')),
-                              );
-                            } catch (e) {
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                SnackBar(
-                                    content: Text('Failed to add food: $e')),
-                              );
-                            }
-                          } else {
-                            String foodName = foodname.text;
-                            //int category = selectedCategoryIndex;
-                            //String location = selectedLocation;
-                            AddFood addNewFood = AddFood(
-                              foodName: foodName,
-                              category: selectedCategoryIndex,
-                              location: selectedLocationIndex,
-                              expired: expirationDate,
-                              remind: reminderDate,
-                              totalCost: allCost,
-                              individualWeight: weightDouble,
-                              individualCost: costPerPiece,
-                              remaining: "remaining",
-                              url: " ",
-                              isCountable: isCountable,
-                              weight_type: 0,
-                              package_type: 0,
-                            );
-                            try {
-                              await addFoodAPI.addFood(addNewFood);
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                SnackBar(
-                                    content: Text('Food added successfully!')),
-                              );
-                            } catch (e) {
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                SnackBar(
-                                    content: Text('Failed to add food: $e')),
-                              );
-                            }
-                          }
-                        },
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: AppTheme.softOrange,
-                          shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(10)),
-                        ),
-                        child: Text(
-                          'Done',
-                          style: FontsTheme.mouseMemoirs_30Black()
-                              .copyWith(color: Colors.black),
-                        ),
-                      )),
-                  // ElevatedButton(
-                  //   onPressed: () async {},
-                  //   style: ElevatedButton.styleFrom(
-                  //     backgroundColor: AppTheme.softBlue,
-                  //     shape: RoundedRectangleBorder(
-                  //         borderRadius: BorderRadius.circular(10)),
-                  //   ),
-                  //   child: Text(
-                  //     'Next',
-                  //     style: FontsTheme.mouseMemoirs_30Black()
-                  //         .copyWith(color: Colors.black),
-                  //   ),
-                  // ),
-                ],
-              ),
-              Center(
-                child: IconButton(
-                  icon: Image.asset('assets/images/BackButton.png'),
-                  iconSize: 50,
-                  onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => Inventory(),
-                      ),
-                    );
-                  },
-                ),
-              )
-            ],
-          ),
+          actions: [
+            IconButton(
+              icon: Icon(Icons.notifications),
+              onPressed: () {},
+            ),
+          ],
         ),
-      ),
-    );
+        body: Stack(
+          children: [
+            SingleChildScrollView(
+              padding: const EdgeInsets.all(16),
+              child: SizedBox(
+                height: 1200,
+                child: Stack(
+                  children: [
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      children: [
+                        Icon(
+                          Icons.arrow_upward_rounded,
+                          size: 50,
+                        ),
+                        Row(
+                          children: [
+                            GestureDetector(
+                              //add photo
+                              onTap: () => _chooseAddImageOption(context),
+                              child: Container(
+                                width: 100,
+                                height: 68,
+                                decoration: BoxDecoration(
+                                  color: AppTheme.mainBlue,
+                                  border: Border.all(color: Colors.black),
+                                  borderRadius: BorderRadius.circular(10),
+                                ),
+                                child: _image == null
+                                    ? Center(child: Icon(Icons.add_a_photo))
+                                    : _isLoading
+                                        ? Center(
+                                            child: CircularProgressIndicator())
+                                        : ClipRRect(
+                                            borderRadius:
+                                                BorderRadius.circular(8.0),
+                                            child: Image(
+                                                image: _image!,
+                                                fit: BoxFit.cover),
+                                          ),
+                              ),
+                            ),
+                            SizedBox(
+                              //itemName
+                              width: 200,
+                              child: TextField(
+                                controller: foodname,
+                                style: FontsTheme.mouseMemoirs_50Black(),
+                                textAlign: TextAlign.center,
+                                decoration: InputDecoration(
+                                    hintStyle:
+                                        FontsTheme.mouseMemoirs_50Black(),
+                                    hintText: 'Food name'),
+                              ),
+                            ),
+                          ],
+                        ),
+                        SizedBox(height: 16),
+                        //buildDropdownField('Categories', "value", Icons.local_dining),
+                        buildCategoriesField(
+                            "Categories", "value", Icons.arrow_drop_down),
+                        buildWhereField('Add to', 'value', Icons.kitchen),
+                        buildDateField('Expiration date', ''),
+                        buildReminderField('30 April 2024'),
+                        buildQuantityWeight(),
+                        buildEachPieceField(),
+                        //buildCostField(),
+
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              children: [
+                                // Container(
+                                //   width: 120,
+                                //   child: ElevatedButton(
+                                //     onPressed: () => {},
+                                //     style: ElevatedButton.styleFrom(
+                                //       backgroundColor: AppTheme.softBlue,
+                                //       shape: RoundedRectangleBorder(
+                                //           borderRadius: BorderRadius.circular(10)),
+                                //     ),
+                                //     child: Text(
+                                //       'Previous',
+                                //       style: FontsTheme.mouseMemoirs_30Black()
+                                //           .copyWith(color: Colors.black),
+                                //     ),
+                                //   ),
+                                // )
+                              ],
+                            ),
+
+                            // ElevatedButton(
+                            //   onPressed: () async {},
+                            //   style: ElevatedButton.styleFrom(
+                            //     backgroundColor: AppTheme.softBlue,
+                            //     shape: RoundedRectangleBorder(
+                            //         borderRadius: BorderRadius.circular(10)),
+                            //   ),
+                            //   child: Text(
+                            //     'Next',
+                            //     style: FontsTheme.mouseMemoirs_30Black()
+                            //         .copyWith(color: Colors.black),
+                            //   ),
+                            // ),
+                          ],
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+            ),
+            Align(
+              alignment: Alignment.bottomCenter,
+              child: Stack(
+                children: [
+                  Container(
+                    width: double.infinity,
+                    height: keyboardHeight > 0 ? 0 : 180,
+                    color: AppTheme.lightGreenBackground,
+                    child: Column(
+                      children: [
+                        const SizedBox(
+                          height: 10,
+                        ),
+                        Align(
+                          child: Center(
+                            child: Container(
+                                width: 150,
+                                child: ElevatedButton(
+                                  onPressed: () async {
+                                    if (isCountable == true) {
+                                      String foodName = foodname.text;
+                                      //int category = selectedCategoryIndex;
+                                      //String location = selectedLocation;
+                                      AddFood addNewFood = AddFood(
+                                        foodName: foodName,
+                                        category: selectedCategoryIndex,
+                                        location: selectedLocationIndex,
+                                        expired: expirationDate,
+                                        remind: reminderDate,
+                                        totalCost: allCost,
+                                        individualWeight: weightDouble,
+                                        individualCost: costPerPiece,
+                                        remaining: "remaining",
+                                        url: base64Encode(
+                                            _image!.file.readAsBytesSync()),
+                                        isCountable: isCountable,
+                                        // weight_type: 0,
+                                        // package_type: 0,
+                                        // current_amount: current_amount,
+                                        // consumed_amount: null,
+                                        // current_quantity: null,
+                                        mimetype: '',
+                                      );
+                                      try {
+                                        await addFoodAPI.addFood(addNewFood);
+                                        ScaffoldMessenger.of(context)
+                                            .showSnackBar(
+                                          SnackBar(
+                                              content: Text(
+                                                  'Food added successfully!')),
+                                        );
+                                      } catch (e) {
+                                        ScaffoldMessenger.of(context)
+                                            .showSnackBar(
+                                          SnackBar(
+                                              content: Text(
+                                                  'Failed to add food: $e')),
+                                        );
+                                      }
+                                    } else {
+                                      String foodName = foodname.text;
+                                      //int category = selectedCategoryIndex;
+                                      //String location = selectedLocation;
+                                      AddFood addNewFood = AddFood(
+                                        foodName: foodName,
+                                        category: selectedCategoryIndex,
+                                        location: selectedLocationIndex,
+                                        expired: expirationDate,
+                                        remind: reminderDate,
+                                        totalCost: allCost,
+                                        individualWeight: weightDouble,
+                                        individualCost: costPerPiece,
+                                        remaining: "remaining",
+                                        url: " ",
+                                        isCountable: isCountable, mimetype: '',
+                                        // weight_type: 0,
+                                        // package_type: 0,
+                                      );
+                                      try {
+                                        await addFoodAPI.addFood(addNewFood);
+                                        ScaffoldMessenger.of(context)
+                                            .showSnackBar(
+                                          SnackBar(
+                                              content: Text(
+                                                  'Food added successfully!')),
+                                        );
+                                      } catch (e) {
+                                        ScaffoldMessenger.of(context)
+                                            .showSnackBar(
+                                          SnackBar(
+                                              content: Text(
+                                                  'Failed to add food: $e')),
+                                        );
+                                      }
+                                    }
+                                  },
+                                  style: ElevatedButton.styleFrom(
+                                    backgroundColor: AppTheme.softOrange,
+                                    shape: RoundedRectangleBorder(
+                                        borderRadius:
+                                            BorderRadius.circular(10)),
+                                  ),
+                                  child: Text(
+                                    'Done',
+                                    style: FontsTheme.mouseMemoirs_30Black()
+                                        .copyWith(color: Colors.black),
+                                  ),
+                                )),
+                          ),
+                        ),
+                        const SizedBox(
+                          height: 2,
+                        ),
+                        Center(
+                          child: IconButton(
+                            icon: Image.asset('assets/images/BackButton.png'),
+                            iconSize: 50,
+                            onPressed: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => Inventory(),
+                                ),
+                              );
+                            },
+                          ),
+                        )
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ));
   }
 
   List<String> itemCategory = [
@@ -760,7 +831,7 @@ class _AddFoodDetailsPageState extends State<addFoodDetails> {
                                 Column(
                                   children: [
                                     Container(
-                                      width: 200,
+                                      width: 245,
                                       padding: EdgeInsets.symmetric(
                                           horizontal: 12, vertical: 8),
                                       decoration: BoxDecoration(
@@ -771,8 +842,13 @@ class _AddFoodDetailsPageState extends State<addFoodDetails> {
                                         mainAxisAlignment:
                                             MainAxisAlignment.spaceBetween,
                                         children: [
-                                          Text('$quantity ',
-                                              style: FontsTheme.hindBold_20()),
+                                          SizedBox(
+                                            width: 80,
+                                            child: TextField(
+                                                controller: quantityController,
+                                                style:
+                                                    FontsTheme.hindBold_20()),
+                                          ),
                                           buildQuantityUnit('')
                                         ],
                                       ),
@@ -826,6 +902,7 @@ class _AddFoodDetailsPageState extends State<addFoodDetails> {
                                   quantity = valueQuantity.toInt();
                                   _updateAllCost();
                                   consumeQuantity = quantity;
+                                  updateQuantityfromSlider();
                                 }),
                               ),
                             ),
@@ -847,7 +924,7 @@ class _AddFoodDetailsPageState extends State<addFoodDetails> {
                             Column(
                               children: [
                                 Container(
-                                  width: 200,
+                                  width: 245,
                                   padding: EdgeInsets.symmetric(
                                       horizontal: 12, vertical: 8),
                                   decoration: BoxDecoration(
@@ -858,8 +935,12 @@ class _AddFoodDetailsPageState extends State<addFoodDetails> {
                                     mainAxisAlignment:
                                         MainAxisAlignment.spaceBetween,
                                     children: [
-                                      Text('$weight ',
-                                          style: FontsTheme.hindBold_20()),
+                                      SizedBox(
+                                        width: 80,
+                                        child: TextField(
+                                            controller: weightController,
+                                            style: FontsTheme.hindBold_20()),
+                                      ),
                                       buildWeightUnit('')
                                     ],
                                   ),
@@ -911,6 +992,7 @@ class _AddFoodDetailsPageState extends State<addFoodDetails> {
                             onChanged: (valueWeight) => setState(() {
                               weightDouble = valueWeight;
                               weight = weightDouble.toStringAsFixed(0);
+                              updateWeightfromSlider();
                             }),
                           ),
                         ),
@@ -927,9 +1009,9 @@ class _AddFoodDetailsPageState extends State<addFoodDetails> {
   }
 
   Widget buildQuantityUnit(String value) {
-    String pieceLabel = quantity == 1 ? "Piece" : "Pieces";
-    String boxLabel = quantity == 1 ? "Box" : "Boxes";
-    String bottleLabel = quantity == 1 ? "Bottle" : "Bottles";
+    String pieceLabel = quantity == 1 ? "piece" : "pieces";
+    String boxLabel = quantity == 1 ? "box" : "boxes";
+    String bottleLabel = quantity == 1 ? "bottle" : "bottles";
     List<String> items = [pieceLabel, boxLabel, bottleLabel];
     String selectedValue = items[0];
     return StatefulBuilder(
@@ -948,7 +1030,7 @@ class _AddFoodDetailsPageState extends State<addFoodDetails> {
                 child: Row(
                   children: [
                     SizedBox(
-                      width: 100,
+                      width: 120,
                       height: 30,
                       child: DropdownButtonHideUnderline(
                         child: DropdownButton<String>(
@@ -982,13 +1064,19 @@ class _AddFoodDetailsPageState extends State<addFoodDetails> {
   }
 
   Widget buildWeightUnit(String value) {
-    String Gram = "Gram";
+    String gram = "gram";
+    String kilogram = "kilogram";
+    String milliliter = "milliliter";
     if (weight == 1) {
-      Gram = "Gram";
+      gram = "gram";
+      kilogram = "kilogram";
+      milliliter = "milliliter";
     } else if (weightDouble > 1) {
-      Gram = "Grams";
+      gram = "grams";
+      kilogram = "kilograms";
+      milliliter = "milliliters";
     }
-    List<String> items = [Gram];
+    List<String> items = [gram, kilogram, milliliter];
     String selectedValue = items[0];
     return StatefulBuilder(
         builder: (BuildContext context, StateSetter setState) {
@@ -1006,7 +1094,7 @@ class _AddFoodDetailsPageState extends State<addFoodDetails> {
                 child: Row(
                   children: [
                     SizedBox(
-                      width: 100,
+                      width: 120,
                       height: 30,
                       child: DropdownButtonHideUnderline(
                         child: DropdownButton<String>(

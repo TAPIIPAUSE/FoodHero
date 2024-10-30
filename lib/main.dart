@@ -19,7 +19,7 @@ import 'package:firebase_core/firebase_core.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp(); // Initialize Firebase
+ // await Firebase.initializeApp(); // Initialize Firebase
   SharedPreferences prefs = await SharedPreferences.getInstance();
   String? token = prefs.getString('james');
 
@@ -59,8 +59,8 @@ final GoRouter _router = GoRouter(
           builder: (BuildContext context, GoRouterState state) {
             final foodCategory =
                 state.pathParameters['foodCategory'] ?? 'All food';
-                // SharedPreferences prefs = await SharedPreferences.getInstance();
-                // final hID = ;
+            // SharedPreferences prefs = await SharedPreferences.getInstance();
+            // final hID = ;
             return
                 // FutureBuilder<int>(
                 //   future: fetchHId(), // Fetch hID from database
