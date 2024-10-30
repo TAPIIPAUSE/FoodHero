@@ -119,10 +119,15 @@ router.post("/addFood", authenticateToken, async (req, res) => {
   var hID = await get_houseID(user);
 
   try {
+
+    var buf = Buffer.from(img, 'base64');
+    const publicUrl = await uploadFile(buf, `images/${Date.now()}_${hID}}`, 'image/jpeg');
+  
+    
     const newFood = new Food({
       hID,
       food_name,
-      img,
+      img:publicUrl,
       location,
       food_category,
       isCountable,
