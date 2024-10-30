@@ -106,20 +106,22 @@ export async function getFoodDetailForFoodDetail(fID) {
     console.log('This is food detail retrieved from DataBase...', food)
     const isCountable = food.isCountable
 
+    var unit_id = food.weight_type
+    var unit_type = await mapUnitType(unit_id)
+
+    var remain_amt_message = ""
+
     if (food.isCountable) {
       var package_id = food.package_type
       var package_type = await mapPackageType(package_id)
 
-      consume_msg = `${Number(food.consumed_quantity.toString())} ${package_type}${Number(food.consumed_quantity.toString()) > 1 ? (package_type === 'Box' ? 'es' : 's') : ''}`;
+      
       remain_msg = `${Number(food.current_quantity.toString())} ${package_type}${Number(food.current_quantity.toString()) > 1 ? (package_type === 'Box' ? 'es' : 's') : ''}`;
-
+      remain_amt_message = `${Number(food.current_amount.toString())} ${unit_type}${unit_type === 'Kg' && Number(food.current_amount.toString()) > 1 ? 's' : ''}`;
     } else {
-      var unit_id = food.weight_type
-      var unit_type = await mapUnitType(unit_id)
-
-      consume_msg = `${Number(food.consumed_amount.toString())} ${unit_type}${unit_type === 'Kg' && Number(food.consumed_amount.toString()) > 1 ? 's' : ''}`;
+     
       remain_msg = `${Number(food.current_amount.toString())} ${unit_type}${unit_type === 'Kg' && Number(food.current_amount.toString()) > 1 ? 's' : ''}`;
-
+      remain_amt_message = ""
 
     }
 
@@ -142,6 +144,7 @@ export async function getFoodDetailForFoodDetail(fID) {
       "IndividualWeight": ind_w,
       "IndividualCost": ind_p,
       "Remaining": remain_msg,
+      "Remaining_amount": remain_amt_message,
       "URL": food.img,
       "isCountable": food.isCountable
     };

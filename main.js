@@ -1,4 +1,5 @@
 import express from "express";
+import cors from "cors";
 import session from "express-session";
 import passport from "passport";
 import mongoose from "mongoose";
@@ -17,7 +18,7 @@ app.use(express.static('public')) //static file for hosting
 // Ensure Body Parsing, Cookie Parsing Middleware is Used
 app.use(express.json());
 app.use(cookieParser());
-
+app.use(cors())
 //Passport JS Tutorial
 // Routes
 import userRoute from './routes/user.js'
