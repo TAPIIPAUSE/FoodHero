@@ -33,8 +33,11 @@ const String october = "OCT";
 const String november = "NOV";
 const String december = "DEC";
 
-const String eaten = "Eaten";
-const String waste = "Waste";
+const String eaten = "Consumed";
+const String waste = "Wasted";
+
+const String saved = "Saved";
+const String lost = "Lost";
 
 const String forgot = "Forgot";
 const String left = "Leftover";

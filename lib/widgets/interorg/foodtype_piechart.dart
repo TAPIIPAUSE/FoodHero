@@ -39,9 +39,10 @@ class _WasteBarPieState extends State<WasteTypePiechart> {
                 radius: 100,
                 color: e.value.color,
                 value: e.value.value,
-                title: '${e.value.value}%',
+                title: '${e.value.value.toStringAsFixed(0)}%',
                 titleStyle: const TextStyle(
                   fontSize: 24,
+                  fontWeight: FontWeight.bold,
                 ),
               );
             },
@@ -258,7 +259,7 @@ class BuildPieLegend extends StatelessWidget {
                   const SizedBox(width: 4),
                   Text(
                     // '${data.name}: ${data.value.toStringAsFixed(0)}%',
-                    '${data.name}: ${data.value}%',
+                    '${data.name}: ${data.value.toStringAsFixed(0)}%',
                     // data.name,
                     style: const TextStyle(fontSize: 20, color: Colors.black),
                   ),

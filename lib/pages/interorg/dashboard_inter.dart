@@ -27,12 +27,14 @@ class _InterDashboardState extends State<InterDashboard> {
   late String currentPage = widget.page;
   late Future<dynamic> apiWasteData;
   late Future<dynamic> apiWasteByTyepData;
+  late Future<dynamic> apiExpenseData;
 
   @override
   void initState() {
     super.initState();
     apiWasteData = _fetchWasteData(currentPage);
     apiWasteByTyepData = _fetchWasteByTypeData(currentPage);
+    apiExpenseData = _fetchExpenseData(currentPage);
   }
 
   Future<dynamic> _fetchWasteData(String page) async {
@@ -48,6 +50,21 @@ class _InterDashboardState extends State<InterDashboard> {
       }
     } catch (e) {
       print('Error loading waste data: $e');
+      return Future.error(e); // Return the error message
+    }
+  }
+
+  Future<dynamic> _fetchExpenseData(String page) async {
+    try {
+      if (page == 'hh') {
+        return await DashboardApi().getHHExpensePie(); // Call HH API
+      } else if (page == 'org') {
+        return await DashboardApi().getOrgExpensePie(); // Call Org API
+      } else {
+        throw Exception('Invalid page type: $page');
+      }
+    } catch (e) {
+      print('Error loading expense data: $e');
       return Future.error(e); // Return the error message
     }
   }
@@ -136,52 +153,69 @@ class _InterDashboardState extends State<InterDashboard> {
           ],
         ),
       ),
-      FutureBuilder<dynamic>(
-        future: apiWasteData,
-        builder: (context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.waiting) {
-            return const Center(child: CircularProgressIndicator());
-          } else if (snapshot.hasError) {
-            return Text('Error: ${snapshot.error}');
-          } else if (!snapshot.hasData || snapshot.data == null) {
-            return const Center(child: Text('No data available'));
-          } else {
-            final data = snapshot.data!;
+      Container(
+        padding: const EdgeInsets.all(10),
+        decoration: const BoxDecoration(
+          color: AppTheme.softBlue,
+          borderRadius: BorderRadius.all(Radius.circular(20)),
+        ),
+        child: FutureBuilder<dynamic>(
+          future: apiWasteData,
+          builder: (context, snapshot) {
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              return const Center(child: CircularProgressIndicator());
+            } else if (snapshot.hasError) {
+              return Text('Error: ${snapshot.error}');
+            } else if (!snapshot.hasData || snapshot.data == null) {
+              return const Center(child: Text('No data available'));
+            } else {
+              final data = snapshot.data!;
 
-            // Safely handle null values with null-aware operators and provide defaults
-            final double wastePercent =
-                data.statistic.percentWaste ?? 0; // Fetch waste percentage
-            final double eatenPercent =
-                data.statistic.percentConsume ?? 0; // Fetch eaten percentage
+              // Safely handle null values with null-aware operators and provide defaults
+              final double wastePercent =
+                  data.statistic.percentWaste ?? 0; // Fetch waste percentage
+              final double eatenPercent =
+                  data.statistic.percentConsume ?? 0; // Fetch eaten percentage
 
-            // If both percentages are 0, show a message instead of an empty chart
-            if (wastePercent == 0 && eatenPercent == 0) {
+              // If both percentages are 0, show a message instead of an empty chart
+              if (wastePercent == 0 && eatenPercent == 0) {
+                return Container(
+                    padding: const EdgeInsets.all(10),
+                    decoration: const BoxDecoration(
+                      color: AppTheme.softBlue,
+                      borderRadius: BorderRadius.all(Radius.circular(20)),
+                    ),
+                    child: const Center(
+                        child: Text(
+                      'No data available',
+                      style: TextStyle(fontSize: 20),
+                    )));
+              }
+
               return Container(
-                  padding: const EdgeInsets.all(10),
-                  decoration: const BoxDecoration(
-                    color: AppTheme.softBlue,
-                    borderRadius: BorderRadius.all(Radius.circular(20)),
-                  ),
-                  child: const Center(
-                      child: Text(
-                    'No data available',
-                    style: TextStyle(fontSize: 20),
-                  )));
+                // padding: const EdgeInsets.all(10),
+                decoration: const BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.all(Radius.circular(20)),
+                ),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    WastePiechart(
+                      wastepercent: wastePercent,
+                      eatenpercent: eatenPercent,
+                    ),
+                    BuildWastePieLegend(
+                      wastepercent: wastePercent,
+                      eatenpercent: eatenPercent,
+                    )
+                  ],
+                ),
+              );
             }
-
-            return Container(
-              padding: const EdgeInsets.all(10),
-              decoration: const BoxDecoration(
-                color: AppTheme.softBlue,
-                borderRadius: BorderRadius.all(Radius.circular(20)),
-              ),
-              child: WastePiechart(
-                wastepercent: wastePercent,
-                eatenpercent: eatenPercent,
-              ),
-            );
-          }
-        },
+          },
+        ),
       ),
       Container(
         padding: const EdgeInsets.all(10),
@@ -260,14 +294,14 @@ class _InterDashboardState extends State<InterDashboard> {
               padding: const EdgeInsets.all(10),
               width: screenWidth * 0.95,
               decoration: const BoxDecoration(
-                color: AppTheme.mainBlue,
+                color: AppTheme.softBlue,
                 borderRadius: BorderRadius.all(Radius.circular(20)),
               ),
               child: Column(
                 children: [
                   Text(
                     "Type of food waste",
-                    style: FontsTheme.mouseMemoirs_30White(),
+                    style: FontsTheme.mouseMemoirs_30Black(),
                   ),
                   Container(
                     padding: const EdgeInsets.all(10),
@@ -322,11 +356,6 @@ class _InterDashboardState extends State<InterDashboard> {
                   const SizedBox(
                     height: 10,
                   ),
-                  Text(
-                    "Price of food waste",
-                    style: FontsTheme.mouseMemoirs_30White(),
-                  ),
-
                   // const PricePiechart(),
                 ],
               ),
@@ -335,32 +364,109 @@ class _InterDashboardState extends State<InterDashboard> {
               height: 10,
             ),
             Container(
-              margin: const EdgeInsets.all(10),
-              padding: const EdgeInsets.all(10),
-              width: screenWidth * 0.95,
-              decoration: const BoxDecoration(
-                color: AppTheme.mainBlue,
-                borderRadius: BorderRadius.all(Radius.circular(20)),
-              ),
-              child: Column(
-                children: [
+                margin: const EdgeInsets.all(10),
+                padding: const EdgeInsets.all(10),
+                width: screenWidth * 0.95,
+                decoration: const BoxDecoration(
+                  color: AppTheme.softBlue,
+                  borderRadius: BorderRadius.all(Radius.circular(20)),
+                ),
+                child: Column(children: [
                   Text(
-                    "Reason of food waste",
-                    style: FontsTheme.mouseMemoirs_30White(),
+                    "Price of food waste",
+                    style: FontsTheme.mouseMemoirs_30Black(),
                   ),
-                  // const ReasonPiechart(),
-                  const SizedBox(
-                    height: 10,
+                  Container(
+                    padding: const EdgeInsets.all(10),
+                    decoration: const BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.all(Radius.circular(20)),
+                    ),
+                    child: FutureBuilder<dynamic>(
+                      future: apiExpenseData,
+                      builder: (context, snapshot) {
+                        if (snapshot.connectionState ==
+                            ConnectionState.waiting) {
+                          return const Center(
+                            child: CircularProgressIndicator(),
+                          );
+                        } else if (snapshot.hasError) {
+                          return Text('Error: ${snapshot.error}');
+                        } else if (!snapshot.hasData || snapshot.data == null) {
+                          return const Center(
+                            child: Text('No data available'),
+                          );
+                        } else {
+                          final data = snapshot.data!;
+                          // Safely handle null values with null-aware operators and provide defaults
+                          final double savedPercent =
+                              data.statistic.percentSaved ??
+                                  0; // Fetch waste percentage
+                          final double lostPercent =
+                              data.statistic.percentLost ??
+                                  0; // Fetch eaten percentage
+
+                          // If both percentages are 0, show a message instead of an empty chart
+                          if (savedPercent == 0 && lostPercent == 0) {
+                            return Container(
+                              padding: const EdgeInsets.all(10),
+                              decoration: const BoxDecoration(
+                                color: AppTheme.softBlue,
+                                borderRadius:
+                                    BorderRadius.all(Radius.circular(20)),
+                              ),
+                              child: const Center(
+                                child: Text(
+                                  'No data available',
+                                  style: TextStyle(fontSize: 20),
+                                ),
+                              ),
+                            );
+                          }
+
+                          return Column(
+                            children: [
+                              PricePiechart(
+                                  savedpercent: savedPercent,
+                                  lostpercent: lostPercent),
+                              BuildExpensePieLegend(
+                                  savedpercent: savedPercent,
+                                  lostpercent: lostPercent)
+                            ],
+                          );
+                        }
+                      },
+                    ),
                   ),
-                  Text(
-                    "Reason trends",
-                    style: FontsTheme.mouseMemoirs_30White(),
-                  ),
-                  const WasteBarchart(
-                      color: Colors.white, chart: ReasonBarChartContent()),
-                ],
-              ),
-            ),
+                ])
+                // Container(
+                //   margin: const EdgeInsets.all(10),
+                //   padding: const EdgeInsets.all(10),
+                //   width: screenWidth * 0.95,
+                //   decoration: const BoxDecoration(
+                //     color: AppTheme.mainBlue,
+                //     borderRadius: BorderRadius.all(Radius.circular(20)),
+                //   ),
+                //   child: Column(
+                //     children: [
+                //       Text(
+                //         "Reason of food waste",
+                //         style: FontsTheme.mouseMemoirs_30White(),
+                //       ),
+                //       // const ReasonPiechart(),
+                //       const SizedBox(
+                //         height: 10,
+                //       ),
+                //       Text(
+                //         "Reason trends",
+                //         style: FontsTheme.mouseMemoirs_30White(),
+                //       ),
+                //       const WasteBarchart(
+                //           color: Colors.white, chart: ReasonBarChartContent()),
+                //     ],
+                //   ),
+                // ),
+                ),
           ],
         ),
       ),
