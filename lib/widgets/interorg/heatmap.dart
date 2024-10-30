@@ -1,38 +1,50 @@
-import 'dart:math';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_heatmap_calendar/flutter_heatmap_calendar.dart';
 
+class HMData {
+  final DateTime date;
+  final int count;
+
+  HMData({required this.date, required this.count});
+}
+
 class HeatMapChart extends StatefulWidget {
-  const HeatMapChart({super.key});
+  final Map<DateTime, int> dataMap;
+  const HeatMapChart({
+    super.key,
+    required this.dataMap,
+  });
 
   @override
   State<HeatMapChart> createState() => _HeatMapChartState();
 }
 
 class _HeatMapChartState extends State<HeatMapChart> {
-  Map<DateTime, int> dateMap = {};
-  Random random = Random();
+  // Map<DateTime, int> dateMap = {
+
+  // };
+  // Random random = Random();
   // Define the start and end dates
   DateTime startDate = DateTime(2024, 10, 1);
   DateTime endDate = DateTime(2024, 12, 31);
-  void addDateMap() {
-    for (DateTime date = startDate;
-        date.isBefore(endDate) || date.isAtSameMomentAs(endDate);
-        date = date.add(const Duration(days: 1))) {
-      // Randomly decide whether to skip this date
-      bool shouldAdd = random.nextBool(); // 50% chance to skip or add
-      if (shouldAdd) {
-        // Assign a random value between 1 and 3 (inclusive)
-        int randomValue = random.nextInt(100) + 1;
-        dateMap[date] = randomValue;
-      }
-    }
-  }
+  // void addDateMap() {
+  //   for (DateTime date = startDate;
+  //       date.isBefore(endDate) || date.isAtSameMomentAs(endDate);
+  //       date = date.add(const Duration(days: 1))) {
+
+  //     // Randomly decide whether to skip this date
+  //     // bool shouldAdd = random.nextBool(); // 50% chance to skip or add
+  //     // if (shouldAdd) {
+  //       // Assign a random value between 1 and 3 (inclusive)
+  //       // int randomValue = random.nextInt(100) + 1;
+  //       // dateMap[date] = randomValue;
+  //     }
+  //   }
+  // }
 
   @override
   void initState() {
-    addDateMap();
+    // addDateMap();
     super.initState();
   }
 
@@ -41,13 +53,13 @@ class _HeatMapChartState extends State<HeatMapChart> {
     return SingleChildScrollView(
       scrollDirection: Axis.horizontal,
       child: HeatMap(
-        defaultColor: Colors.white,
+        defaultColor: Colors.grey[300],
         startDate: startDate,
         endDate: endDate,
         // flexible: true,
         colorMode: ColorMode.color,
         showColorTip: true,
-        datasets: dateMap,
+        datasets: widget.dataMap,
         textColor: Colors.black,
         // weekTextColor: Colors.black,
 

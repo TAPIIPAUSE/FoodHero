@@ -1,11 +1,6 @@
-// ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
-
-import 'package:foodhero/data/chartdata/reason_barchart_data.dart';
-import 'package:foodhero/data/chartdata/waste_barchart_data.dart';
 import 'package:foodhero/theme.dart';
-import 'package:foodhero/utils/constants.dart';
 import 'package:intl/intl.dart';
 
 class BarData {

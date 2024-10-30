@@ -30,6 +30,7 @@ class _InterDashboardState extends State<InterDashboard> {
   late Future<dynamic> apiWasteByTyepData;
   late Future<dynamic> apiExpenseData;
   late Future<dynamic> apiBarChartData;
+  late Future<dynamic> apiHeatmap;
 
   @override
   void initState() {
@@ -38,6 +39,7 @@ class _InterDashboardState extends State<InterDashboard> {
     apiWasteByTyepData = _fetchWasteByTypeData(currentPage);
     apiExpenseData = _fetchExpenseData(currentPage);
     apiBarChartData = _fetchBarChartData(currentPage);
+    apiHeatmap = _fetchHeatmap(currentPage);
   }
 
   Future<dynamic> _fetchWasteData(String page) async {
@@ -98,6 +100,19 @@ class _InterDashboardState extends State<InterDashboard> {
     }
   }
 
+  Future<dynamic> _fetchHeatmap(String page) async {
+    try {
+      if (page == 'hh') {
+        return await DashboardApi().getHHHeatmap();
+        // } else if (page == 'org') {
+        // return await DashboardApi().();
+      }
+    } catch (e) {
+      print('Error loading heatmap data: $e');
+      return Future.error(e);
+    }
+  }
+
   String _getFoodTypeName(int category) {
     switch (category) {
       case 1:
@@ -150,19 +165,50 @@ class _InterDashboardState extends State<InterDashboard> {
           color: AppTheme.softBlue,
           borderRadius: BorderRadius.all(Radius.circular(20)),
         ),
-        child: const Column(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          children: [
-            Text("Heatmap calendar"),
-            Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                HeatMapChart(),
-              ],
-            ),
-          ],
-        ),
+        child: FutureBuilder<dynamic>(
+            future: apiHeatmap,
+            builder: (context, snapshot) {
+              if (snapshot.connectionState == ConnectionState.waiting) {
+                return const Center(
+                  child: CircularProgressIndicator(),
+                );
+              } else if (snapshot.hasError) {
+                return Text('Error: ${snapshot.error}');
+              } else if (!snapshot.hasData || snapshot.data == null) {
+                return Center(child: const Text('No data available'));
+              } else {
+                // final data = snapshot.data;
+                final dataMap = <DateTime, int>{};
+                for (var stat in snapshot.data!.statistic) {
+                  dataMap[stat.date] = stat.percentWaste;
+                }
+
+                return Container(
+                  decoration: const BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.all(Radius.circular(20)),
+                  ),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      Text(
+                        "Heatmap calendar",
+                        style: TextStyle(fontSize: 20),
+                      ),
+                      Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          HeatMapChart(
+                            dataMap: dataMap,
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+                );
+              }
+            }),
       ),
       Container(
         padding: const EdgeInsets.all(10),
@@ -325,7 +371,7 @@ class _InterDashboardState extends State<InterDashboard> {
               height: 10,
             ),
             Text(
-              "Amount of food waste",
+              "????",
               style: FontsTheme.mouseMemoirs_30Black(),
             ),
             cs.CarouselSlider(
