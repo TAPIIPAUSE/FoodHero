@@ -112,6 +112,7 @@ router.post("/addFood", authenticateToken, async (req, res) => {
     total_price,
     bestByDate,
     RemindDate,
+    mimetype
   } = req.body;
 
   var user = await get_user_from_db(req, res);
@@ -121,7 +122,7 @@ router.post("/addFood", authenticateToken, async (req, res) => {
   try {
 
     var buf = Buffer.from(img, 'base64');
-    const publicUrl = await uploadFile(buf, `images/${Date.now()}_${hID}}`, 'image/jpeg');
+    const publicUrl = await uploadFile(buf, `images/${Date.now()}_${hID}}`, mimetype);
   
     
     const newFood = new Food({
