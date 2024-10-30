@@ -259,7 +259,7 @@ class BuildPieLegend extends StatelessWidget {
                   const SizedBox(width: 4),
                   Text(
                     // '${data.name}: ${data.value.toStringAsFixed(0)}%',
-                    '${data.name}: ${data.value.toStringAsFixed(0)}%',
+                    '${data.name}: ${data.value.toString()}%',
                     // data.name,
                     style: const TextStyle(fontSize: 20, color: Colors.black),
                   ),

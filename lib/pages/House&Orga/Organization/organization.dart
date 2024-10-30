@@ -5,10 +5,12 @@ import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:foodhero/fonts.dart';
 import 'package:foodhero/main.dart';
+import 'package:foodhero/models/chart/bar/orgbar_model.dart';
 import 'package:foodhero/models/score/orgscore_model.dart';
 import 'package:foodhero/pages/House&Orga/Organization/orgaStatistics.dart';
 import 'package:foodhero/pages/api/houseorg_api.dart';
 import 'package:foodhero/theme.dart';
+import 'package:foodhero/widgets/interorg/barchart.dart';
 import 'package:foodhero/widgets/interorg/org_listscore.dart';
 import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
@@ -58,6 +60,17 @@ class _OrganizationState extends State<organization> {
     }
   }
 
+  Future<OrgFoodSaved> _getOrgBar() async {
+    try {
+      final data = await HouseOrgApi().getOrgBarChart();
+      print('Fetched org bar');
+      return data;
+    } catch (e) {
+      print('Error loading org bar: $e');
+      rethrow; // Return the error message
+    }
+  }
+
   @override
   void initState() {
     super.initState();
@@ -81,71 +94,71 @@ class _OrganizationState extends State<organization> {
 
   // Dummy briefweekdays list for example purposes
 
-  List<Widget> generateCharts() {
-    // Generate bar chart data dynamically
-    Widget barChart = Row(
-      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-      children: List.generate(7, (index) {
-        int currentIndex = index;
-        while (currentIndex >= briefweekdays.length) {
-          currentIndex -= briefweekdays.length; // Wrap around to beginning
-        }
-        final weekday = briefweekdays[currentIndex];
-        final currentDate = index == _weekdayIndex;
-        return Column(
-          children: [
-            Container(
-              height: 100, // height of the bar
-              width: 20, // width of the bar
-              color: currentDate ? Colors.orange : Colors.grey,
-            ),
-            const SizedBox(height: 5),
-            Text(weekday),
-          ],
-        );
-      }),
-    );
+  // List<Widget> generateCharts() {
+  //   // Generate bar chart data dynamically
+  //   Widget barChart = Row(
+  //     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+  //     children: List.generate(7, (index) {
+  //       int currentIndex = index;
+  //       while (currentIndex >= briefweekdays.length) {
+  //         currentIndex -= briefweekdays.length; // Wrap around to beginning
+  //       }
+  //       final weekday = briefweekdays[currentIndex];
+  //       final currentDate = index == _weekdayIndex;
+  //       return Column(
+  //         children: [
+  //           Container(
+  //             height: 100, // height of the bar
+  //             width: 20, // width of the bar
+  //             color: currentDate ? Colors.orange : Colors.grey,
+  //           ),
+  //           const SizedBox(height: 5),
+  //           Text(weekday),
+  //         ],
+  //       );
+  //     }),
+  //   );
 
-    // Generate pie chart with fixed size using SizedBox
-    Widget pieChart = SizedBox(
-      width: 150, // Fixed width
-      height: 150, // Fixed height
-      child: PieChart(
-        PieChartData(
-          pieTouchData: PieTouchData(
-            touchCallback: (FlTouchEvent event, pieTouchResponse) {
-              setState(() {
-                if (!event.isInterestedForInteractions ||
-                    pieTouchResponse == null ||
-                    pieTouchResponse.touchedSection == null) {
-                  touchedIndex = -1;
-                  return;
-                }
-                touchedIndex =
-                    pieTouchResponse.touchedSection!.touchedSectionIndex;
-              });
-            },
-          ),
-          borderData: FlBorderData(show: false),
-          sectionsSpace: 0,
-          centerSpaceRadius: 0,
-          sections: showingSections(),
-        ),
-      ),
-    );
+  //   // Generate pie chart with fixed size using SizedBox
+  //   Widget pieChart = SizedBox(
+  //     width: 150, // Fixed width
+  //     height: 150, // Fixed height
+  //     child: PieChart(
+  //       PieChartData(
+  //         pieTouchData: PieTouchData(
+  //           touchCallback: (FlTouchEvent event, pieTouchResponse) {
+  //             setState(() {
+  //               if (!event.isInterestedForInteractions ||
+  //                   pieTouchResponse == null ||
+  //                   pieTouchResponse.touchedSection == null) {
+  //                 touchedIndex = -1;
+  //                 return;
+  //               }
+  //               touchedIndex =
+  //                   pieTouchResponse.touchedSection!.touchedSectionIndex;
+  //             });
+  //           },
+  //         ),
+  //         borderData: FlBorderData(show: false),
+  //         sectionsSpace: 0,
+  //         centerSpaceRadius: 0,
+  //         sections: showingSections(),
+  //       ),
+  //     ),
+  //   );
 
-    return [barChart, pieChart];
-  }
+  //   return [barChart, pieChart];
+  // }
 
-  List<PieChartSectionData> showingSections() {
-    // Your logic to generate pie chart sections...
-    return [
-      PieChartSectionData(color: Colors.red, value: 40, title: '40%'),
-      PieChartSectionData(color: Colors.green, value: 30, title: '30%'),
-      PieChartSectionData(color: Colors.blue, value: 20, title: '20%'),
-      PieChartSectionData(color: Colors.yellow, value: 10, title: '10%'),
-    ];
-  }
+  // List<PieChartSectionData> showingSections() {
+  //   // Your logic to generate pie chart sections...
+  //   return [
+  //     PieChartSectionData(color: Colors.red, value: 40, title: '40%'),
+  //     PieChartSectionData(color: Colors.green, value: 30, title: '30%'),
+  //     PieChartSectionData(color: Colors.blue, value: 20, title: '20%'),
+  //     PieChartSectionData(color: Colors.yellow, value: 10, title: '10%'),
+  //   ];
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -202,19 +215,19 @@ class _OrganizationState extends State<organization> {
                       // Row(
                       //   children: [
                       const SizedBox(height: 10),
-                      cs.CarouselSlider(
-                        items: generateCharts(),
-                        carouselController: _controller,
-                        options: cs.CarouselOptions(
-                          height: 150,
-                          enlargeCenterPage: true,
-                          onPageChanged: (index, reason) {
-                            setState(() {
-                              _current = index;
-                            });
-                          },
-                        ),
-                      ),
+                      // cs.CarouselSlider(
+                      //   items: generateCharts(),
+                      //   carouselController: _controller,
+                      //   options: cs.CarouselOptions(
+                      //     height: 150,
+                      //     enlargeCenterPage: true,
+                      //     onPageChanged: (index, reason) {
+                      //       setState(() {
+                      //         _current = index;
+                      //       });
+                      //     },
+                      //   ),
+                      // ),
                       //   ],
                       // ),
                       const Text(
@@ -222,30 +235,94 @@ class _OrganizationState extends State<organization> {
                         style: TextStyle(
                             fontSize: 24, fontWeight: FontWeight.bold),
                       ),
+
+                      FutureBuilder<OrgFoodSaved>(
+                        future: _getOrgBar(),
+                        builder: (context, snapshot) {
+                          if (snapshot.connectionState ==
+                              ConnectionState.waiting) {
+                            return const Center(
+                                child: CircularProgressIndicator());
+                          } else if (snapshot.hasError) {
+                            return Text('Error: ${snapshot.error}');
+                          } else if (!snapshot.hasData ||
+                              snapshot.data == null) {
+                            return const Center(
+                                child: Text('No data available'));
+                          } else {
+                            final data =
+                                (snapshot.data!.weekList as List<dynamic>)
+                                    .map((stat) {
+                              return BarData(
+                                label: stat.date,
+                                percent: stat.percent,
+                              );
+                            }).toList();
+
+                            // Parse and sort the data by date
+                            data.sort((a, b) {
+                              DateTime dateA =
+                                  DateFormat('EEE MMM dd yyyy').parse(a.label);
+                              DateTime dateB =
+                                  DateFormat('EEE MMM dd yyyy').parse(b.label);
+                              return dateA.compareTo(dateB);
+                            });
+
+                            return Container(
+                              decoration: const BoxDecoration(
+                                color: Colors.white,
+                                borderRadius:
+                                    BorderRadius.all(Radius.circular(20)),
+                              ),
+                              child: Column(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceEvenly,
+                                children: [
+                                  const Text("Daily Food Consumption",
+                                      style: TextStyle(fontSize: 20)),
+                                  Row(
+                                    mainAxisAlignment: MainAxisAlignment.start,
+                                    children: [
+                                      Text("%",
+                                          style: TextStyle(
+                                              fontSize: 16,
+                                              fontWeight: FontWeight.bold)),
+                                    ],
+                                  ),
+                                  WasteBarChartContent(
+                                    chartData: data,
+                                    // color: AppTheme.softBlue,
+                                  ),
+                                ],
+                              ),
+                            );
+                          }
+                        },
+                      ),
                     ],
                   ),
                 ),
 
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: generateCharts().map((widget) {
-                    int index = generateCharts().indexOf(widget);
-                    return GestureDetector(
-                      onTap: () => _controller.animateToPage(index),
-                      child: Container(
-                        width: 8.0,
-                        height: 8.0,
-                        margin: const EdgeInsets.symmetric(
-                            vertical: 10.0, horizontal: 2.0),
-                        decoration: BoxDecoration(
-                          shape: BoxShape.circle,
-                          color:
-                              _current == index ? Colors.orange : Colors.grey,
-                        ),
-                      ),
-                    );
-                  }).toList(),
-                ),
+                // Row(
+                //   mainAxisAlignment: MainAxisAlignment.center,
+                //   children: generateCharts().map((widget) {
+                //     int index = generateCharts().indexOf(widget);
+                //     return GestureDetector(
+                //       onTap: () => _controller.animateToPage(index),
+                //       child: Container(
+                //         width: 8.0,
+                //         height: 8.0,
+                //         margin: const EdgeInsets.symmetric(
+                //             vertical: 10.0, horizontal: 2.0),
+                //         decoration: BoxDecoration(
+                //           shape: BoxShape.circle,
+                //           color:
+                //               _current == index ? Colors.orange : Colors.grey,
+                //         ),
+                //       ),
+                //     );
+                //   }).toList(),
+                // ),
                 const SizedBox(height: 20),
                 // Members section
 

@@ -1,4 +1,6 @@
 import 'package:dio/dio.dart';
+import 'package:foodhero/models/chart/bar/hhbar_model.dart';
+import 'package:foodhero/models/chart/bar/orgbar_model.dart';
 import 'package:foodhero/models/score/housescore_model.dart';
 import 'package:foodhero/models/score/orgscore_model.dart';
 import 'package:foodhero/pages/api/ApiClient.dart';
@@ -73,6 +75,72 @@ class HouseOrgApi {
     } catch (e) {
       print('Error: $e');
       throw Exception('Failed to fetch org page score: ${e.toString()}');
+    }
+  }
+
+  // get hh bar data
+  Future<HouseholdFoodSaved> getHHBarChart() async {
+    try {
+      print("===HHBar===");
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      final token = prefs.getString('user_token');
+      // print('token: $token');
+
+      final res = await dio.get(
+        '$baseurl/household/weekly_fs-bar',
+        options: Options(
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer $token',
+          },
+        ),
+      );
+
+      print("Response status: ${res.statusCode}");
+      print("Response body: ${res.data}");
+
+      if (res.statusCode == 200) {
+        final Map<String, dynamic> data = res.data;
+        return HouseholdFoodSaved.fromJson(data);
+      } else {
+        throw Exception('Invalid response format: ${res.data.runtimeType}');
+      }
+    } catch (e) {
+      print('Error: $e');
+      throw Exception('Failed to fetch HH bar: ${e.toString()}');
+    }
+  }
+
+  // get org bar data
+  Future<OrgFoodSaved> getOrgBarChart() async {
+    try {
+      print("===OrgBar===");
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      final token = prefs.getString('user_token');
+      // print('token: $token');
+
+      final res = await dio.get(
+        '$baseurl/organization/weekly_fs-bar',
+        options: Options(
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer $token',
+          },
+        ),
+      );
+
+      print("Response status: ${res.statusCode}");
+      print("Response body: ${res.data}");
+
+      if (res.statusCode == 200) {
+        final Map<String, dynamic> data = res.data;
+        return OrgFoodSaved.fromJson(data);
+      } else {
+        throw Exception('Invalid response format: ${res.data.runtimeType}');
+      }
+    } catch (e) {
+      print('Error: $e');
+      throw Exception('Failed to fetch org bar: ${e.toString()}');
     }
   }
 }

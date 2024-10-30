@@ -89,8 +89,8 @@ class _InterDashboardState extends State<InterDashboard> {
     try {
       if (page == 'hh') {
         return await DashboardApi().getHHBar();
-        // } else if (page == 'org') {
-        //   return await DashboardApi().getOrgWasteBarChart();
+      } else if (page == 'org') {
+        return await DashboardApi().getOrgBar();
       }
     } catch (e) {
       print('Error loading bar chart data: $e');
@@ -190,17 +190,10 @@ class _InterDashboardState extends State<InterDashboard> {
 
               // If both percentages are 0, show a message instead of an empty chart
               if (wastePercent == 0 && eatenPercent == 0) {
-                return Container(
-                    padding: const EdgeInsets.all(10),
-                    decoration: const BoxDecoration(
-                      color: AppTheme.softBlue,
-                      borderRadius: BorderRadius.all(Radius.circular(20)),
-                    ),
-                    child: const Center(
-                        child: Text(
-                      'No data available',
-                      style: TextStyle(fontSize: 20),
-                    )));
+                return const Center(
+                    child: Text(
+                  'No data available',
+                ));
               }
 
               return Container(
@@ -255,6 +248,13 @@ class _InterDashboardState extends State<InterDashboard> {
                   percent: stat.percent,
                 );
               }).toList();
+
+              // Check if data is empty, and show a message if it is
+              if (data.isEmpty) {
+                return Center(
+                  child: Text("No data available"),
+                );
+              }
 
               // Parse and sort the data by date
               data.sort((a, b) {
@@ -385,6 +385,13 @@ class _InterDashboardState extends State<InterDashboard> {
                             );
                           }).toList();
 
+                          // Check if data is empty, and show a message if it is
+                          if (data.isEmpty) {
+                            return Center(
+                              child: Text("No data available"),
+                            );
+                          }
+
                           return Column(
                             children: [
                               WasteTypePiechart(
@@ -450,18 +457,9 @@ class _InterDashboardState extends State<InterDashboard> {
                               data.statistic.percentLost ?? 0;
 
                           if (savedPercent == 0 && lostPercent == 0) {
-                            return Container(
-                              padding: const EdgeInsets.all(10),
-                              decoration: const BoxDecoration(
-                                color: AppTheme.softBlue,
-                                borderRadius:
-                                    BorderRadius.all(Radius.circular(20)),
-                              ),
-                              child: const Center(
-                                child: Text(
-                                  'No data available',
-                                  style: TextStyle(fontSize: 20),
-                                ),
+                            return const Center(
+                              child: Text(
+                                'No data available',
                               ),
                             );
                           }
