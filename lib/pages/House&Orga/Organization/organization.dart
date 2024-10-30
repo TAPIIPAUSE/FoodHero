@@ -10,6 +10,7 @@ import 'package:foodhero/pages/House&Orga/Organization/orgaStatistics.dart';
 import 'package:foodhero/pages/api/houseorg_api.dart';
 import 'package:foodhero/theme.dart';
 import 'package:foodhero/widgets/interorg/org_listscore.dart';
+import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 import 'package:percent_indicator/percent_indicator.dart';
 
@@ -175,14 +176,15 @@ class _OrganizationState extends State<organization> {
             child: Column(
               children: [
                 GestureDetector(
-                  onTap: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => orgaStatistics(),
-                      ),
-                    );
-                  },
+                  onTap: () => context.push('/dashboard_inter/org'),
+                  // () {
+                  //   Navigator.push(
+                  //     context,
+                  //     MaterialPageRoute(
+                  //       builder: (context) => orgaStatistics(),
+                  //     ),
+                  //   );
+                  // },
                   child: Column(
                     children: [
                       Row(

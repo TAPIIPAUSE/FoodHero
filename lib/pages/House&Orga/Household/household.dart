@@ -9,6 +9,7 @@ import 'package:foodhero/theme.dart';
 import 'package:foodhero/fonts.dart';
 import 'package:carousel_slider/carousel_slider.dart' as cs;
 import 'package:foodhero/widgets/interorg/org_listscore.dart';
+import 'package:go_router/go_router.dart';
 import 'package:percent_indicator/percent_indicator.dart';
 import 'package:intl/intl.dart';
 
@@ -173,14 +174,15 @@ class _HouseholdState extends State<household> {
               padding: const EdgeInsets.all(8.0),
               child: Column(children: [
                 GestureDetector(
-                  onTap: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => houseStatistics(),
-                      ),
-                    );
-                  },
+                  onTap: () => context.push('/dashboard_inter/hh'),
+                  // () {
+                  // Navigator.push(
+                  //   context,
+                  //   MaterialPageRoute(
+                  //     builder: (context) => houseStatistics(),
+                  //   ),
+                  // );
+                  // },
                   child: Column(
                     children: [
                       Row(

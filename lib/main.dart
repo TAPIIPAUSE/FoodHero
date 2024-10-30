@@ -124,15 +124,17 @@ final GoRouter _router = GoRouter(
           path: 'dashboard_inter/:page',
           builder: (BuildContext context, GoRouterState state) {
             final page = state.pathParameters['page'] ?? 'default';
-            return InterDashboard(page: page,);
+            return InterDashboard(
+              page: page,
+            );
           },
         ),
-        GoRoute(
-          path: 'waste_chart',
-          builder: (BuildContext context, GoRouterState state) {
-            return const WasteChart();
-          },
-        ),
+        // GoRoute(
+        //   path: 'waste_chart',
+        //   builder: (BuildContext context, GoRouterState state) {
+        //     return const WasteChart();
+        //   },
+        // ),
       ],
     ),
   ],

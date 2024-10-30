@@ -15,7 +15,6 @@ import 'package:foodhero/utils/constants.dart';
 import 'package:foodhero/widgets/interorg/foodtype_piechart.dart';
 import 'package:foodhero/widgets/interorg/org_listscore.dart';
 import 'package:go_router/go_router.dart';
-import 'package:intl/intl.dart';
 
 class ChartData {
   final String name;
@@ -229,7 +228,7 @@ class _InterOrganizationState extends State<InterOrganization> {
 
   Widget _buildContent() {
     final screenWidth = MediaQuery.of(context).size.width;
-    const wastedpoint = 5000;
+    // const wastedpoint = 5000;
 
     final ButtonStyle buttonStyle = IconButton.styleFrom(
         backgroundColor: AppTheme.greenMainTheme,

@@ -11,6 +11,7 @@ import 'package:foodhero/widgets/interorg/heatmap.dart';
 import 'package:foodhero/widgets/interorg/price_piechart.dart';
 import 'package:foodhero/widgets/interorg/waste_piechart.dart';
 import 'package:go_router/go_router.dart';
+import 'package:intl/intl.dart';
 
 class InterDashboard extends StatefulWidget {
   const InterDashboard({super.key, required this.page});
@@ -28,6 +29,7 @@ class _InterDashboardState extends State<InterDashboard> {
   late Future<dynamic> apiWasteData;
   late Future<dynamic> apiWasteByTyepData;
   late Future<dynamic> apiExpenseData;
+  late Future<dynamic> apiBarChartData;
 
   @override
   void initState() {
@@ -35,6 +37,7 @@ class _InterDashboardState extends State<InterDashboard> {
     apiWasteData = _fetchWasteData(currentPage);
     apiWasteByTyepData = _fetchWasteByTypeData(currentPage);
     apiExpenseData = _fetchExpenseData(currentPage);
+    apiBarChartData = _fetchBarChartData(currentPage);
   }
 
   Future<dynamic> _fetchWasteData(String page) async {
@@ -76,13 +79,21 @@ class _InterDashboardState extends State<InterDashboard> {
       } else if (page == 'org') {
         return await DashboardApi().getOrgWasteTypePie(); // Call Org API
       }
-      // else if (page == 'inter') {
-      //   return await DashboardApi().getInterWastePie(); // Call Inter Org API
-      // } else {
-      //   throw Exception('Invalid page type: $page');
-      // }
     } catch (e) {
       print('Error loading waste type data: $e');
+      return Future.error(e);
+    }
+  }
+
+  Future<dynamic> _fetchBarChartData(String page) async {
+    try {
+      if (page == 'hh') {
+        return await DashboardApi().getHHBar();
+        // } else if (page == 'org') {
+        //   return await DashboardApi().getOrgWasteBarChart();
+      }
+    } catch (e) {
+      print('Error loading bar chart data: $e');
       return Future.error(e);
     }
   }
@@ -202,6 +213,10 @@ class _InterDashboardState extends State<InterDashboard> {
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
+                    Text(
+                      'Consumption vs Waste',
+                      style: TextStyle(fontSize: 20),
+                    ),
                     WastePiechart(
                       wastepercent: wastePercent,
                       eatenpercent: eatenPercent,
@@ -223,13 +238,58 @@ class _InterDashboardState extends State<InterDashboard> {
           color: AppTheme.softBlue,
           borderRadius: BorderRadius.all(Radius.circular(20)),
         ),
-        child: const Column(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          children: [
-            Text("Bar chart"),
-            WasteBarchart(
-                color: AppTheme.softBlue, chart: WasteBarChartContent()),
-          ],
+        child: FutureBuilder<dynamic>(
+          future: apiBarChartData,
+          builder: (context, snapshot) {
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              return const Center(child: CircularProgressIndicator());
+            } else if (snapshot.hasError) {
+              return Text('Error: ${snapshot.error}');
+            } else if (!snapshot.hasData || snapshot.data == null) {
+              return const Center(child: Text('No data available'));
+            } else {
+              final data =
+                  (snapshot.data!.weekList as List<dynamic>).map((stat) {
+                return BarData(
+                  label: stat.date,
+                  percent: stat.percent,
+                );
+              }).toList();
+
+              // Parse and sort the data by date
+              data.sort((a, b) {
+                DateTime dateA = DateFormat('EEE MMM dd yyyy').parse(a.label);
+                DateTime dateB = DateFormat('EEE MMM dd yyyy').parse(b.label);
+                return dateA.compareTo(dateB);
+              });
+
+              return Container(
+                decoration: const BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.all(Radius.circular(20)),
+                ),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    const Text("Daily Food Consumption",
+                        style: TextStyle(fontSize: 20)),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+                        Text("%",
+                            style: TextStyle(
+                                fontSize: 16, fontWeight: FontWeight.bold)),
+                      ],
+                    ),
+                    WasteBarChartContent(
+                      chartData: data,
+                      // color: AppTheme.softBlue,
+                    ),
+                  ],
+                ),
+              );
+            }
+          },
         ),
       ),
     ];
@@ -271,24 +331,14 @@ class _InterDashboardState extends State<InterDashboard> {
             cs.CarouselSlider(
               items: carouselItems,
               options: cs.CarouselOptions(
-                autoPlay: false, // Enable auto-play
-                enlargeCenterPage: true, // Increase the size of the center item
-                enableInfiniteScroll: false, // Enable infinite scroll
+                autoPlay: false,
+                enlargeCenterPage: true,
+                enableInfiniteScroll: false,
                 aspectRatio: 1,
-                initialPage: 1, // Set the initial page index
-                onPageChanged: (index, reason) {
-                  // Optional callback when the page changes
-                  // You can use it to update any additional UI components
-                },
+                initialPage: 1,
+                onPageChanged: (index, reason) {},
               ),
             ),
-            // IconButton(
-            //   onPressed: () => context.push('/waste_chart'),
-            //   icon: const Icon(
-            //     Icons.keyboard_arrow_down_rounded,
-            //     color: AppTheme.mainBlue,
-            //   ),
-            // ),
             Container(
               margin: const EdgeInsets.all(10),
               padding: const EdgeInsets.all(10),
@@ -324,8 +374,6 @@ class _InterDashboardState extends State<InterDashboard> {
                             child: Text('No data available'),
                           );
                         } else {
-                          // final data = snapshot.data!;
-                          // Ensure the data is mapped correctly
                           final data =
                               (snapshot.data!.statistic as List<dynamic>)
                                   .map((stat) {
@@ -352,11 +400,9 @@ class _InterDashboardState extends State<InterDashboard> {
                       },
                     ),
                   ),
-                  // const WasteTypePiechart(),
                   const SizedBox(
                     height: 10,
                   ),
-                  // const PricePiechart(),
                 ],
               ),
             ),
@@ -398,15 +444,11 @@ class _InterDashboardState extends State<InterDashboard> {
                           );
                         } else {
                           final data = snapshot.data!;
-                          // Safely handle null values with null-aware operators and provide defaults
                           final double savedPercent =
-                              data.statistic.percentSaved ??
-                                  0; // Fetch waste percentage
+                              data.statistic.percentSaved ?? 0;
                           final double lostPercent =
-                              data.statistic.percentLost ??
-                                  0; // Fetch eaten percentage
+                              data.statistic.percentLost ?? 0;
 
-                          // If both percentages are 0, show a message instead of an empty chart
                           if (savedPercent == 0 && lostPercent == 0) {
                             return Container(
                               padding: const EdgeInsets.all(10),
@@ -438,35 +480,7 @@ class _InterDashboardState extends State<InterDashboard> {
                       },
                     ),
                   ),
-                ])
-                // Container(
-                //   margin: const EdgeInsets.all(10),
-                //   padding: const EdgeInsets.all(10),
-                //   width: screenWidth * 0.95,
-                //   decoration: const BoxDecoration(
-                //     color: AppTheme.mainBlue,
-                //     borderRadius: BorderRadius.all(Radius.circular(20)),
-                //   ),
-                //   child: Column(
-                //     children: [
-                //       Text(
-                //         "Reason of food waste",
-                //         style: FontsTheme.mouseMemoirs_30White(),
-                //       ),
-                //       // const ReasonPiechart(),
-                //       const SizedBox(
-                //         height: 10,
-                //       ),
-                //       Text(
-                //         "Reason trends",
-                //         style: FontsTheme.mouseMemoirs_30White(),
-                //       ),
-                //       const WasteBarchart(
-                //           color: Colors.white, chart: ReasonBarChartContent()),
-                //     ],
-                //   ),
-                // ),
-                ),
+                ])),
           ],
         ),
       ),
