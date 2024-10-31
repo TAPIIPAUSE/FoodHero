@@ -80,6 +80,9 @@ class APIFood {
   }
 
   Future<FoodDetailData?> getFoodDetail(int foodId) async {
+    if (foodId == null) {
+      throw ArgumentError('foodId cannot be null');
+    }
     try {
       SharedPreferences prefs = await SharedPreferences.getInstance();
       final token = prefs.getString('user_token');
@@ -117,6 +120,9 @@ class APIFood {
       }
     } catch (error) {
       print("Error during food detail request: $error"); // Debug log
+      if (error is DioException) {
+        print("Dio error: ${error.message}");
+      }
       return null;
     }
   }

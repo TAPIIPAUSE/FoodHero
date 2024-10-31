@@ -359,7 +359,7 @@ class _FoodDetailsPageState extends State<foodDetails> {
             print('Rendering food details for: ${food.FoodName}'); // Debug log
 
             foodname = food.FoodName;
-            foodID = food.Food_ID;
+            //foodID = food.Food_ID;
             category = food.Category;
             location = food.Location;
             isCountable = food.isCountable;
@@ -382,8 +382,8 @@ class _FoodDetailsPageState extends State<foodDetails> {
 
             foodNameModal = food.FoodName;
             consumeQuantityModal = food.Remaining;
-            score = food.scoreGained;
-            save = food.save;
+            //  score = food.scoreGained;
+            //  save = food.save;
             double screenHeight = food.isCountable ? 900 : 800;
 
             print('this is iscountable: $isCountable');

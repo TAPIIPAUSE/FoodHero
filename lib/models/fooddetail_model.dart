@@ -28,26 +28,26 @@ class FoodDetailData {
   // "bestByDate": "2024-12-31T00:00:00.000Z",
   // "RemindDate": "2024-12-15T00:00:00.000Z"
 
-  FoodDetailData({
-    required this.Food_ID,
-    required this.FoodName,
-    required this.Category,
-    required this.Location,
-    required this.Expired,
-    required this.Remind,
-    required this.TotalCost,
-    required this.IndividualWeight,
-    required this.IndividualCost,
-    required this.Remaining,
-    required this.Remaining_amount,
-    required this.URL,
-    required this.isCountable,
-    required this.scoreGained,
-    required this.save
+  FoodDetailData(
+      {required this.Food_ID,
+      required this.FoodName,
+      required this.Category,
+      required this.Location,
+      required this.Expired,
+      required this.Remind,
+      required this.TotalCost,
+      required this.IndividualWeight,
+      required this.IndividualCost,
+      required this.Remaining,
+      required this.Remaining_amount,
+      required this.URL,
+      required this.isCountable,
+      required this.scoreGained,
+      required this.save
 
-    // required this.total_price,
-    // required this.current_quantity,
-  });
+      // required this.total_price,
+      // required this.current_quantity,
+      });
 
   // Convert Food instance to a Map
   Map<String, dynamic> toJson() {
@@ -73,25 +73,26 @@ class FoodDetailData {
   // Create Food instance from a Map
   factory FoodDetailData.fromJson(Map<String, dynamic> json) {
     return FoodDetailData(
-        Food_ID: json['Food_ID'],
-        FoodName: json['FoodName'],
-        Category: json['Category'],
-        Location: json['Location'],
-        Expired: DateTime.parse(json['Expired']),
-        Remind: DateTime.parse(json['Remind']),
-        TotalCost: json['TotalCost'].toDouble(),
-        IndividualWeight: json['IndividualWeight'].toDouble(),
-        IndividualCost: json['IndividualCost'].toDouble(),
-        Remaining: json['Remaining'],
-        Remaining_amount: json['Remaining_amount'],
-        URL: json['URL'],
-        isCountable: json['isCountable'],
-        scoreGained: json['scoreGained'],
-        save: json['save'],
+      Food_ID: json['Food_ID'] ?? 0, // Default value if null
+      FoodName: json['FoodName'] ?? 'Unknown', // Provide a default string
+      Category: json['Category'] ?? 'Uncategorized',
+      Location: json['Location'] ?? 'Unknown Location',
+      Expired: DateTime.tryParse(json['Expired']) ??
+          DateTime.now(), // Default to now if parsing fails
+      Remind: DateTime.tryParse(json['Remind']) ?? DateTime.now(),
+      TotalCost: (json['TotalCost'] as num?)?.toDouble() ?? 0.0,
+      IndividualWeight: (json['IndividualWeight'] as num?)?.toDouble() ?? 0.0,
+      IndividualCost: (json['IndividualCost'] as num?)?.toDouble() ?? 0.0,
+      Remaining: json['Remaining'] ?? '0',
+      Remaining_amount: json['Remaining_amount'] ?? '0',
+      URL: json['URL'] ?? '',
+      isCountable: json['isCountable'] ?? false,
+      scoreGained: json['scoreGained'] ?? 0,
+      save: json['save'] ?? 0,
 
-        // current_quantity: json['current_quantity']
-        // total_price: json['total_price']
-        );
+      // current_quantity: json['current_quantity']
+      // total_price: json['total_price']
+    );
   }
 
   // Create a copy of Food with optional parameter updates
