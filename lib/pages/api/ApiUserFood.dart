@@ -93,21 +93,21 @@ class APIFood {
             'Content-Type': 'application/json',
             'Authorization': 'Bearer $token',
           },
-          validateStatus: (status) {
-            return status! < 500; // Accept all responses below 500
-          },
+          // validateStatus: (status) {
+          //   return status! < 500; // Accept all responses below 500
+          // },
         ),
-        queryParameters: {'fID': foodId},
+        data: {'fID': foodId},
       );
       print("Request URL: $baseurl/getFoodById");
-      print("Respon: $res");
+      print("Respon: $res.data");
       print("Food Detail Response status: ${res.statusCode}"); // Debug log
       print("Food Detail Response body: ${res.data}"); // Debug log
       print("Requesting food details with fID: $foodId and token: $token");
 
       if (res.statusCode == 200) {
         final foodDetail = FoodDetailData.fromJson(res.data);
-        print("Parsed food detail data: ${foodDetail.foodName}"); // Debug log
+        print("Parsed food detail data: ${foodDetail.FoodName}"); // Debug log
         return foodDetail;
       } else {
         print("Failed to load food details: Status ${res.statusCode}");
@@ -122,9 +122,9 @@ class APIFood {
   }
 
   Future<void> addFood(AddFood food) async {
-     try {
+    try {
       final response = await dio.post('$baseurl/addFood', data: food.toJson());
-      
+
       if (response.statusCode == 200) {
         print('Food added successfully: ${response.data}');
       } else {
@@ -134,7 +134,6 @@ class APIFood {
       print('Error adding food: $e');
     }
   }
- 
 }
 
 
