@@ -90,7 +90,7 @@ export async function unitConverter(type,totalAmount,consumedAmount) {
             totalAmount *= 1000;
             consumedAmount *= 1000;
             break;
-        case "Grams":
+        case "Gram":
             // No conversion needed
             break;
         default:

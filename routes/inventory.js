@@ -431,7 +431,7 @@ router.post('/consume/all', authenticateToken, async (req, res) => {
     res.status(200).json({
       message: 'Food item consumed successfully',
       scoreGained: score,
-      PersonObject: personObject
+      save: save,
     });
 
   } catch (error) {
