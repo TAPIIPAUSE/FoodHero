@@ -81,7 +81,7 @@ class _WastePiechartState extends State<WastePiechart> {
         // TabBarView(
         // children: [
         SizedBox(
-            height: 250,
+            height: 200,
             child: PieChart(
               PieChartData(
                 pieTouchData: PieTouchData(
@@ -252,9 +252,9 @@ class _BuildWastePieLegend extends State<BuildWastePieLegend> {
 
   @override
   Widget build(BuildContext context) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.center,
-      crossAxisAlignment: CrossAxisAlignment.start,
+    return Column(
+      // mainAxisAlignment: MainAxisAlignment.center,
+      // crossAxisAlignment: CrossAxisAlignment.,
       children: chartData.map((data) {
         return Padding(
           padding: const EdgeInsets.symmetric(vertical: 8.0),
@@ -270,7 +270,7 @@ class _BuildWastePieLegend extends State<BuildWastePieLegend> {
               ),
               const SizedBox(width: 4),
               Text(
-                '${data.name}: ${data.value.toStringAsFixed(0)}%',
+                '${data.name}: ${data.value.toString()}%',
                 style: const TextStyle(fontSize: 16, color: Colors.black),
               ),
               const SizedBox(width: 16),

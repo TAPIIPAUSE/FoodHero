@@ -188,120 +188,127 @@ class _OrganizationState extends State<organization> {
             padding: const EdgeInsets.all(8.0),
             child: Column(
               children: [
-                GestureDetector(
-                  onTap: () => context.push('/dashboard_inter/org'),
-                  // () {
-                  //   Navigator.push(
-                  //     context,
-                  //     MaterialPageRoute(
-                  //       builder: (context) => orgaStatistics(),
-                  //     ),
-                  //   );
-                  // },
-                  child: Column(
-                    children: [
-                      Row(
-                        children: [
-                          Text('Today $_todayDate',
-                              style: FontsTheme.hindBold_20()),
-                          const SizedBox(width: 10),
-                          Chip(
-                            label: Text(_weekday,
-                                style: const TextStyle(color: Colors.white)),
-                            backgroundColor: Colors.orange,
-                          ),
-                        ],
-                      ),
-                      // Row(
-                      //   children: [
-                      const SizedBox(height: 10),
-                      // cs.CarouselSlider(
-                      //   items: generateCharts(),
-                      //   carouselController: _controller,
-                      //   options: cs.CarouselOptions(
-                      //     height: 150,
-                      //     enlargeCenterPage: true,
-                      //     onPageChanged: (index, reason) {
-                      //       setState(() {
-                      //         _current = index;
-                      //       });
-                      //     },
-                      //   ),
-                      // ),
-                      //   ],
-                      // ),
-                      const Text(
-                        'Statistics',
-                        style: TextStyle(
-                            fontSize: 24, fontWeight: FontWeight.bold),
-                      ),
+                // GestureDetector(
+                // onTap:
+                // () {
+                //   Navigator.push(
+                //     context,
+                //     MaterialPageRoute(
+                //       builder: (context) => orgaStatistics(),
+                //     ),
+                //   );
+                // },
+                // child:
+                Column(
+                  children: [
+                    Row(
+                      children: [
+                        Text('Today $_todayDate',
+                            style: FontsTheme.hindBold_20()),
+                        const SizedBox(width: 10),
+                        Chip(
+                          label: Text(_weekday,
+                              style: const TextStyle(color: Colors.white)),
+                          backgroundColor: Colors.orange,
+                        ),
+                      ],
+                    ),
+                    // Row(
+                    //   children: [
+                    const SizedBox(height: 10),
+                    // cs.CarouselSlider(
+                    //   items: generateCharts(),
+                    //   carouselController: _controller,
+                    //   options: cs.CarouselOptions(
+                    //     height: 150,
+                    //     enlargeCenterPage: true,
+                    //     onPageChanged: (index, reason) {
+                    //       setState(() {
+                    //         _current = index;
+                    //       });
+                    //     },
+                    //   ),
+                    // ),
+                    //   ],
+                    // ),
+                    const Text(
+                      'Statistics',
+                      style:
+                          TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+                    ),
 
-                      FutureBuilder<OrgFoodSaved>(
-                        future: _getOrgBar(),
-                        builder: (context, snapshot) {
-                          if (snapshot.connectionState ==
-                              ConnectionState.waiting) {
-                            return const Center(
-                                child: CircularProgressIndicator());
-                          } else if (snapshot.hasError) {
-                            return Text('Error: ${snapshot.error}');
-                          } else if (!snapshot.hasData ||
-                              snapshot.data == null) {
-                            return const Center(
-                                child: Text('No data available'));
-                          } else {
-                            final data =
-                                (snapshot.data!.weekList as List<dynamic>)
-                                    .map((stat) {
-                              return BarData(
-                                label: stat.date,
-                                percent: stat.percent,
-                              );
-                            }).toList();
-
-                            // Parse and sort the data by date
-                            data.sort((a, b) {
-                              DateTime dateA =
-                                  DateFormat('EEE MMM dd yyyy').parse(a.label);
-                              DateTime dateB =
-                                  DateFormat('EEE MMM dd yyyy').parse(b.label);
-                              return dateA.compareTo(dateB);
-                            });
-
-                            return Container(
-                              decoration: const BoxDecoration(
-                                color: Colors.white,
-                                borderRadius:
-                                    BorderRadius.all(Radius.circular(20)),
-                              ),
-                              child: Column(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceEvenly,
-                                children: [
-                                  const Text("Daily Food Consumption",
-                                      style: TextStyle(fontSize: 20)),
-                                  Row(
-                                    mainAxisAlignment: MainAxisAlignment.start,
-                                    children: [
-                                      Text("%",
-                                          style: TextStyle(
-                                              fontSize: 16,
-                                              fontWeight: FontWeight.bold)),
-                                    ],
-                                  ),
-                                  WasteBarChartContent(
-                                    chartData: data,
-                                    // color: AppTheme.softBlue,
-                                  ),
-                                ],
-                              ),
+                    FutureBuilder<OrgFoodSaved>(
+                      future: _getOrgBar(),
+                      builder: (context, snapshot) {
+                        if (snapshot.connectionState ==
+                            ConnectionState.waiting) {
+                          return const Center(
+                              child: CircularProgressIndicator());
+                        } else if (snapshot.hasError) {
+                          return Text('Error: ${snapshot.error}');
+                        } else if (!snapshot.hasData || snapshot.data == null) {
+                          return const Center(child: Text('No data available'));
+                        } else {
+                          final data =
+                              (snapshot.data!.weekList as List<dynamic>)
+                                  .map((stat) {
+                            return BarData(
+                              label: stat.date,
+                              percent: stat.percent,
                             );
-                          }
-                        },
+                          }).toList();
+
+                          // Parse and sort the data by date
+                          data.sort((a, b) {
+                            DateTime dateA =
+                                DateFormat('EEE MMM dd yyyy').parse(a.label);
+                            DateTime dateB =
+                                DateFormat('EEE MMM dd yyyy').parse(b.label);
+                            return dateA.compareTo(dateB);
+                          });
+
+                          return Container(
+                            decoration: const BoxDecoration(
+                              color: Colors.white,
+                              borderRadius:
+                                  BorderRadius.all(Radius.circular(20)),
+                            ),
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                              children: [
+                                const Text("Daily Food Consumption",
+                                    style: TextStyle(fontSize: 20)),
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  children: [
+                                    Text("%",
+                                        style: TextStyle(
+                                            fontSize: 16,
+                                            fontWeight: FontWeight.bold)),
+                                  ],
+                                ),
+                                WasteBarChartContent(
+                                  chartData: data,
+                                  // color: AppTheme.softBlue,
+                                ),
+                              ],
+                            ),
+                          );
+                        }
+                      },
+                    ),
+                    TextButton.icon(
+                      onPressed: () => context.push('/dashboard_inter/org'),
+                      icon: Icon(
+                        Icons.expand_circle_down_rounded,
+                        size: 32,
+                        color: AppTheme.softOrange,
                       ),
-                    ],
-                  ),
+                      label: Text(''),
+                    )
+                  ],
                 ),
+                // ),
 
                 // Row(
                 //   mainAxisAlignment: MainAxisAlignment.center,
@@ -353,6 +360,7 @@ class _OrganizationState extends State<organization> {
                               name: score.housename,
                               star: score.rank == 1,
                               point: score.score,
+                              rank: score.rank,
                             );
                           },
                         ),

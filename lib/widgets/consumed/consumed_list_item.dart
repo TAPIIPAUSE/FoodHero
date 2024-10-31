@@ -22,7 +22,7 @@ class ConsumedListItem extends StatefulWidget {
 
   final String thumbnail;
   final String foodname;
-  final String expiry;
+  final DateTime expiry;
   final double progressbar;
   final String consuming;
   final String remaining;
@@ -55,10 +55,9 @@ class _ConsumedListItemState extends State<ConsumedListItem> {
           context,
           MaterialPageRoute(
             builder: (context) => ConsumedDetails(
-              foodname: widget.foodname,
-              cID: widget.cID,
-              isCountable: widget.isCountable 
-            ),
+                foodname: widget.foodname,
+                cID: widget.cID,
+                isCountable: widget.isCountable),
           ),
         );
       },
@@ -94,7 +93,7 @@ class _ConsumedListItemState extends State<ConsumedListItem> {
                     flex: 3,
                     child: _FoodDetail(
                       foodname: widget.foodname,
-                      expiry: DateTime.parse(widget.expiry),
+                      expiry: widget.expiry,
                       progessbar: widget.progressbar,
                       consumeing: widget.consuming,
                       remaining: widget.remaining,

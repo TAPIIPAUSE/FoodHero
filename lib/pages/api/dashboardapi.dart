@@ -4,6 +4,7 @@ import 'package:foodhero/models/chart/bar/orgbar_model.dart';
 import 'package:foodhero/models/chart/expensepie/hhexpensepie_model.dart';
 import 'package:foodhero/models/chart/expensepie/orgexpensepie_model.dart';
 import 'package:foodhero/models/chart/heatmap/hhheatmap_model.dart';
+import 'package:foodhero/models/chart/heatmap/orgheatmap_model.dart';
 import 'package:foodhero/models/chart/savetypepie/hhfoodtypepie_model.dart';
 import 'package:foodhero/models/chart/savetypepie/interorgfoodtypepie_model.dart';
 import 'package:foodhero/models/chart/savetypepie/orgfoodtypepie_model.dart';
@@ -553,6 +554,38 @@ class DashboardApi {
     } catch (e) {
       print('Error: $e');
       throw Exception('Failed to fetch HH heatmap: ${e.toString()}');
+    }
+  }
+
+  // org heatmap
+  Future<OrgHeatmapData> getOrgHeatmap() async {
+    try {
+      print("===Org heatmap===");
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      final token = prefs.getString('user_token');
+      // print('token: $token');
+      final res = await dio.get(
+        '$baseurl/organization/visualization/heatmap',
+        options: Options(
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer $token',
+          },
+        ),
+      );
+
+      print("Response status: ${res.statusCode}");
+      print("Response body: ${res.data}");
+
+      if (res.statusCode == 200) {
+        final Map<String, dynamic> data = res.data;
+        return OrgHeatmapData.fromJson(data);
+      } else {
+        throw Exception('Invalid response format: ${res.data.runtimeType}');
+      }
+    } catch (e) {
+      print('Error: $e');
+      throw Exception('Failed to fetch Org heatmap: ${e.toString()}');
     }
   }
 }

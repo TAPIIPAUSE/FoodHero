@@ -258,7 +258,7 @@ class _BuildExpensePieLegend extends State<BuildExpensePieLegend> {
               ),
               const SizedBox(width: 4),
               Text(
-                '${data.name}: ${data.value.toStringAsFixed(0)}%',
+                '${data.name}: ${data.value.toString()}%',
                 style: const TextStyle(fontSize: 16, color: Colors.black),
               ),
               const SizedBox(width: 16),

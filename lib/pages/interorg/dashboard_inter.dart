@@ -104,8 +104,8 @@ class _InterDashboardState extends State<InterDashboard> {
     try {
       if (page == 'hh') {
         return await DashboardApi().getHHHeatmap();
-        // } else if (page == 'org') {
-        // return await DashboardApi().();
+      } else if (page == 'org') {
+        return await DashboardApi().getOrgHeatmap();
       }
     } catch (e) {
       print('Error loading heatmap data: $e');
@@ -192,8 +192,8 @@ class _InterDashboardState extends State<InterDashboard> {
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
                       Text(
-                        "Heatmap calendar",
-                        style: TextStyle(fontSize: 20),
+                        "Food Waste Heatmap Calendar",
+                        style: FontsTheme.mouseMemoirs_30Black(),
                       ),
                       Column(
                         mainAxisAlignment: MainAxisAlignment.center,
@@ -202,6 +202,7 @@ class _InterDashboardState extends State<InterDashboard> {
                           HeatMapChart(
                             dataMap: dataMap,
                           ),
+                          
                         ],
                       ),
                     ],
@@ -254,15 +255,20 @@ class _InterDashboardState extends State<InterDashboard> {
                   children: [
                     Text(
                       'Consumption vs Waste',
-                      style: TextStyle(fontSize: 20),
+                      style: FontsTheme.mouseMemoirs_30Black(),
                     ),
                     WastePiechart(
                       wastepercent: wastePercent,
                       eatenpercent: eatenPercent,
                     ),
-                    BuildWastePieLegend(
-                      wastepercent: wastePercent,
-                      eatenpercent: eatenPercent,
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        BuildWastePieLegend(
+                          wastepercent: wastePercent,
+                          eatenpercent: eatenPercent,
+                        ),
+                      ],
                     )
                   ],
                 ),
@@ -317,8 +323,10 @@ class _InterDashboardState extends State<InterDashboard> {
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
-                    const Text("Daily Food Consumption",
-                        style: TextStyle(fontSize: 20)),
+                    Text(
+                      "Daily Food Consumption",
+                      style: FontsTheme.mouseMemoirs_30Black(),
+                    ),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.start,
                       children: [
@@ -371,7 +379,7 @@ class _InterDashboardState extends State<InterDashboard> {
               height: 10,
             ),
             Text(
-              "????",
+              currentPage == "hh" ? "Household" : "Organization",
               style: FontsTheme.mouseMemoirs_30Black(),
             ),
             cs.CarouselSlider(
@@ -396,7 +404,7 @@ class _InterDashboardState extends State<InterDashboard> {
               child: Column(
                 children: [
                   Text(
-                    "Type of food waste",
+                    "Waste by Food Type",
                     style: FontsTheme.mouseMemoirs_30Black(),
                   ),
                   Container(
@@ -472,7 +480,7 @@ class _InterDashboardState extends State<InterDashboard> {
                 ),
                 child: Column(children: [
                   Text(
-                    "Price of food waste",
+                    "Expense Save vs Lost",
                     style: FontsTheme.mouseMemoirs_30Black(),
                   ),
                   Container(

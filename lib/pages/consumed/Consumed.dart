@@ -16,7 +16,7 @@ class Consumed extends StatefulWidget {
 }
 
 class _ConsumedState extends State<Consumed> {
-  Future<List<ConsumedfoodData>> _loadConsumedFood() async {
+  Future<ConsumedfoodData> _loadConsumedFood() async {
     try {
       final prefs = await SharedPreferences.getInstance();
       final hID = prefs.getInt('hID');
@@ -62,26 +62,26 @@ class _ConsumedState extends State<Consumed> {
         ),
         body: Container(
           margin: const EdgeInsets.all(10),
-          child: FutureBuilder<List<ConsumedfoodData>>(
+          child: FutureBuilder<ConsumedfoodData>(
             future: _loadConsumedFood(),
             builder: (context, snapshot) {
               if (snapshot.connectionState == ConnectionState.waiting) {
                 return const Center(child: CircularProgressIndicator());
               } else if (snapshot.hasError) {
                 return Center(child: Text('Error: ${snapshot.error}'));
-              } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
+              } else if (!snapshot.hasData || snapshot.data==null) {
                 return const Center(
                     child: Text('No consumed food data available.'));
               } else {
                 return ListView.builder(
-                  itemCount: snapshot.data!.length,
+                  itemCount: snapshot.data!.documentNumber,
                   itemBuilder: (context, index) {
-                    final item = snapshot.data![index];
+                    final item = snapshot.data!.food[index];
                     return ConsumedListItem(
                       cID: item.consumeId,
                       thumbnail: item.url,
                       foodname: item.foodName,
-                      expiry: item.expired ?? '',
+                      expiry: item.expired,
                       progressbar:
                           10, // You might want to calculate this based on item data
                       consuming: item.consuming,

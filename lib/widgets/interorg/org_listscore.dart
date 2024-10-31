@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:foodhero/theme.dart';
 import 'package:intl/intl.dart';
+
+import 'package:foodhero/theme.dart';
 
 class ListScore extends StatelessWidget {
   const ListScore({
@@ -8,11 +9,13 @@ class ListScore extends StatelessWidget {
     required this.name,
     required this.star,
     required this.point,
+    required this.rank,
   });
 
   final String name;
   final bool star;
   final double point;
+  final int rank;
 
   @override
   Widget build(BuildContext context) {
@@ -31,6 +34,16 @@ class ListScore extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.center,
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
+                Text(
+                  rank.toString(),
+                  style: const TextStyle(
+                    fontWeight: FontWeight.w500,
+                    fontSize: 16.0,
+                  ),
+                ),
+                SizedBox(
+                  width: 20,
+                ),
                 Expanded(
                   flex: 3,
                   child: Text(

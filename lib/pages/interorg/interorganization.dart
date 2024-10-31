@@ -325,6 +325,7 @@ class _InterOrganizationState extends State<InterOrganization> {
                                     name: score.orgname,
                                     star: score.rank == 1,
                                     point: score.score,
+                                    rank: score.rank,
                                   );
                                 },
                               ),
@@ -534,6 +535,7 @@ class _InterOrganizationState extends State<InterOrganization> {
                                     name: score.username,
                                     star: score.rank == 1,
                                     point: score.score,
+                                    rank: score.rank,
                                   );
                                 },
                               ),
@@ -734,6 +736,7 @@ class _InterOrganizationState extends State<InterOrganization> {
                                     name: score.housename,
                                     star: score.rank == 1,
                                     point: score.score,
+                                    rank: score.rank,
                                   );
                                 },
                               ),

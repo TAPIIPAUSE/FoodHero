@@ -11,7 +11,7 @@ class ConsumedFood {
   final authService = AuthService();
   final dio = Dio();
   //get
-  Future<List<ConsumedfoodData>> getConsumedfood(int hID) async {
+  Future<ConsumedfoodData> getConsumedfood(int hID) async {
     try {
       SharedPreferences prefs = await SharedPreferences.getInstance();
       final token = prefs.getString('user_token');
@@ -35,29 +35,42 @@ class ConsumedFood {
 
       // await prefs.setInt('consume_id', consumedfood.consumeId);
       if (res.statusCode == 200) {
-        if (res.data is List) {
-          List<ConsumedfoodData> consumedFoodList = (res.data as List)
-              .map((e) => ConsumedfoodData.fromJson(e as Map<String, dynamic>))
-              .toList();
+        final Map<String, dynamic> data = res.data;
+        ConsumedfoodData consumedFood = ConsumedfoodData.fromJson(data);
+        await prefs.setInt('consume_id', consumedFood.food.first.consumeId);
+        return consumedFood;
+        // if (res.data is List) {
+        // List<ConsumedfoodData> consumedFoodList = (res.data as List)
+        //     .map((e) => ConsumedfoodData.fromJson(e as Map<String, dynamic>))
+        //     .toList();
 
-          if (consumedFoodList.isNotEmpty) {
-            await prefs.setInt('consume_id', consumedFoodList.first.consumeId);
-          }
+        // } else if (res.data is List) {
+        //   List<ConsumedfoodData> consumedFoodList = (res.data as List)
+        //       .map((e) => ConsumedfoodData.fromJson(e as Map<String, dynamic>))
+        //       .toList();
 
-          return consumedFoodList;
-          // return (res.data as List)
-          //     .map((e) => ConsumedfoodData.fromJson(e as Map<String, dynamic>))
-          //     .toList();
-        } else {
-          throw Exception(
-              'Unexpected response format: ${res.data.runtimeType}');
-        }
+        //   if (consumedFoodList.isNotEmpty) {
+        //     await prefs.setInt(
+        //         'consume_id', consumedFoodList.first.food.first.consumeId);
+        //     return consumedFoodList.first;
+        //   } else {
+        // throw Exception('No consumed food data found');
+        // }
+
+        // return consumedFoodList;
+        // return (res.data as List)
+        //     .map((e) => ConsumedfoodData.fromJson(e as Map<String, dynamic>))
+        //     .toList();
+        // } else {
+        //   throw Exception(
+        //       'Unexpected response format: ${res.data.runtimeType}');
+        // }
       } else {
         throw Exception('Failed to load consumed food data');
       }
     } on DioException catch (e) {
       print('Error fetching consumed food: ${e.toString()}');
-      return [];
+      rethrow;
     }
   }
 
