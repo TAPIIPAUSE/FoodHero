@@ -79,7 +79,7 @@ class _FoodDetailsPageState extends State<foodDetails> {
   double allCost = 0;
   double costPerPiece = 0;
   double updateAllCost = 0;
-  int consumeQuantity = 0;
+  //int consumeQuantity = 0;
   late String foodname = '';
   late String category;
   late String location;
@@ -537,7 +537,8 @@ class _FoodDetailsPageState extends State<foodDetails> {
                                   ),
                                 ),
                                 ElevatedButton(
-                                  onPressed: () => _wasteOption(context, food),
+                                  onPressed: () =>
+                                      _wasteOption(context, intQuantity!),
                                   style: ElevatedButton.styleFrom(
                                     backgroundColor: Color(0xFFE76F51),
                                     shape: RoundedRectangleBorder(
@@ -911,7 +912,6 @@ class _FoodDetailsPageState extends State<foodDetails> {
                                                 setState(() {
                                           consumeQuantity =
                                               valueWeightConsumeOption;
-
                                           //weightConsumeOption.toStringAsFixed(0);
                                         }),
                                       ),
@@ -935,14 +935,28 @@ class _FoodDetailsPageState extends State<foodDetails> {
                                   addCompleteConsume);
                               ScaffoldMessenger.of(context).showSnackBar(
                                 SnackBar(
-                                    content: Text("All $foodname Consumed!")),
+                                  behavior: SnackBarBehavior.floating,
+                                  margin: EdgeInsets.only(bottom: 300),
+                                  content: Text(
+                                    "All $foodname Consumed!",
+                                    style: FontsTheme.hindBold_20(),
+                                  ),
+                                  duration: const Duration(seconds: 2),
+                                  backgroundColor: AppTheme.greenMainTheme,
+                                ),
                               );
                             } catch (e) {
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                SnackBar(
-                                    content:
-                                        Text('Failed to complete food: $e')),
-                              );
+                              ScaffoldMessenger.of(context)
+                                  .showSnackBar(SnackBar(
+                                behavior: SnackBarBehavior.floating,
+                                margin: EdgeInsets.only(bottom: 300),
+                                content: Text(
+                                  'Failed to complete food: $e',
+                                  style: FontsTheme.hindBold_20(),
+                                ),
+                                duration: const Duration(seconds: 2),
+                                backgroundColor: AppTheme.greenMainTheme,
+                              ));
                             }
                           },
                           style: ElevatedButton.styleFrom(
@@ -962,17 +976,19 @@ class _FoodDetailsPageState extends State<foodDetails> {
                             Navigator.pop(context);
                           },
                           style: ElevatedButton.styleFrom(
-                            backgroundColor: Color(0xFFE76F51),
-                            shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(10)),
-                          ),
+                              shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(10)),
+                              side: const BorderSide(
+                                color: AppTheme.softRedCancleWasted,
+                                width: 5,
+                              )),
                           child: Text(
                             'Cancle',
-                            style: FontsTheme.hind_20()
-                                .copyWith(color: Colors.black),
+                            style: FontsTheme.hindBold_20()
+                                .copyWith(color: Colors.red),
                           ),
                         ),
-                        SizedBox(height: 10),
+                        const SizedBox(height: 10),
                       ],
                     );
                   }),
@@ -1011,6 +1027,8 @@ class _FoodDetailsPageState extends State<foodDetails> {
     // );
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
+        behavior: SnackBarBehavior.floating,
+        margin: EdgeInsets.only(bottom: 600),
         content: Text(
           '${foodname} added to consumed list',
           style: FontsTheme.hindBold_20(),
@@ -1087,7 +1105,7 @@ class _FoodDetailsPageState extends State<foodDetails> {
     });
   }
 
-  void _wasteOption(BuildContext context, FoodDetailData food) {
+  void _wasteOption(BuildContext context, int getQuantity) {
     Widget buildConsumedQuantityUnit(String value) {
       String pieceLabel = quantity == 1 ? "Piece" : "Pieces";
       String boxLabel = quantity == 1 ? "Box" : "Boxes";
@@ -1132,298 +1150,400 @@ class _FoodDetailsPageState extends State<foodDetails> {
       });
     }
 
+    double consumeQuantity = getQuantity.toDouble();
     showDialog(
         context: context,
         builder: (BuildContext contetxt) {
-          return Transform.translate(
-              offset: Offset(0, 0),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: [
-                  Center(
-                    child: Stack(
+          return GestureDetector(
+            onTap: () {
+              Navigator.of(context)
+                  .pop(); // Close the dialog when tapping outside
+            },
+            child: AlertDialog(
+              insetPadding: EdgeInsets.zero,
+              backgroundColor: Colors.transparent,
+              content: SizedBox(
+                width: MediaQuery.of(context).size.width,
+                child: GestureDetector(
+                  onTap: () {
+                    // Prevent closing when tapping inside the dialog content
+                  },
+                  child: StatefulBuilder(
+                      builder: (BuildContext context, StateSetter setState) {
+                    return Column(
+                      mainAxisAlignment: MainAxisAlignment.end,
                       children: [
-                        Container(
-                          height: 250,
-                          width: 375,
-                          padding: EdgeInsets.all(10),
-                          decoration: BoxDecoration(
-                            color: AppTheme.softRed,
-                            borderRadius: BorderRadius.circular(30),
-                          ),
-                          child: Container(
-                            alignment: Alignment.bottomCenter,
-                            child: TextButton(
-                              onPressed: () => _consumeReasons(context),
-                              style: TextButton.styleFrom(
-                                backgroundColor: AppTheme.softRed,
-                                fixedSize: Size(350, 50),
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(10),
-                                ),
+                        Center(
+                            child: Stack(
+                          children: [
+                            Container(
+                              height: 250,
+                              width: 375,
+                              padding: EdgeInsets.all(10),
+                              decoration: BoxDecoration(
+                                color: AppTheme.spoiledBrown,
+                                borderRadius: BorderRadius.circular(30),
                               ),
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  Text(
-                                    'Waste',
-                                    style: FontsTheme.mouseMemoirs_30Black()
-                                        .copyWith(color: Colors.black),
-                                    textAlign: TextAlign.center,
+                              child: Container(
+                                alignment: Alignment.bottomCenter,
+                                child: TextButton(
+                                  onPressed: () => addToConsumed(context),
+                                  style: TextButton.styleFrom(
+                                    backgroundColor: AppTheme.spoiledBrown,
+                                    fixedSize: Size(350, 50),
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(10),
+                                    ),
                                   ),
-                                ],
+                                  child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      Text(
+                                        'Waste',
+                                        style: FontsTheme.mouseMemoirs_30Black()
+                                            .copyWith(color: Colors.black),
+                                        textAlign: TextAlign.center,
+                                      ),
+                                    ],
+                                  ),
+                                ),
                               ),
                             ),
-                          ),
-                        ),
-                        Container(
-                          alignment: Alignment.topCenter,
-                          height: 175,
-                          width: 355,
-                          margin: EdgeInsets.all(10),
-                          foregroundDecoration: BoxDecoration(
-                            color: AppTheme.softBlue,
-                            borderRadius: BorderRadius.circular(30),
-                          ),
-                        ),
-                        Container(
-                            width: 350,
-                            child: Column(
-                              children: <Widget>[
-                                SizedBox(
-                                  height: 40,
-                                ),
-                                // SizedBox(
-                                //   child: Container(
-                                //     width: 300,
-                                //     height: 200,
-                                //     padding: EdgeInsets.all(3),
-                                //     decoration: BoxDecoration(
-                                //         borderRadius: BorderRadius.circular(5),
-                                //         color: AppTheme.softRed),
-                                //   ),
-                                // ),
-                                // SizedBox(
-                                //   width: 10,
-                                //   height: 10,
-                                //   child: InkWell(
-                                //       onTap: () {
-                                //         consumeQuantity - 1;
-                                //       },
-                                //       child: Icon(
-                                //         Icons.remove,
-                                //         color: Colors.white,
-                                //         size: 16,
-                                //       )),
-                                // ),
-                                // Container(
-                                //   margin: EdgeInsets.symmetric(horizontal: 3),
-                                //   padding: EdgeInsets.symmetric(
-                                //       horizontal: 3, vertical: 2),
-                                //   decoration: BoxDecoration(
-                                //       borderRadius: BorderRadius.circular(3),
-                                //       color: Colors.white),
-                                //   child: Text(
-                                //     "$consumeQuantity",
-                                //     style: TextStyle(
-                                //         color: Colors.black, fontSize: 16),
-                                //   ),
-                                // ),
-                                //Consume option if Countable show Quantity
-                                Visibility(
-                                  visible: food.isCountable,
-                                  child: Row(
-                                    children: [
-                                      SizedBox(
-                                        width: 50,
-                                      ),
-                                      Container(
-                                        width: 80,
-                                        height: 50,
-                                        padding: EdgeInsets.symmetric(
-                                            horizontal: 20, vertical: 8),
-                                        decoration: BoxDecoration(
-                                          borderRadius:
-                                              BorderRadius.circular(10),
-                                          color: Colors.white,
-                                        ),
-                                        child: Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.spaceBetween,
-                                          children: [
-                                            Text('$quantity ',
-                                                style: FontsTheme.hindBold_20()
-                                                    .copyWith(
-                                                        color: Colors.black)),
-                                            //   buildConsumedQuantityUnit(''),
-                                          ],
-                                        ),
-                                      ),
-                                      SizedBox(
-                                        width: 20,
-                                      ),
-                                      Container(
-                                        width: 120,
-                                        height: 50,
-                                        padding: EdgeInsets.symmetric(
-                                            horizontal: 20, vertical: 8),
-                                        decoration: BoxDecoration(
-                                          borderRadius:
-                                              BorderRadius.circular(10),
-                                          color: Colors.white,
-                                        ),
-                                        child: Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.spaceBetween,
-                                          children: [
-                                            Text('Pieces',
-                                                style: FontsTheme.hindBold_20()
-                                                    .copyWith(
-                                                        color: Colors.black)),
-                                            //   buildConsumedQuantityUnit(''),
-                                          ],
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                                //Consume option if Not Countable show Weight
-                                Visibility(
-                                  visible: !food.isCountable,
-                                  child: Row(
-                                    children: [
-                                      const SizedBox(
-                                        width: 50,
-                                      ),
-                                      Container(
-                                        width: 100,
-                                        height: 50,
-                                        padding: const EdgeInsets.symmetric(
-                                            horizontal: 20, vertical: 8),
-                                        decoration: BoxDecoration(
-                                          borderRadius:
-                                              BorderRadius.circular(10),
-                                          color: Colors.white,
-                                        ),
-                                        child: Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.spaceBetween,
-                                          children: [
-                                            Text('$weightConsumeOption',
-                                                style: FontsTheme.hindBold_20()
-                                                    .copyWith(
-                                                        color: Colors.black)),
-                                            //   buildConsumedQuantityUnit(''),
-                                          ],
-                                        ),
-                                      ),
-                                      SizedBox(
-                                        width: 20,
-                                      ),
-                                      Container(
-                                        width: 120,
-                                        height: 50,
-                                        padding: EdgeInsets.symmetric(
-                                            horizontal: 20, vertical: 8),
-                                        decoration: BoxDecoration(
-                                          borderRadius:
-                                              BorderRadius.circular(10),
-                                          color: Colors.white,
-                                        ),
-                                        child: Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.spaceBetween,
-                                          children: [
-                                            Text('grams',
-                                                style: FontsTheme.hindBold_20()
-                                                    .copyWith(
-                                                        color: Colors.black)),
-                                            //   buildConsumedQuantityUnit(''),
-                                          ],
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                                SizedBox(
-                                  height: 20,
-                                ),
-                                // SizedBox(
-                                //   width: 10,
-                                //   height: 10,
-                                //   child: InkWell(
-                                //       onTap: () {
-                                //         consumeQuantity + 1;
-                                //       },
-                                //       child: Icon(
-                                //         Icons.add,
-                                //         color: Colors.white,
-                                //         size: 16,
-                                //       )),
-                                // ),
-                                SizedBox(
-                                  child: InteractiveSlider(
-                                    focusedHeight: 20,
-                                    backgroundColor: AppTheme.softRed,
-                                    startIcon: const Icon(
-                                      Icons.remove_circle_rounded,
-                                      color: Colors.black,
+                            Container(
+                              alignment: Alignment.topCenter,
+                              height: 175,
+                              width: 355,
+                              margin: EdgeInsets.all(10),
+                              foregroundDecoration: BoxDecoration(
+                                color: AppTheme.softBlue,
+                                borderRadius: BorderRadius.circular(30),
+                              ),
+                            ),
+                            Container(
+                                width: 350,
+                                child: Column(
+                                  children: <Widget>[
+                                    SizedBox(
+                                      height: 40,
                                     ),
-                                    endIcon: const Icon(
-                                      Icons.add_circle_rounded,
-                                      color: Colors.black,
-                                    ),
-                                    min: 1,
-                                    max: weight.toDouble(),
-                                    onChanged: (valueWeightConsumeOption) =>
-                                        setState(() {
-                                      weightConsumeOption =
-                                          valueWeightConsumeOption.toInt();
+                                    // SizedBox(
+                                    //   child: Container(
+                                    //     width: 300,
+                                    //     height: 200,
+                                    //     padding: EdgeInsets.all(3),
+                                    // decoration: BoxDecoration(
+                                    //     borderRadius: BorderRadius.circular(5),
+                                    //     color: AppTheme.softRed),
 
-                                      weightConsumeOption.toStringAsFixed(0);
-                                    }),
-                                  ),
+                                    // SizedBox(
+                                    //   width: 10,
+                                    //   height: 10,
+                                    //   child: InkWell(
+                                    //       onTap: () {
+                                    //         consumeQuantity - 1;
+                                    //       },
+                                    //       child: Icon(
+                                    //         Icons.remove,
+                                    //         color: Colors.white,
+                                    //         size: 16,
+                                    //       )),
+                                    // ),
+                                    // Container(
+                                    //   margin: EdgeInsets.symmetric(horizontal: 3),
+                                    //   padding: EdgeInsets.symmetric(
+                                    //       horizontal: 3, vertical: 2),
+                                    //   decoration: BoxDecoration(
+                                    //       borderRadius: BorderRadius.circular(3),
+                                    //       color: Colors.white),
+                                    //   child: Text(
+                                    //     "$consumeQuantity",
+                                    //     style: TextStyle(
+                                    //         color: Colors.black, fontSize: 16),
+                                    //   ),
+                                    // ),
+                                    //Consume option if Countable show Quantity
+                                    Visibility(
+                                      visible: isCountable,
+                                      child: Row(
+                                        children: [
+                                          SizedBox(
+                                            width: 50,
+                                          ),
+                                          Container(
+                                            width: 80,
+                                            height: 50,
+                                            padding: EdgeInsets.symmetric(
+                                                horizontal: 20, vertical: 8),
+                                            decoration: BoxDecoration(
+                                              borderRadius:
+                                                  BorderRadius.circular(10),
+                                              color: Colors.white,
+                                            ),
+                                            child: Row(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment
+                                                      .spaceBetween,
+                                              children: [
+                                                Text(
+                                                    "${consumeQuantity.toInt()}",
+                                                    style:
+                                                        FontsTheme.hindBold_20()
+                                                            .copyWith(
+                                                                color: Colors
+                                                                    .black)),
+                                                //   buildConsumedQuantityUnit(''),
+                                              ],
+                                            ),
+                                          ),
+                                          SizedBox(
+                                            width: 20,
+                                          ),
+                                          Container(
+                                            width: 120,
+                                            height: 50,
+                                            padding: EdgeInsets.symmetric(
+                                                horizontal: 20, vertical: 8),
+                                            decoration: BoxDecoration(
+                                              borderRadius:
+                                                  BorderRadius.circular(10),
+                                              color: Colors.white,
+                                            ),
+                                            child: Row(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment
+                                                      .spaceBetween,
+                                              children: [
+                                                Text('Pieces',
+                                                    style:
+                                                        FontsTheme.hindBold_20()
+                                                            .copyWith(
+                                                                color: Colors
+                                                                    .black)),
+                                                //   buildConsumedQuantityUnit(''),
+                                              ],
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                    //Consume option if Not Countable show Weight
+                                    Visibility(
+                                      visible: !isCountable,
+                                      child: Row(
+                                        children: [
+                                          SizedBox(
+                                            width: 50,
+                                          ),
+                                          Container(
+                                            width: 100,
+                                            height: 50,
+                                            padding: EdgeInsets.symmetric(
+                                                horizontal: 20, vertical: 8),
+                                            decoration: BoxDecoration(
+                                              borderRadius:
+                                                  BorderRadius.circular(10),
+                                              color: Colors.white,
+                                            ),
+                                            child: Row(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment
+                                                      .spaceBetween,
+                                              children: [
+                                                Text('$weightConsumeOption',
+                                                    style:
+                                                        FontsTheme.hindBold_20()
+                                                            .copyWith(
+                                                                color: Colors
+                                                                    .black)),
+                                                //   buildConsumedQuantityUnit(''),
+                                              ],
+                                            ),
+                                          ),
+                                          SizedBox(
+                                            width: 20,
+                                          ),
+                                          Container(
+                                            width: 120,
+                                            height: 50,
+                                            padding: EdgeInsets.symmetric(
+                                                horizontal: 20, vertical: 8),
+                                            decoration: BoxDecoration(
+                                              borderRadius:
+                                                  BorderRadius.circular(10),
+                                              color: Colors.white,
+                                            ),
+                                            child: Row(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment
+                                                      .spaceBetween,
+                                              children: [
+                                                Text('grams',
+                                                    style:
+                                                        FontsTheme.hindBold_20()
+                                                            .copyWith(
+                                                                color: Colors
+                                                                    .black)),
+                                                //   buildConsumedQuantityUnit(''),
+                                              ],
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                    SizedBox(
+                                      height: 20,
+                                    ),
+                                    // SizedBox(
+                                    //   width: 10,
+                                    //   height: 10,
+                                    //   child: InkWell(
+                                    //       onTap: () {
+                                    //         consumeQuantity + 1;
+                                    //       },
+                                    //       child: Icon(
+                                    //         Icons.add,
+                                    //         color: Colors.white,
+                                    //         size: 16,
+                                    //       )),
+                                    // ),
+                                    SizedBox(
+                                      child: InteractiveSlider(
+                                        focusedHeight: 20,
+                                        backgroundColor: AppTheme.spoiledBrown,
+                                        startIcon: const Icon(
+                                          Icons.remove_circle_rounded,
+                                          color: Colors.black,
+                                        ),
+                                        endIcon: const Icon(
+                                          Icons.add_circle_rounded,
+                                          color: Colors.black,
+                                        ),
+                                        min: 1,
+                                        max: intQuantity!.toDouble(),
+                                        onChanged:
+                                            (double valueWeightWasteOption) =>
+                                                setState(() {
+                                          consumeQuantity =
+                                              valueWeightWasteOption;
+
+                                          //weightConsumeOption.toStringAsFixed(0);
+                                        }),
+                                      ),
+                                    ),
+                                  ],
+                                )),
+                          ],
+                        )),
+                        SizedBox(height: 10),
+                        ElevatedButton(
+                          onPressed: () {
+                            completeWaste(context);
+                          },
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: AppTheme.softRedCancleWasted,
+                            shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(10)),
+                          ),
+                          child: Text(
+                            'Complete Waste',
+                            style: FontsTheme.mouseMemoirs_30Black()
+                                .copyWith(color: Colors.black),
+                          ),
+                        ),
+                        SizedBox(height: 20),
+                        ElevatedButton(
+                          onPressed: () {
+                            Navigator.pop(context);
+                          },
+                          style: ElevatedButton.styleFrom(
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(10),
+                              ),
+                              side: const BorderSide(
+                                color: AppTheme.softRedCancleWasted,
+                                width: 5,
+                              )),
+                          child: Text(
+                            'Cancle',
+                            style: FontsTheme.hindBold_20()
+                                .copyWith(color: Colors.red),
+                          ),
+                        ),
+                        const SizedBox(height: 10),
+                      ],
+                    );
+                  }),
+                ),
+              ),
+            ),
+          );
+        });
+  }
+
+  void completeWaste(BuildContext context) {
+    consumedModal(context);
+  }
+
+  void wastedModal(BuildContext context) {
+    String tellScore = ' ';
+    if (score > 0) {
+      score = score;
+    } else {
+      tellScore = 'You loss $score points\n Your loss $save';
+    }
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return GestureDetector(
+          onTap: () {
+            Navigator.of(context).pop();
+          },
+          child: Dialog.fullscreen(
+              child: Stack(
+            children: [
+              Container(
+                  color: AppTheme.lightGreenBackground,
+                  child: Center(
+                    child: Column(
+                      children: [
+                        Text(
+                          '$foodNameModal\n Consummed',
+                          style: FontsTheme.mouseMemoirs_64Black(),
+                          textAlign: TextAlign.center,
+                        ),
+                        const SizedBox(
+                          height: 400,
+                        ),
+                        Text(
+                          '$consumeQuantityModal were consumed\n You get $score points\n Save $save baht',
+                          style: FontsTheme.mouseMemoirs_30Black(),
+                          textAlign: TextAlign.center,
+                        ),
+                        TextButton(
+                            onPressed: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => Consumed(),
                                 ),
-                              ],
-                            )),
+                              );
+                            },
+                            child: Text(
+                              'Go to the consuming food',
+                              style: FontsTheme.mouseMemoirs_20(),
+                            ))
                       ],
                     ),
-                  ),
-                  SizedBox(height: 10),
-                  ElevatedButton(
-                    onPressed: () {
-                      completeConsume(context);
-                    },
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: Color(0xFFF4A261),
-                      shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(10)),
-                    ),
-                    child: Text(
-                      'Complete Consume',
-                      style: FontsTheme.mouseMemoirs_30Black()
-                          .copyWith(color: Colors.black),
-                    ),
-                  ),
-                  SizedBox(height: 20),
-                  ElevatedButton(
-                    onPressed: () {
-                      Navigator.pop(context);
-                    },
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: Color(0xFFE76F51),
-                      shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(10)),
-                    ),
-                    child: Text(
-                      'Cancle',
-                      style: FontsTheme.hind_20().copyWith(color: Colors.black),
-                    ),
-                  ),
-                  SizedBox(height: 10),
-                ],
-              ));
-        });
+                  )),
+            ],
+          )),
+        );
+      },
+    );
+
+    Future.delayed(const Duration(seconds: 2), () {
+      Navigator.of(context).pop();
+    });
   }
 
   void _consumeReasons(BuildContext context) {

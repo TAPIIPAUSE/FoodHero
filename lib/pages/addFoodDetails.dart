@@ -383,15 +383,29 @@ class _AddFoodDetailsPageState extends State<addFoodDetails> {
                                         ScaffoldMessenger.of(context)
                                             .showSnackBar(
                                           SnackBar(
-                                              content: Text(
-                                                  'Food added successfully!')),
+                                            content: Text(
+                                              'Food added successfully!',
+                                              style: FontsTheme.hindBold_20(),
+                                            ),
+                                            duration:
+                                                const Duration(seconds: 2),
+                                            backgroundColor:
+                                                AppTheme.greenMainTheme,
+                                          ),
                                         );
                                       } catch (e) {
                                         ScaffoldMessenger.of(context)
                                             .showSnackBar(
                                           SnackBar(
-                                              content: Text(
-                                                  'Failed to add food: $e')),
+                                            content: Text(
+                                              'Failed to add food: $e',
+                                              style: FontsTheme.hindBold_20(),
+                                            ),
+                                            duration:
+                                                const Duration(seconds: 2),
+                                            backgroundColor:
+                                                AppTheme.greenMainTheme,
+                                          ),
                                         );
                                       }
                                     } else {
@@ -418,15 +432,32 @@ class _AddFoodDetailsPageState extends State<addFoodDetails> {
                                         ScaffoldMessenger.of(context)
                                             .showSnackBar(
                                           SnackBar(
-                                              content: Text(
-                                                  'Food added successfully!')),
+                                            behavior: SnackBarBehavior.floating,
+                                            margin:
+                                                EdgeInsets.only(bottom: 300),
+                                            content: Text(
+                                              'Food added successfully!',
+                                              style: FontsTheme.hindBold_20(),
+                                            ),
+                                            duration:
+                                                const Duration(seconds: 2),
+                                            backgroundColor:
+                                                AppTheme.greenMainTheme,
+                                          ),
                                         );
                                       } catch (e) {
                                         ScaffoldMessenger.of(context)
                                             .showSnackBar(
                                           SnackBar(
-                                              content: Text(
-                                                  'Failed to add food: $e')),
+                                            content: Text(
+                                              'Failed to add food: $e',
+                                              style: FontsTheme.hindBold_20(),
+                                            ),
+                                            duration:
+                                                const Duration(seconds: 2),
+                                            backgroundColor:
+                                                AppTheme.greenMainTheme,
+                                          ),
                                         );
                                       }
                                     }
