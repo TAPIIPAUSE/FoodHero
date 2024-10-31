@@ -504,7 +504,7 @@ router.post('/complete_waste', authenticateToken, async (req, res) => {
     res.status(200).json({
       message: 'Food item Waste successfully',
       scoreGained: score,
-      PersonObject: personObject
+      Waste: Number(w)
     });
 
   } catch (error) {
