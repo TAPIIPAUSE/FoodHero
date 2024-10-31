@@ -10,32 +10,36 @@ class AddFood {
   String remaining;
   String url;
   bool isCountable;
-  int weight_type;
-  int package_type;
-  //int current_amount;
-  //int total_amount;
-  //double consumed_amount;
-  //double current_quantity;
+  // int weight_type;
+  // int package_type;
+
+  // int current_amount;
+  // //int total_amount;
+  // double consumed_amount;
+  // double current_quantity;
   //double total_quanitity;
   //double consumed_quantity;
   //double total_price;
   //DateTime bestByDate;
-
-  AddFood({
-    required this.foodName,
-    required this.category,
-    required this.location,
-    required this.expired,
-    required this.remind,
-    required this.totalCost,
-    required this.individualWeight,
-    required this.individualCost,
-    required this.remaining,
-    required this.url,
-    required this.isCountable,
-    required this.weight_type,
-    required this.package_type,
-  });
+  String mimetype;
+  AddFood(
+      {required this.foodName,
+      required this.category,
+      required this.location,
+      required this.expired,
+      required this.remind,
+      required this.totalCost,
+      required this.individualWeight,
+      required this.individualCost,
+      required this.remaining,
+      required this.url,
+      required this.isCountable,
+      // required this.weight_type,
+      // required this.package_type,
+      // required this.current_amount,
+      // required this.consumed_amount,
+      // required this.current_quantity,
+      required this.mimetype});
 
   Map<String, dynamic> toJson() {
     return {
@@ -50,8 +54,8 @@ class AddFood {
       'remaining': remaining,
       'url': url,
       'isCountable': isCountable,
-      'weight_type': weight_type,
-      'package_type': package_type,
+      // 'weight_type': weight_type,
+      // 'package_type': package_type,
       // 'current_amount': current_amount,
       // 'total_amount': total_amount,
       // 'consumed_amount': consumed_amount,
