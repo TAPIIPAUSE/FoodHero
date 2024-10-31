@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_heatmap_calendar/flutter_heatmap_calendar.dart';
 
-class HMData {
-  final DateTime date;
-  final int count;
+// class HMData {
+//   final DateTime date;
+//   final int count;
 
-  HMData({required this.date, required this.count});
-}
+//   HMData({required this.date, required this.count});
+// }
 
 class HeatMapChart extends StatefulWidget {
   final Map<DateTime, int> dataMap;
@@ -87,6 +87,29 @@ class _HeatMapChartState extends State<HeatMapChart> {
               // 11: Colors.indigo,
               // 13: Colors.purple,
             },
+            onClick: (value) {
+              final count = widget.dataMap[value] ?? 0;
+              showDialog(
+                context: context,
+                builder: (BuildContext context) {
+                  return AlertDialog(
+                    title: Text("Date Information"),
+                    content: Text(
+                      'Date: ${value.toString().split(' ')[0]}\nWasted: $count%',
+                      style: const TextStyle(fontSize: 16),
+                    ),
+                    // actions: [
+                    //   TextButton(
+                    //     child: Text("OK"),
+                    //     onPressed: () {
+                    //       Navigator.of(context).pop();
+                    //     },
+                    //   ),
+                    // ],
+                  );
+                },
+              );
+            },
 
             // onClick: (value) {
             //   ScaffoldMessenger.of(context)
@@ -126,7 +149,7 @@ class _HeatMapChartState extends State<HeatMapChart> {
           SizedBox(width: 4),
           Text(label,
               style: TextStyle(
-                fontSize: 12,
+                fontSize: 14,
                 fontWeight: FontWeight.bold,
               )),
         ],

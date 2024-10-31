@@ -188,24 +188,28 @@ class _InterDashboardState extends State<InterDashboard> {
                     color: Colors.white,
                     borderRadius: BorderRadius.all(Radius.circular(20)),
                   ),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: [
-                      Text(
-                        "Food Waste Heatmap Calendar",
-                        style: FontsTheme.mouseMemoirs_30Black(),
-                      ),
-                      Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          HeatMapChart(
-                            dataMap: dataMap,
-                          ),
-                          
-                        ],
-                      ),
-                    ],
+                  child: SingleChildScrollView(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: [
+                        SizedBox(
+                          height: 20,
+                        ),
+                        Text(
+                          "Food Waste Heatmap Calendar",
+                          style: FontsTheme.mouseMemoirs_30Black(),
+                        ),
+                        Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            HeatMapChart(
+                              dataMap: dataMap,
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
                   ),
                 );
               }
