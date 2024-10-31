@@ -12,6 +12,8 @@ class FoodDetailData {
   final String Remaining_amount;
   final String URL;
   final bool isCountable;
+  final int scoreGained;
+  final int save;
 
   //final int total_price;
   // final int current_quantity;
@@ -40,6 +42,8 @@ class FoodDetailData {
     required this.Remaining_amount,
     required this.URL,
     required this.isCountable,
+    required this.scoreGained,
+    required this.save
 
     // required this.total_price,
     // required this.current_quantity,
@@ -61,29 +65,33 @@ class FoodDetailData {
       'Remaining_amount': Remaining_amount,
       'URL': URL,
       'isCountable': isCountable,
+      'scoreGained': scoreGained,
+      'save': save,
     };
   }
 
   // Create Food instance from a Map
   factory FoodDetailData.fromJson(Map<String, dynamic> json) {
     return FoodDetailData(
-      Food_ID: json['Food_ID'],
-      FoodName: json['FoodName'],
-      Category: json['Category'],
-      Location: json['Location'],
-      Expired: DateTime.parse(json['Expired']),
-      Remind: DateTime.parse(json['Remind']),
-      TotalCost: json['TotalCost'].toDouble(),
-      IndividualWeight: json['IndividualWeight'].toDouble(),
-      IndividualCost: json['IndividualCost'].toDouble(),
-      Remaining: json['Remaining'],
-      Remaining_amount: json['Remaining_amount'],
-      URL: json['URL'],
-      isCountable: json['isCountable'],
+        Food_ID: json['Food_ID'],
+        FoodName: json['FoodName'],
+        Category: json['Category'],
+        Location: json['Location'],
+        Expired: DateTime.parse(json['Expired']),
+        Remind: DateTime.parse(json['Remind']),
+        TotalCost: json['TotalCost'].toDouble(),
+        IndividualWeight: json['IndividualWeight'].toDouble(),
+        IndividualCost: json['IndividualCost'].toDouble(),
+        Remaining: json['Remaining'],
+        Remaining_amount: json['Remaining_amount'],
+        URL: json['URL'],
+        isCountable: json['isCountable'],
+        scoreGained: json['scoreGained'],
+        save: json['save'],
 
-      // current_quantity: json['current_quantity']
-      // total_price: json['total_price']
-    );
+        // current_quantity: json['current_quantity']
+        // total_price: json['total_price']
+        );
   }
 
   // Create a copy of Food with optional parameter updates
@@ -102,6 +110,8 @@ class FoodDetailData {
     String? URL,
     bool? isCountable,
     double? total_amount,
+    int? scoreGained,
+    int? save,
     //int? current_quantity,
     // int? total_price
   }) {
@@ -119,7 +129,8 @@ class FoodDetailData {
       Remaining_amount: Remaining_amount ?? this.Remaining_amount,
       URL: URL ?? this.URL,
       isCountable: isCountable ?? this.isCountable,
-
+      scoreGained: scoreGained ?? this.scoreGained,
+      save: save ?? this.save,
       // current_quantity: current_quantity ?? this.current_quantity
       //  total_price: total_price ?? this.total_price
     );

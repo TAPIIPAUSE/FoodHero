@@ -446,7 +446,7 @@ class _AddFoodDetailsPageState extends State<addFoodDetails> {
                           ),
                         ),
                         const SizedBox(
-                          height: 2,
+                          height: 10,
                         ),
                         Center(
                           child: IconButton(

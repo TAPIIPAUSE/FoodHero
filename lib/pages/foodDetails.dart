@@ -2,8 +2,10 @@ import 'dart:io';
 import 'dart:core';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:foodhero/models/completeconsume_model.dart';
 import 'package:foodhero/models/fooddetail_model.dart';
 import 'package:foodhero/pages/api/ApiUserFood.dart';
+import 'package:foodhero/pages/api/consumeFromFoodDetail.dart';
 import 'package:foodhero/pages/consumed/Consumed.dart';
 import 'package:foodhero/pages/consumed/consumedItemsProvider.dart';
 import 'package:foodhero/pages/inventory/inventory.dart';
@@ -53,6 +55,7 @@ class _FoodDetailsPageState extends State<foodDetails> {
   bool _isLoading = false; // Flag to indicate image loading state
   bool _showImageOption = false;
   //From API
+  int foodID = 0;
   DateTime expirationDate = DateTime(2024);
   String expireString = '';
   String expireDate = '';
@@ -77,7 +80,7 @@ class _FoodDetailsPageState extends State<foodDetails> {
   double costPerPiece = 0;
   double updateAllCost = 0;
   int consumeQuantity = 0;
-  late final String foodname;
+  late String foodname = '';
   late String category;
   late String location;
   late bool isCountable;
@@ -87,6 +90,13 @@ class _FoodDetailsPageState extends State<foodDetails> {
   late double xAlign;
   late Color loginColor;
   late Color signInColor;
+
+  //
+  String foodNameModal = '';
+  String consumeQuantityModal = '';
+  int score = 0;
+  int save = 0;
+
   Future<FoodDetailData?> _loadFoodDetail() async {
     try {
       // Debug log
@@ -106,6 +116,8 @@ class _FoodDetailsPageState extends State<foodDetails> {
       rethrow;
     }
   }
+
+  final Consumefromfooddetail APICompleteConsume = Consumefromfooddetail();
 
   void _pickImage() async {
     // Implement your image picking logic here (e.g., using image_picker)
@@ -346,7 +358,8 @@ class _FoodDetailsPageState extends State<foodDetails> {
             final food = snapshot.data!;
             print('Rendering food details for: ${food.FoodName}'); // Debug log
 
-            // Adjust screen height based on isCountable
+            foodname = food.FoodName;
+            foodID = food.Food_ID;
             category = food.Category;
             location = food.Location;
             isCountable = food.isCountable;
@@ -356,8 +369,8 @@ class _FoodDetailsPageState extends State<foodDetails> {
             remindString = food.Remind.toString();
             DateTime remind = DateTime.parse(remindString);
             remindDate = DateFormat('dd-MM-yyyy').format(remind);
-            intQuantity = int.tryParse(quantityString.split(' ')[0]);
             quantityString = food.Remaining;
+            intQuantity = int.tryParse(quantityString.split(' ')[0]);
             eachPieceWeight = food.IndividualWeight;
             eachPieceCost = food.IndividualCost;
             weightString = food.Remaining_amount;
@@ -366,7 +379,12 @@ class _FoodDetailsPageState extends State<foodDetails> {
             // weightUnit = food.;
 
             //allCostString = food.total_price.toString();
-            double screenHeight = food.isCountable ? 900 : 600;
+
+            foodNameModal = food.FoodName;
+            consumeQuantityModal = food.Remaining;
+            score = food.scoreGained;
+            save = food.save;
+            double screenHeight = food.isCountable ? 900 : 800;
 
             print('this is iscountable: $isCountable');
             return Stack(
@@ -904,8 +922,28 @@ class _FoodDetailsPageState extends State<foodDetails> {
                         )),
                         SizedBox(height: 10),
                         ElevatedButton(
-                          onPressed: () {
+                          onPressed: () async {
                             completeConsume(context);
+
+                            int fID = foodID;
+                            CompleteConsume addCompleteConsume =
+                                CompleteConsume(
+                              fID: fID,
+                            );
+                            try {
+                              await APICompleteConsume.completeConsume(
+                                  addCompleteConsume);
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                SnackBar(
+                                    content: Text("All $foodname Consumed!")),
+                              );
+                            } catch (e) {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                SnackBar(
+                                    content:
+                                        Text('Failed to complete food: $e')),
+                              );
+                            }
                           },
                           style: ElevatedButton.styleFrom(
                             backgroundColor: Color(0xFFF4A261),
@@ -988,7 +1026,12 @@ class _FoodDetailsPageState extends State<foodDetails> {
   }
 
   void consumedModal(BuildContext context) {
-    String foodnameString = foodname;
+    String tellScore = ' ';
+    if (score > 0) {
+      score = score;
+    } else {
+      tellScore = 'You loss $score points\n Your loss $save';
+    }
     showDialog(
       context: context,
       builder: (BuildContext context) {
@@ -1005,7 +1048,7 @@ class _FoodDetailsPageState extends State<foodDetails> {
                     child: Column(
                       children: [
                         Text(
-                          '$foodnameString\n Consummed',
+                          '$foodNameModal\n Consummed',
                           style: FontsTheme.mouseMemoirs_64Black(),
                           textAlign: TextAlign.center,
                         ),
@@ -1013,7 +1056,7 @@ class _FoodDetailsPageState extends State<foodDetails> {
                           height: 400,
                         ),
                         Text(
-                          '5 Boxes were consumed\n You get 5 points (+5.0)\n Save 500 baht',
+                          '$consumeQuantityModal were consumed\n You get $score points\n Save $save baht',
                           style: FontsTheme.mouseMemoirs_30Black(),
                           textAlign: TextAlign.center,
                         ),
@@ -1249,13 +1292,13 @@ class _FoodDetailsPageState extends State<foodDetails> {
                                   visible: !food.isCountable,
                                   child: Row(
                                     children: [
-                                      SizedBox(
+                                      const SizedBox(
                                         width: 50,
                                       ),
                                       Container(
                                         width: 100,
                                         height: 50,
-                                        padding: EdgeInsets.symmetric(
+                                        padding: const EdgeInsets.symmetric(
                                             horizontal: 20, vertical: 8),
                                         decoration: BoxDecoration(
                                           borderRadius:
@@ -1902,7 +1945,7 @@ class _FoodDetailsPageState extends State<foodDetails> {
                                 mainAxisAlignment:
                                     MainAxisAlignment.spaceBetween,
                                 children: [
-                                  Text(weightString.toString(),
+                                  Text(weightString,
                                       style: FontsTheme.hindBold_20()),
                                   // buildWeightUnit('')
                                 ],
