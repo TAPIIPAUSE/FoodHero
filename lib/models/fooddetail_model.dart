@@ -29,18 +29,17 @@ class FoodDetailData {
   // "RemindDate": "2024-12-15T00:00:00.000Z"
 
   FoodDetailData({
-    required this.Food_ID,
-    required this.FoodName,
-    required this.Category,
-    required this.Location,
-    required this.Expired,
-    required this.Remind,
-    required this.TotalCost,
-    required this.IndividualWeight,
-    required this.IndividualCost,
-    required this.Remaining,
-    required this.Remaining_amount,
-    required this.URL,
+    required this.foodId,
+    required this.foodName,
+    required this.category,
+    required this.location,
+    required this.expired,
+    required this.remind,
+    required this.totalCost,
+    required this.individualWeight,
+    required this.individualCost,
+    required this.remaining,
+    required this.url,
     required this.isCountable,
     required this.scoreGained,
     required this.save
@@ -136,14 +135,20 @@ class FoodDetailData {
     );
   }
 
-  @override
-  String toString() {
-    return 'Food(Food_ID: $Food_ID, FoodName: $FoodName, Category: $Category, '
-        'Location: $Location, Expired: $Expired, Remind: $Remind, '
-        'TotalCost: $TotalCost, IndividualWeight: $IndividualWeight, '
-        'IndividualCost: $IndividualCost, Remaining: $Remaining, Remaining_amount: $Remaining_amount, '
-        'URL: $URL, isCountable: $isCountable,)';
-    // current_quantity: $current_quantity
-    // total_price: $total_price
+  Map<String, dynamic> toJson() {
+    return {
+      'Food_ID': foodId,
+      'FoodName': foodName,
+      'Category': category,
+      'Location': location,
+      'Expired': expired.toIso8601String(),
+      'Remind': remind.toIso8601String(),
+      'TotalCost': totalCost,
+      'IndividualWeight': individualWeight,
+      'IndividualCost': individualCost,
+      'Remaining': remaining,
+      'URL': url,
+      'isCountable': isCountable,
+    };
   }
 }

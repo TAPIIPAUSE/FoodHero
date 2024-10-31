@@ -3,7 +3,9 @@ import 'package:foodhero/fonts.dart';
 import 'package:foodhero/pages/api/ApiClient.dart';
 import 'package:foodhero/pages/login_regis.dart';
 import 'package:foodhero/theme.dart';
-
+import 'package:foodhero/fonts.dart';
+import 'package:go_router/go_router.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class RegisterScreen extends StatefulWidget {
   @override

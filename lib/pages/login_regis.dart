@@ -24,6 +24,7 @@ class login_regis extends StatelessWidget {
         automaticallyImplyLeading: false, //hide back button
       ),
       body: Stack(
+        alignment: AlignmentDirectional.bottomCenter,
         children: [
           Align(
             alignment: Alignment.topCenter,
@@ -47,76 +48,78 @@ class login_regis extends StatelessWidget {
                     topLeft: Radius.circular(30),
                     topRight: Radius.circular(30)),
               ),
-            ),
-          ),
-          Align(
+              child: Align(
             alignment: Alignment.bottomCenter,
             child: SizedBox(
               width: 356,
               height: 267,
-              child: Image.asset(
-                'assets/images/Superfoodhero&background.png',
-                fit: BoxFit.cover,
+              child: Stack(
+                children: [Image.asset(
+                  'assets/images/Superfoodhero&background.png',
+                  fit: BoxFit.cover,
+                ),
+                Center(
+            child: Column(
+              children: [
+                InkWell(
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => LoginScreen()),
+                    );
+                  },
+                  child: Container(
+                    width: 200,
+                    height: 55,
+                    decoration: BoxDecoration(
+                      border: Border.all(color: AppTheme.greenMainTheme),
+                      borderRadius: BorderRadius.circular(40),
+                      color: AppTheme.softGreen,
+                    ),
+                    padding: EdgeInsets.all(10.0),
+                    child: Center(
+                      child:
+                          Text('Log in', style: FontsTheme.hindBold_30()),
+                    ),
+                  ),
+                ),
+          
+                const SizedBox(
+                    height: 10), // Add some spacing between the buttons
+                InkWell(
+                  onTap: () {
+                    // Navigate to another page (replace 'AnotherPage' with your actual page name)
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => RegisterScreen()),
+                    );
+                  },
+                  child: Container(
+                    width: 250,
+                    height: 54.74,
+                    decoration: BoxDecoration(
+                      border: Border.all(color: AppTheme.greenMainTheme),
+                      borderRadius: BorderRadius.circular(40),
+                      color: Color(0xFF3667BB),
+                    ),
+                    padding: EdgeInsets.all(10.0),
+                    child: Center(
+                      child: Text('Create Account',
+                          style: FontsTheme.hindBold_30()
+                              .copyWith(color: Colors.white)),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),],
               ),
             ),
           ),
-          Padding(
-              padding: const EdgeInsets.only(top: 565, left: 60),
-              child: Center(
-                child: Column(
-                  children: [
-                    InkWell(
-                      onTap: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(builder: (context) => LoginScreen()),
-                        );
-                      },
-                      child: Container(
-                        width: 200,
-                        height: 55,
-                        decoration: BoxDecoration(
-                          border: Border.all(color: AppTheme.greenMainTheme),
-                          borderRadius: BorderRadius.circular(40),
-                          color: AppTheme.softGreen,
-                        ),
-                        padding: EdgeInsets.all(10.0),
-                        child: Center(
-                          child:
-                              Text('Log in', style: FontsTheme.hindBold_30()),
-                        ),
-                      ),
-                    ),
-
-                    SizedBox(
-                        height: 10), // Add some spacing between the buttons
-                    InkWell(
-                      onTap: () {
-                        // Navigate to another page (replace 'AnotherPage' with your actual page name)
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(builder: (context) => RegisterScreen()),
-                        );
-                      },
-                      child: Container(
-                        width: 250,
-                        height: 54.74,
-                        decoration: BoxDecoration(
-                          border: Border.all(color: AppTheme.greenMainTheme),
-                          borderRadius: BorderRadius.circular(40),
-                          color: Color(0xFF3667BB),
-                        ),
-                        padding: EdgeInsets.all(10.0),
-                        child: Center(
-                          child: Text('Create Account',
-                              style: FontsTheme.hindBold_30()
-                                  .copyWith(color: Colors.white)),
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-              )),
+          
+            ),
+          ),
+          
         ],
         // ),
       ),

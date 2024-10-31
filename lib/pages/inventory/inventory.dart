@@ -13,7 +13,6 @@ import 'package:foodhero/widgets/inventory/inventory_list_item.dart';
 import 'package:foodhero/widgets/inventory/sort_dropdown.dart';
 import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
-import 'package:percent_indicator/percent_indicator.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class Inventory extends StatefulWidget {
@@ -43,7 +42,7 @@ class _InventoryState extends State<Inventory> {
       final prefs = await SharedPreferences.getInstance();
       final hID = prefs.getInt('hID');
       print('hID from SharedPreferences: $hID'); // Debug print
-      final data = await APIFood().getInventoryFood(hID!); //pervent null?
+      final data = await APIFood().getInventoryFood(hID!);
       print('Fetched inventory food data: $data'); // Debug print
       // print('Fetched data: ${data.map((item) => item.toString())}');
       return data;
@@ -150,17 +149,15 @@ class _InventoryState extends State<Inventory> {
     {"name": "Mom", "score": 18547},
     {"name": "Brother", "score": 17245},
   ];
-  final ScrollController foodList = ScrollController();
-
   void _scrollToTop() {
     _InventoryScrollController.animateTo(
       0,
-      duration: const Duration(milliseconds: 1000),
+      duration: Duration(milliseconds: 300),
       curve: Curves.easeInOut,
     );
-    foodList.animateTo(0,
-        duration: const Duration(milliseconds: 1200), curve: Curves.easeOut);
   }
+
+  final ScrollController foodList = ScrollController();
 
   @override
   Widget build(BuildContext context) {
@@ -200,7 +197,7 @@ class _InventoryState extends State<Inventory> {
           body: Stack(
             children: [
               RawScrollbar(
-                  //controller: _InventoryScrollController,
+                  controller: _InventoryScrollController,
                   thumbColor: AppTheme.greenMainTheme,
                   child: SingleChildScrollView(
                     child: Column(
@@ -349,9 +346,7 @@ class _InventoryState extends State<Inventory> {
                                     if (snapshot.connectionState ==
                                         ConnectionState.waiting) {
                                       return const Center(
-                                        child: CircularProgressIndicator(
-                                          color: AppTheme.softRed,
-                                        ),
+                                        child: CircularProgressIndicator(),
                                       );
                                     } else if (snapshot.hasError) {
                                       return Center(
@@ -368,76 +363,82 @@ class _InventoryState extends State<Inventory> {
                                     //       child: Text('No food items found'));
                                     // }
                                     else {
-                                      return ListView.builder(
-                                        shrinkWrap: true,
-                                        controller: foodList,
-                                        itemCount:
-                                            snapshot.data!.foodItems.length,
-                                        itemBuilder: (context, index) {
-                                          final foodItem =
-                                              snapshot.data!.foodItems[
+                                      return SizedBox(
+                                        //FoodList Blue background
+                                        height: screenHeight - 300,
+                                        child: RawScrollbar(
+                                          controller: foodList,
+                                          thumbColor: AppTheme.greenMainTheme,
+                                          child: ListView.builder(
+                                            controller: foodList,
+                                            itemCount:
+                                                snapshot.data!.foodItems.length,
+                                            itemBuilder: (context, index) {
+                                              final foodItem = snapshot
+                                                      .data!.foodItems[
                                                   index]; // Cast to Food type
-                                          return GestureDetector(
-                                              onTap: () async {
-                                                //FoodDetailData foodDetail = await getFoodDetail(fID);
-                                                print(
-                                                    'Navigating to food details for ID: ${foodItem.foodId}');
-                                                print('Food Item: $foodItem');
-                                                Navigator.push(
-                                                  context,
-                                                  MaterialPageRoute(
-                                                    builder: (context) =>
-                                                        foodDetails(
-                                                      FoodID: foodItem.foodId,
-                                                    ),
-                                                  ),
-                                                );
-                                              },
-                                              child: InventoryListItem(
-                                                foodname: foodItem
-                                                    .foodName, // Use 'foodName' from model
-                                                img: foodItem
-                                                    .url, // Use 'url' from model
-                                                progressbar:
-                                                    40, // Static or calculated value
-                                                consuming: foodItem
-                                                    .consuming, // Use 'consuming' from model
-                                                remaining: foodItem
-                                                    .remaining, // Use 'remaining' from model
-                                                foodid: foodItem
-                                                    .foodId, // Use 'foodId' from model
-                                                expired: foodItem
-                                                    .expired, // Use 'expired' from model
-                                                // Uncomment and use additional properties if needed
-                                                // remind: foodItem.remind,
-                                                // isCountable: foodItem.isCountable,
-                                                // TotalCost: foodItem.TotalCost,
-                                                // IndividualWeight: foodItem.IndividualWeight,
-                                                // IndividualCost: foodItem.IndividualCost,
-                                              ));
-                                        },
+                                              return GestureDetector(
+                                                  onTap: () async {
+                                                    //FoodDetailData foodDetail = await getFoodDetail(fID);
+                                                    print(
+                                                        'Navigating to food details for ID: ${foodItem.foodId}');
+                                                    print(
+                                                        'Food Item: $foodItem');
+                                                    Navigator.push(
+                                                      context,
+                                                      MaterialPageRoute(
+                                                        builder: (context) =>
+                                                            foodDetails(
+                                                          FoodID:
+                                                              foodItem.foodId,
+                                                        ),
+                                                      ),
+                                                    );
+                                                  },
+                                                  child: InventoryListItem(
+                                                    foodname: foodItem
+                                                        .foodName, // Use 'foodName' from model
+                                                    img: foodItem
+                                                        .url, // Use 'url' from model
+                                                    progressbar:
+                                                        40, // Static or calculated value
+                                                    consuming: foodItem
+                                                        .consuming, // Use 'consuming' from model
+                                                    remaining: foodItem
+                                                        .remaining, // Use 'remaining' from model
+                                                    foodid: foodItem
+                                                        .foodId, // Use 'foodId' from model
+                                                    expired: foodItem
+                                                        .expired, // Use 'expired' from model
+                                                    // Uncomment and use additional properties if needed
+                                                    // remind: foodItem.remind,
+                                                    // isCountable: foodItem.isCountable,
+                                                    // TotalCost: foodItem.TotalCost,
+                                                    // IndividualWeight: foodItem.IndividualWeight,
+                                                    // IndividualCost: foodItem.IndividualCost,
+                                                  ));
+                                            },
+                                          ),
+                                        ),
                                       );
                                     }
                                   }),
-                              // InventoryListItem(
-                              //   foodname: "Try food",
-                              //   img: "ssss",
-                              //   // location: "Pantry try",
-                              //   expired: DateTime(2024, 0012, 30),
-                              //   // remind: "2024-11-24",
-                              //   progressbar: 40,
-                              //   consuming: "2",
-                              //   // remaining: 3,
-                              //   foodid: 10, remaining: '5 pieces',
-                              //   //expired: "2024-12-31",
-                              //   // isCountable: true,
-                              //   // TotalCost: 50,
-                              //   // IndividualWeight: 100,
-                              //   // IndividualCost: 10,
-                              // ),
-                              const SizedBox(
-                                height: 55,
-                              )
+                              InventoryListItem(
+                                foodname: "Try food",
+                                img: "ssss",
+                                // location: "Pantry try",
+                                expired: DateTime(2024, 0012, 30),
+                                // remind: "2024-11-24",
+                                progressbar: 40,
+                                consuming: "2",
+                                // remaining: 3,
+                                foodid: 10, remaining: '5 pieces',
+                                //expired: "2024-12-31",
+                                // isCountable: true,
+                                // TotalCost: 50,
+                                // IndividualWeight: 100,
+                                // IndividualCost: 10,
+                              ),
                             ],
                           ),
                         ),
