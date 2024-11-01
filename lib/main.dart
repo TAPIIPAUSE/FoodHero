@@ -19,7 +19,7 @@ import 'package:firebase_core/firebase_core.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
- // await Firebase.initializeApp(); // Initialize Firebase
+  //await Firebase.initializeApp(); // Initialize Firebase
   SharedPreferences prefs = await SharedPreferences.getInstance();
   String? token = prefs.getString('james');
 

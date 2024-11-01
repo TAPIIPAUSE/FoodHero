@@ -1,18 +1,23 @@
 class AddFood {
-  String foodName;
-  int category;
+  String food_name;
+  String img;
   int location;
-  DateTime expired;
-  DateTime remind;
-  double totalCost;
-  double individualWeight;
-  double individualCost;
-  String remaining;
-  String url;
+  int food_category;
   bool isCountable;
-  // int weight_type;
-  // int package_type;
+  int weight_type;
+  int package_type;
+  int current_amount;
+  int total_amount;
+  double consumed_amount;
+  int current_quantity;
+  int total_quanitity;
+  int consumed_quantity;
+  double total_price;
+  DateTime bestByDate;
+  DateTime RemindDate;
 
+//    int package_type;
+// int weight_type;
   // int current_amount;
   // //int total_amount;
   // double consumed_amount;
@@ -21,41 +26,50 @@ class AddFood {
   //double consumed_quantity;
   //double total_price;
   //DateTime bestByDate;
-  String mimetype;
-  AddFood(
-      {required this.foodName,
-      required this.category,
-      required this.location,
-      required this.expired,
-      required this.remind,
-      required this.totalCost,
-      required this.individualWeight,
-      required this.individualCost,
-      required this.remaining,
-      required this.url,
-      required this.isCountable,
-      // required this.weight_type,
-      // required this.package_type,
-      // required this.current_amount,
-      // required this.consumed_amount,
-      // required this.current_quantity,
-      required this.mimetype});
+// String mimetype;
+  AddFood({
+    required this.food_name,
+    required this.img,
+    required this.location,
+    required this.food_category,
+    required this.isCountable,
+    required this.weight_type,
+    required this.package_type,
+    required this.current_amount,
+    required this.total_amount,
+    required this.consumed_amount,
+    required this.current_quantity,
+    required this.total_quanitity,
+    required this.consumed_quantity,
+    required this.total_price,
+    required this.bestByDate,
+    required this.RemindDate,
+
+    // required this.current_amount,
+    // required this.consumed_amount,
+    // required this.current_quantity,
+    //required this.mimetype
+  });
 
   Map<String, dynamic> toJson() {
     return {
-      'foodName': foodName,
-      'category': category,
+      'food_name': food_name,
+      'img': img,
       'location': location,
-      'expired': expired.toIso8601String(),
-      'remind': remind.toIso8601String(),
-      'totalCost': totalCost,
-      'individualWeight': individualWeight,
-      'individualCost': individualCost,
-      'remaining': remaining,
-      'url': url,
+      'food_category': food_category,
       'isCountable': isCountable,
-      // 'weight_type': weight_type,
-      // 'package_type': package_type,
+      'weight_type': weight_type,
+      'package_type': package_type,
+      'current_amount': current_amount,
+      'total_amount': total_amount,
+      'consumed_amount': consumed_amount,
+      'current_quantity': current_quantity,
+      'total_quanitity': total_quanitity,
+      'consumed_quantity': consumed_quantity,
+      'total_price': total_price,
+      'bestByDate': bestByDate.toIso8601String(),
+      'RemindDate': RemindDate.toIso8601String(),
+      //
       // 'current_amount': current_amount,
       // 'total_amount': total_amount,
       // 'consumed_amount': consumed_amount,

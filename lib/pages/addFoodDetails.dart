@@ -9,6 +9,7 @@ import 'package:foodhero/theme.dart';
 import 'package:foodhero/fonts.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:interactive_slider/interactive_slider.dart';
+//import 'package:intl/intl.dart';
 
 class addFoodDetails extends StatefulWidget {
   @override
@@ -28,8 +29,8 @@ class _AddFoodDetailsPageState extends State<addFoodDetails> {
   // Image provider for the selected image
   bool _isLoading = false; // Flag to indicate image loading state
   bool _showImageOption = false;
-  DateTime expirationDate = DateTime(2024);
-  DateTime reminderDate = DateTime(2024);
+  DateTime expirationDate = DateTime.now();
+  DateTime reminderDate = DateTime.now();
   int quantity = 1;
   TextEditingController quantityController = TextEditingController();
   double weightDouble = 1; // in grams
@@ -45,8 +46,11 @@ class _AddFoodDetailsPageState extends State<addFoodDetails> {
   late String selectedCategory = '';
   int selectedCategoryIndex = 0;
   String selectedLocation = '';
-  int selectedLocationIndex = 0;
+  int selectedLocationIndex = 1;
   bool isCountable = true;
+  int selectedQuantityUnit = 0;
+  int selectedWeightUnit = 0;
+
   late double xAlign;
   late Color loginColor;
   late Color signInColor;
@@ -185,6 +189,13 @@ class _AddFoodDetailsPageState extends State<addFoodDetails> {
     });
   }
 
+  // void currency() {
+  //   Locale locale = Localizations.localeOf(context);
+  //   var format = NumberFormat.simpleCurrency(locale: locale.toString());
+  //   print("CURRENCY SYMBOL ${format.currencySymbol}"); // $
+  //   print("CURRENCY NAME ${format.currencyName}"); // USD
+  // }
+
   @override
   void initState() {
     super.initState();
@@ -193,6 +204,7 @@ class _AddFoodDetailsPageState extends State<addFoodDetails> {
     signInColor = normalColor;
     quantity = quantity;
     weightController.text = weight.toString();
+    selectedQuantityUnit = selectedQuantityUnit;
   }
 
   @override
@@ -359,27 +371,55 @@ class _AddFoodDetailsPageState extends State<addFoodDetails> {
                                       //int category = selectedCategoryIndex;
                                       //String location = selectedLocation;
                                       AddFood addNewFood = AddFood(
-                                        foodName: foodName,
-                                        category: selectedCategoryIndex,
+                                        food_name: foodName,
+
+                                        img: _image != null
+                                            ? base64Encode(
+                                                _image!.file.readAsBytesSync())
+                                            : '',
                                         location: selectedLocationIndex,
-                                        expired: expirationDate,
-                                        remind: reminderDate,
-                                        totalCost: allCost,
-                                        individualWeight: weightDouble,
-                                        individualCost: costPerPiece,
-                                        remaining: "remaining",
-                                        url: base64Encode(
-                                            _image!.file.readAsBytesSync()),
+                                        food_category: selectedCategoryIndex,
                                         isCountable: isCountable,
-                                        // weight_type: 0,
-                                        // package_type: 0,
-                                        // current_amount: current_amount,
-                                        // consumed_amount: null,
-                                        // current_quantity: null,
-                                        mimetype: '',
+
+                                        weight_type: selectedWeightUnit,
+                                        package_type: selectedQuantityUnit,
+
+                                        current_amount: 4,
+                                        total_amount: 8,
+                                        consumed_amount: 2,
+                                        current_quantity: 3,
+                                        total_quanitity: 8,
+                                        consumed_quantity: 4,
+                                        total_price: allCost,
+                                        bestByDate: expirationDate,
+
+                                        RemindDate: reminderDate,
+                                        // foodName: foodName,
+                                        // category: selectedCategoryIndex,
+                                        // location: selectedLocationIndex,
+                                        // expired: expirationDate,
+                                        // remind: reminderDate,
+                                        // totalCost: allCost,
+                                        // individualWeight: weightDouble,
+                                        // individualCost: costPerPiece,
+                                        // remaining: "remaining",
+                                        // url: _image != null
+                                        //     ? base64Encode(
+                                        //         _image!.file.readAsBytesSync())
+                                        //     : '',
+                                        // isCountable: isCountable,
+
+                                        // package_type: selectedQuantityUnit,
+                                        // weight_type: selectedWeightUnit,
+                                        // // current_amount: current_amount,
+                                        // // consumed_amount: null,
+                                        // // current_quantity: null,
+                                        // mimetype: 'jpeg',
                                       );
                                       try {
-                                        await addFoodAPI.addFood(addNewFood);
+                                        await addFoodAPI.addFood(
+                                          addNewFood,
+                                        );
                                         ScaffoldMessenger.of(context)
                                             .showSnackBar(
                                           SnackBar(
@@ -413,19 +453,32 @@ class _AddFoodDetailsPageState extends State<addFoodDetails> {
                                       //int category = selectedCategoryIndex;
                                       //String location = selectedLocation;
                                       AddFood addNewFood = AddFood(
-                                        foodName: foodName,
-                                        category: selectedCategoryIndex,
+                                        food_name: foodName,
+
+                                        img: _image != null
+                                            ? base64Encode(
+                                                _image!.file.readAsBytesSync())
+                                            : '',
                                         location: selectedLocationIndex,
-                                        expired: expirationDate,
-                                        remind: reminderDate,
-                                        totalCost: allCost,
-                                        individualWeight: weightDouble,
-                                        individualCost: costPerPiece,
-                                        remaining: "remaining",
-                                        url: " ",
-                                        isCountable: isCountable, mimetype: '',
-                                        // weight_type: 0,
-                                        // package_type: 0,
+                                        food_category: selectedCategoryIndex,
+                                        isCountable: isCountable,
+
+                                        weight_type: selectedWeightUnit,
+                                        package_type: selectedQuantityUnit,
+
+                                        current_amount: 4,
+                                        total_amount: 8,
+                                        consumed_amount: 2,
+                                        current_quantity: 3,
+                                        total_quanitity: 8,
+                                        consumed_quantity: 4,
+                                        total_price: allCost,
+                                        bestByDate: expirationDate,
+
+                                        RemindDate: reminderDate,
+
+                                        //  current_quantity: "remaining",     individualWeight: weightDouble,
+                                        //       individualCost: costPerPiece,
                                       );
                                       try {
                                         await addFoodAPI.addFood(addNewFood);
@@ -512,7 +565,7 @@ class _AddFoodDetailsPageState extends State<addFoodDetails> {
   ];
 
   Widget buildCategoriesField(String label, String value, IconData icon) {
-    selectedCategory = itemCategory[0];
+    selectedCategory = itemCategory[0 + 1];
     return StatefulBuilder(
         builder: (BuildContext context, StateSetter setState) {
       return Padding(
@@ -593,7 +646,7 @@ class _AddFoodDetailsPageState extends State<addFoodDetails> {
     "Pantry",
   ];
   Widget buildWhereField(String label, String value, IconData icon) {
-    selectedLocation = itemLocation[0];
+    selectedLocation = itemLocation[0 + 1];
     return StatefulBuilder(
         builder: (BuildContext context, StateSetter setState) {
       return Padding(
@@ -876,6 +929,9 @@ class _AddFoodDetailsPageState extends State<addFoodDetails> {
                                           SizedBox(
                                             width: 80,
                                             child: TextField(
+                                                keyboardType:
+                                                    const TextInputType
+                                                        .numberWithOptions(),
                                                 controller: quantityController,
                                                 style:
                                                     FontsTheme.hindBold_20()),
@@ -969,6 +1025,8 @@ class _AddFoodDetailsPageState extends State<addFoodDetails> {
                                       SizedBox(
                                         width: 80,
                                         child: TextField(
+                                            keyboardType: const TextInputType
+                                                .numberWithOptions(),
                                             controller: weightController,
                                             style: FontsTheme.hindBold_20()),
                                       ),
@@ -1080,6 +1138,7 @@ class _AddFoodDetailsPageState extends State<addFoodDetails> {
                             if (newValue != null) {
                               setState(() {
                                 selectedValue = newValue;
+                                selectedQuantityUnit = items.indexOf(newValue);
                               });
                             }
                           },
@@ -1144,6 +1203,7 @@ class _AddFoodDetailsPageState extends State<addFoodDetails> {
                             if (newValue != null) {
                               setState(() {
                                 selectedValue = newValue;
+                                selectedWeightUnit = items.indexOf(newValue);
                               });
                             }
                           },
@@ -1210,14 +1270,22 @@ class _AddFoodDetailsPageState extends State<addFoodDetails> {
                                           },
                                           style: FontsTheme.hindBold_15()),
                                     ),
-                                    Icon(Icons.attach_money,
-                                        color: Colors.green),
-                                    SizedBox(
+                                    Text(
+                                      '฿',
+                                      style: FontsTheme.mouseMemoirs_25(),
+                                    ),
+                                    Text(
+                                      'TH ',
+                                      style: FontsTheme.hindBold_20(),
+                                    ),
+                                    // Icon(Icons.monetization_on_sharp,
+                                    //     color: Colors.green),
+                                    const SizedBox(
                                       width: 50,
                                     ),
                                     IconButton(
                                       onPressed: () {},
-                                      icon: Icon(
+                                      icon: const Icon(
                                         Icons.info_rounded,
                                         color: AppTheme.mainBlue,
                                         size: 30,
@@ -1244,31 +1312,39 @@ class _AddFoodDetailsPageState extends State<addFoodDetails> {
                                 borderRadius: BorderRadius.circular(10),
                                 color: Colors.white,
                               ),
-                              child: SizedBox(
-                                  width: 100,
-                                  child: TextField(
-                                      decoration: InputDecoration(
-                                        labelText: 'Weight',
-                                      ),
-                                      keyboardType: TextInputType.number,
-                                      onChanged: (value) {
-                                        if (value.isNotEmpty) {
-                                          setState(() {
-                                            costPerPiece =
-                                                double.tryParse(value) ??
-                                                    costPerPiece;
-                                            _updateAllCost();
-                                          });
-                                        }
-                                      },
-                                      controller: TextEditingController(
-                                          text: _updateWeight()
-                                              .toString()), // Set initial text
+                              child: Row(
+                                children: [
+                                  SizedBox(
+                                      width: 50,
+                                      child: TextField(
+                                          decoration: const InputDecoration(
+                                            labelText: 'Weight',
+                                          ),
+                                          keyboardType: TextInputType.number,
+                                          onChanged: (value) {
+                                            if (value.isNotEmpty) {
+                                              setState(() {
+                                                costPerPiece =
+                                                    double.tryParse(value) ??
+                                                        costPerPiece;
+                                                _updateAllCost();
+                                              });
+                                            }
+                                          },
+                                          controller: TextEditingController(
+                                              text: _updateWeight()
+                                                  .toString()), // Set initial text
 
-                                      style: FontsTheme.hindBold_15())),
+                                          style: FontsTheme.hindBold_15())),
+                                  Text(
+                                    'gram',
+                                    style: FontsTheme.hindBold_15(),
+                                  )
+                                ],
+                              ),
                             ),
                             Container(
-                                padding: EdgeInsets.symmetric(
+                                padding: const EdgeInsets.symmetric(
                                     horizontal: 12, vertical: 8),
                                 decoration: BoxDecoration(
                                   borderRadius: BorderRadius.circular(10),
@@ -1277,9 +1353,9 @@ class _AddFoodDetailsPageState extends State<addFoodDetails> {
                                 child: Row(
                                   children: [
                                     SizedBox(
-                                        width: 100,
+                                        width: 80,
                                         child: TextField(
-                                            decoration: InputDecoration(
+                                            decoration: const InputDecoration(
                                               labelText: 'Cost',
                                             ),
                                             keyboardType: TextInputType.number,
@@ -1303,8 +1379,17 @@ class _AddFoodDetailsPageState extends State<addFoodDetails> {
                                             controller: TextEditingController(
                                                 text: _updateCost().toString()),
                                             style: FontsTheme.hindBold_15())),
-                                    Icon(Icons.attach_money,
-                                        color: Colors.green),
+
+                                    Text(
+                                      '฿',
+                                      style: FontsTheme.mouseMemoirs_25(),
+                                    ),
+                                    Text(
+                                      'TH ',
+                                      style: FontsTheme.hindBold_20(),
+                                    ),
+                                    // Icon(Icons.attach_money,
+                                    //     color: Colors.green),
                                   ],
                                 )),
                           ],
@@ -1322,10 +1407,13 @@ class _AddFoodDetailsPageState extends State<addFoodDetails> {
   Future<void> _selectExDate() async {
     final DateTime? picked = await showDatePicker(
       context: context,
-      initialDate: expirationDate,
+      initialDate: DateTime.now(),
       firstDate: DateTime(2020),
       lastDate: DateTime(2030),
     );
+    setState(() {
+      expirationDate = picked ?? DateTime.now();
+    });
     if (picked != null && picked != expirationDate) {
       setState(() {
         expirationDate = picked;
@@ -1336,7 +1424,7 @@ class _AddFoodDetailsPageState extends State<addFoodDetails> {
   Future<void> _selectReDate() async {
     final DateTime? picked = await showDatePicker(
       context: context,
-      initialDate: reminderDate,
+      initialDate: DateTime.now(),
       firstDate: DateTime(2020),
       lastDate: DateTime(2030),
     );
@@ -1366,7 +1454,7 @@ class _AddFoodDetailsPageState extends State<addFoodDetails> {
   Future<void> _selectDate() async {
     final DateTime? picked = await showDatePicker(
       context: context,
-      initialDate: expirationDate,
+      initialDate: DateTime.now(),
       firstDate: DateTime(2020),
       lastDate: DateTime(2030),
     );
@@ -1380,7 +1468,7 @@ class _AddFoodDetailsPageState extends State<addFoodDetails> {
   Future<void> _remaining() async {
     final DateTime? picked = await showDatePicker(
       context: context,
-      initialDate: expirationDate,
+      initialDate: DateTime.now(),
       firstDate: DateTime(2020),
       lastDate: DateTime(2030),
     );

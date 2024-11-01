@@ -129,7 +129,20 @@ class APIFood {
 
   Future<void> addFood(AddFood food) async {
     try {
-      final response = await dio.post('$baseurl/addFood', data: food.toJson());
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      final token = prefs.getString('user_token');
+      print('Adding food details for: $food with token: $token'); // Debug log
+
+      final response = await dio.post(
+        '$baseurl/addFood',
+        data: food.toJson(), // Data directly passed here
+        options: Options(
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer $token',
+          },
+        ),
+      );
 
       if (response.statusCode == 200) {
         print('Food added successfully: ${response.data}');

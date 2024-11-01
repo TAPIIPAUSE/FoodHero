@@ -79,7 +79,8 @@ class _FoodDetailsPageState extends State<foodDetails> {
   double allCost = 0;
   double costPerPiece = 0;
   double updateAllCost = 0;
-  //int consumeQuantity = 0;
+  double consumeQuantity = 0;
+  int selectedConsumeQuantityModal = 0;
   late String foodname = '';
   late String category;
   late String location;
@@ -674,7 +675,46 @@ class _FoodDetailsPageState extends State<foodDetails> {
                               child: Container(
                                 alignment: Alignment.bottomCenter,
                                 child: TextButton(
-                                  onPressed: () => addToConsumed(context),
+                                  onPressed: () async {
+                                    addToConsumed(context);
+
+                                    int fID = foodID;
+                                    CompleteConsume addCompleteConsume =
+                                        CompleteConsume(
+                                      fID: fID,
+                                    );
+                                    try {
+                                      await APICompleteConsume.completeConsume(
+                                          addCompleteConsume);
+                                      ScaffoldMessenger.of(context)
+                                          .showSnackBar(
+                                        SnackBar(
+                                          behavior: SnackBarBehavior.floating,
+                                          margin: EdgeInsets.only(bottom: 500),
+                                          content: Text(
+                                            "$selectedConsumeQuantityModal $foodname Consumed!",
+                                            style: FontsTheme.hindBold_20(),
+                                          ),
+                                          duration: const Duration(seconds: 6),
+                                          backgroundColor:
+                                              AppTheme.greenMainTheme,
+                                        ),
+                                      );
+                                    } catch (e) {
+                                      ScaffoldMessenger.of(context)
+                                          .showSnackBar(SnackBar(
+                                        behavior: SnackBarBehavior.floating,
+                                        margin: EdgeInsets.only(bottom: 300),
+                                        content: Text(
+                                          'Failed to complete food: $e',
+                                          style: FontsTheme.hindBold_20(),
+                                        ),
+                                        duration: const Duration(seconds: 2),
+                                        backgroundColor:
+                                            AppTheme.greenMainTheme,
+                                      ));
+                                    }
+                                  },
                                   style: TextButton.styleFrom(
                                     backgroundColor: AppTheme.softRed,
                                     fixedSize: Size(350, 50),
@@ -912,6 +952,8 @@ class _FoodDetailsPageState extends State<foodDetails> {
                                                 setState(() {
                                           consumeQuantity =
                                               valueWeightConsumeOption;
+                                          selectedConsumeQuantityModal =
+                                              consumeQuantity.toInt();
                                           //weightConsumeOption.toStringAsFixed(0);
                                         }),
                                       ),
@@ -1002,19 +1044,19 @@ class _FoodDetailsPageState extends State<foodDetails> {
   List<ConsumedListItem> consumedItems = [];
 
   void addToConsumed(BuildContext context) {
-    final newItem = ConsumedListItem(
-      cID: 1,
-      thumbnail: "assets/images/apples.jpg",
-      foodname: foodname,
-      expiry: "ssss",
-      progressbar: 80,
-      consuming: "12",
-      remaining: "8",
-      isCountable: isCountable,
-    );
+    // final newItem = ConsumedListItem(
+    //   cID: 1,
+    //   thumbnail: "assets/images/apples.jpg",
+    //   foodname: foodname,
+    //   expiry: "ssss",
+    //   progressbar: 80,
+    //   consuming: "12",
+    //   remaining: "8",
+    //   isCountable: isCountable,
+    // );
 
-    Provider.of<ConsumedItemsProvider>(context, listen: false)
-        .addConsumedItem(newItem);
+    // Provider.of<ConsumedItemsProvider>(context, listen: false)
+    //     .addConsumedItem(newItem);
     // setState(() {
     //   consumedItems.add(newItem);
     // });
@@ -1025,18 +1067,20 @@ class _FoodDetailsPageState extends State<foodDetails> {
     //     builder: (context) => Consumed(consumedItems: consumedItems),
     //   ),
     // );
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        behavior: SnackBarBehavior.floating,
-        margin: EdgeInsets.only(bottom: 600),
-        content: Text(
-          '${foodname} added to consumed list',
-          style: FontsTheme.hindBold_20(),
-        ),
-        duration: const Duration(seconds: 2),
-        backgroundColor: AppTheme.greenMainTheme,
-      ),
-    );
+    showDialog(
+        context: context,
+        builder: (BuildContext contetxt) {
+          return SnackBar(
+            behavior: SnackBarBehavior.floating,
+            margin: EdgeInsets.only(bottom: 600),
+            content: Text(
+              '$selectedConsumeQuantityModal ${foodname} added to consumed list',
+              style: FontsTheme.hindBold_20(),
+            ),
+            duration: const Duration(seconds: 2),
+            backgroundColor: AppTheme.greenMainTheme,
+          );
+        });
   }
 
   void completeConsume(BuildContext context) {
@@ -1150,7 +1194,7 @@ class _FoodDetailsPageState extends State<foodDetails> {
       });
     }
 
-    double consumeQuantity = getQuantity.toDouble();
+    consumeQuantity = getQuantity.toDouble();
     showDialog(
         context: context,
         builder: (BuildContext contetxt) {
@@ -2294,7 +2338,7 @@ class _FoodDetailsPageState extends State<foodDetails> {
                                     Text('All Cost',
                                         style:
                                             FontsTheme.mouseMemoirs_30Black()),
-                                    SizedBox(width: 20),
+                                    const SizedBox(width: 20),
                                     SizedBox(
                                       width: 100,
                                       child: TextField(
@@ -2312,14 +2356,20 @@ class _FoodDetailsPageState extends State<foodDetails> {
                                           },
                                           style: FontsTheme.hindBold_15()),
                                     ),
-                                    Icon(Icons.attach_money,
-                                        color: Colors.green),
-                                    SizedBox(
+                                    Text(
+                                      '฿',
+                                      style: FontsTheme.mouseMemoirs_25(),
+                                    ),
+                                    Text(
+                                      'TH ',
+                                      style: FontsTheme.hindBold_20(),
+                                    ),
+                                    const SizedBox(
                                       width: 50,
                                     ),
                                     IconButton(
                                       onPressed: () {},
-                                      icon: Icon(
+                                      icon: const Icon(
                                         Icons.info_rounded,
                                         color: AppTheme.mainBlue,
                                         size: 30,
@@ -2347,7 +2397,7 @@ class _FoodDetailsPageState extends State<foodDetails> {
                                 color: Colors.white,
                               ),
                               child: SizedBox(
-                                  width: 100,
+                                  width: 80,
                                   child: TextField(
                                       decoration: const InputDecoration(
                                         labelText: 'Weight',
@@ -2381,7 +2431,7 @@ class _FoodDetailsPageState extends State<foodDetails> {
                                 child: Row(
                                   children: [
                                     SizedBox(
-                                        width: 100,
+                                        width: 80,
                                         child: TextField(
                                             decoration: const InputDecoration(
                                               labelText: 'Cost',
@@ -2409,8 +2459,16 @@ class _FoodDetailsPageState extends State<foodDetails> {
                                                 //_updateCost().toString()
                                                 ),
                                             style: FontsTheme.hindBold_15())),
-                                    Icon(Icons.attach_money,
-                                        color: Colors.green),
+                                    Text(
+                                      '฿',
+                                      style: FontsTheme.mouseMemoirs_25(),
+                                    ),
+                                    Text(
+                                      'TH ',
+                                      style: FontsTheme.hindBold_20(),
+                                    ),
+                                    // Icon(Icons.attach_money,
+                                    //     color: Colors.green),
                                   ],
                                 )),
                           ],
