@@ -11,7 +11,7 @@ export function authenticateToken(req, res, next) {
   console.log("Token received for verification:", token);
 
 
-  if (token == null) return res.status(401).send("No JWT Token");
+  if (token == null) return res.status(400).send("No JWT Token");
 
   jwt.verify(token, process.env.TOKEN_SECRET, (err, user) => {
     console.log(err);
@@ -30,7 +30,7 @@ export function authenticateCookieToken(req, res, next){
 
   // console.log("This is cookie information:", req.cookies.token)
 
-  if (!token) return res.status(401).send('Access Denied');
+  if (!token) return res.status(400).send('Access Denied');
 
   jwt.verify(token, process.env.TOKEN_SECRET, (err, user) => {
       if (err) return res.status(403).send('Expired Token');
