@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:io';
 import 'dart:core';
 import 'package:flutter/cupertino.dart';
@@ -95,8 +96,9 @@ class _FoodDetailsPageState extends State<foodDetails> {
   //
   String foodNameModal = '';
   String consumeQuantityModal = '';
-  int score = 0;
-  int save = 0;
+
+  int scoreGained = 0; //from a backend response
+  int save = 0; //from a backend response
 
   Future<FoodDetailData?> _loadFoodDetail() async {
     try {
@@ -292,6 +294,15 @@ class _FoodDetailsPageState extends State<foodDetails> {
     return updateWeight.toStringAsFixed(2);
   }
 
+  void updateModalScores(String jsonResponse) {
+    // Parse JSON response
+    final Map<String, dynamic> data = jsonDecode(jsonResponse);
+    setState(() {
+      scoreGained = data['scoreGained'];
+      save = data['save'];
+    });
+  }
+
   @override
   void initState() {
     super.initState();
@@ -310,6 +321,9 @@ class _FoodDetailsPageState extends State<foodDetails> {
     // quantity = widget.remaining;
     // weight = widget.remaining;
     weightReduced = weight.toString();
+    String backendResponse =
+        '{"message": "Food item consumed successfully", "scoreGained": 2, "save": 50}';
+    updateModalScores(backendResponse);
   }
 
   //double screenHeight = 950;
@@ -358,9 +372,8 @@ class _FoodDetailsPageState extends State<foodDetails> {
 
             final food = snapshot.data!;
             print('Rendering food details for: ${food.FoodName}'); // Debug log
-
+            foodID = food.Food_ID;
             foodname = food.FoodName;
-            //foodID = food.Food_ID;
             category = food.Category;
             location = food.Location;
             isCountable = food.isCountable;
@@ -1067,20 +1080,16 @@ class _FoodDetailsPageState extends State<foodDetails> {
     //     builder: (context) => Consumed(consumedItems: consumedItems),
     //   ),
     // );
-    showDialog(
-        context: context,
-        builder: (BuildContext contetxt) {
-          return SnackBar(
-            behavior: SnackBarBehavior.floating,
-            margin: EdgeInsets.only(bottom: 600),
-            content: Text(
-              '$selectedConsumeQuantityModal ${foodname} added to consumed list',
-              style: FontsTheme.hindBold_20(),
-            ),
-            duration: const Duration(seconds: 2),
-            backgroundColor: AppTheme.greenMainTheme,
-          );
-        });
+    SnackBar(
+      behavior: SnackBarBehavior.floating,
+      margin: EdgeInsets.only(bottom: 600),
+      content: Text(
+        '$selectedConsumeQuantityModal ${foodname} added to consumed list',
+        style: FontsTheme.hindBold_20(),
+      ),
+      duration: const Duration(seconds: 2),
+      backgroundColor: AppTheme.greenMainTheme,
+    );
   }
 
   void completeConsume(BuildContext context) {
@@ -1088,12 +1097,12 @@ class _FoodDetailsPageState extends State<foodDetails> {
   }
 
   void consumedModal(BuildContext context) {
-    String tellScore = ' ';
-    if (score > 0) {
-      score = score;
-    } else {
-      tellScore = 'You loss $score points\n Your loss $save';
-    }
+    // String tellScore = ' ';
+    // if (score > 0) {
+    //   score = score;
+    // } else {
+    //   tellScore = 'You loss $score points\n Your loss $save';
+    // }
     showDialog(
       context: context,
       builder: (BuildContext context) {
@@ -1118,7 +1127,7 @@ class _FoodDetailsPageState extends State<foodDetails> {
                           height: 400,
                         ),
                         Text(
-                          '$consumeQuantityModal were consumed\n You get $score points\n Save $save baht',
+                          '$consumeQuantityModal were consumed\n You get $scoreGained points\n Save $save baht',
                           style: FontsTheme.mouseMemoirs_30Black(),
                           textAlign: TextAlign.center,
                         ),
@@ -1529,12 +1538,12 @@ class _FoodDetailsPageState extends State<foodDetails> {
   }
 
   void wastedModal(BuildContext context) {
-    String tellScore = ' ';
-    if (score > 0) {
-      score = score;
-    } else {
-      tellScore = 'You loss $score points\n Your loss $save';
-    }
+    // String tellScore = ' ';
+    // if (score > 0) {
+    //   score = score;
+    // } else {
+    //   tellScore = 'You loss $score points\n Your loss $save';
+    // }
     showDialog(
       context: context,
       builder: (BuildContext context) {
@@ -1559,7 +1568,7 @@ class _FoodDetailsPageState extends State<foodDetails> {
                           height: 400,
                         ),
                         Text(
-                          '$consumeQuantityModal were consumed\n You get $score points\n Save $save baht',
+                          '$consumeQuantityModal were consumed\n You get $scoreGained points\n Save $save baht',
                           style: FontsTheme.mouseMemoirs_30Black(),
                           textAlign: TextAlign.center,
                         ),
