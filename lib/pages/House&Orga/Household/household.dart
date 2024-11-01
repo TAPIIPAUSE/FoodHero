@@ -195,7 +195,8 @@ class _HouseholdState extends State<household> {
                         const SizedBox(width: 10),
                         Chip(
                           label: Text(_weekday,
-                              style: const TextStyle(color: Colors.white)),
+                              style: const TextStyle(
+                                  color: Colors.white, fontSize: 12)),
                           backgroundColor: Colors.orange,
                         ),
                       ],
@@ -274,7 +275,7 @@ class _HouseholdState extends State<household> {
                       icon: Icon(
                         Icons.expand_circle_down_rounded,
                         size: 32,
-                        color: AppTheme.softOrange,
+                        color: Colors.orange,
                       ),
                       label: Text(''),
                     )
@@ -330,8 +331,9 @@ class _HouseholdState extends State<household> {
                             final score = houseScore.scoreList[index];
                             return ListScore(
                               name: score.username,
-                              star: score.rank == 1,
-                              point: score.score, rank: score.rank,
+                              star: score.rank == 1 && score.score > 0,
+                              point: score.score,
+                              rank: score.rank,
                             );
                           },
                         ),
@@ -365,28 +367,28 @@ class _HouseholdState extends State<household> {
                 //     ),
                 //   ),
                 // ),
-                const SizedBox(height: 20),
-                // Progress bar
-                LinearPercentIndicator(
-                  lineHeight: 20.0,
-                  percent: 0.32,
-                  linearStrokeCap: LinearStrokeCap.roundAll,
-                  progressColor: Colors.orange,
-                ),
-                const Text("Reached 32% this month"),
-                const SizedBox(height: 20),
-                // Create a goal button
-                ElevatedButton(
-                  onPressed: () {},
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: AppTheme.greenMainTheme,
-                    padding: const EdgeInsets.symmetric(
-                        horizontal: 50, vertical: 20),
-                    textStyle: const TextStyle(
-                        fontSize: 20, fontWeight: FontWeight.bold),
-                  ),
-                  child: const Text('Create a goal'),
-                ),
+                // const SizedBox(height: 20),
+                // // Progress bar
+                // LinearPercentIndicator(
+                //   lineHeight: 20.0,
+                //   percent: 0.32,
+                //   linearStrokeCap: LinearStrokeCap.roundAll,
+                //   progressColor: Colors.orange,
+                // ),
+                // const Text("Reached 32% this month"),
+                // const SizedBox(height: 20),
+                // // Create a goal button
+                // ElevatedButton(
+                //   onPressed: () {},
+                //   style: ElevatedButton.styleFrom(
+                //     backgroundColor: AppTheme.greenMainTheme,
+                //     padding: const EdgeInsets.symmetric(
+                //         horizontal: 50, vertical: 20),
+                //     textStyle: const TextStyle(
+                //         fontSize: 20, fontWeight: FontWeight.bold),
+                //   ),
+                //   child: const Text('Create a goal'),
+                // ),
               ]),
             ),
           ),

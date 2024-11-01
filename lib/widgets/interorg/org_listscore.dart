@@ -56,7 +56,7 @@ class ListScore extends StatelessWidget {
                 ),
                 Row(
                   children: [
-                    if (star == true)
+                    if (star)
                       const Icon(Icons.star_rate_rounded,
                           color: AppTheme.softOrange),
                     const SizedBox(

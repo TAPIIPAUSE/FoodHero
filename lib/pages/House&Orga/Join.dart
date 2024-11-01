@@ -48,6 +48,7 @@ class _JoinState extends State<join> {
 
   @override
   Widget build(BuildContext context) {
+    final screenWidth = MediaQuery.of(context).size.width;
     return MainScaffold(
       selectedRouteIndex: 3,
       child: Scaffold(
@@ -70,88 +71,147 @@ class _JoinState extends State<join> {
           ],
         ),
         body: SingleChildScrollView(
-          child: Padding(
-              padding: const EdgeInsets.all(80),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  Text(
-                    "Household",
-                    style: FontsTheme.mouseMemoirs_40(),
+          child: Center(
+            child: Column(
+              // mainAxisAlignment: MainAxisAlignment.center,
+              // crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                const SizedBox(
+                  height: 120,
+                ),
+                Container(
+                  width: screenWidth * 0.95,
+                  padding: EdgeInsets.symmetric(vertical: 50),
+                  decoration: const BoxDecoration(
+                    color: AppTheme.softBlue,
+                    borderRadius: BorderRadius.all(Radius.circular(20)),
                   ),
-                  Row(
+                  child: Column(
                     children: [
-                      SizedBox(
-                        width: 100,
-                        height: 50,
-                        child: TextButton(
-                          onPressed: () => CreateHouse(context),
-                          style: TextButton.styleFrom(
-                              backgroundColor: AppTheme.greenMainTheme,
-                              foregroundColor: Colors.white),
-                          child: const Text('Create'),
+                      Text(
+                        "Household",
+                        style: FontsTheme.mouseMemoirs_40(),
+                      ),
+                      TextButton(
+                        style: TextButton.styleFrom(
+                          backgroundColor: AppTheme.mainBlue,
+                          foregroundColor: Colors.white,
+                          minimumSize: Size(100, 50), // Set width and height
                         ),
-                      ),
-                      const SizedBox(
-                        width: 50,
-                      ),
-                      SizedBox(
-                        width: 100,
-                        height: 50,
-                        child: TextButton(
-                          onPressed: () => JoinHouse(context),
-                          style: TextButton.styleFrom(
-                              backgroundColor: AppTheme.mainBlue,
-                              foregroundColor: Colors.white),
-                          child: const Text(
-                            'Join',
-                          ),
+                        onPressed: () {
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => const household()));
+                        },
+                        child: const Text(
+                          "Open",
                         ),
                       ),
                     ],
                   ),
+                ),
 
-                  const SizedBox(
-                    height: 120,
+                // Row(
+                // children: [
+                // SizedBox(
+                //   width: 100,
+                //   height: 50,
+                //   child: TextButton(
+                //     onPressed: () => CreateHouse(context),
+                //     style: TextButton.styleFrom(
+                //         backgroundColor: AppTheme.greenMainTheme,
+                //         foregroundColor: Colors.white),
+                //     child: const Text('Create'),
+                //   ),
+                // ),
+                // const SizedBox(
+                //   width: 50,
+                // ),
+                // SizedBox(
+                //   width: 100,
+                //   height: 50,
+                //   child: TextButton(
+                //     onPressed: () => JoinHouse(context),
+                //     style: TextButton.styleFrom(
+                //         backgroundColor: AppTheme.mainBlue,
+                //         foregroundColor: Colors.white),
+                //     child: const Text(
+                //       'Join',
+                //     ),
+                //   ),
+                // ),
+                // ],
+                // ),
+
+                const SizedBox(
+                  height: 10,
+                ),
+                Container(
+                  width: screenWidth * 0.95,
+                  padding: EdgeInsets.symmetric(vertical: 50),
+                  decoration: const BoxDecoration(
+                    color: AppTheme.softBlue,
+                    borderRadius: BorderRadius.all(Radius.circular(20)),
                   ),
-                  Text(
-                    "Organization",
-                    style: FontsTheme.mouseMemoirs_40(),
-                  ),
-                  Row(
+                  child: Column(
                     children: [
-                      SizedBox(
-                        width: 100,
-                        height: 50,
-                        child: TextButton(
-                          onPressed: () => CreateOrga(context),
-                          style: TextButton.styleFrom(
-                              backgroundColor: AppTheme.greenMainTheme,
-                              foregroundColor: Colors.white),
-                          child: const Text('Create'),
-                        ),
+                      Text(
+                        "Organization",
+                        style: FontsTheme.mouseMemoirs_40(),
                       ),
-                      const SizedBox(
-                        width: 50,
-                      ),
-                      SizedBox(
-                        width: 100,
-                        height: 50,
-                        child: TextButton(
-                          onPressed: () => JoinOrga(context),
-                          style: TextButton.styleFrom(
-                              backgroundColor: AppTheme.mainBlue,
-                              foregroundColor: Colors.white),
-                          child: const Text('Join'),
+                      TextButton(
+                        style: TextButton.styleFrom(
+                          backgroundColor: AppTheme.mainBlue,
+                          foregroundColor: Colors.white,
+                          minimumSize: Size(100, 50), // Set width and height
                         ),
+                        onPressed: () {
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => const organization()));
+                        },
+                        child: const Text("Open"),
                       ),
                     ],
-                  )
+                  ),
+                ),
 
-                  // Members section
-                ],
-              )),
+                // Row(
+                //   children: [
+                //     SizedBox(
+                //       width: 100,
+                //       height: 50,
+                //       child: TextButton(
+                //         onPressed: () => CreateOrga(context),
+                //         style: TextButton.styleFrom(
+                //             backgroundColor: AppTheme.greenMainTheme,
+                //             foregroundColor: Colors.white),
+                //         child: const Text('Create'),
+                //       ),
+                //     ),
+                //     const SizedBox(
+                //       width: 50,
+                //     ),
+                //     SizedBox(
+                //       width: 100,
+                //       height: 50,
+                //       child: TextButton(
+                //         onPressed: () => JoinOrga(context),
+                //         style: TextButton.styleFrom(
+                //             backgroundColor: AppTheme.mainBlue,
+                //             foregroundColor: Colors.white),
+                //         child: const Text('Join'),
+                //       ),
+                //     ),
+                //   ],
+                // )
+
+                // Members section
+              ],
+            ),
+          ),
         ),
       ),
     );

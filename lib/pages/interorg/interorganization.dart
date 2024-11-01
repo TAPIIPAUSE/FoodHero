@@ -323,7 +323,7 @@ class _InterOrganizationState extends State<InterOrganization> {
                                   final score = interScore.scoreList[index];
                                   return ListScore(
                                     name: score.orgname,
-                                    star: score.rank == 1,
+                                    star: score.rank == 1 && score.score > 0,
                                     point: score.score,
                                     rank: score.rank,
                                   );
@@ -533,7 +533,7 @@ class _InterOrganizationState extends State<InterOrganization> {
                                   final score = houseScore.scoreList[index];
                                   return ListScore(
                                     name: score.username,
-                                    star: score.rank == 1,
+                                    star: score.rank == 1 && score.score > 0,
                                     point: score.score,
                                     rank: score.rank,
                                   );
@@ -734,7 +734,7 @@ class _InterOrganizationState extends State<InterOrganization> {
                                   final score = orgScore.scoreList[index];
                                   return ListScore(
                                     name: score.housename,
-                                    star: score.rank == 1,
+                                    star: score.rank == 1 && score.score > 0,
                                     point: score.score,
                                     rank: score.rank,
                                   );
