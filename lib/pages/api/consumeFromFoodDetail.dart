@@ -1,6 +1,5 @@
 import 'package:dio/dio.dart';
 import 'package:foodhero/models/completeconsume_model.dart';
-import 'package:foodhero/models/getModalCompleteConsume.dart';
 import 'package:foodhero/utils/constants.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:convert';

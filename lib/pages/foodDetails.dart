@@ -4,9 +4,11 @@ import 'dart:core';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:foodhero/models/completeconsume_model.dart';
+import 'package:foodhero/models/conpletewaste_model.dart';
 import 'package:foodhero/models/fooddetail_model.dart';
 import 'package:foodhero/pages/api/ApiUserFood.dart';
 import 'package:foodhero/pages/api/consumeFromFoodDetail.dart';
+import 'package:foodhero/pages/api/wasteFromFoodDetails.dart';
 import 'package:foodhero/pages/consumed/Consumed.dart';
 import 'package:foodhero/pages/consumed/consumedItemsProvider.dart';
 import 'package:foodhero/pages/inventory/inventory.dart';
@@ -64,7 +66,7 @@ class _FoodDetailsPageState extends State<foodDetails> {
   String remindString = '';
   String remindDate = '';
   String quantityString = '';
-  String weightString = '';
+  double weightDouble = 0;
   double allCostString = 0;
   double eachPieceWeight = 0;
   double eachPieceCost = 0;
@@ -100,6 +102,8 @@ class _FoodDetailsPageState extends State<foodDetails> {
   int scoreGained = 0; //from a backend response
   int save = 0; //from a backend response
 
+  int lost = 0; //from a backend response
+
   Future<FoodDetailData?> _loadFoodDetail() async {
     try {
       // Debug log
@@ -121,7 +125,7 @@ class _FoodDetailsPageState extends State<foodDetails> {
   }
 
   final Consumefromfooddetail APICompleteConsume = Consumefromfooddetail();
-
+  final Wastefromfooddetail APICompleteWaste = Wastefromfooddetail();
   void _pickImage() async {
     // Implement your image picking logic here (e.g., using image_picker)
     final pickedFile =
@@ -303,6 +307,15 @@ class _FoodDetailsPageState extends State<foodDetails> {
     });
   }
 
+  void updateWasteModalScores(String jsonResponse) {
+    // Parse JSON response
+    final Map<String, dynamic> data = jsonDecode(jsonResponse);
+    setState(() {
+      scoreGained = data['scoreGained'];
+      lost = data['Lost'];
+    });
+  }
+
   @override
   void initState() {
     super.initState();
@@ -321,9 +334,12 @@ class _FoodDetailsPageState extends State<foodDetails> {
     // quantity = widget.remaining;
     // weight = widget.remaining;
     weightReduced = weight.toString();
-    String backendResponse =
+    String completeConsumeRes =
         '{"message": "Food item consumed successfully", "scoreGained": 2, "save": 50}';
-    updateModalScores(backendResponse);
+    updateModalScores(completeConsumeRes);
+    String completeWasteRes =
+        '{"message": "Food item Waste successfully", "scoreGained": 2, "Lost": 50}';
+    updateWasteModalScores(completeWasteRes);
   }
 
   //double screenHeight = 950;
@@ -387,8 +403,10 @@ class _FoodDetailsPageState extends State<foodDetails> {
             intQuantity = int.tryParse(quantityString.split(' ')[0]);
             eachPieceWeight = food.IndividualWeight;
             eachPieceCost = food.IndividualCost;
-            weightString = food.Remaining_amount;
-
+            weightDouble = food.total_amount;
+            // if (isCountable == false) {
+            //   weightDouble = food.total_amount;
+            // }
             allCostString = food.TotalCost;
             // weightUnit = food.;
 
@@ -1006,7 +1024,7 @@ class _FoodDetailsPageState extends State<foodDetails> {
                                 behavior: SnackBarBehavior.floating,
                                 margin: EdgeInsets.only(bottom: 300),
                                 content: Text(
-                                  'Failed to complete food: $e',
+                                  'Failed to complete consume food: $e',
                                   style: FontsTheme.hindBold_20(),
                                 ),
                                 duration: const Duration(seconds: 2),
@@ -1127,7 +1145,7 @@ class _FoodDetailsPageState extends State<foodDetails> {
                           height: 400,
                         ),
                         Text(
-                          '$consumeQuantityModal were consumed\n You get $scoreGained points\n Save $save baht',
+                          '$consumeQuantityModal were consumed\n You get $scoreGained points\n Save $lost ฿ Baht',
                           style: FontsTheme.mouseMemoirs_30Black(),
                           textAlign: TextAlign.center,
                         ),
@@ -1489,8 +1507,41 @@ class _FoodDetailsPageState extends State<foodDetails> {
                         )),
                         SizedBox(height: 10),
                         ElevatedButton(
-                          onPressed: () {
+                          onPressed: () async {
                             completeWaste(context);
+
+                            int fID = foodID;
+                            CompleteWaste postCompleteWaste = CompleteWaste(
+                              fID: fID,
+                            );
+                            try {
+                              await APICompleteWaste.completeWaste(
+                                  postCompleteWaste);
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                SnackBar(
+                                  behavior: SnackBarBehavior.floating,
+                                  margin: EdgeInsets.only(bottom: 300),
+                                  content: Text(
+                                    "All $foodname Wasted!",
+                                    style: FontsTheme.hindBold_20(),
+                                  ),
+                                  duration: const Duration(seconds: 2),
+                                  backgroundColor: AppTheme.greenMainTheme,
+                                ),
+                              );
+                            } catch (e) {
+                              ScaffoldMessenger.of(context)
+                                  .showSnackBar(SnackBar(
+                                behavior: SnackBarBehavior.floating,
+                                margin: EdgeInsets.only(bottom: 300),
+                                content: Text(
+                                  'Failed to complete waste food: $e',
+                                  style: FontsTheme.hindBold_20(),
+                                ),
+                                duration: const Duration(seconds: 2),
+                                backgroundColor: AppTheme.greenMainTheme,
+                              ));
+                            }
                           },
                           style: ElevatedButton.styleFrom(
                             backgroundColor: AppTheme.softRedCancleWasted,
@@ -1534,7 +1585,7 @@ class _FoodDetailsPageState extends State<foodDetails> {
   }
 
   void completeWaste(BuildContext context) {
-    consumedModal(context);
+    wastedModal(context);
   }
 
   void wastedModal(BuildContext context) {
@@ -1560,7 +1611,7 @@ class _FoodDetailsPageState extends State<foodDetails> {
                     child: Column(
                       children: [
                         Text(
-                          '$foodNameModal\n Consummed',
+                          '$foodNameModal\n Wasted',
                           style: FontsTheme.mouseMemoirs_64Black(),
                           textAlign: TextAlign.center,
                         ),
@@ -1568,7 +1619,7 @@ class _FoodDetailsPageState extends State<foodDetails> {
                           height: 400,
                         ),
                         Text(
-                          '$consumeQuantityModal were consumed\n You get $scoreGained points\n Save $save baht',
+                          '$consumeQuantityModal were wasted\n You get $scoreGained points\n Save $save ฿ Baht',
                           style: FontsTheme.mouseMemoirs_30Black(),
                           textAlign: TextAlign.center,
                         ),
@@ -2118,7 +2169,7 @@ class _FoodDetailsPageState extends State<foodDetails> {
                                 mainAxisAlignment:
                                     MainAxisAlignment.spaceBetween,
                                 children: [
-                                  Text(weightString,
+                                  Text(weightDouble.toString(),
                                       style: FontsTheme.hindBold_20()),
                                   // buildWeightUnit('')
                                 ],

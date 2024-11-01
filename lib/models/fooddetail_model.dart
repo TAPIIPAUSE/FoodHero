@@ -14,6 +14,7 @@ class FoodDetailData {
   final bool isCountable;
   final int scoreGained;
   final int save;
+  final double total_amount; 
 
   //final int total_price;
   // final int current_quantity;
@@ -43,7 +44,8 @@ class FoodDetailData {
       required this.URL,
       required this.isCountable,
       required this.scoreGained,
-      required this.save
+      required this.save, 
+      required this. total_amount
 
       // required this.total_price,
       // required this.current_quantity,
@@ -67,6 +69,7 @@ class FoodDetailData {
       'isCountable': isCountable,
       'scoreGained': scoreGained,
       'save': save,
+      'total_amount': total_amount, 
     };
   }
 
@@ -89,6 +92,7 @@ class FoodDetailData {
       isCountable: json['isCountable'] ?? false,
       scoreGained: json['scoreGained'] ?? 0,
       save: json['save'] ?? 0,
+      total_amount: json['total_amount']?? 0 
 
       // current_quantity: json['current_quantity']
       // total_price: json['total_price']
@@ -132,6 +136,7 @@ class FoodDetailData {
       isCountable: isCountable ?? this.isCountable,
       scoreGained: scoreGained ?? this.scoreGained,
       save: save ?? this.save,
+      total_amount: total_amount ?? this.total_amount 
       // current_quantity: current_quantity ?? this.current_quantity
       //  total_price: total_price ?? this.total_price
     );
