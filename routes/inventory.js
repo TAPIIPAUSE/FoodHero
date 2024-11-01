@@ -484,8 +484,6 @@ router.post('/complete_waste', authenticateToken, async (req, res) => {
       "FoodType": food.food_category
     })
 
-    console.log(score)
-
     await personObject.save()
 
     // 3.3) Update Score in Household Score Database
