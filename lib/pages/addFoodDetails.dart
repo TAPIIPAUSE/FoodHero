@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:io';
 import 'dart:async';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:foodhero/models/addfood_model.dart';
 import 'package:foodhero/pages/api/ApiUserFood.dart';
 import 'package:foodhero/pages/inventory/inventory.dart';
@@ -33,9 +34,11 @@ class _AddFoodDetailsPageState extends State<addFoodDetails> {
   DateTime reminderDate = DateTime.now();
   int quantity = 1;
   TextEditingController quantityController = TextEditingController();
+  int sendQuantity = 0;
   double weightDouble = 1; // in grams
   String weight = ''; //make it proper for the decimals
   TextEditingController weightController = TextEditingController();
+  int sendWeight = 0;
   double allCost = 0;
   double costPerPiece = 0;
   double updateAllCost = 0;
@@ -46,7 +49,7 @@ class _AddFoodDetailsPageState extends State<addFoodDetails> {
   late String selectedCategory = '';
   int selectedCategoryIndex = 0;
   String selectedLocation = '';
-  int selectedLocationIndex = 1;
+  int selectedLocationIndex = 0;
   bool isCountable = true;
   int selectedQuantityUnit = 0;
   int selectedWeightUnit = 0;
@@ -180,12 +183,14 @@ class _AddFoodDetailsPageState extends State<addFoodDetails> {
     setState(() {
       quantityController.text =
           quantity.toString(); // Update the controller's text
+      sendQuantity = quantity;
     });
   }
 
   void updateWeightfromSlider() {
     setState(() {
       weightController.text = weight.toString(); // Update the controller's text
+      sendWeight = weight as int;
     });
   }
 
@@ -275,13 +280,19 @@ class _AddFoodDetailsPageState extends State<addFoodDetails> {
                                           ),
                               ),
                             ),
+                            const SizedBox(
+                              width: 10,
+                            ),
                             SizedBox(
                               //itemName
-                              width: 200,
+                              width: 250,
                               child: TextField(
                                 controller: foodname,
                                 style: FontsTheme.mouseMemoirs_50Black(),
                                 textAlign: TextAlign.center,
+                                inputFormatters: [
+                                  LengthLimitingTextInputFormatter(12)
+                                ],
                                 decoration: InputDecoration(
                                     hintStyle:
                                         FontsTheme.mouseMemoirs_50Black(),
@@ -377,18 +388,19 @@ class _AddFoodDetailsPageState extends State<addFoodDetails> {
                                             ? base64Encode(
                                                 _image!.file.readAsBytesSync())
                                             : '',
-                                        location: selectedLocationIndex,
-                                        food_category: selectedCategoryIndex,
+                                        location: selectedLocationIndex + 1,
+                                        food_category:
+                                            selectedCategoryIndex + 1,
                                         isCountable: isCountable,
 
-                                        weight_type: selectedWeightUnit,
-                                        package_type: selectedQuantityUnit,
+                                        weight_type: selectedWeightUnit + 1,
+                                        package_type: selectedQuantityUnit + 1,
 
                                         current_amount: 4,
-                                        total_amount: 8,
+                                        total_amount: sendWeight,
                                         consumed_amount: 2,
                                         current_quantity: 3,
-                                        total_quanitity: 8,
+                                        total_quanitity: sendQuantity,
                                         consumed_quantity: 4,
                                         total_price: allCost,
                                         bestByDate: expirationDate,
@@ -459,12 +471,14 @@ class _AddFoodDetailsPageState extends State<addFoodDetails> {
                                             ? base64Encode(
                                                 _image!.file.readAsBytesSync())
                                             : '',
-                                        location: selectedLocationIndex,
-                                        food_category: selectedCategoryIndex,
+                                        location: selectedLocationIndex +
+                                            1, //to match with back-end 1 or 2 only
+                                        food_category: selectedCategoryIndex +
+                                            1, //to match with back-end 1 or 2 only
                                         isCountable: isCountable,
 
-                                        weight_type: selectedWeightUnit,
-                                        package_type: selectedQuantityUnit,
+                                        weight_type: selectedWeightUnit + 1,
+                                        package_type: selectedQuantityUnit + 1,
 
                                         current_amount: 4,
                                         total_amount: 8,
@@ -565,7 +579,7 @@ class _AddFoodDetailsPageState extends State<addFoodDetails> {
   ];
 
   Widget buildCategoriesField(String label, String value, IconData icon) {
-    selectedCategory = itemCategory[0 + 1];
+    selectedCategory = itemCategory[0];
     return StatefulBuilder(
         builder: (BuildContext context, StateSetter setState) {
       return Padding(
@@ -626,7 +640,9 @@ class _AddFoodDetailsPageState extends State<addFoodDetails> {
                                   setState(() {
                                     selectedCategory = newValue;
                                     selectedCategoryIndex =
-                                        itemCategory.indexOf(newValue);
+                                        itemCategory.isNotEmpty
+                                            ? itemCategory.indexOf(newValue)
+                                            : 0;
                                   });
                                 }
                               },
@@ -646,7 +662,7 @@ class _AddFoodDetailsPageState extends State<addFoodDetails> {
     "Pantry",
   ];
   Widget buildWhereField(String label, String value, IconData icon) {
-    selectedLocation = itemLocation[0 + 1];
+    selectedLocation = itemLocation[0];
     return StatefulBuilder(
         builder: (BuildContext context, StateSetter setState) {
       return Padding(
@@ -707,7 +723,9 @@ class _AddFoodDetailsPageState extends State<addFoodDetails> {
                                   setState(() {
                                     selectedLocation = newValue;
                                     selectedLocationIndex =
-                                        itemLocation.indexOf(newValue);
+                                        itemLocation.isNotEmpty
+                                            ? itemLocation.indexOf(newValue)
+                                            : 0;
                                   });
                                 }
                               },
@@ -1138,7 +1156,9 @@ class _AddFoodDetailsPageState extends State<addFoodDetails> {
                             if (newValue != null) {
                               setState(() {
                                 selectedValue = newValue;
-                                selectedQuantityUnit = items.indexOf(newValue);
+                                selectedQuantityUnit = items.isNotEmpty
+                                    ? items.indexOf(newValue)
+                                    : 0;
                               });
                             }
                           },
@@ -1203,7 +1223,9 @@ class _AddFoodDetailsPageState extends State<addFoodDetails> {
                             if (newValue != null) {
                               setState(() {
                                 selectedValue = newValue;
-                                selectedWeightUnit = items.indexOf(newValue);
+                                selectedWeightUnit = items.isNotEmpty
+                                    ? items.indexOf(newValue)
+                                    : 0;
                               });
                             }
                           },

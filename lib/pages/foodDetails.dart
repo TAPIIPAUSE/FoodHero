@@ -416,7 +416,7 @@ class _FoodDetailsPageState extends State<foodDetails> {
             consumeQuantityModal = food.Remaining;
             //  score = food.scoreGained;
             //  save = food.save;
-            double screenHeight = food.isCountable ? 900 : 800;
+            double screenHeight = food.isCountable ? 1000 : 900;
 
             print('this is iscountable: $isCountable');
             return Stack(
