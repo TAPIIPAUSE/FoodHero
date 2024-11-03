@@ -246,15 +246,48 @@ class _HouseholdState extends State<household> {
                             child: Column(
                               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                               children: [
-                                const Text("Daily Food Consumption",
-                                    style: TextStyle(fontSize: 20)),
-                                Row(
-                                  mainAxisAlignment: MainAxisAlignment.start,
+                                Stack(
                                   children: [
-                                    Text("%",
-                                        style: TextStyle(
-                                            fontSize: 16,
-                                            fontWeight: FontWeight.bold)),
+                                    Center(
+                                      child: Text("Daily Food Consumption",
+                                          style: TextStyle(fontSize: 20)),
+                                    ),
+                                    Row(
+                                      mainAxisAlignment: MainAxisAlignment.end,
+                                      children: [
+                                        // Text("%",
+                                        //     style: TextStyle(
+                                        //         fontSize: 16,
+                                        //         fontWeight: FontWeight.bold)),
+                                        IconButton(
+                                          onPressed: () {
+                                            showDialog(
+                                              context: context,
+                                              builder: (BuildContext context) {
+                                                return AlertDialog(
+                                                  title: Text("Information"),
+                                                  content: Text(
+                                                    'information about this chart',
+                                                    style: const TextStyle(
+                                                        fontSize: 16),
+                                                  ),
+                                                  // actions: [
+                                                  //   TextButton(
+                                                  //     child: Text("OK"),
+                                                  //     onPressed: () {
+                                                  //       Navigator.of(context).pop();
+                                                  //     },
+                                                  //   ),
+                                                  // ],
+                                                );
+                                              },
+                                            );
+                                          },
+                                          icon: const Icon(
+                                              Icons.info_outline_rounded),
+                                        ),
+                                      ],
+                                    ),
                                   ],
                                 ),
                                 WasteBarChartContent(
