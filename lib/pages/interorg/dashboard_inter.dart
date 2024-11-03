@@ -133,15 +133,15 @@ class _InterDashboardState extends State<InterDashboard> {
   Color _getFoodTypeColor(int category) {
     switch (category) {
       case 1:
-        return Colors.redAccent;
+        return Colors.deepOrange.shade300;
       case 2:
-        return Colors.greenAccent.shade400;
+        return Colors.lightGreen.shade400;
       case 3:
-        return Colors.brown.shade300;
+        return Colors.blueGrey.shade300;
       case 4:
-        return Colors.yellow.shade400;
+        return Colors.amber.shade300;
       case 5:
-        return Colors.lightBlue;
+        return Colors.blue.shade300;
       default:
         return Colors.grey;
     }
