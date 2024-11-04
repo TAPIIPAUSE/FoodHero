@@ -1,6 +1,7 @@
 import 'package:carousel_slider/carousel_slider.dart' as cs;
 import 'package:flutter/material.dart';
 import 'package:foodhero/fonts.dart';
+import 'package:foodhero/models/chart/savetypepie/hhfoodtypepie_model.dart';
 import 'package:foodhero/pages/api/dashboardapi.dart';
 import 'package:foodhero/pages/interorg/interorganization.dart';
 import 'package:foodhero/theme.dart';
@@ -28,6 +29,7 @@ class _InterDashboardState extends State<InterDashboard> {
   late String currentPage = widget.page;
   late Future<dynamic> apiWasteData;
   late Future<dynamic> apiWasteByTyepData;
+  late Future<dynamic> apiConsumeByTyepData;
   late Future<dynamic> apiExpenseData;
   late Future<dynamic> apiBarChartData;
   late Future<dynamic> apiHeatmap;
@@ -37,6 +39,7 @@ class _InterDashboardState extends State<InterDashboard> {
     super.initState();
     apiWasteData = _fetchWasteData(currentPage);
     apiWasteByTyepData = _fetchWasteByTypeData(currentPage);
+    apiConsumeByTyepData = _fetchConsumeByTypeData(currentPage);
     apiExpenseData = _fetchExpenseData(currentPage);
     apiBarChartData = _fetchBarChartData(currentPage);
     apiHeatmap = _fetchHeatmap(currentPage);
@@ -83,6 +86,19 @@ class _InterDashboardState extends State<InterDashboard> {
       }
     } catch (e) {
       print('Error loading waste type data: $e');
+      return Future.error(e);
+    }
+  }
+
+  Future<dynamic> _fetchConsumeByTypeData(String page) async {
+    try {
+      if (page == 'hh') {
+        return await DashboardApi().getHHFoodTypePie();
+      } else if (page == 'org') {
+        return await DashboardApi().getOrgFoodTypePie(); // Call Org API
+      }
+    } catch (e) {
+      print('Error loading consume type data: $e');
       return Future.error(e);
     }
   }
@@ -506,16 +522,17 @@ class _InterDashboardState extends State<InterDashboard> {
               height: 10,
             ),
             Container(
-                margin: const EdgeInsets.all(10),
-                padding: const EdgeInsets.all(10),
-                width: screenWidth * 0.95,
-                decoration: const BoxDecoration(
-                  color: AppTheme.softBlue,
-                  borderRadius: BorderRadius.all(Radius.circular(20)),
-                ),
-                child: Column(children: [
+              margin: const EdgeInsets.all(10),
+              padding: const EdgeInsets.all(10),
+              width: screenWidth * 0.95,
+              decoration: const BoxDecoration(
+                color: AppTheme.softBlue,
+                borderRadius: BorderRadius.all(Radius.circular(20)),
+              ),
+              child: Column(
+                children: [
                   Text(
-                    "Expense Save vs Lost",
+                    "Consumed by Food Type",
                     style: FontsTheme.mouseMemoirs_30Black(),
                   ),
                   Container(
@@ -525,7 +542,7 @@ class _InterDashboardState extends State<InterDashboard> {
                       borderRadius: BorderRadius.all(Radius.circular(20)),
                     ),
                     child: FutureBuilder<dynamic>(
-                      future: apiExpenseData,
+                      future: apiConsumeByTyepData,
                       builder: (context, snapshot) {
                         if (snapshot.connectionState ==
                             ConnectionState.waiting) {
@@ -535,39 +552,105 @@ class _InterDashboardState extends State<InterDashboard> {
                         } else if (snapshot.hasError) {
                           return Text('Error: ${snapshot.error}');
                         } else if (!snapshot.hasData || snapshot.data == null) {
-                          return const Center(
-                            child: Text('No data available'),
-                          );
+                          return Center(child: const Text('No data available'));
                         } else {
-                          final data = snapshot.data!;
-                          final double savedPercent =
-                              data.statistic.percentSaved ?? 0;
-                          final double lostPercent =
-                              data.statistic.percentLost ?? 0;
+                          final data =
+                              (snapshot.data!.statistic as List<dynamic>)
+                                  .map((stat) {
+                            return ChartData(
+                              name: _getFoodTypeName(stat.category),
+                              value: stat.percentConsume,
+                              color: _getFoodTypeColor(stat.category),
+                              category: stat.category,
+                            );
+                          }).toList();
 
-                          if (savedPercent == 0 && lostPercent == 0) {
-                            return const Center(
-                              child: Text(
-                                'No data available',
-                              ),
+                          // Check if data is empty, and show a message if it is
+                          if (data.isEmpty) {
+                            return Center(
+                              child: Text("No data available"),
                             );
                           }
 
                           return Column(
                             children: [
-                              PricePiechart(
-                                  savedpercent: savedPercent,
-                                  lostpercent: lostPercent),
-                              BuildExpensePieLegend(
-                                  savedpercent: savedPercent,
-                                  lostpercent: lostPercent)
+                              WasteTypePiechart(chartData: data),
+                              BuildPieLegend(
+                                  chartData: data, title: 'Food Type')
                             ],
                           );
                         }
                       },
                     ),
                   ),
-                ])),
+                ],
+              ),
+            ),
+            // Container(
+            //     margin: const EdgeInsets.all(10),
+            //     padding: const EdgeInsets.all(10),
+            //     width: screenWidth * 0.95,
+            //     decoration: const BoxDecoration(
+            //       color: AppTheme.softBlue,
+            //       borderRadius: BorderRadius.all(Radius.circular(20)),
+            //     ),
+            //     child: Column(children: [
+            //       Text(
+            //         "Expense Save vs Lost",
+            //         style: FontsTheme.mouseMemoirs_30Black(),
+            //       ),
+            //       Container(
+            //         padding: const EdgeInsets.all(10),
+            //         decoration: const BoxDecoration(
+            //           color: Colors.white,
+            //           borderRadius: BorderRadius.all(Radius.circular(20)),
+            //         ),
+            //         child: FutureBuilder<dynamic>(
+            //           future: apiExpenseData,
+            //           builder: (context, snapshot) {
+            //             if (snapshot.connectionState ==
+            //                 ConnectionState.waiting) {
+            //               return const Center(
+            //                 child: CircularProgressIndicator(),
+            //               );
+            //             } else if (snapshot.hasError) {
+            //               return Text('Error: ${snapshot.error}');
+            //             } else if (!snapshot.hasData || snapshot.data == null) {
+            //               return const Center(
+            //                 child: Text('No data available'),
+            //               );
+            //             } else {
+            //               final data = snapshot.data!;
+            //               final double savedPercent =
+            //                   data.statistic.percentSaved ?? 0;
+            //               final double lostPercent =
+            //                   data.statistic.percentLost ?? 0;
+
+            //               if (savedPercent == 0 && lostPercent == 0) {
+            //                 return const Center(
+            //                   child: Text(
+            //                     'No data available',
+            //                   ),
+            //                 );
+            //               }
+
+            //               return Column(
+            //                 children: [
+            //                   PricePiechart(
+            //                       savedpercent: savedPercent,
+            //                       lostpercent: lostPercent),
+            //                   BuildExpensePieLegend(
+            //                       savedpercent: savedPercent,
+            //                       lostpercent: lostPercent)
+            //                 ],
+            //               );
+            //             }
+            //           },
+            //         ),
+            // ),
+            // ],
+            // ),
+            // ),
           ],
         ),
       ),

@@ -82,27 +82,27 @@ class _InterOrganizationState extends State<InterOrganization> {
     }
   }
 
-  Future<InterOrgFoodTypePie> _getInterOrgFoodTypePie() async {
-    try {
-      final data = await DashboardApi().getInterOrgFoodTypePie();
-      print('Fetched inter org food type pie'); // Debug print
-      return data;
-    } catch (e) {
-      print('Error loading inter org food type pie: $e');
-      rethrow;
-    }
-  }
+  // Future<InterOrgFoodTypePie> _getInterOrgFoodTypePie() async {
+  //   try {
+  //     final data = await DashboardApi().getInterOrgFoodTypePie();
+  //     print('Fetched inter org food type pie'); // Debug print
+  //     return data;
+  //   } catch (e) {
+  //     print('Error loading inter org food type pie: $e');
+  //     rethrow;
+  //   }
+  // }
 
-  Future<HHFoodTypePie> _getHHFoodTypePie() async {
-    try {
-      final data = await DashboardApi().getHHFoodTypePie();
-      print('Fetched hh food type pie'); // Debug print
-      return data;
-    } catch (e) {
-      print('Error loading hh food type pie: $e');
-      rethrow;
-    }
-  }
+  // Future<HHFoodTypePie> _getHHFoodTypePie() async {
+  //   try {
+  //     final data = await DashboardApi().getHHFoodTypePie();
+  //     print('Fetched hh food type pie'); // Debug print
+  //     return data;
+  //   } catch (e) {
+  //     print('Error loading hh food type pie: $e');
+  //     rethrow;
+  //   }
+  // }
 
   Future<OrgFoodTypePie> _getOrgFoodTypePie() async {
     try {
@@ -336,106 +336,106 @@ class _InterOrganizationState extends State<InterOrganization> {
                     ],
                   ),
                 ),
-                Container(
-                  margin: const EdgeInsets.all(10),
-                  padding: const EdgeInsets.all(10),
-                  width: screenWidth * 0.95,
-                  decoration: const BoxDecoration(
-                    color: AppTheme.mainBlue,
-                    borderRadius: BorderRadius.all(Radius.circular(20)),
-                  ),
-                  child: Column(
-                    children: [
-                      const Text(
-                        'We saved food',
-                        style: TextStyle(color: Colors.white, fontSize: 24),
-                      ),
-                      // Text(
-                      //   '${NumberFormat('#,###').format(wastedpoint)} grams',
-                      //   style:
-                      //       const TextStyle(color: Colors.white, fontSize: 20),
-                      // ),
-                      // Pie chart
-                      Container(
-                        // height: 800,
-                        padding: const EdgeInsets.all(10),
-                        decoration: const BoxDecoration(
-                          color: Colors.white,
-                          borderRadius: BorderRadius.all(Radius.circular(20)),
-                        ),
-                        child:
-                            // const Column(
-                            // children: [
-                            // Row(
-                            //   mainAxisAlignment: MainAxisAlignment.center,
-                            //   children: [
-                            //     Text(week),
-                            //     Text(month),
-                            //   ],
-                            // ),
-                            // _buildResponsiveChartLayout(screenWidth),
-                            FutureBuilder<InterOrgFoodTypePie>(
-                          future: _getInterOrgFoodTypePie(),
-                          builder: (context, snapshot) {
-                            if (snapshot.connectionState ==
-                                ConnectionState.waiting) {
-                              return const Center(
-                                child: CircularProgressIndicator(),
-                              );
-                            } else if (snapshot.hasError) {
-                              return Text('Error: ${snapshot.error}');
-                            } else if (!snapshot.hasData ||
-                                snapshot.data!.statistic.isEmpty) {
-                              // Check if the data is null or if the statistic list is empty
-                              return const Text('No data available');
-                            } else {
-                              final data = snapshot.data!;
-                              // final statistic = data.statistic;
-                              // Assuming you want to loop over each statistic for the pie chart
-                              return Column(
-                                children: [
-                                  // map each statistic to a WasteTypePiechart widget
-                                  WasteTypePiechart(
-                                    chartData: data.statistic
-                                        .map((stat) => ChartData(
-                                              category: stat.category,
-                                              value: stat.percentConsume,
-                                              name: _getFoodTypeName(
-                                                  stat.category),
-                                              color: _getFoodTypeColor(
-                                                  stat.category),
-                                            ))
-                                        .toList(),
-                                  ),
-                                  BuildPieLegend(
-                                    chartData: data.statistic
-                                        .map((stat) => ChartData(
-                                              category: stat.category,
-                                              value: stat.percentConsume,
-                                              name: _getFoodTypeName(
-                                                  stat.category),
-                                              color: _getFoodTypeColor(
-                                                  stat.category),
-                                            ))
-                                        .toList(),
-                                    title: 'Food Type',
-                                  )
-                                ],
-                              );
-                            }
-                          },
-                        ),
-                      ),
-                      // ),
-                      // const SizedBox(height: 10),
-                      // ElevatedButton(
-                      //   onPressed: () => context.push('/dashboard_inter/inter'),
-                      //   style: buttonStyle,
-                      //   child: const Text("see more"),
-                      // ),
-                    ],
-                  ),
-                ),
+                // Container(
+                //   margin: const EdgeInsets.all(10),
+                //   padding: const EdgeInsets.all(10),
+                //   width: screenWidth * 0.95,
+                //   decoration: const BoxDecoration(
+                //     color: AppTheme.mainBlue,
+                //     borderRadius: BorderRadius.all(Radius.circular(20)),
+                //   ),
+                //   child: Column(
+                //     children: [
+                //       const Text(
+                //         'We saved food',
+                //         style: TextStyle(color: Colors.white, fontSize: 24),
+                //       ),
+                //       // Text(
+                //       //   '${NumberFormat('#,###').format(wastedpoint)} grams',
+                //       //   style:
+                //       //       const TextStyle(color: Colors.white, fontSize: 20),
+                //       // ),
+                //       // Pie chart
+                //       Container(
+                //         // height: 800,
+                //         padding: const EdgeInsets.all(10),
+                //         decoration: const BoxDecoration(
+                //           color: Colors.white,
+                //           borderRadius: BorderRadius.all(Radius.circular(20)),
+                //         ),
+                //         child:
+                //             // const Column(
+                //             // children: [
+                //             // Row(
+                //             //   mainAxisAlignment: MainAxisAlignment.center,
+                //             //   children: [
+                //             //     Text(week),
+                //             //     Text(month),
+                //             //   ],
+                //             // ),
+                //             // _buildResponsiveChartLayout(screenWidth),
+                //             FutureBuilder<InterOrgFoodTypePie>(
+                //           future: _getInterOrgFoodTypePie(),
+                //           builder: (context, snapshot) {
+                //             if (snapshot.connectionState ==
+                //                 ConnectionState.waiting) {
+                //               return const Center(
+                //                 child: CircularProgressIndicator(),
+                //               );
+                //             } else if (snapshot.hasError) {
+                //               return Text('Error: ${snapshot.error}');
+                //             } else if (!snapshot.hasData ||
+                //                 snapshot.data!.statistic.isEmpty) {
+                //               // Check if the data is null or if the statistic list is empty
+                //               return const Text('No data available');
+                //             } else {
+                //               final data = snapshot.data!;
+                //               // final statistic = data.statistic;
+                //               // Assuming you want to loop over each statistic for the pie chart
+                //               return Column(
+                //                 children: [
+                //                   // map each statistic to a WasteTypePiechart widget
+                //                   WasteTypePiechart(
+                //                     chartData: data.statistic
+                //                         .map((stat) => ChartData(
+                //                               category: stat.category,
+                //                               value: stat.percentConsume,
+                //                               name: _getFoodTypeName(
+                //                                   stat.category),
+                //                               color: _getFoodTypeColor(
+                //                                   stat.category),
+                //                             ))
+                //                         .toList(),
+                //                   ),
+                //                   BuildPieLegend(
+                //                     chartData: data.statistic
+                //                         .map((stat) => ChartData(
+                //                               category: stat.category,
+                //                               value: stat.percentConsume,
+                //                               name: _getFoodTypeName(
+                //                                   stat.category),
+                //                               color: _getFoodTypeColor(
+                //                                   stat.category),
+                //                             ))
+                //                         .toList(),
+                //                     title: 'Food Type',
+                //                   )
+                //                 ],
+                //               );
+                //             }
+                //           },
+                //         ),
+                //       ),
+                //       // ),
+                //       // const SizedBox(height: 10),
+                //       // ElevatedButton(
+                //       //   onPressed: () => context.push('/dashboard_inter/inter'),
+                //       //   style: buttonStyle,
+                //       //   child: const Text("see more"),
+                //       // ),
+                //     ],
+                //   ),
+                // ),
               ],
             ),
           ),
@@ -565,73 +565,73 @@ class _InterOrganizationState extends State<InterOrganization> {
                       //   style:
                       //       const TextStyle(color: Colors.white, fontSize: 20),
                       // ),
-                      // Pie chart
-                      Container(
-                        padding: const EdgeInsets.all(10),
-                        decoration: const BoxDecoration(
-                          color: Colors.white,
-                          borderRadius: BorderRadius.all(Radius.circular(20)),
-                        ),
-                        child:
-                            // const Column(
-                            //   children: [
-                            //     Row(
-                            //       mainAxisAlignment: MainAxisAlignment.center,
-                            //       children: [
-                            //         Text(week),
-                            //         Text(month),
-                            //       ],
-                            //     ),
-                            //     // _buildResponsiveChartLayout(screenWidth),
-                            //     WasteTypePiechart(),
-                            //   ],
-                            // ),
-                            // Column(
-                            FutureBuilder<HHFoodTypePie>(
-                          future: _getHHFoodTypePie(),
-                          builder: (context, snapshot) {
-                            if (snapshot.connectionState ==
-                                ConnectionState.waiting) {
-                              return const Center(
-                                child: CircularProgressIndicator(),
-                              );
-                            } else if (snapshot.hasError) {
-                              return Text('Error: ${snapshot.error}');
-                            } else if (!snapshot.hasData ||
-                                snapshot.data!.statistic.isEmpty) {
-                              return const Text('No data available');
-                            } else {
-                              final data = snapshot.data!;
-                              return Column(
-                                children: [
-                                  WasteTypePiechart(
-                                    chartData: data.statistic
-                                        .map((stat) => ChartData(
-                                            name:
-                                                _getFoodTypeName(stat.category),
-                                            value: stat.percentConsume,
-                                            color: _getFoodTypeColor(
-                                                stat.category),
-                                            category: stat.category))
-                                        .toList(),
-                                  ),
-                                  BuildPieLegend(
-                                      chartData: data.statistic
-                                          .map((stat) => ChartData(
-                                              name: _getFoodTypeName(
-                                                  stat.category),
-                                              value: stat.percentConsume,
-                                              color: _getFoodTypeColor(
-                                                  stat.category),
-                                              category: stat.category))
-                                          .toList(),
-                                      title: 'Food Type')
-                                ],
-                              );
-                            }
-                          },
-                        ),
-                      ),
+                      // ? Pie chart
+                      // Container(
+                      //   padding: const EdgeInsets.all(10),
+                      //   decoration: const BoxDecoration(
+                      //     color: Colors.white,
+                      //     borderRadius: BorderRadius.all(Radius.circular(20)),
+                      //   ),
+                      //   child:
+                      //       // const Column(
+                      //       //   children: [
+                      //       //     Row(
+                      //       //       mainAxisAlignment: MainAxisAlignment.center,
+                      //       //       children: [
+                      //       //         Text(week),
+                      //       //         Text(month),
+                      //       //       ],
+                      //       //     ),
+                      //       //     // _buildResponsiveChartLayout(screenWidth),
+                      //       //     WasteTypePiechart(),
+                      //       //   ],
+                      //       // ),
+                      //       // Column(
+                      //       FutureBuilder<HHFoodTypePie>(
+                      //     future: _getHHFoodTypePie(),
+                      //     builder: (context, snapshot) {
+                      //       if (snapshot.connectionState ==
+                      //           ConnectionState.waiting) {
+                      //         return const Center(
+                      //           child: CircularProgressIndicator(),
+                      //         );
+                      //       } else if (snapshot.hasError) {
+                      //         return Text('Error: ${snapshot.error}');
+                      //       } else if (!snapshot.hasData ||
+                      //           snapshot.data!.statistic.isEmpty) {
+                      //         return const Text('No data available');
+                      //       } else {
+                      //         final data = snapshot.data!;
+                      //         return Column(
+                      //           children: [
+                      //             WasteTypePiechart(
+                      //               chartData: data.statistic
+                      //                   .map((stat) => ChartData(
+                      //                       name:
+                      //                           _getFoodTypeName(stat.category),
+                      //                       value: stat.percentConsume,
+                      //                       color: _getFoodTypeColor(
+                      //                           stat.category),
+                      //                       category: stat.category))
+                      //                   .toList(),
+                      //             ),
+                      //             BuildPieLegend(
+                      //                 chartData: data.statistic
+                      //                     .map((stat) => ChartData(
+                      //                         name: _getFoodTypeName(
+                      //                             stat.category),
+                      //                         value: stat.percentConsume,
+                      //                         color: _getFoodTypeColor(
+                      //                             stat.category),
+                      //                         category: stat.category))
+                      //                     .toList(),
+                      //                 title: 'Food Type')
+                      //           ],
+                      //         );
+                      //       }
+                      //     },
+                      //   ),
+                      // ),
                       const SizedBox(height: 10),
                       ElevatedButton(
                         onPressed: () => context.push('/dashboard_inter/hh'),
