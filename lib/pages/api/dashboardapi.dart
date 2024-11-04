@@ -196,38 +196,38 @@ class DashboardApi {
   }
 
   // ! get inter org waste pie data ???
-  Future<InterFoodWastePieData> getInterWastePie() async {
-    try {
-      print("===Inter Org waste pie===");
-      SharedPreferences prefs = await SharedPreferences.getInstance();
-      final token = prefs.getString('user_token');
-      // print('token: $token');
+  // Future<InterFoodWastePieData> getInterWastePie() async {
+  //   try {
+  //     print("===Inter Org waste pie===");
+  //     SharedPreferences prefs = await SharedPreferences.getInstance();
+  //     final token = prefs.getString('user_token');
+  //     // print('token: $token');
 
-      final res = await dio.get(
-        '$baseurl/inter_organization/fs-pie-chart',
-        options: Options(
-          headers: {
-            'Content-Type': 'application/json',
-            'Authorization': 'Bearer $token',
-          },
-        ),
-        // queryParameters: {'hID': hID},
-      );
+  //     final res = await dio.get(
+  //       '$baseurl/inter_organization/fs-pie-chart',
+  //       options: Options(
+  //         headers: {
+  //           'Content-Type': 'application/json',
+  //           'Authorization': 'Bearer $token',
+  //         },
+  //       ),
+  //       // queryParameters: {'hID': hID},
+  //     );
 
-      print("Response status: ${res.statusCode}");
-      print("Response body: ${res.data}");
+  //     print("Response status: ${res.statusCode}");
+  //     print("Response body: ${res.data}");
 
-      if (res.statusCode == 200) {
-        final Map<String, dynamic> data = res.data;
-        return InterFoodWastePieData.fromJson(data);
-      } else {
-        throw Exception('Invalid response format: ${res.data.runtimeType}');
-      }
-    } catch (e) {
-      print('Error: $e');
-      throw Exception('Failed to fetch Inter Org waste pie: ${e.toString()}');
-    }
-  }
+  //     if (res.statusCode == 200) {
+  //       final Map<String, dynamic> data = res.data;
+  //       return InterFoodWastePieData.fromJson(data);
+  //     } else {
+  //       throw Exception('Invalid response format: ${res.data.runtimeType}');
+  //     }
+  //   } catch (e) {
+  //     print('Error: $e');
+  //     throw Exception('Failed to fetch Inter Org waste pie: ${e.toString()}');
+  //   }
+  // }
 
   // get food type pie for inter org
   Future<InterOrgFoodTypePie> getInterOrgFoodTypePie() async {

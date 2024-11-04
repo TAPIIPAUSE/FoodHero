@@ -51,8 +51,8 @@ class _InterDashboardState extends State<InterDashboard> {
         return await DashboardApi().getHHWastePie(); // Call HH API
       } else if (page == 'org') {
         return await DashboardApi().getOrgWastePie(); // Call Org API
-      } else if (page == 'inter') {
-        return await DashboardApi().getInterWastePie(); // Call Inter Org API
+      // } else if (page == 'inter') {
+        // return await DashboardApi().getInterWastePie(); // Call Inter Org API
       } else {
         throw Exception('Invalid page type: $page');
       }
