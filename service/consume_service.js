@@ -98,10 +98,15 @@ export async function getFoodDetailForConsumeDetail(fID,cID){
 
 
 export async function mapPackageType(id) {
-  var assigned_ID = id
-  var package_type = await PackageUnitType.findOne({ assigned_ID })
-  console.log(package_type)
-  return package_type.type
+  if(id != 0){
+    var assigned_ID = id
+    var package_type = await PackageUnitType.findOne({ assigned_ID })
+    console.log(package_type)
+    return package_type.type
+  }else{
+    return "No package"
+  }
+
 }
 
 export async function mapUnitType(id) {

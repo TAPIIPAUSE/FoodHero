@@ -125,6 +125,16 @@ export async function getFoodDetailForFoodDetail(fID) {
 
     }
 
+    var package_type = await mapPackageType(food.package_type)
+
+    // if(food.package_type){
+    //   var package_type = await mapPackageType(food.package_type)
+    //   console.log("Food is Countable", package_type)
+    // }else{
+    //   console.log("Food is uncounatble", food.package_type)
+    
+    // }
+
     const location = await getLocationString(food.location)
 
     const {
@@ -146,7 +156,12 @@ export async function getFoodDetailForFoodDetail(fID) {
       "Remaining": remain_msg,
       "Remaining_amount": remain_amt_message,
       "URL": food.img,
-      "isCountable": food.isCountable
+      "isCountable": food.isCountable,
+      "weightCountable": Number(food.current_amount.toString()),
+      "quantityCountable": Number(food.current_quantity.toString()),
+      "weightUncountable": Number(food.current_amount.toString()),
+      "unit": unit_type,
+      "package": package_type
     };
 
 
