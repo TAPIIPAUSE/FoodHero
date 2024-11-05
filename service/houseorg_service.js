@@ -39,7 +39,10 @@ import PersonalScore from "../schema/score_module/PersonalScoreSchema.js";
             total = total + Number(i.Consume) + Number(i.Waste)
         })
 
-        const result = (con_acc && total) ? ((con_acc / total) * 100).toFixed(2) : "0.00";
+        var waste_acc = total - con_acc
+
+        const consume_result = (con_acc && total) ? ((con_acc / total) * 100).toFixed(2) : "0.00";
+        const waste_result = (waste_acc && total) ? ((waste_acc / total) * 100).toFixed(2) : "0.00";
 
 
         return {
@@ -47,7 +50,8 @@ import PersonalScore from "../schema/score_module/PersonalScoreSchema.js";
             Consume: con_acc,
             Wasted: total - con_acc,
             Total: total,
-            Percent: Number(result)
+            consumePercent: Number(consume_result),
+            wastePercent: Number(waste_result)
         }
     })
     return output
@@ -91,15 +95,19 @@ import PersonalScore from "../schema/score_module/PersonalScoreSchema.js";
             total = total + Number(i.Consume) + Number(i.Waste)
         })
 
-        const result = (con_acc && total) ? ((con_acc / total) * 100).toFixed(2) : "0.00";
 
+        var waste_acc = total - con_acc
+
+        const consume_result = (con_acc && total) ? ((con_acc / total) * 100).toFixed(2) : "0.00";
+        const waste_result = (waste_acc && total) ? ((waste_acc / total) * 100).toFixed(2) : "0.00";
 
         return {
             Date: item.date,
             Consume: con_acc,
             Wasted: total - con_acc,
             Total: total,
-            Percent: Number(result)
+            consumePercent: Number(consume_result),
+            wastePercent: Number(waste_result)
         }
     })
 
