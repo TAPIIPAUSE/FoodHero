@@ -162,6 +162,7 @@ class _HouseholdState extends State<household> {
 
   @override
   Widget build(BuildContext context) {
+    final screenWidth = MediaQuery.of(context).size.width;
     return MainScaffold(
         selectedRouteIndex: 3,
         child: Scaffold(
@@ -203,116 +204,146 @@ class _HouseholdState extends State<household> {
                       ],
                     ),
                     const SizedBox(height: 10),
-                    const Text(
-                      'Statistics',
-                      style:
-                          TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
-                    ),
-                    FutureBuilder<HouseholdFoodSaved>(
-                      future: _getHouseBar(),
-                      builder: (context, snapshot) {
-                        if (snapshot.connectionState ==
-                            ConnectionState.waiting) {
-                          return const Center(
-                              child: CircularProgressIndicator());
-                        } else if (snapshot.hasError) {
-                          return Text('Error: ${snapshot.error}');
-                        } else if (!snapshot.hasData || snapshot.data == null) {
-                          return const Center(child: Text('No data available'));
-                        } else {
-                          final data =
-                              (snapshot.data!.weekList as List<dynamic>)
-                                  .map((stat) {
-                            return BarData(
-                              label: stat.date,
-                              percent: stat.percent,
-                            );
-                          }).toList();
-
-                          // Parse and sort the data by date
-                          data.sort((a, b) {
-                            DateTime dateA =
-                                DateFormat('EEE MMM dd yyyy').parse(a.label);
-                            DateTime dateB =
-                                DateFormat('EEE MMM dd yyyy').parse(b.label);
-                            return dateA.compareTo(dateB);
-                          });
-
-                          return Container(
-                            decoration: const BoxDecoration(
-                              color: Colors.white,
-                              borderRadius:
-                                  BorderRadius.all(Radius.circular(20)),
-                            ),
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                              children: [
-                                Stack(
-                                  children: [
-                                    Center(
-                                      child: Text("Daily Food Consumption",
-                                          style: TextStyle(fontSize: 20)),
-                                    ),
-                                    Row(
-                                      mainAxisAlignment: MainAxisAlignment.end,
-                                      children: [
-                                        // Text("%",
-                                        //     style: TextStyle(
-                                        //         fontSize: 16,
-                                        //         fontWeight: FontWeight.bold)),
-                                        IconButton(
-                                          onPressed: () {
-                                            showDialog(
-                                              context: context,
-                                              builder: (BuildContext context) {
-                                                return AlertDialog(
-                                                  title: Text("Information"),
-                                                  content: Text(
-                                                    'information about this chart',
-                                                    style: const TextStyle(
-                                                        fontSize: 16),
-                                                  ),
-                                                  // actions: [
-                                                  //   TextButton(
-                                                  //     child: Text("OK"),
-                                                  //     onPressed: () {
-                                                  //       Navigator.of(context).pop();
-                                                  //     },
-                                                  //   ),
-                                                  // ],
-                                                );
-                                              },
-                                            );
-                                          },
-                                          icon: const Icon(
-                                              Icons.info_outline_rounded),
-                                        ),
-                                      ],
-                                    ),
-                                  ],
-                                ),
-                                WasteBarChartContent(
-                                  chartData: data,
-                                  // color: AppTheme.softBlue,
-                                ),
-                              ],
-                            ),
-                          );
-                        }
-                      },
-                    ),
-                    // IconButton.outlined(
-                    //     onPressed: () => context.push('/dashboard_inter/hh'),
-                    //     icon: Icon(Icons.expand_more_rounded)),
-                    TextButton.icon(
-                      onPressed: () => context.push('/dashboard_inter/hh'),
-                      icon: Icon(
-                        Icons.expand_circle_down_rounded,
-                        size: 32,
-                        color: Colors.orange,
+                    Container(
+                      margin: const EdgeInsets.all(10),
+                      padding: const EdgeInsets.all(10),
+                      width: screenWidth * 0.95,
+                      decoration: const BoxDecoration(
+                        color: AppTheme.softBlue,
+                        borderRadius: BorderRadius.all(Radius.circular(20)),
                       ),
-                      label: Text(''),
-                    )
+                      child: Column(
+                        children: [
+                          const Text(
+                            'Statistics',
+                            style: TextStyle(
+                                fontSize: 24, fontWeight: FontWeight.bold),
+                          ),
+                          FutureBuilder<HouseholdFoodSaved>(
+                            future: _getHouseBar(),
+                            builder: (context, snapshot) {
+                              if (snapshot.connectionState ==
+                                  ConnectionState.waiting) {
+                                return const Center(
+                                    child: CircularProgressIndicator());
+                              } else if (snapshot.hasError) {
+                                return Text('Error: ${snapshot.error}');
+                              } else if (!snapshot.hasData ||
+                                  snapshot.data == null) {
+                                return const Center(
+                                    child: Text('No data available'));
+                              } else {
+                                final data =
+                                    (snapshot.data!.weekList as List<dynamic>)
+                                        .map((stat) {
+                                  return BarData(
+                                    label: stat.date,
+                                    percent: stat.percent,
+                                  );
+                                }).toList();
+
+                                // Parse and sort the data by date
+                                data.sort((a, b) {
+                                  DateTime dateA = DateFormat('EEE MMM dd yyyy')
+                                      .parse(a.label);
+                                  DateTime dateB = DateFormat('EEE MMM dd yyyy')
+                                      .parse(b.label);
+                                  return dateA.compareTo(dateB);
+                                });
+
+                                return Container(
+                                  decoration: const BoxDecoration(
+                                    color: Colors.white,
+                                    borderRadius:
+                                        BorderRadius.all(Radius.circular(20)),
+                                  ),
+                                  child: Column(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceEvenly,
+                                    children: [
+                                      Stack(
+                                        children: [
+                                          Center(
+                                            child: Text(
+                                                "Daily Food Consumption",
+                                                style: TextStyle(fontSize: 20)),
+                                          ),
+                                          Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.end,
+                                            children: [
+                                              // Text("%",
+                                              //     style: TextStyle(
+                                              //         fontSize: 16,
+                                              //         fontWeight: FontWeight.bold)),
+                                              IconButton(
+                                                onPressed: () {
+                                                  showDialog(
+                                                    context: context,
+                                                    builder:
+                                                        (BuildContext context) {
+                                                      return AlertDialog(
+                                                        title:
+                                                            Text("Information"),
+                                                        content: Text(
+                                                          'information about this chart',
+                                                          style:
+                                                              const TextStyle(
+                                                                  fontSize: 16),
+                                                        ),
+                                                        // actions: [
+                                                        //   TextButton(
+                                                        //     child: Text("OK"),
+                                                        //     onPressed: () {
+                                                        //       Navigator.of(context).pop();
+                                                        //     },
+                                                        //   ),
+                                                        // ],
+                                                      );
+                                                    },
+                                                  );
+                                                },
+                                                icon: const Icon(
+                                                    Icons.info_outline_rounded),
+                                              ),
+                                            ],
+                                          ),
+                                        ],
+                                      ),
+                                      WasteBarChartContent(
+                                        chartData: data,
+                                        // color: AppTheme.softBlue,
+                                      ),
+                                    ],
+                                  ),
+                                );
+                              }
+                            },
+                          ),
+                          const SizedBox(height: 10),
+                          ElevatedButton(
+                            onPressed: () =>
+                                context.push('/dashboard_inter/hh'),
+                            style: IconButton.styleFrom(
+                                backgroundColor: AppTheme.mainBlue,
+                                foregroundColor: Colors.white),
+                            child: const Text("see more"),
+                          ),
+                          // IconButton.outlined(
+                          //     onPressed: () => context.push('/dashboard_inter/hh'),
+                          //     icon: Icon(Icons.expand_more_rounded)),
+                        ],
+                      ),
+                    ),
+                    // TextButton.icon(
+                    //   onPressed: () => context.push('/dashboard_inter/hh'),
+                    //   icon: Icon(
+                    //     Icons.expand_circle_down_rounded,
+                    //     size: 32,
+                    //     color: AppTheme.mainBlue,
+                    //   ),
+                    //   label: Text(''),
+                    // )
                   ],
                 ),
                 // ),
@@ -344,83 +375,96 @@ class _HouseholdState extends State<household> {
                 //   'Score board',
                 //   style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
                 // ),
-                Stack(
-                  children: [
-                    const Text(
-                      'Score board',
-                      style: TextStyle(
-                          color: Colors.black,
-                          fontSize: 24,
-                          fontWeight: FontWeight.bold),
-                    ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.end,
-                      children: [
-                        // Text("%",
-                        //     style: TextStyle(
-                        //         fontSize: 16,
-                        //         fontWeight: FontWeight.bold)),
-                        IconButton(
-                          onPressed: () {
-                            showDialog(
-                              context: context,
-                              builder: (BuildContext context) {
-                                return AlertDialog(
-                                    // title: Text("Information"),
-                                    content: SizedBox(
-                                  width: double.maxFinite,
-                                  child: Markdown(
-                                      data:
-                                          "### Scoring calculation from Food Consumption \n**If food quantity greater or equal to 1000 grams** \n* If 90% to 100% of the food is consumed, The consumed portion is multiplied by 5 to receive a **positive score** between 4.5 and 5 \n* If 70% to 90% of the food is consumed, The consumed portion is multiplied by 3 to receive a **positive score** between 2.1 and 2.7 \n* If less than 70% of the food is consumed, The consumed portion is multiplied by -5, resulting in a **negative score** between -3.5 and -5 \n\n**If food quantity less than 1000 grams** \n* If more than 80% of the food is consumed, The consumed portion is multiplied by 2 to receive a **positive score** between 1.6 and 2 \n* If 80% or less of the food is consumed, The consumed portion is multiplied by -2, resulting in a **negative score** between -1.6 and -2 \n### How to receive a Star? \nA star is awarded to the top-ranking member in this household who has a score more than 0"),
-                                )
-                                    // Text(
-                                    // 'information about this chart',
-                                    // style: const TextStyle(fontSize: 16),
-                                    // ),
-                                    );
-                              },
-                            );
-                          },
-                          icon: const Icon(
-                            Icons.info_outline_rounded,
-                            color: Colors.black,
+                Container(
+                  margin: const EdgeInsets.all(10),
+                  padding: const EdgeInsets.all(10),
+                  width: screenWidth * 0.95,
+                  decoration: const BoxDecoration(
+                    color: AppTheme.softBlue,
+                    borderRadius: BorderRadius.all(Radius.circular(20)),
+                  ),
+                  child: Column(
+                    children: [
+                      Stack(
+                        children: [
+                          const Text(
+                            'Score board',
+                            style: TextStyle(
+                                color: Colors.black,
+                                fontSize: 24,
+                                fontWeight: FontWeight.bold),
                           ),
-                        ),
-                      ],
-                    ),
-                  ],
-                ),
-                FutureBuilder<HouseScore>(
-                  future: _getHouseScore(),
-                  builder: (context, snapshot) {
-                    if (snapshot.connectionState == ConnectionState.waiting) {
-                      return const Center(
-                        child: CircularProgressIndicator(color: Colors.white),
-                      );
-                    } else if (snapshot.hasError) {
-                      return Text('Error: ${snapshot.error}');
-                    } else if (!snapshot.hasData) {
-                      return const Text('No house score available');
-                    } else {
-                      final houseScore = snapshot.data!;
-                      return SizedBox(
-                        child: ListView.builder(
-                          shrinkWrap: true,
-                          itemCount: houseScore.scoreList.length,
-                          itemBuilder: (context, index) {
-                            final score = houseScore.scoreList[index];
-                            return ListScore(
-                              name: score.username,
-                              star: score.rank == 1 && score.score > 0,
-                              point: score.score,
-                              rank: score.rank,
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.end,
+                            children: [
+                              IconButton(
+                                onPressed: () {
+                                  showDialog(
+                                    context: context,
+                                    builder: (BuildContext context) {
+                                      return AlertDialog(
+                                          // title: Text("Information"),
+                                          content: SizedBox(
+                                        width: double.maxFinite,
+                                        child: Markdown(
+                                            data:
+                                                "### Scoring calculation from Food Consumption \n**If food quantity greater or equal to 1000 grams** \n* If 90% to 100% of the food is consumed, The consumed portion is multiplied by 5 to receive a **positive score** between 4.5 and 5 \n* If 70% to 90% of the food is consumed, The consumed portion is multiplied by 3 to receive a **positive score** between 2.1 and 2.7 \n* If less than 70% of the food is consumed, The consumed portion is multiplied by -5, resulting in a **negative score** between -3.5 and -5 \n\n**If food quantity less than 1000 grams** \n* If more than 80% of the food is consumed, The consumed portion is multiplied by 2 to receive a **positive score** between 1.6 and 2 \n* If 80% or less of the food is consumed, The consumed portion is multiplied by -2, resulting in a **negative score** between -1.6 and -2 \n### How to receive a Star? \nA star is awarded to the top-ranking member in this household who has a score more than 0"),
+                                      )
+                                          // Text(
+                                          // 'information about this chart',
+                                          // style: const TextStyle(fontSize: 16),
+                                          // ),
+                                          );
+                                    },
+                                  );
+                                },
+                                icon: const Icon(
+                                  Icons.info_outline_rounded,
+                                  color: Colors.black,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ],
+                      ),
+                      FutureBuilder<HouseScore>(
+                        future: _getHouseScore(),
+                        builder: (context, snapshot) {
+                          if (snapshot.connectionState ==
+                              ConnectionState.waiting) {
+                            return const Center(
+                              child: CircularProgressIndicator(
+                                  color: Colors.white),
                             );
-                          },
-                        ),
-                      );
-                    }
-                  },
+                          } else if (snapshot.hasError) {
+                            return Text('Error: ${snapshot.error}');
+                          } else if (!snapshot.hasData) {
+                            return const Text('No house score available');
+                          } else {
+                            final houseScore = snapshot.data!;
+                            return SizedBox(
+                              child: ListView.builder(
+                                shrinkWrap: true,
+                                itemCount: houseScore.scoreList.length,
+                                itemBuilder: (context, index) {
+                                  final score = houseScore.scoreList[index];
+                                  return ListScore(
+                                    name: score.username,
+                                    star: score.rank == 1 && score.score > 0,
+                                    point: score.score,
+                                    rank: score.rank,
+                                    isMember: score.isCurrentUser,
+                                  );
+                                },
+                              ),
+                            );
+                          }
+                        },
+                      ),
+                    ],
+                  ),
                 ),
+
                 // ],
                 // ),
 

@@ -392,6 +392,7 @@ class _InterOrganizationState extends State<InterOrganization> {
                                     star: score.rank == 1 && score.score > 0,
                                     point: score.score,
                                     rank: score.rank,
+                                    isMember: score.isCurrentUser,
                                   );
                                 },
                               ),
@@ -711,11 +712,13 @@ class _InterOrganizationState extends State<InterOrganization> {
                                 itemCount: houseScore.scoreList.length,
                                 itemBuilder: (context, index) {
                                   final score = houseScore.scoreList[index];
+                                  print("isMember: ${score.isCurrentUser}");
                                   return ListScore(
                                     name: score.username,
                                     star: score.rank == 1 && score.score > 0,
                                     point: score.score,
                                     rank: score.rank,
+                                    isMember: score.isCurrentUser,
                                   );
                                 },
                               ),
@@ -1039,11 +1042,13 @@ class _InterOrganizationState extends State<InterOrganization> {
                                 itemCount: orgScore.scoreList.length,
                                 itemBuilder: (context, index) {
                                   final score = orgScore.scoreList[index];
+                                  print("isMember: ${score.isCurrentUser}");
                                   return ListScore(
                                     name: score.housename,
                                     star: score.rank == 1 && score.score > 0,
                                     point: score.score,
                                     rank: score.rank,
+                                    isMember: score.isCurrentUser,
                                   );
                                 },
                               ),

@@ -10,12 +10,14 @@ class ListScore extends StatelessWidget {
     required this.star,
     required this.point,
     required this.rank,
+    required this.isMember,
   });
 
   final String name;
   final bool star;
   final double point;
   final int rank;
+  final bool isMember;
 
   @override
   Widget build(BuildContext context) {
@@ -25,7 +27,7 @@ class ListScore extends StatelessWidget {
         Container(
           padding: const EdgeInsets.all(5.0),
           decoration: BoxDecoration(
-            color: Colors.white,
+            color: isMember ? AppTheme.softYellow : Colors.white,
             borderRadius: BorderRadius.circular(10.0),
           ),
           child: Padding(
@@ -57,8 +59,10 @@ class ListScore extends StatelessWidget {
                 Row(
                   children: [
                     if (star)
-                      const Icon(Icons.star_rate_rounded,
-                          color: AppTheme.softOrange),
+                      Icon(Icons.star_rate_rounded,
+                          color: isMember
+                              ? AppTheme.mainBlue
+                              : AppTheme.softOrange),
                     const SizedBox(
                       width: 10,
                     ),
@@ -66,7 +70,9 @@ class ListScore extends StatelessWidget {
                       padding: const EdgeInsets.all(10.0),
                       width: screenWidth * 0.2,
                       decoration: BoxDecoration(
-                        color: AppTheme.softGreen,
+                        color: point >= 0
+                            ? AppTheme.softGreen
+                            : AppTheme.softRedCancleWasted,
                         borderRadius: BorderRadius.circular(10.0),
                       ),
                       child: Column(
@@ -76,9 +82,9 @@ class ListScore extends StatelessWidget {
                                 ? '0'
                                 : NumberFormat('#,##0.00').format(point),
                             style: const TextStyle(
-                              color: Colors.black,
-                              fontSize: 14.0,
-                            ),
+                                color: Colors.black,
+                                fontSize: 14.0,
+                                fontWeight: FontWeight.bold),
                           ),
                         ],
                       ),

@@ -28,11 +28,13 @@ class Score {
   final int rank;
   final String username;
   final double score;
+  final bool isCurrentUser;
 
   Score({
     required this.rank,
     required this.username,
     required this.score,
+    required this.isCurrentUser,
   });
 
   factory Score.fromJson(Map<String, dynamic> json) {
@@ -40,6 +42,8 @@ class Score {
       rank: json['Rank'],
       username: json['Username'],
       score: (json['Score'] as num).toDouble(),
+      isCurrentUser:
+          json['isCurrentUser'] ?? false, // Add null check with default value
     );
   }
 
@@ -48,6 +52,7 @@ class Score {
       'Rank': rank,
       'Username': username,
       'Score': score,
+      'IsCurrentUser': isCurrentUser,
     };
   }
 }
