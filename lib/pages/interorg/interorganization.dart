@@ -405,76 +405,77 @@ class _InterOrganizationState extends State<InterOrganization> {
                 ),
 
                 // ???
-                // Container(
-                //   margin: const EdgeInsets.all(10),
-                //   padding: const EdgeInsets.all(10),
-                //   width: screenWidth * 0.95,
-                //   decoration: const BoxDecoration(
-                //     color: AppTheme.mainBlue,
-                //     borderRadius: BorderRadius.all(Radius.circular(20)),
-                //   ),
-                //   child: FutureBuilder<OrgFoodWastePieData>(
-                //     future: _getOrgWastePieData(),
-                //     builder: (context, snapshot) {
-                //       if (snapshot.connectionState == ConnectionState.waiting) {
-                //         return const Center(child: CircularProgressIndicator());
-                //       } else if (snapshot.hasError) {
-                //         return Text('Error: ${snapshot.error}');
-                //       } else if (!snapshot.hasData || snapshot.data == null) {
-                //         return const Center(child: Text('No data available'));
-                //       } else {
-                //         final data = snapshot.data!;
+                Container(
+                  margin: const EdgeInsets.all(10),
+                  padding: const EdgeInsets.all(10),
+                  width: screenWidth * 0.95,
+                  decoration: const BoxDecoration(
+                    color: AppTheme.mainBlue,
+                    borderRadius: BorderRadius.all(Radius.circular(20)),
+                  ),
+                  child: FutureBuilder<OrgFoodWastePieData>(
+                    future: _getOrgWastePieData(),
+                    builder: (context, snapshot) {
+                      if (snapshot.connectionState == ConnectionState.waiting) {
+                        return const Center(child: CircularProgressIndicator());
+                      } else if (snapshot.hasError) {
+                        return Text('Error: ${snapshot.error}');
+                      } else if (!snapshot.hasData || snapshot.data == null) {
+                        return const Center(child: Text('No data available'));
+                      } else {
+                        final data = snapshot.data!;
 
-                //         // Safely handle null values with null-aware operators and provide defaults
-                //         final double wastePercent =
-                //             data.statistic.percentWaste ??
-                //                 0; // Fetch waste percentage
-                //         final double eatenPercent =
-                //             data.statistic.percentConsume ??
-                //                 0; // Fetch eaten percentage
+                        // Safely handle null values with null-aware operators and provide defaults
+                        final double wastePercent =
+                            data.statistic.percentWaste ??
+                                0; // Fetch waste percentage
+                        final double eatenPercent =
+                            data.statistic.percentConsume ??
+                                0; // Fetch eaten percentage
 
-                //         // If both percentages are 0, show a message instead of an empty chart
-                //         if (wastePercent == 0 && eatenPercent == 0) {
-                //           return const Center(
-                //               child: Text(
-                //             'No data available',
-                //           ));
-                //         }
+                        // If both percentages are 0, show a message instead of an empty chart
+                        if (wastePercent == 0 && eatenPercent == 0) {
+                          return const Center(
+                              child: Text(
+                            'No data available',
+                            style: TextStyle(color: Colors.white),
+                          ));
+                        }
 
-                //         return Container(
-                //           // padding: const EdgeInsets.all(10),
-                //           decoration: const BoxDecoration(
-                //             color: Colors.white,
-                //             borderRadius: BorderRadius.all(Radius.circular(20)),
-                //           ),
-                //           child: Column(
-                //             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                //             crossAxisAlignment: CrossAxisAlignment.center,
-                //             children: [
-                //               Text(
-                //                 'Consumption vs Waste',
-                //                 style: FontsTheme.mouseMemoirs_30Black(),
-                //               ),
-                //               WastePiechart(
-                //                 wastepercent: wastePercent,
-                //                 eatenpercent: eatenPercent,
-                //               ),
-                //               Row(
-                //                 mainAxisAlignment: MainAxisAlignment.center,
-                //                 children: [
-                //                   BuildWastePieLegend(
-                //                     wastepercent: wastePercent,
-                //                     eatenpercent: eatenPercent,
-                //                   ),
-                //                 ],
-                //               )
-                //             ],
-                //           ),
-                //         );
-                //       }
-                //     },
-                //   ),
-                // ),
+                        return Container(
+                          // padding: const EdgeInsets.all(10),
+                          decoration: const BoxDecoration(
+                            color: Colors.white,
+                            borderRadius: BorderRadius.all(Radius.circular(20)),
+                          ),
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              Text(
+                                'Consumption vs Waste',
+                                style: FontsTheme.mouseMemoirs_30Black(),
+                              ),
+                              WastePiechart(
+                                wastepercent: wastePercent,
+                                eatenpercent: eatenPercent,
+                              ),
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  BuildWastePieLegend(
+                                    wastepercent: wastePercent,
+                                    eatenpercent: eatenPercent,
+                                  ),
+                                ],
+                              )
+                            ],
+                          ),
+                        );
+                      }
+                    },
+                  ),
+                ),
                 // ????
                 // Container(
                 //   margin: const EdgeInsets.all(10),
@@ -768,6 +769,7 @@ class _InterOrganizationState extends State<InterOrganization> {
                               return const Center(
                                   child: Text(
                                 'No data available',
+                                style: TextStyle(color: Colors.white),
                               ));
                             }
 
@@ -1098,6 +1100,7 @@ class _InterOrganizationState extends State<InterOrganization> {
                               return const Center(
                                   child: Text(
                                 'No data available',
+                                style: TextStyle(color: Colors.white),
                               ));
                             }
 
