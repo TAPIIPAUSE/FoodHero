@@ -1,4 +1,6 @@
 import PersonalScore from "../schema/score_module/PersonalScoreSchema.js"
+import House from "../schema/user_module/houseSchema.js";
+import Organization from "../schema/user_module/organizationSchema.js";
 
 export async function preprocess_Org_fs_pie_chart(orgID){
     const org_stat = await PersonalScore.find({orgID: orgID})
@@ -257,16 +259,47 @@ export async function preprocess_Org_fe_pie_chart(org_ID){
     }
 }
 
+// export async function monthly_house(hID) {
+//   const monthData = [];
+//   const today = new Date();
+//   const house = await House.findOne({assigned_ID: hID})
+//   const house_created_at = house.createdAt
+//   // Calculate the date 29 days ago to create a 30-day range including today
+  
+//   // const startOfRange = new Date(today);
+//   startOfRange.setDate(today.getDate() - 29);
+
+//   // Loop through each day from startOfRange to today
+//   for (let day = new Date(startOfRange); day <= today; day.setDate(day.getDate() + 1)) {
+//     const startOfDay = new Date(day);
+//     startOfDay.setHours(0, 0, 0, 0);
+
+//     const endOfDay = new Date(day);
+//     endOfDay.setHours(23, 59, 59, 999);
+
+//     // Query the PersonalScore collection for entries created on the specific day
+//     const dailyFood = await PersonalScore.find({
+//       hID: hID,
+//       createdAt: { $gte: startOfDay, $lte: endOfDay }
+//     });
+
+//     monthData.push({
+//       date: startOfDay.toDateString(),
+//       items: dailyFood
+//     });
+//   }
+
+//   return monthData;
+// }
+
 export async function monthly_house(hID) {
   const monthData = [];
   const today = new Date();
+  const house = await House.findOne({ assigned_ID: hID });
+  const house_created_at = new Date(house.createdAt);
 
-  // Calculate the date 29 days ago to create a 30-day range including today
-  const startOfRange = new Date(today);
-  startOfRange.setDate(today.getDate() - 29);
-
-  // Loop through each day from startOfRange to today
-  for (let day = new Date(startOfRange); day <= today; day.setDate(day.getDate() + 1)) {
+  // Loop from house_created_at to today
+  for (let day = new Date(house_created_at); day <= today; day.setDate(day.getDate() + 1)) {
     const startOfDay = new Date(day);
     startOfDay.setHours(0, 0, 0, 0);
 
@@ -346,16 +379,47 @@ export async function preprocess_house_heatmap(hID){
 //   return monthData;
 // }
 
+// export async function monthly_org(orgID) {
+//   const monthData = [];
+//   const today = new Date();
+
+//   // Calculate the date 29 days ago from today to create a 30-day range including today
+//   const startOfRange = new Date(today);
+//   startOfRange.setDate(today.getDate() - 29);
+
+//   // Loop through each day from startOfRange to today
+//   for (let day = new Date(startOfRange); day <= today; day.setDate(day.getDate() + 1)) {
+//     const startOfDay = new Date(day);
+//     startOfDay.setHours(0, 0, 0, 0);
+
+//     const endOfDay = new Date(day);
+//     endOfDay.setHours(23, 59, 59, 999);
+
+//     // Query the PersonalScore collection for entries created on the specific day
+//     const dailyFood = await PersonalScore.find({
+//       orgID: orgID,
+//       createdAt: { $gte: startOfDay, $lte: endOfDay }
+//     });
+
+//     monthData.push({
+//       date: startOfDay.toDateString(),
+//       items: dailyFood
+//     });
+//   }
+
+//   return monthData;
+// }
+
 export async function monthly_org(orgID) {
   const monthData = [];
   const today = new Date();
 
-  // Calculate the date 29 days ago from today to create a 30-day range including today
-  const startOfRange = new Date(today);
-  startOfRange.setDate(today.getDate() - 29);
+  // Fetch the organization and get the createdAt date
+  const organization = await Organization.findOne({ assigned_ID: orgID });
+  const org_created_at = new Date(organization.createdAt);
 
-  // Loop through each day from startOfRange to today
-  for (let day = new Date(startOfRange); day <= today; day.setDate(day.getDate() + 1)) {
+  // Loop from org_created_at to today
+  for (let day = new Date(org_created_at); day <= today; day.setDate(day.getDate() + 1)) {
     const startOfDay = new Date(day);
     startOfDay.setHours(0, 0, 0, 0);
 
@@ -376,6 +440,7 @@ export async function monthly_org(orgID) {
 
   return monthData;
 }
+
 
 
 export async function preprocess_Org_heatmap(orgID){

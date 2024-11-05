@@ -45,6 +45,7 @@ import PersonalScore from "../schema/score_module/PersonalScoreSchema.js";
         return {
             Date: item.date,
             Consume: con_acc,
+            Wasted: total - con_acc,
             Total: total,
             Percent: Number(result)
         }
@@ -96,6 +97,7 @@ import PersonalScore from "../schema/score_module/PersonalScoreSchema.js";
         return {
             Date: item.date,
             Consume: con_acc,
+            Wasted: total - con_acc,
             Total: total,
             Percent: Number(result)
         }
