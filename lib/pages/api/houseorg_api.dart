@@ -1,6 +1,8 @@
 import 'package:dio/dio.dart';
 import 'package:foodhero/models/chart/bar/hhbar_model.dart';
 import 'package:foodhero/models/chart/bar/orgbar_model.dart';
+import 'package:foodhero/models/hhname_model.dart';
+import 'package:foodhero/models/orgname_mode.dart';
 import 'package:foodhero/models/score/housescore_model.dart';
 import 'package:foodhero/models/score/orgscore_model.dart';
 import 'package:foodhero/pages/api/ApiClient.dart';
@@ -141,6 +143,66 @@ class HouseOrgApi {
     } catch (e) {
       print('Error: $e');
       throw Exception('Failed to fetch org bar: ${e.toString()}');
+    }
+  }
+
+  // get hh name
+  Future<HHName?> getHHName() async {
+    try {
+      print("===HHName===");
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      final token = prefs.getString('user_token');
+      // print('token: $token');
+      final res = await dio.get(
+        '$baseurl/household/getHouseName',
+        options: Options(
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer $token',
+          },
+        ),
+      );
+      print("Response status: ${res.statusCode}");
+      print("Response body: ${res.data}");
+      if (res.statusCode == 200) {
+        HHName data = HHName.fromJson(res.data);
+        return data;
+      } else {
+        throw Exception('Invalid response format: ${res.data.runtimeType}');
+      }
+    } catch (e) {
+      print('Error: $e');
+      throw Exception('Failed to fetch HH name: ${e.toString()}');
+    }
+  }
+
+  // get org name
+  Future<OrgName?> getOrgName() async {
+    try {
+      print("===OrgName===");
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      final token = prefs.getString('user_token');
+      // print('token: $token');
+      final res = await dio.get(
+        '$baseurl/organization/getOrgName',
+        options: Options(
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer $token',
+          },
+        ),
+      );
+      print("Response status: ${res.statusCode}");
+      print("Response body: ${res.data}");
+      if (res.statusCode == 200) {
+        OrgName data = OrgName.fromJson(res.data);
+        return data;
+      } else {
+        throw Exception('Invalid response format: ${res.data.runtimeType}');
+      }
+    } catch (e) {
+      print('Error: $e');
+      throw Exception('Failed to fetch org name: ${e.toString()}');
     }
   }
 }

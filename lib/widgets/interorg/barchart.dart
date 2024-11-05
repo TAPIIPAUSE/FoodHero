@@ -7,10 +7,14 @@ import 'package:intl/intl.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 
 class BarData {
-  final double percent;
+  final double wastePercent;
+  final double consumePercent;
   final String label;
 
-  BarData({required this.percent, required this.label});
+  BarData(
+      {required this.wastePercent,
+      required this.consumePercent,
+      required this.label});
 }
 
 // class WasteBarchart extends StatelessWidget {
@@ -72,7 +76,7 @@ class _WasteBarChartContentState extends State<WasteBarChartContent> {
             StackedColumn100Series<BarData, String>(
               dataSource: widget.chartData,
               xValueMapper: (BarData data, _) => data.label,
-              yValueMapper: (BarData data, _) => data.percent.toDouble(),
+              yValueMapper: (BarData data, _) => data.consumePercent.toDouble(),
               // dataLabelSettings: const DataLabelSettings(isVisible: true),
               dataLabelSettings: DataLabelSettings(
                 isVisible: true,
@@ -83,15 +87,15 @@ class _WasteBarChartContentState extends State<WasteBarChartContent> {
               name: 'Food Consumption', // Name for the legend
               color: AppTheme.softBrightGreen,
               dataLabelMapper: (BarData data, _) =>
-                  // '${data.percent.toInt()}%', // Convert to integer
-                  data.percent == 0 ? '' : '${data.percent.toInt()}%',
+                  '${data.consumePercent.toInt()}%', // Convert to integer
+              // data.consumePercent == 0 ? '' : '${data.consumePercent}%',
               // dataLabelMapper: (BarData data, _) =>
               // data.percent == 0 ? 'No data' : '${data.percent}%',
             ),
             StackedColumn100Series<BarData, String>(
               dataSource: widget.chartData,
               xValueMapper: (BarData data, _) => data.label,
-              yValueMapper: (BarData data, _) => data.percent.toDouble(),
+              yValueMapper: (BarData data, _) => data.wastePercent.toDouble(),
               // dataLabelSettings: const DataLabelSettings(isVisible: true),
               dataLabelSettings: DataLabelSettings(
                 isVisible: true,
@@ -104,7 +108,7 @@ class _WasteBarChartContentState extends State<WasteBarChartContent> {
               dataLabelMapper: (BarData data, _) =>
                   // '${100 - data.percent.toInt()}%', // Convert to integer
                   // dataLabelMapper: (BarData data, _) =>
-                  data.percent == 0 ? '' : '${data.percent.toInt()}%',
+                  data.wastePercent == 0 ? '' : '${data.wastePercent.toInt()}%',
             ),
           ],
           legend: Legend(

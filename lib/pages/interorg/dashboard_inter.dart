@@ -297,9 +297,6 @@ class _InterDashboardState extends State<InterDashboard> {
                             wastepercent: wastePercent,
                             eatenpercent: eatenPercent,
                           ),
-                          SizedBox(
-                            height: 10,
-                          ),
                           Row(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
@@ -339,7 +336,8 @@ class _InterDashboardState extends State<InterDashboard> {
                   (snapshot.data!.weekList as List<dynamic>).map((stat) {
                 return BarData(
                   label: stat.date,
-                  percent: stat.percent,
+                  wastePercent: stat.wastePercent,
+                  consumePercent: stat.consumePercent,
                 );
               }).toList();
 
@@ -383,10 +381,10 @@ class _InterDashboardState extends State<InterDashboard> {
                                   context: context,
                                   builder: (BuildContext context) {
                                     return AlertDialog(
-                                      title: Text("Information"),
+                                      // title: Text("Information"),
                                       content: Text(
-                                        'information about this chart',
-                                        style: const TextStyle(fontSize: 16),
+                                        'The height of each bar represents the percentage of food that you consumed on a particular day, while the colors represent the completed consumed and wasted of food. The percentage of consumed and wasted is represented by the height of the corresponding color in the bar. The total height of the bar always adds up to 100%, which represents your total daily food consumption.',
+                                        // style: const TextStyle(fontSize: 16),
                                       ),
                                       // actions: [
                                       //   TextButton(

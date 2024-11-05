@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
 import 'package:foodhero/main.dart';
 import 'package:foodhero/models/chart/bar/hhbar_model.dart';
+import 'package:foodhero/models/hhname_model.dart';
 import 'package:foodhero/models/score/housescore_model.dart';
 import 'package:foodhero/pages/House&Orga/Household/houseStatistics.dart';
 import 'package:foodhero/pages/api/houseorg_api.dart';
@@ -67,6 +68,17 @@ class _HouseholdState extends State<household> {
       return data;
     } catch (e) {
       print('Error loading house bar: $e');
+      rethrow; // Return the error message
+    }
+  }
+
+  Future<HHName?> _getHouseName() async {
+    try {
+      final data = await HouseOrgApi().getHHName();
+      print('Fetching house name');
+      return data;
+    } catch (e) {
+      print('Error loading house name: $e');
       rethrow; // Return the error message
     }
   }
@@ -169,9 +181,30 @@ class _HouseholdState extends State<household> {
           backgroundColor: AppTheme.lightGreenBackground,
           appBar: AppBar(
             backgroundColor: AppTheme.greenMainTheme,
-            toolbarHeight: 90,
+            toolbarHeight: 100,
             centerTitle: true,
-            title: const Text('Household'),
+            title: Column(
+              children: [
+                const Text('Household'),
+                FutureBuilder(
+                    future: _getHouseName(),
+                    builder: (context, snapshot) {
+                      if (snapshot.connectionState == ConnectionState.waiting) {
+                        return const CircularProgressIndicator(
+                          color: Colors.white,
+                        );
+                      } else if (snapshot.hasError) {
+                        return Text('Error: ${snapshot.error}');
+                      } else if (!snapshot.hasData) {
+                        return Text('No house name');
+                      } else {
+                        final name = snapshot.data!.name;
+                        return Text(name,
+                            style: FontsTheme.mouseMemoirs_30Black());
+                      }
+                    })
+              ],
+            ),
             titleTextStyle: FontsTheme.mouseMemoirs_64Black(),
             leading: IconButton(
               icon: const Icon(Icons.person),
@@ -238,7 +271,8 @@ class _HouseholdState extends State<household> {
                                         .map((stat) {
                                   return BarData(
                                     label: stat.date,
-                                    percent: stat.percent,
+                                    wastePercent: stat.wastePercent,
+                                    consumePercent: stat.consumePercent,
                                   );
                                 }).toList();
 
@@ -283,13 +317,13 @@ class _HouseholdState extends State<household> {
                                                     builder:
                                                         (BuildContext context) {
                                                       return AlertDialog(
-                                                        title:
-                                                            Text("Information"),
+                                                        // title:
+                                                        // Text("Information"),
                                                         content: Text(
-                                                          'information about this chart',
-                                                          style:
-                                                              const TextStyle(
-                                                                  fontSize: 16),
+                                                          'The height of each bar represents the percentage of food that you consumed on a particular day, while the colors represent the completed consumed and wasted of food. The percentage of consumed and wasted is represented by the height of the corresponding color in the bar. The total height of the bar always adds up to 100%, which represents your total daily food consumption.',
+                                                          // style:
+                                                          // const TextStyle(
+                                                          // fontSize: 16),
                                                         ),
                                                         // actions: [
                                                         //   TextButton(

@@ -24,13 +24,15 @@ class WeekData {
   final String date;
   final int consume;
   final int total;
-  final double percent;
+  final double consumePercent;
+  final double wastePercent;
 
   WeekData({
     required this.date,
     required this.consume,
     required this.total,
-    required this.percent,
+    required this.consumePercent,
+    required this.wastePercent,
   });
 
   Map<String, dynamic> toMap() {
@@ -38,7 +40,8 @@ class WeekData {
       'Date': date,
       'Consume': consume,
       'Total': total,
-      'Percent': percent,
+      'ConsumePercent': consumePercent,
+      'WastePercent': wastePercent,
     };
   }
 
@@ -47,7 +50,8 @@ class WeekData {
       date: json['Date'] as String,
       consume: json['Consume'] as int,
       total: json['Total'] as int,
-      percent: (json['Percent'] as num).toDouble(),
+      consumePercent: (json['consumePercent'] as num).toDouble(),
+      wastePercent: (json['wastePercent'] as num).toDouble(),
     );
   }
 }

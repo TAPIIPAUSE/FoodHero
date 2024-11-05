@@ -7,6 +7,7 @@ import 'package:flutter_markdown/flutter_markdown.dart';
 import 'package:foodhero/fonts.dart';
 import 'package:foodhero/main.dart';
 import 'package:foodhero/models/chart/bar/orgbar_model.dart';
+import 'package:foodhero/models/orgname_mode.dart';
 import 'package:foodhero/models/score/orgscore_model.dart';
 import 'package:foodhero/pages/House&Orga/Organization/orgaStatistics.dart';
 import 'package:foodhero/pages/api/houseorg_api.dart';
@@ -68,6 +69,17 @@ class _OrganizationState extends State<organization> {
       return data;
     } catch (e) {
       print('Error loading org bar: $e');
+      rethrow; // Return the error message
+    }
+  }
+
+  Future<OrgName?> _getOrgName() async {
+    try {
+      final data = await HouseOrgApi().getOrgName();
+      print('Fetched org name');
+      return data;
+    } catch (e) {
+      print('Error loading org name: $e');
       rethrow; // Return the error message
     }
   }
@@ -170,9 +182,30 @@ class _OrganizationState extends State<organization> {
         backgroundColor: AppTheme.lightGreenBackground,
         appBar: AppBar(
           backgroundColor: AppTheme.greenMainTheme,
-          toolbarHeight: 90,
+          toolbarHeight: 100,
           centerTitle: true,
-          title: const Text('Organization'),
+          title: Column(
+            children: [
+              const Text('Organization'),
+              FutureBuilder(
+                  future: _getOrgName(),
+                  builder: (context, snapshot) {
+                    if (snapshot.connectionState == ConnectionState.waiting) {
+                      return const CircularProgressIndicator(
+                        color: Colors.white,
+                      );
+                    } else if (snapshot.hasError) {
+                      return Text('Error: ${snapshot.error}');
+                    } else if (!snapshot.hasData) {
+                      return Text('No organization name');
+                    } else {
+                      final name = snapshot.data!.name;
+                      return Text(name,
+                          style: FontsTheme.mouseMemoirs_30Black());
+                    }
+                  })
+            ],
+          ),
           titleTextStyle: FontsTheme.mouseMemoirs_64Black(),
           leading: IconButton(
             icon: const Icon(Icons.person),
@@ -268,7 +301,8 @@ class _OrganizationState extends State<organization> {
                                         .map((stat) {
                                   return BarData(
                                     label: stat.date,
-                                    percent: stat.percent,
+                                    wastePercent: stat.wastePercent,
+                                    consumePercent: stat.consumePercent,
                                   );
                                 }).toList();
 
@@ -309,14 +343,14 @@ class _OrganizationState extends State<organization> {
                                                       builder: (BuildContext
                                                           context) {
                                                         return AlertDialog(
-                                                          title: Text(
-                                                              "Information"),
+                                                          // title: Text(
+                                                          // "Information"),
                                                           content: Text(
-                                                            'information about this chart',
-                                                            style:
-                                                                const TextStyle(
-                                                                    fontSize:
-                                                                        16),
+                                                            'The height of each bar represents the percentage of food that you consumed on a particular day, while the colors represent the completed consumed and wasted of food. The percentage of consumed and wasted is represented by the height of the corresponding color in the bar. The total height of the bar always adds up to 100%, which represents your total daily food consumption.',
+                                                            // style:
+                                                            // const TextStyle(
+                                                            // fontSize:
+                                                            // 16),
                                                           ),
                                                         );
                                                       },
