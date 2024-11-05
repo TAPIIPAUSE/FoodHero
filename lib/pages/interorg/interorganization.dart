@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_markdown/flutter_markdown.dart';
 import 'package:foodhero/fonts.dart';
 import 'package:foodhero/main.dart';
 import 'package:foodhero/models/chart/savetypepie/hhfoodtypepie_model.dart';
@@ -319,12 +320,51 @@ class _InterOrganizationState extends State<InterOrganization> {
                   ),
                   child: Column(
                     children: [
-                      const Text(
-                        'Score board',
-                        style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 24,
-                            fontWeight: FontWeight.bold),
+                      Stack(
+                        children: [
+                          const Text(
+                            'Score board',
+                            style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 24,
+                                fontWeight: FontWeight.bold),
+                          ),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.end,
+                            children: [
+                              // Text("%",
+                              //     style: TextStyle(
+                              //         fontSize: 16,
+                              //         fontWeight: FontWeight.bold)),
+                              IconButton(
+                                onPressed: () {
+                                  showDialog(
+                                    context: context,
+                                    builder: (BuildContext context) {
+                                      return AlertDialog(
+                                          // title: Text("Information"),
+                                          content: SizedBox(
+                                        width: double.maxFinite,
+                                        child: Markdown(
+                                            data:
+                                                "### Scoring calculation from Food Consumption \n**If food quantity greater or equal to 1000 grams** \n* If 90% to 100% of the food is consumed, The consumed portion is multiplied by 5 to receive a **positive score** between 4.5 and 5 \n* If 70% to 90% of the food is consumed, The consumed portion is multiplied by 3 to receive a **positive score** between 2.1 and 2.7 \n* If less than 70% of the food is consumed, The consumed portion is multiplied by -5, resulting in a **negative score** between -3.5 and -5 \n\n**If food quantity less than 1000 grams** \n* If more than 80% of the food is consumed, The consumed portion is multiplied by 2 to receive a **positive score** between 1.6 and 2 \n* If 80% or less of the food is consumed, The consumed portion is multiplied by -2, resulting in a **negative score** between -1.6 and -2 \n### How to receive a Star? \nA star is awarded to the top-ranking member in this inter organization who has a score more than 0"),
+                                      )
+                                          // Text(
+                                          // 'information about this chart',
+                                          // style: const TextStyle(fontSize: 16),
+                                          // ),
+                                          );
+                                    },
+                                  );
+                                },
+                                icon: const Icon(
+                                  Icons.info_outline_rounded,
+                                  color: Colors.white,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ],
                       ),
                       FutureBuilder<InterScore>(
                         future: _getInterScore(),
@@ -597,13 +637,54 @@ class _InterOrganizationState extends State<InterOrganization> {
                   ),
                   child: Column(
                     children: [
-                      const Text(
-                        'Score board',
-                        style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 24,
-                            fontWeight: FontWeight.bold),
+                      Stack(
+                        children: [
+                          const Text(
+                            'Score board',
+                            style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 24,
+                                fontWeight: FontWeight.bold),
+                          ),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.end,
+                            children: [
+                              // Text("%",
+                              //     style: TextStyle(
+                              //         fontSize: 16,
+                              //         fontWeight: FontWeight.bold)),
+                              IconButton(
+                                onPressed: () {
+                                  showDialog(
+                                    context: context,
+                                    builder: (BuildContext context) {
+                                      return AlertDialog(
+                                          // title: Text("Information"),
+                                          content: SizedBox(
+                                        width: double.maxFinite,
+                                        child: Markdown(
+                                            data:
+                                                "### Scoring calculation from Food Consumption \n**If food quantity greater or equal to 1000 grams** \n* If 90% to 100% of the food is consumed, The consumed portion is multiplied by 5 to receive a **positive score** between 4.5 and 5 \n* If 70% to 90% of the food is consumed, The consumed portion is multiplied by 3 to receive a **positive score** between 2.1 and 2.7 \n* If less than 70% of the food is consumed, The consumed portion is multiplied by -5, resulting in a **negative score** between -3.5 and -5 \n\n**If food quantity less than 1000 grams** \n* If more than 80% of the food is consumed, The consumed portion is multiplied by 2 to receive a **positive score** between 1.6 and 2 \n* If 80% or less of the food is consumed, The consumed portion is multiplied by -2, resulting in a **negative score** between -1.6 and -2 \n### How to receive a Star? \nA star is awarded to the top-ranking member in this household who has a score more than 0"),
+                                      ));
+                                    },
+                                  );
+                                },
+                                icon: const Icon(
+                                  Icons.info_outline_rounded,
+                                  color: Colors.white,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ],
                       ),
+                      // const Text(
+                      //   'Score board',
+                      //   style: TextStyle(
+                      //       color: Colors.white,
+                      //       fontSize: 24,
+                      //       fontWeight: FontWeight.bold),
+                      // ),
                       FutureBuilder<HouseScore>(
                         future: _getHouseScore(),
                         builder: (context, snapshot) {
@@ -883,13 +964,59 @@ class _InterOrganizationState extends State<InterOrganization> {
                   ),
                   child: Column(
                     children: [
-                      const Text(
-                        'Score board',
-                        style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 24,
-                            fontWeight: FontWeight.bold),
+                      Stack(
+                        children: [
+                          const Text(
+                            'Score board',
+                            style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 24,
+                                fontWeight: FontWeight.bold),
+                          ),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.end,
+                            children: [
+                              // Text("%",
+                              //     style: TextStyle(
+                              //         fontSize: 16,
+                              //         fontWeight: FontWeight.bold)),
+                              IconButton(
+                                onPressed: () {
+                                  showDialog(
+                                    context: context,
+                                    builder: (BuildContext context) {
+                                      return AlertDialog(
+                                          // title: Text("Information"),
+                                          content: SizedBox(
+                                        width: double.maxFinite,
+                                        child: Markdown(
+                                            data:
+                                                "### Scoring calculation from Food Consumption \n**If food quantity greater or equal to 1000 grams** \n* If 90% to 100% of the food is consumed, The consumed portion is multiplied by 5 to receive a **positive score** between 4.5 and 5 \n* If 70% to 90% of the food is consumed, The consumed portion is multiplied by 3 to receive a **positive score** between 2.1 and 2.7 \n* If less than 70% of the food is consumed, The consumed portion is multiplied by -5, resulting in a **negative score** between -3.5 and -5 \n\n**If food quantity less than 1000 grams** \n* If more than 80% of the food is consumed, The consumed portion is multiplied by 2 to receive a **positive score** between 1.6 and 2 \n* If 80% or less of the food is consumed, The consumed portion is multiplied by -2, resulting in a **negative score** between -1.6 and -2 \n### How to receive a Star? \nA star is awarded to the top-ranking member in this organization who has a score more than 0"),
+                                      )
+                                          // Text(
+                                          // 'information about this chart',
+                                          // style: const TextStyle(fontSize: 16),
+                                          // ),
+                                          );
+                                    },
+                                  );
+                                },
+                                icon: const Icon(
+                                  Icons.info_outline_rounded,
+                                  color: Colors.white,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ],
                       ),
+                      // const Text(
+                      //   'Score board',
+                      //   style: TextStyle(
+                      //       color: Colors.white,
+                      //       fontSize: 24,
+                      //       fontWeight: FontWeight.bold),
+                      // ),
                       FutureBuilder<OrgScore>(
                         future: _getOrgScore(),
                         builder: (context, snapshot) {
