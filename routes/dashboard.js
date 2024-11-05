@@ -17,10 +17,8 @@ router.get("/household/score", authenticateToken, async (req, res) => {
     try {
       var user = await get_user_from_db(req, res);
   
-      var h_ID = user.hID;
-  
       // We get Score Array from this Function
-      const processed_score_array = await preprocess_House_Score(h_ID)
+      const processed_score_array = await preprocess_House_Score(user)
 
       
       return res.status(200).send({
@@ -38,11 +36,8 @@ router.get("/organization/score", authenticateToken, async (req, res) => {
 
   try {
     var user = await get_user_from_db(req, res);
-
-    var orgID = user.orgID;
-
     // We get Score Array from this Function
-    const processed_score_array = await preprocess_Org_Score(orgID)
+    const processed_score_array = await preprocess_Org_Score(user)
 
     
     return res.status(200).send({
@@ -59,8 +54,9 @@ router.get("/inter_organization/score", authenticateToken, async (req, res) => {
 
 
   try {
+    const user = await get_user_from_db(req,res)
     // We get Score Array from this Function
-    const processed_score_array = await preprocess_interOrg_Score()
+    const processed_score_array = await preprocess_interOrg_Score(user)
 
     
     return res.status(200).send({
