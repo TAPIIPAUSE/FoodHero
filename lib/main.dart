@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:foodhero/firebase_options.dart';
 import 'package:foodhero/pages/House&Orga/join.dart';
 import 'package:foodhero/pages/consumed/Consumed.dart';
 import 'package:foodhero/pages/consumed/consumedItemsProvider.dart';
@@ -20,13 +21,8 @@ import 'package:firebase_core/firebase_core.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(
-      options: FirebaseOptions(
-    apiKey: 'key',
-    appId: 'id',
-    messagingSenderId: 'sendid',
-    projectId: 'myapp',
-    storageBucket: 'myapp-b9yt18.appspot.com',
-  )); // Initialize Firebase
+    options: DefaultFirebaseOptions.currentPlatform,
+  ); // Initialize Firebase
   SharedPreferences prefs = await SharedPreferences.getInstance();
   String? token = prefs.getString('james');
 
