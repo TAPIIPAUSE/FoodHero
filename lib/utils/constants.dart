@@ -60,7 +60,7 @@ const reson = [
   oth,
 ];
 
-//const myip="192.168.183.213";
+const myip = "10.250.79.113";
 
 //Pause
 //mac
@@ -69,4 +69,4 @@ const reson = [
 //const myip = "10.4.148.102";
 //JamesDom James Mok Wifi
 // const myip = "192.168.1.155";
-const myip = "10.0.2.2";
+// const myip = "10.0.2.2";
