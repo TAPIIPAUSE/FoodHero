@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:foodhero/models/completeconsume_model.dart';
 import 'package:foodhero/models/conpletewaste_model.dart';
 import 'package:foodhero/models/fooddetail_model.dart';
+import 'package:foodhero/models/someconsume_model.dart';
 import 'package:foodhero/pages/api/ApiUserFood.dart';
 import 'package:foodhero/pages/api/consumeFromFoodDetail.dart';
 import 'package:foodhero/pages/api/wasteFromFoodDetails.dart';
@@ -129,6 +130,7 @@ class _FoodDetailsPageState extends State<foodDetails> {
     }
   }
 
+  final Consumefromfooddetail APIConsume = Consumefromfooddetail();
   final Consumefromfooddetail APICompleteConsume = Consumefromfooddetail();
   final Wastefromfooddetail APICompleteWaste = Wastefromfooddetail();
   void _pickImage() async {
@@ -752,13 +754,14 @@ class _FoodDetailsPageState extends State<foodDetails> {
                                     addToConsumed(context);
 
                                     int fID = foodID;
-                                    CompleteConsume addCompleteConsume =
-                                        CompleteConsume(
+                                    SomeConsume addSomeConsume =
+                                        SomeConsume(
                                       fID: fID,
+                                      //consume values
                                     );
                                     try {
-                                      await APICompleteConsume.completeConsume(
-                                          addCompleteConsume);
+                                      await APIConsume.someConsume(
+                                          addSomeConsume);
                                       ScaffoldMessenger.of(context)
                                           .showSnackBar(
                                         SnackBar(
@@ -907,8 +910,8 @@ class _FoodDetailsPageState extends State<foodDetails> {
                                           min: 1,
                                           max: showQuantity.toDouble(),
                                           onChanged:
-                                              (double valueConsumeOption) =>
-                                                  setState(() {
+                                              (double valueConsumeOption) 
+                                                {  setState(() {
                                             //Countable
                                             consumeQuantity =
                                                 valueConsumeOption;
@@ -921,7 +924,7 @@ class _FoodDetailsPageState extends State<foodDetails> {
                                                 consumeQuantity.toInt();
 
                                             //weightConsumeOption.toStringAsFixed(0);
-                                          }),
+                                          },);}
                                         ),
                                       ),
                                     ],
@@ -2092,7 +2095,6 @@ class _FoodDetailsPageState extends State<foodDetails> {
                       height: 10,
                     ),
                     //Weight
-
                     Row(
                       children: [
                         Text('Weight',

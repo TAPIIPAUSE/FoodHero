@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 import 'package:foodhero/fonts.dart';
 import 'package:foodhero/main.dart';
+import 'package:foodhero/models/fooddetail_model.dart';
 import 'package:foodhero/models/inventoryfood_model.dart';
 import 'package:foodhero/pages/addFoodDetails.dart';
 import 'package:foodhero/pages/api/ApiUserFood.dart';
@@ -368,15 +369,28 @@ class _InventoryState extends State<Inventory> {
                                     //       child: Text('No food items found'));
                                     // }
                                     else {
+                                      // Filter food items where remaining is not "0"
+                                      List<Food> filteredFoodItems = snapshot
+                                          .data!.foodItems
+                                          .where((foodItem) {
+                                        // Check if remaining starts with "0"
+                                        return !foodItem.remaining
+                                            .startsWith("0 ");
+                                      }).toList();
                                       return ListView.builder(
                                         shrinkWrap: true,
                                         controller: foodList,
-                                        itemCount:
-                                            snapshot.data!.foodItems.length,
+                                        itemCount: filteredFoodItems.length,
                                         itemBuilder: (context, index) {
-                                          final foodItem =
-                                              snapshot.data!.foodItems[
-                                                  index]; // Cast to Food type
+                                          final foodItem = filteredFoodItems[
+                                              index]; // Cast to Food type
+                                          //hide 0 remain food
+                                          // bool showFoodCard = true;
+                                          // int find0 = foodItem.remaining
+                                          // if (foodItem.remaining = ) {
+
+                                          // }
+                                          // int remainingCount = int.tryParse
                                           return GestureDetector(
                                               onTap: () async {
                                                 //FoodDetailData foodDetail = await getFoodDetail(fID);

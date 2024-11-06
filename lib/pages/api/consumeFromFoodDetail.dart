@@ -1,5 +1,6 @@
 import 'package:dio/dio.dart';
 import 'package:foodhero/models/completeconsume_model.dart';
+import 'package:foodhero/models/someconsume_model.dart';
 import 'package:foodhero/utils/constants.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:convert';
@@ -32,6 +33,33 @@ class Consumefromfooddetail {
       print('Error complete food: $e');
     }
   }
+
+  Future <void> someConsume(SomeConsume howConsume) async {
+    try {
+       SharedPreferences prefs = await SharedPreferences.getInstance();
+      final token = prefs.getString('user_token');
+      print('Consuming some food for: $howConsume with token: $token');
+      final response = await dio.post(
+        '$baseurl/consume',
+        data: howConsume.toJson(), // Data directly passed here
+        options: Options(
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer $token',
+          },
+        ),
+      );
+
+      if (response.statusCode == 200) {
+        print('Complete consumed successfully: ${response.data}');
+      } else {
+        print('Failed complete food: ${response.statusCode}');
+      }
+    } catch (e) {
+         print('Error consume some food: $e');
+    }
+  } 
+
 
     void main() {
   String jsonResponse = '{"message": "Food item consumed successfully", "scoreGained": 2, "save": 50}';
