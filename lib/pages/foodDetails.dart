@@ -1176,35 +1176,37 @@ class _FoodDetailsPageState extends State<foodDetails> {
               Container(
                   color: AppTheme.lightGreenBackground,
                   child: Center(
-                    child: Column(
-                      children: [
-                        Text(
-                          '$foodNameModal\n Consummed',
-                          style: FontsTheme.mouseMemoirs_64Black(),
-                          textAlign: TextAlign.center,
-                        ),
-                        const SizedBox(
-                          height: 400,
-                        ),
-                        Text(
-                          '$consumeQuantityModal were consumed\n You get $scoreGained points\n Save $lost ฿ Baht',
-                          style: FontsTheme.mouseMemoirs_30Black(),
-                          textAlign: TextAlign.center,
-                        ),
-                        TextButton(
-                            onPressed: () {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) => Consumed(),
-                                ),
-                              );
-                            },
-                            child: Text(
-                              'Go to the consuming food',
-                              style: FontsTheme.mouseMemoirs_20(),
-                            ))
-                      ],
+                    child: SingleChildScrollView(
+                      child: Column(
+                        children: [
+                          Text(
+                            '$foodNameModal\n Consummed',
+                            style: FontsTheme.mouseMemoirs_64Black(),
+                            textAlign: TextAlign.center,
+                          ),
+                          const SizedBox(
+                            height: 400,
+                          ),
+                          Text(
+                            '$consumeQuantityModal were consumed\n You get $scoreGained points\n Save $lost ฿ Baht',
+                            style: FontsTheme.mouseMemoirs_30Black(),
+                            textAlign: TextAlign.center,
+                          ),
+                          TextButton(
+                              onPressed: () {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => Consumed(),
+                                  ),
+                                );
+                              },
+                              child: Text(
+                                'Go to the consuming food',
+                                style: FontsTheme.mouseMemoirs_20(),
+                              ))
+                        ],
+                      ),
                     ),
                   )),
             ],
@@ -1544,35 +1546,37 @@ class _FoodDetailsPageState extends State<foodDetails> {
               Container(
                   color: AppTheme.lightGreenBackground,
                   child: Center(
-                    child: Column(
-                      children: [
-                        Text(
-                          '$foodNameModal\n Wasted',
-                          style: FontsTheme.mouseMemoirs_64Black(),
-                          textAlign: TextAlign.center,
-                        ),
-                        const SizedBox(
-                          height: 400,
-                        ),
-                        Text(
-                          '$consumeQuantityModal were wasted\n You get $scoreGained points\n Save $save ฿ Baht',
-                          style: FontsTheme.mouseMemoirs_30Black(),
-                          textAlign: TextAlign.center,
-                        ),
-                        TextButton(
-                            onPressed: () {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) => Consumed(),
-                                ),
-                              );
-                            },
-                            child: Text(
-                              'Go to the consuming food',
-                              style: FontsTheme.mouseMemoirs_20(),
-                            ))
-                      ],
+                    child: SingleChildScrollView(
+                      child: Column(
+                        children: [
+                          Text(
+                            '$foodNameModal\n Wasted',
+                            style: FontsTheme.mouseMemoirs_64Black(),
+                            textAlign: TextAlign.center,
+                          ),
+                          const SizedBox(
+                            height: 400,
+                          ),
+                          Text(
+                            '$consumeQuantityModal were wasted\n You get $scoreGained points\n Save $save ฿ Baht',
+                            style: FontsTheme.mouseMemoirs_30Black(),
+                            textAlign: TextAlign.center,
+                          ),
+                          TextButton(
+                              onPressed: () {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => Consumed(),
+                                  ),
+                                );
+                              },
+                              child: Text(
+                                'Go to the consuming food',
+                                style: FontsTheme.mouseMemoirs_20(),
+                              ))
+                        ],
+                      ),
                     ),
                   )),
             ],
@@ -1784,18 +1788,15 @@ class _FoodDetailsPageState extends State<foodDetails> {
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.start,
                         children: [
-                          Container(
-                            width: 120,
-                            child: Text(
-                              label,
-                              style: FontsTheme.mouseMemoirs_30Black(),
-                            ),
+                          Text(
+                            label,
+                            style: FontsTheme.mouseMemoirs_30Black(),
                           )
                         ],
                       ),
                     ),
                     SizedBox(
-                        width: 215,
+                        width: MediaQuery.of(context).size.width * 0.55,
                         child: Container(
                           padding: EdgeInsets.symmetric(horizontal: 10.0),
                           decoration: BoxDecoration(
@@ -1855,7 +1856,7 @@ class _FoodDetailsPageState extends State<foodDetails> {
                       ),
                     ),
                     SizedBox(
-                        width: 215,
+                        width: MediaQuery.of(context).size.width * 0.4,
                         child: Container(
                             padding: EdgeInsets.symmetric(horizontal: 10.0),
                             decoration: BoxDecoration(
@@ -2372,7 +2373,7 @@ class _FoodDetailsPageState extends State<foodDetails> {
                                       style: FontsTheme.hindBold_20(),
                                     ),
                                     const SizedBox(
-                                      width: 50,
+                                      width: 10,
                                     ),
                                     IconButton(
                                       onPressed: () {},
@@ -2470,10 +2471,10 @@ class _FoodDetailsPageState extends State<foodDetails> {
                                       '฿',
                                       style: FontsTheme.mouseMemoirs_25(),
                                     ),
-                                    Text(
-                                      'TH ',
-                                      style: FontsTheme.hindBold_20(),
-                                    ),
+                                    // Text(
+                                    //   'TH ',
+                                    //   style: FontsTheme.hindBold_20(),
+                                    // ),
                                     // Icon(Icons.attach_money,
                                     //     color: Colors.green),
                                   ],

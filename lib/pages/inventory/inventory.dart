@@ -209,7 +209,7 @@ class _InventoryState extends State<Inventory> {
                           margin: const EdgeInsets.all(10),
                           padding: const EdgeInsets.all(10),
                           // height: screenHeight * 0.2,
-                          width: screenWidth * 0.9,
+                          width: screenWidth * 0.95,
                           decoration: const BoxDecoration(
                             color: AppTheme.mainBlue,
                             borderRadius: BorderRadius.all(Radius.circular(20)),
@@ -220,43 +220,43 @@ class _InventoryState extends State<Inventory> {
                               Text('Today $_todayDate',
                                   style: FontsTheme.mouseMemoirs_30White()
                                       .copyWith(color: Colors.white)),
-                              Text(
-                                'Things you should eat today:',
-                                style: FontsTheme.hind_20()
-                                    .copyWith(color: Colors.white),
-                              ),
-                              Text(
-                                ' - Tomatos expire tomorrow',
-                                style: FontsTheme.hind_15()
-                                    .copyWith(color: Colors.white),
-                              ),
-                              Text(
-                                ' - Lettuce expire in 2 days',
-                                style: FontsTheme.hind_15()
-                                    .copyWith(color: Colors.white),
-                              ),
-                              Text(
-                                'Yogurt should be eaten before the next 3 days',
-                                style: FontsTheme.hind_15()
-                                    .copyWith(color: Colors.white),
-                              ),
-                              const SizedBox(
-                                height: 3,
-                              ),
-                              Center(
-                                child: Text(
-                                  'Current Status',
-                                  style: FontsTheme.hindBold_20()
-                                      .copyWith(color: AppTheme.softOrange),
-                                ),
-                              ),
-                              const SizedBox(
-                                height: 5,
-                              ),
-                              Center(child: progressBar),
-                              const SizedBox(
-                                height: 10,
-                              )
+                              // Text(
+                              //   'Things you should eat today:',
+                              //   style: FontsTheme.hind_20()
+                              //       .copyWith(color: Colors.white),
+                              // ),
+                              // Text(
+                              //   ' - Tomatos expire tomorrow',
+                              //   style: FontsTheme.hind_15()
+                              //       .copyWith(color: Colors.white),
+                              // ),
+                              // Text(
+                              //   ' - Lettuce expire in 2 days',
+                              //   style: FontsTheme.hind_15()
+                              //       .copyWith(color: Colors.white),
+                              // ),
+                              // Text(
+                              //   'Yogurt should be eaten before the next 3 days',
+                              //   style: FontsTheme.hind_15()
+                              //       .copyWith(color: Colors.white),
+                              // ),
+                              // const SizedBox(
+                              //   height: 3,
+                              // ),
+                              // Center(
+                              //   child: Text(
+                              //     'Current Status',
+                              //     style: FontsTheme.hindBold_20()
+                              //         .copyWith(color: AppTheme.softOrange),
+                              //   ),
+                              // ),
+                              // const SizedBox(
+                              //   height: 5,
+                              // ),
+                              // Center(child: progressBar),
+                              // const SizedBox(
+                              //   height: 10,
+                              // )
                             ],
                           ),
                         ),
