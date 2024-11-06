@@ -295,18 +295,23 @@ export async function preprocess_Org_fe_pie_chart(org_ID){
 export async function monthly_house(hID) {
   const monthData = [];
   const today = new Date();
+
+  // Convert today to Thai time (UTC+7)
+  today.setHours(today.getHours() + 7);
+
+  // Fetch the house and get the createdAt date
   const house = await House.findOne({ assigned_ID: hID });
   const house_created_at = new Date(house.createdAt);
 
-  // Loop from house_created_at to today
+  // Loop from house_created_at to the end of today in Thai time
   for (let day = new Date(house_created_at); day <= today; day.setDate(day.getDate() + 1)) {
     const startOfDay = new Date(day);
-    startOfDay.setHours(0, 0, 0, 0);
+    startOfDay.setHours(7, 0, 0, 0);  // Thai time start (UTC+7)
 
     const endOfDay = new Date(day);
-    endOfDay.setHours(23, 59, 59, 999);
+    endOfDay.setHours(30, 59, 59, 999);  // Thai time end (UTC+7)
 
-    // Query the PersonalScore collection for entries created on the specific day
+    // Query the PersonalScore collection for entries created on the specific day in Thai time
     const dailyFood = await PersonalScore.find({
       hID: hID,
       createdAt: { $gte: startOfDay, $lte: endOfDay }
@@ -320,6 +325,7 @@ export async function monthly_house(hID) {
 
   return monthData;
 }
+
 
 
 
@@ -348,85 +354,26 @@ export async function preprocess_house_heatmap(hID){
   return output
 }
 
-// export async function monthly_org(orgID) {
-//   const monthData = [];
-//   const today = new Date();
-  
-//   // Get the first and last day of the current month
-//   const startOfMonth = new Date(today.getFullYear(), today.getMonth(), 1);
-//   const endOfMonth = new Date(today.getFullYear(), today.getMonth() + 1, 0);
-
-//   // Loop from the 1st to the last day of the current month
-//   for (let day = new Date(startOfMonth); day <= endOfMonth; day.setDate(day.getDate() + 1)) {
-//     const startOfDay = new Date(day);
-//     startOfDay.setHours(0, 0, 0, 0);
-
-//     const endOfDay = new Date(day);
-//     endOfDay.setHours(23, 59, 59, 999);
-
-//     // Query the Food collection for entries created on the specific day
-//     const dailyFood = await PersonalScore.find({
-//       orgID: orgID,
-//       createdAt: { $gte: startOfDay, $lte: endOfDay }
-//     });
-
-//     monthData.push({
-//       date: startOfDay.toDateString(),
-//       items: dailyFood
-//     });
-//   }
-
-//   return monthData;
-// }
-
-// export async function monthly_org(orgID) {
-//   const monthData = [];
-//   const today = new Date();
-
-//   // Calculate the date 29 days ago from today to create a 30-day range including today
-//   const startOfRange = new Date(today);
-//   startOfRange.setDate(today.getDate() - 29);
-
-//   // Loop through each day from startOfRange to today
-//   for (let day = new Date(startOfRange); day <= today; day.setDate(day.getDate() + 1)) {
-//     const startOfDay = new Date(day);
-//     startOfDay.setHours(0, 0, 0, 0);
-
-//     const endOfDay = new Date(day);
-//     endOfDay.setHours(23, 59, 59, 999);
-
-//     // Query the PersonalScore collection for entries created on the specific day
-//     const dailyFood = await PersonalScore.find({
-//       orgID: orgID,
-//       createdAt: { $gte: startOfDay, $lte: endOfDay }
-//     });
-
-//     monthData.push({
-//       date: startOfDay.toDateString(),
-//       items: dailyFood
-//     });
-//   }
-
-//   return monthData;
-// }
-
 export async function monthly_org(orgID) {
   const monthData = [];
   const today = new Date();
+
+  // Convert today to Thai time (UTC+7)
+  today.setHours(today.getHours() + 7);
 
   // Fetch the organization and get the createdAt date
   const organization = await Organization.findOne({ assigned_ID: orgID });
   const org_created_at = new Date(organization.createdAt);
 
-  // Loop from org_created_at to today
+  // Loop from org_created_at to the end of today in Thai time
   for (let day = new Date(org_created_at); day <= today; day.setDate(day.getDate() + 1)) {
     const startOfDay = new Date(day);
-    startOfDay.setHours(0, 0, 0, 0);
+    startOfDay.setHours(7, 0, 0, 0);  // Thai time start (UTC+7)
 
     const endOfDay = new Date(day);
-    endOfDay.setHours(23, 59, 59, 999);
+    endOfDay.setHours(30, 59, 59, 999);  // Thai time end (UTC+7)
 
-    // Query the PersonalScore collection for entries created on the specific day
+    // Query the PersonalScore collection for entries created on the specific day in Thai time
     const dailyFood = await PersonalScore.find({
       orgID: orgID,
       createdAt: { $gte: startOfDay, $lte: endOfDay }
