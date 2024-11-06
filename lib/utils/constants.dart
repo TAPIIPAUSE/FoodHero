@@ -60,7 +60,7 @@ const reson = [
   oth,
 ];
 
-const myip = "192.168.183.89";
+const myip = "https://lizard-flowing-opossum.ngrok-free.app";
 
 //Pause
 //mac

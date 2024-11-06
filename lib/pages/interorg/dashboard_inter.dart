@@ -237,83 +237,75 @@ class _InterDashboardState extends State<InterDashboard> {
           color: AppTheme.softBlue,
           borderRadius: BorderRadius.all(Radius.circular(20)),
         ),
-        child: Container(
-          decoration: const BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.all(Radius.circular(20)),
-          ),
-          child: Column(
-            children: [
-              Text(
-                'Consumption vs Waste',
-                style: FontsTheme.mouseMemoirs_30Black(),
-              ),
-              FutureBuilder<dynamic>(
-                future: apiWasteData,
-                builder: (context, snapshot) {
-                  if (snapshot.connectionState == ConnectionState.waiting) {
-                    return const Center(child: CircularProgressIndicator());
-                  } else if (snapshot.hasError) {
-                    return Text('Error: ${snapshot.error}');
-                  } else if (!snapshot.hasData || snapshot.data == null) {
-                    return const Center(child: Text('No data available'));
-                  } else {
-                    final data = snapshot.data!;
+        child: FutureBuilder<dynamic>(
+          future: apiWasteData,
+          builder: (context, snapshot) {
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              return const Center(child: CircularProgressIndicator());
+            } else if (snapshot.hasError) {
+              return Text('Error: ${snapshot.error}');
+            } else if (!snapshot.hasData || snapshot.data == null) {
+              return const Center(child: Text('No data available'));
+            } else {
+              final data = snapshot.data!;
 
-                    // Safely handle null values with null-aware operators and provide defaults
-                    final double wastePercent = data.statistic.percentWaste ??
-                        0; // Fetch waste percentage
-                    final double eatenPercent = data.statistic.percentConsume ??
-                        0; // Fetch eaten percentage
+              // Safely handle null values with null-aware operators and provide defaults
+              final double wastePercent =
+                  data.statistic.percentWaste ?? 0; // Fetch waste percentage
+              final double eatenPercent =
+                  data.statistic.percentConsume ?? 0; // Fetch eaten percentage
 
-                    // If both percentages are 0, show a message instead of an empty chart
-                    if (wastePercent == 0 && eatenPercent == 0) {
-                      return Container(
-                        decoration: const BoxDecoration(
-                          color: Colors.white,
-                          borderRadius: BorderRadius.all(Radius.circular(20)),
-                        ),
-                        child: const Center(
-                            child: Text(
-                          'No data available',
-                        )),
-                      );
-                    }
+              // If both percentages are 0, show a message instead of an empty chart
+              if (wastePercent == 0 && eatenPercent == 0) {
+                return Container(
+                  decoration: const BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.all(Radius.circular(20)),
+                  ),
+                  child: const Center(
+                      child: Text(
+                    'No data available',
+                  )),
+                );
+              }
 
-                    return Container(
-                      // padding: const EdgeInsets.all(10),
-                      decoration: const BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.all(Radius.circular(20)),
+              return Container(
+                // padding: const EdgeInsets.all(10),
+                decoration: const BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.all(Radius.circular(20)),
+                ),
+                child: SingleChildScrollView(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      SizedBox(
+                        height: 10,
                       ),
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                        crossAxisAlignment: CrossAxisAlignment.center,
+                      Text(
+                        'Consumption vs Waste',
+                        style: FontsTheme.mouseMemoirs_30Black(),
+                      ),
+                      WastePiechart(
+                        wastepercent: wastePercent,
+                        eatenpercent: eatenPercent,
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          SizedBox(
-                            height: 10,
-                          ),
-                          WastePiechart(
+                          BuildWastePieLegend(
                             wastepercent: wastePercent,
                             eatenpercent: eatenPercent,
                           ),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              BuildWastePieLegend(
-                                wastepercent: wastePercent,
-                                eatenpercent: eatenPercent,
-                              ),
-                            ],
-                          )
                         ],
-                      ),
-                    );
-                  }
-                },
-              ),
-            ],
-          ),
+                      )
+                    ],
+                  ),
+                ),
+              );
+            }
+          },
         ),
       ),
       Container(
@@ -361,57 +353,61 @@ class _InterDashboardState extends State<InterDashboard> {
                   color: Colors.white,
                   borderRadius: BorderRadius.all(Radius.circular(20)),
                 ),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: [
-                    Stack(
-                      children: [
-                        Center(
-                          child: Text(
-                            "Daily Food Consumption",
-                            style: FontsTheme.mouseMemoirs_30Black(),
-                          ),
-                        ),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.end,
-                          children: [
-                            // Text("%",
-                            //     style: TextStyle(
-                            //         fontSize: 16, fontWeight: FontWeight.bold)),
-                            IconButton(
-                              onPressed: () {
-                                showDialog(
-                                  context: context,
-                                  builder: (BuildContext context) {
-                                    return AlertDialog(
-                                      // title: Text("Information"),
-                                      content: Text(
-                                        'The height of each bar represents the percentage of food that you consumed on a particular day, while the colors represent the completed consumed and wasted of food. The percentage of consumed and wasted is represented by the height of the corresponding color in the bar. The total height of the bar always adds up to 100%, which represents your total daily food consumption.',
-                                        // style: const TextStyle(fontSize: 16),
-                                      ),
-                                      // actions: [
-                                      //   TextButton(
-                                      //     child: Text("OK"),
-                                      //     onPressed: () {
-                                      //       Navigator.of(context).pop();
-                                      //     },
-                                      //   ),
-                                      // ],
-                                    );
-                                  },
-                                );
-                              },
-                              icon: const Icon(Icons.info_outline_rounded),
+                child: SingleChildScrollView(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      Stack(
+                        children: [
+                          Center(
+                            child: Text(
+                              "Daily Food Consumption",
+                              style: FontsTheme.mouseMemoirs_30Black(),
                             ),
-                          ],
-                        ),
-                      ],
-                    ),
-                    WasteBarChartContent(
-                      chartData: data,
-                      // color: AppTheme.softBlue,
-                    ),
-                  ],
+                          ),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.end,
+                            children: [
+                              // Text("%",
+                              //     style: TextStyle(
+                              //         fontSize: 16, fontWeight: FontWeight.bold)),
+                              IconButton(
+                                onPressed: () {
+                                  showDialog(
+                                    context: context,
+                                    builder: (BuildContext context) {
+                                      return AlertDialog(
+                                        // title: Text("Information"),
+                                        content: Text(
+                                          'The height of each bar represents the percentage of food that you consumed on a particular day, while the colors represent the completed consumed and wasted of food. The percentage of consumed and wasted is represented by the height of the corresponding color in the bar. The total height of the bar always adds up to 100%, which represents your total daily food consumption.',
+                                          // style: const TextStyle(fontSize: 16),
+                                        ),
+                                        // actions: [
+                                        //   TextButton(
+                                        //     child: Text("OK"),
+                                        //     onPressed: () {
+                                        //       Navigator.of(context).pop();
+                                        //     },
+                                        //   ),
+                                        // ],
+                                      );
+                                    },
+                                  );
+                                },
+                                icon: const Icon(
+                                  Icons.info_outline_rounded,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ],
+                      ),
+                      WasteBarChartContent(
+                        chartData: data,
+                        // color: AppTheme.softBlue,
+                      ),
+                    ],
+                  ),
                 ),
               );
             }

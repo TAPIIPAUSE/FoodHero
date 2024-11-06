@@ -5,7 +5,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:convert';
 
 class Wastefromfooddetail {
-  static String baseurl = "http://$myip:3000/api/v1/inventory";
+  static String baseurl = "$myip/api/v1/inventory";
   final dio = Dio();
   Future<void> completeWaste(CompleteWaste food) async {
     try {

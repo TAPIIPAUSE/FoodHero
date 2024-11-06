@@ -88,9 +88,9 @@ class _WasteBarChartContentState extends State<WasteBarChartContent> {
           int seriesIndex) {
         // Customize tooltip content here
         final barData = data as BarData;
-        final total = barData.total;
-        final consumed = barData.consume;
-        final wasted = barData.waste;
+        final total = NumberFormat('#,##0').format(barData.total);
+        final consumed = NumberFormat('#,##0').format(barData.consume);
+        final wasted = NumberFormat('#,##0').format(barData.waste);
         return Container(
           padding: const EdgeInsets.all(8),
           decoration: BoxDecoration(
@@ -101,14 +101,15 @@ class _WasteBarChartContentState extends State<WasteBarChartContent> {
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              Text("Total Consumption: $total",
+              Text("Total Consumption: $total g.",
                   style: const TextStyle(fontSize: 16)),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
-                  Text("Consumed: $consumed",
+                  Text("Consumed: $consumed g.",
                       style: const TextStyle(fontSize: 12)),
-                  Text("Wasted: $wasted", style: const TextStyle(fontSize: 12)),
+                  Text("Wasted: $wasted g.",
+                      style: const TextStyle(fontSize: 12)),
                 ],
               ),
             ],
@@ -146,97 +147,107 @@ class _WasteBarChartContentState extends State<WasteBarChartContent> {
 
   @override
   Widget build(BuildContext context) {
+    final lastestData =
+        widget.chartData.isNotEmpty ? widget.chartData.last : null;
     return Column(
       children: [
         SizedBox(
-            height: 200,
-            width: widget.chartData.length *
-                50.0, // Adjust width based on the number of bars and desired spacing
-            child: SfCartesianChart(
-              tooltipBehavior: _tooltipBehavior,
-              // selectionType: SelectionType.point,
-              // onSelectionChanged: (SelectionArgs args) {
-              //   final data = widget.chartData[args.pointIndex];
-              //   _showConsumptionDetails(data);
+          height: 200,
+          width: widget.chartData.length *
+              50.0, // Adjust width based on the number of bars and desired spacing
+          child: SfCartesianChart(
+            tooltipBehavior: _tooltipBehavior,
+            // selectionType: SelectionType.point,
+            // onSelectionChanged: (SelectionArgs args) {
+            //   final data = widget.chartData[args.pointIndex];
+            //   _showConsumptionDetails(data);
 
-              //   // Clear selection after showing details
-              //   _selectionBehavior.toggleSelection;
-              // },
-              series: [
-                StackedColumn100Series<BarData, String>(
-                  dataSource: widget.chartData,
-                  xValueMapper: (BarData data, _) => data.label,
-                  yValueMapper: (BarData data, _) =>
-                      data.consumePercent.toDouble(),
-                  // dataLabelSettings: const DataLabelSettings(isVisible: true),
-                  dataLabelSettings: DataLabelSettings(
-                    isVisible: true,
-                    labelAlignment: ChartDataLabelAlignment.middle,
-                    // Optional: customize how zero values are displayed
-                    textStyle: TextStyle(fontSize: 10),
-                  ),
-                  name: 'Food Consumption', // Name for the legend
-                  color: AppTheme.softBrightGreen,
-                  // selectionBehavior: _selectionBehavior,
-                  dataLabelMapper: (BarData data, _) =>
-                      '${data.consumePercent.toInt()}%', // Convert to integer
-                  // data.consumePercent == 0 ? '' : '${data.consumePercent}%',
-                  // dataLabelMapper: (BarData data, _) =>
-                  // data.percent == 0 ? 'No data' : '${data.percent}%',
+            //   // Clear selection after showing details
+            //   _selectionBehavior.toggleSelection;
+            // },
+            series: [
+              StackedColumn100Series<BarData, String>(
+                dataSource: widget.chartData,
+                xValueMapper: (BarData data, _) => data.label,
+                yValueMapper: (BarData data, _) =>
+                    data.consumePercent.toDouble(),
+                // dataLabelSettings: const DataLabelSettings(isVisible: true),
+                dataLabelSettings: DataLabelSettings(
+                  isVisible: true,
+                  labelAlignment: ChartDataLabelAlignment.bottom,
+                  // Optional: customize how zero values are displayed
+                  textStyle: TextStyle(fontSize: 6.5),
                 ),
-                StackedColumn100Series<BarData, String>(
-                  dataSource: widget.chartData,
-                  xValueMapper: (BarData data, _) => data.label,
-                  yValueMapper: (BarData data, _) =>
-                      data.wastePercent.toDouble(),
-                  // dataLabelSettings: const DataLabelSettings(isVisible: true),
-                  dataLabelSettings: DataLabelSettings(
-                    isVisible: true,
-                    labelAlignment: ChartDataLabelAlignment.middle,
-                    // Optional: customize how zero values are displayed
-                    textStyle: TextStyle(fontSize: 10),
-                  ),
-                  name: 'Food wasted', // Name for the legend
-                  color: AppTheme.softRedCancleWasted,
-                  // selectionBehavior: _selectionBehavior,
-                  dataLabelMapper: (BarData data, _) =>
-                      // '${100 - data.percent.toInt()}%', // Convert to integer
-                      // dataLabelMapper: (BarData data, _) =>
-                      data.wastePercent == 0
-                          ? ''
-                          : '${data.wastePercent.toInt()}%',
+                name: 'Food Consumption', // Name for the legend
+                color: AppTheme.softBrightGreen,
+                // selectionBehavior: _selectionBehavior,
+                dataLabelMapper: (BarData data, _) =>
+                    '${data.consumePercent.toInt()}%', // Convert to integer
+                // data.consumePercent == 0 ? '' : '${data.consumePercent}%',
+                // dataLabelMapper: (BarData data, _) =>
+                // data.percent == 0 ? 'No data' : '${data.percent}%',
+              ),
+              StackedColumn100Series<BarData, String>(
+                dataSource: widget.chartData,
+                xValueMapper: (BarData data, _) => data.label,
+                yValueMapper: (BarData data, _) => data.wastePercent.toDouble(),
+                // dataLabelSettings: const DataLabelSettings(isVisible: true),
+                dataLabelSettings: DataLabelSettings(
+                  isVisible: true,
+                  labelAlignment: ChartDataLabelAlignment.bottom,
+                  // Optional: customize how zero values are displayed
+                  textStyle: TextStyle(fontSize: 6.5),
                 ),
-              ],
-              legend: Legend(
-                isVisible: true,
-                position: LegendPosition
-                    .bottom, // Position the legend below the chart
+                name: 'Food Wasted', // Name for the legend
+                color: AppTheme.softRedCancleWasted,
+                // selectionBehavior: _selectionBehavior,
+                dataLabelMapper: (BarData data, _) =>
+                    // '${100 - data.percent.toInt()}%', // Convert to integer
+                    // dataLabelMapper: (BarData data, _) =>
+                    data.wastePercent == 0
+                        ? ''
+                        : '${data.wastePercent.toInt()}%',
               ),
-              // primaryXAxis: CategoryAxis(), // Explicitly set x-axis type
-              primaryXAxis: CategoryAxis(
-                labelStyle: TextStyle(fontSize: 10),
-                axisLabelFormatter: (AxisLabelRenderDetails details) {
-                  DateTime date =
-                      DateFormat("EEE MMM dd yyyy").parse(details.text);
-                  String formattedDate = DateFormat("dd/MM").format(date);
-                  return ChartAxisLabel(formattedDate, details.textStyle);
-                },
-              ),
-              primaryYAxis: NumericAxis(),
-            )),
-        Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Text("Total Consumption: ", style: const TextStyle(fontSize: 20)),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                Text("Consumed: ", style: const TextStyle(fontSize: 16)),
-                Text("Wasted: ", style: const TextStyle(fontSize: 16)),
-              ],
+            ],
+            legend: Legend(
+              isVisible: true,
+              position:
+                  LegendPosition.bottom, // Position the legend below the chart
+              overflowMode: LegendItemOverflowMode.wrap, // Wrap legend items
             ),
-          ],
+            // primaryXAxis: CategoryAxis(), // Explicitly set x-axis type
+            primaryXAxis: CategoryAxis(
+              labelStyle: TextStyle(fontSize: 7),
+              axisLabelFormatter: (AxisLabelRenderDetails details) {
+                DateTime date =
+                    DateFormat("EEE MMM dd yyyy").parse(details.text);
+                String formattedDate = DateFormat("dd/MM").format(date);
+                return ChartAxisLabel(formattedDate, details.textStyle);
+              },
+            ),
+            primaryYAxis: NumericAxis(),
+          ),
         ),
+        if (lastestData != null)
+          Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Text(
+                  "Today Consumption: ${NumberFormat('#,##0').format(lastestData.total)} g.",
+                  style: const TextStyle(fontSize: 20)),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  Text(
+                      "Consumed: ${NumberFormat('#,##0').format(lastestData.consume)} g.",
+                      style: const TextStyle(fontSize: 16)),
+                  Text(
+                      "Wasted: ${NumberFormat('#,##0').format(lastestData.waste)} g.",
+                      style: const TextStyle(fontSize: 16)),
+                ],
+              ),
+            ],
+          ),
       ],
     );
   }

@@ -8,7 +8,7 @@ import 'dart:convert';
   Future<void> createHousehold(String householdName) async {
     try {
       final response = await http.post(
-        Uri.parse('http://$myip:3000/api/v1/users/create_house'),
+        Uri.parse('$myip/api/v1/users/create_house'),
         headers: <String, String>{
           'Content-Type': 'application/json; charset=UTF-8',
         },
@@ -35,7 +35,7 @@ import 'dart:convert';
   Future<void> joinHousehold(String householdId) async {
     try {
       final response = await http.post(
-        Uri.parse('http://$myip:3000/api/v1/users/join_house'),
+        Uri.parse('$myip/api/v1/users/join_house'),
         headers: <String, String>{
           'Content-Type': 'application/json; charset=UTF-8',
         },

@@ -206,7 +206,7 @@ class _OrganizationState extends State<organization> {
                   })
             ],
           ),
-          titleTextStyle: FontsTheme.mouseMemoirs_64Black(),
+          titleTextStyle: FontsTheme.mouseMemoirs_50Black(),
           leading: IconButton(
             icon: const Icon(Icons.person),
             onPressed: () {},
@@ -236,20 +236,21 @@ class _OrganizationState extends State<organization> {
                 // child:
                 Column(
                   children: [
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Text('Today $_todayDate',
-                            style: FontsTheme.hindBold_20()),
-                        const SizedBox(width: 10),
-                        // Chip(
-                        //   label: Text(_weekday,
-                        //       style: const TextStyle(
-                        //           color: Colors.white, fontSize: 12)),
-                        //   backgroundColor: Colors.orange,
-                        // ),
-                      ],
-                    ),
+                    Text('Today $_todayDate', style: FontsTheme.hindBold_20()),
+                    // Text(_todayDate, style: FontsTheme.hindBold_20()),
+                    // Row(
+                    // mainAxisAlignment: MainAxisAlignment.center,
+                    // children: [
+
+                    // const SizedBox(width: 10),
+                    // Chip(
+                    //   label: Text(_weekday,
+                    //       style: const TextStyle(
+                    //           color: Colors.white, fontSize: 12)),
+                    //   backgroundColor: Colors.orange,
+                    // ),
+                    // ],
+                    // ),
                     // Row(
                     //   children: [
                     const SizedBox(height: 10),

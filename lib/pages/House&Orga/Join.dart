@@ -81,7 +81,7 @@ class _JoinState extends State<join> {
                 ),
                 Container(
                   width: screenWidth * 0.95,
-                  padding: EdgeInsets.symmetric(vertical: 50),
+                  padding: EdgeInsets.symmetric(vertical: 25),
                   decoration: const BoxDecoration(
                     color: AppTheme.softYellow,
                     borderRadius: BorderRadius.all(Radius.circular(20)),
@@ -171,7 +171,7 @@ class _JoinState extends State<join> {
                 ),
                 Container(
                   width: screenWidth * 0.95,
-                  padding: EdgeInsets.symmetric(vertical: 50),
+                  padding: EdgeInsets.symmetric(vertical: 25),
                   decoration: const BoxDecoration(
                     color: AppTheme.softYellow,
                     borderRadius: BorderRadius.all(Radius.circular(20)),
