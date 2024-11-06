@@ -9,11 +9,17 @@ import 'package:syncfusion_flutter_charts/charts.dart';
 class BarData {
   final double wastePercent;
   final double consumePercent;
+  final int total;
+  final int consume;
+  final int waste;
   final String label;
 
   BarData(
       {required this.wastePercent,
       required this.consumePercent,
+      required this.total,
+      required this.consume,
+      required this.waste,
       required this.label});
 }
 
@@ -65,169 +71,174 @@ class WasteBarChartContent extends StatefulWidget {
 }
 
 class _WasteBarChartContentState extends State<WasteBarChartContent> {
+  // late SelectionBehavior _selectionBehavior;
+  late TooltipBehavior _tooltipBehavior;
+
+  @override
+  void initState() {
+    //   _selectionBehavior = SelectionBehavior(
+    //     enable: true,
+    //     // unselectedColor: Colors.grey,
+    //     unselectedOpacity: 1,
+    //   );
+    super.initState();
+    _tooltipBehavior = TooltipBehavior(
+      enable: true,
+      builder: (dynamic data, dynamic point, dynamic series, int pointIndex,
+          int seriesIndex) {
+        // Customize tooltip content here
+        final barData = data as BarData;
+        final total = barData.total;
+        final consumed = barData.consume;
+        final wasted = barData.waste;
+        return Container(
+          padding: const EdgeInsets.all(8),
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(8),
+            // boxShadow: [BoxShadow(color: Colors.black12, blurRadius: 4)],
+          ),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Text("Total Consumption: $total",
+                  style: const TextStyle(fontSize: 16)),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  Text("Consumed: $consumed",
+                      style: const TextStyle(fontSize: 12)),
+                  Text("Wasted: $wasted", style: const TextStyle(fontSize: 12)),
+                ],
+              ),
+            ],
+          ),
+        );
+      },
+    );
+  }
+
+  // void _showConsumptionDetails(BarData data) {
+  //   showDialog(
+  //       context: context,
+  //       builder: (context) {
+  //         return AlertDialog(
+  //           title: Text("Details for ${data.label}"),
+  //           content: Column(
+  //             mainAxisSize: MainAxisSize.min,
+  //             children: [
+  //               Text("Total: ${data.total}"),
+  //               Text("Consumption: ${data.consume}"),
+  //               Text("Waste: ${data.wastePercent}"),
+  //             ],
+  //           ),
+  //           // actions: [
+  //           //   TextButton(
+  //           //     onPressed: () {
+  //           //       Navigator.pop(context);
+  //           //     },
+  //           //     child: const Text('Close'),
+  //           //   ),
+  //           // ],
+  //         );
+  //       });
+  // }
+
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
-        height: 240,
-        width: widget.chartData.length *
-            50.0, // Adjust width based on the number of bars and desired spacing
-        child: SfCartesianChart(
-          series: [
-            StackedColumn100Series<BarData, String>(
-              dataSource: widget.chartData,
-              xValueMapper: (BarData data, _) => data.label,
-              yValueMapper: (BarData data, _) => data.consumePercent.toDouble(),
-              // dataLabelSettings: const DataLabelSettings(isVisible: true),
-              dataLabelSettings: DataLabelSettings(
-                isVisible: true,
-                labelAlignment: ChartDataLabelAlignment.middle,
-                // Optional: customize how zero values are displayed
-                textStyle: TextStyle(fontSize: 10),
-              ),
-              name: 'Food Consumption', // Name for the legend
-              color: AppTheme.softBrightGreen,
-              dataLabelMapper: (BarData data, _) =>
-                  '${data.consumePercent.toInt()}%', // Convert to integer
-              // data.consumePercent == 0 ? '' : '${data.consumePercent}%',
-              // dataLabelMapper: (BarData data, _) =>
-              // data.percent == 0 ? 'No data' : '${data.percent}%',
-            ),
-            StackedColumn100Series<BarData, String>(
-              dataSource: widget.chartData,
-              xValueMapper: (BarData data, _) => data.label,
-              yValueMapper: (BarData data, _) => data.wastePercent.toDouble(),
-              // dataLabelSettings: const DataLabelSettings(isVisible: true),
-              dataLabelSettings: DataLabelSettings(
-                isVisible: true,
-                labelAlignment: ChartDataLabelAlignment.middle,
-                // Optional: customize how zero values are displayed
-                textStyle: TextStyle(fontSize: 10),
-              ),
-              name: 'Food wasted', // Name for the legend
-              color: AppTheme.softRedCancleWasted,
-              dataLabelMapper: (BarData data, _) =>
-                  // '${100 - data.percent.toInt()}%', // Convert to integer
+    return Column(
+      children: [
+        SizedBox(
+            height: 200,
+            width: widget.chartData.length *
+                50.0, // Adjust width based on the number of bars and desired spacing
+            child: SfCartesianChart(
+              tooltipBehavior: _tooltipBehavior,
+              // selectionType: SelectionType.point,
+              // onSelectionChanged: (SelectionArgs args) {
+              //   final data = widget.chartData[args.pointIndex];
+              //   _showConsumptionDetails(data);
+
+              //   // Clear selection after showing details
+              //   _selectionBehavior.toggleSelection;
+              // },
+              series: [
+                StackedColumn100Series<BarData, String>(
+                  dataSource: widget.chartData,
+                  xValueMapper: (BarData data, _) => data.label,
+                  yValueMapper: (BarData data, _) =>
+                      data.consumePercent.toDouble(),
+                  // dataLabelSettings: const DataLabelSettings(isVisible: true),
+                  dataLabelSettings: DataLabelSettings(
+                    isVisible: true,
+                    labelAlignment: ChartDataLabelAlignment.middle,
+                    // Optional: customize how zero values are displayed
+                    textStyle: TextStyle(fontSize: 10),
+                  ),
+                  name: 'Food Consumption', // Name for the legend
+                  color: AppTheme.softBrightGreen,
+                  // selectionBehavior: _selectionBehavior,
+                  dataLabelMapper: (BarData data, _) =>
+                      '${data.consumePercent.toInt()}%', // Convert to integer
+                  // data.consumePercent == 0 ? '' : '${data.consumePercent}%',
                   // dataLabelMapper: (BarData data, _) =>
-                  data.wastePercent == 0 ? '' : '${data.wastePercent.toInt()}%',
+                  // data.percent == 0 ? 'No data' : '${data.percent}%',
+                ),
+                StackedColumn100Series<BarData, String>(
+                  dataSource: widget.chartData,
+                  xValueMapper: (BarData data, _) => data.label,
+                  yValueMapper: (BarData data, _) =>
+                      data.wastePercent.toDouble(),
+                  // dataLabelSettings: const DataLabelSettings(isVisible: true),
+                  dataLabelSettings: DataLabelSettings(
+                    isVisible: true,
+                    labelAlignment: ChartDataLabelAlignment.middle,
+                    // Optional: customize how zero values are displayed
+                    textStyle: TextStyle(fontSize: 10),
+                  ),
+                  name: 'Food wasted', // Name for the legend
+                  color: AppTheme.softRedCancleWasted,
+                  // selectionBehavior: _selectionBehavior,
+                  dataLabelMapper: (BarData data, _) =>
+                      // '${100 - data.percent.toInt()}%', // Convert to integer
+                      // dataLabelMapper: (BarData data, _) =>
+                      data.wastePercent == 0
+                          ? ''
+                          : '${data.wastePercent.toInt()}%',
+                ),
+              ],
+              legend: Legend(
+                isVisible: true,
+                position: LegendPosition
+                    .bottom, // Position the legend below the chart
+              ),
+              // primaryXAxis: CategoryAxis(), // Explicitly set x-axis type
+              primaryXAxis: CategoryAxis(
+                labelStyle: TextStyle(fontSize: 10),
+                axisLabelFormatter: (AxisLabelRenderDetails details) {
+                  DateTime date =
+                      DateFormat("EEE MMM dd yyyy").parse(details.text);
+                  String formattedDate = DateFormat("dd/MM").format(date);
+                  return ChartAxisLabel(formattedDate, details.textStyle);
+                },
+              ),
+              primaryYAxis: NumericAxis(),
+            )),
+        Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Text("Total Consumption: ", style: const TextStyle(fontSize: 20)),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                Text("Consumed: ", style: const TextStyle(fontSize: 16)),
+                Text("Wasted: ", style: const TextStyle(fontSize: 16)),
+              ],
             ),
           ],
-          legend: Legend(
-            isVisible: true,
-            position:
-                LegendPosition.bottom, // Position the legend below the chart
-          ),
-          // primaryXAxis: CategoryAxis(), // Explicitly set x-axis type
-          primaryXAxis: CategoryAxis(
-            labelStyle: TextStyle(fontSize: 10),
-            axisLabelFormatter: (AxisLabelRenderDetails details) {
-              DateTime date = DateFormat("EEE MMM dd yyyy").parse(details.text);
-              String formattedDate = DateFormat("dd/MM").format(date);
-              return ChartAxisLabel(formattedDate, details.textStyle);
-            },
-          ),
-          primaryYAxis: NumericAxis(),
-        )
-        // BarChart(
-        //   BarChartData(
-        //     titlesData: FlTitlesData(
-        //       bottomTitles: AxisTitles(
-        //         sideTitles: SideTitles(
-        //           showTitles: true,
-        //           getTitlesWidget: (value, meta) {
-        //             int index = value.toInt();
-        //             if (index >= 0 && index < widget.chartData.length) {
-        //               DateTime date = DateFormat('EEE MMM dd yyyy')
-        //                   .parse(widget.chartData[index].label);
-        //               String formattedDate = DateFormat('dd/MM').format(date);
-        //               return Text(
-        //                 formattedDate,
-        //                 style: const TextStyle(
-        //                   color: Colors.black,
-        //                   fontSize: 10,
-        //                   fontWeight: FontWeight.bold,
-        //                 ),
-        //               );
-        //             }
-        //             return const SizedBox.shrink();
-        //           },
-        //         ),
-        //       ),
-        //       topTitles: const AxisTitles(
-        //         sideTitles: SideTitles(showTitles: false, reservedSize: 28),
-        //       ),
-        //       rightTitles: const AxisTitles(
-        //         sideTitles: SideTitles(
-        //           showTitles: false,
-        //         ),
-        //       ),
-        //       leftTitles: AxisTitles(
-        //         sideTitles: SideTitles(
-        //           interval: 20,
-        //           showTitles: true,
-        //           reservedSize: 40,
-        //           getTitlesWidget: (value, meta) {
-        //             if (value.toInt() == 0) return const SizedBox.shrink();
-        //             return Text(
-        //               // value.toInt().toString(),
-        //               '${value.toInt()}',
-        //               style: const TextStyle(
-        //                 color: Colors.black,
-        //                 fontSize: 12,
-        //                 fontWeight: FontWeight.bold,
-        //               ),
-        //             );
-        //           },
-        //         ),
-        //       ),
-        //     ),
-        //     borderData: FlBorderData(
-        //         border: Border.all(color: Colors.black, width: 0.5), show: true),
-        //     alignment: BarChartAlignment.spaceEvenly,
-        //     maxY: 100,
-        //     minY: 0,
-        //     barGroups: widget.chartData.asMap().entries.map((e) {
-        //       return BarChartGroupData(
-        //         x: e.key,
-        //         barRods: [
-        //           BarChartRodData(
-        //             toY: e.value.percent,
-        //             color: AppTheme.softBrightGreen,
-        //             width: 20,
-        //           ),
-        //         ],
-        //       );
-        //     }).toList(),
-        //     gridData: FlGridData(
-        //       // show: true,
-        //       drawVerticalLine: true,
-        //       // drawHorizontalLine: true,
-        //       horizontalInterval: 20,
-        //       checkToShowHorizontalLine: (value) =>
-        //           value <= 100, // Only show grid lines up to 100
-        //       getDrawingHorizontalLine: (value) {
-        //         return FlLine(
-        //           color: Colors.black12,
-        //           strokeWidth: 1,
-        //         );
-        //       },
-        //       // getDrawingVerticalLine: (value) {
-        //       //   return FlLine(
-        //       //     color: Colors.black,
-        //       //     strokeWidth: 1,
-        //       //   );
-        //       // },
-        //     ),
-        //     barTouchData: BarTouchData(
-        //         enabled: true,
-        //         touchTooltipData: BarTouchTooltipData(
-        //           tooltipPadding: const EdgeInsets.all(8),
-        //           tooltipMargin: 8,
-        //         )),
-        //   ),
-        // ),
-        // ),
-        // ),
-        );
+        ),
+      ],
+    );
   }
 //   const ReasonBarChartContent({super.key});
 

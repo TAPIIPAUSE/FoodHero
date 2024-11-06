@@ -77,17 +77,39 @@ class _JoinState extends State<join> {
               // crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 const SizedBox(
-                  height: 120,
+                  height: 10,
                 ),
                 Container(
                   width: screenWidth * 0.95,
                   padding: EdgeInsets.symmetric(vertical: 50),
                   decoration: const BoxDecoration(
-                    color: AppTheme.softBlue,
+                    color: AppTheme.softYellow,
                     borderRadius: BorderRadius.all(Radius.circular(20)),
+                    border: Border(
+                      bottom: BorderSide(
+                        color: AppTheme.softBrightGreen,
+                        width: 2,
+                      ),
+                      top: BorderSide(
+                        color: AppTheme.softBrightGreen,
+                        width: 2,
+                      ),
+                      left: BorderSide(
+                        color: AppTheme.softBrightGreen,
+                        width: 2,
+                      ),
+                      right: BorderSide(
+                        color: AppTheme.softBrightGreen,
+                        width: 2,
+                      ),
+                    ),
                   ),
                   child: Column(
                     children: [
+                      Text(
+                        "🏡",
+                        style: TextStyle(fontSize: 64),
+                      ),
                       Text(
                         "Household",
                         style: FontsTheme.mouseMemoirs_40(),
@@ -151,11 +173,33 @@ class _JoinState extends State<join> {
                   width: screenWidth * 0.95,
                   padding: EdgeInsets.symmetric(vertical: 50),
                   decoration: const BoxDecoration(
-                    color: AppTheme.softBlue,
+                    color: AppTheme.softYellow,
                     borderRadius: BorderRadius.all(Radius.circular(20)),
+                    border: Border(
+                      bottom: BorderSide(
+                        color: AppTheme.softBrightGreen,
+                        width: 2,
+                      ),
+                      top: BorderSide(
+                        color: AppTheme.softBrightGreen,
+                        width: 2,
+                      ),
+                      left: BorderSide(
+                        color: AppTheme.softBrightGreen,
+                        width: 2,
+                      ),
+                      right: BorderSide(
+                        color: AppTheme.softBrightGreen,
+                        width: 2,
+                      ),
+                    ),
                   ),
                   child: Column(
                     children: [
+                      Text(
+                        "🏢",
+                        style: TextStyle(fontSize: 64),
+                      ),
                       Text(
                         "Organization",
                         style: FontsTheme.mouseMemoirs_40(),

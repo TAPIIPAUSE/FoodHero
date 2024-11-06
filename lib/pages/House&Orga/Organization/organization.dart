@@ -200,7 +200,7 @@ class _OrganizationState extends State<organization> {
                       return Text('No organization name');
                     } else {
                       final name = snapshot.data!.name;
-                      return Text(name,
+                      return Text("🏢 $name 🏢",
                           style: FontsTheme.mouseMemoirs_30Black());
                     }
                   })
@@ -237,16 +237,17 @@ class _OrganizationState extends State<organization> {
                 Column(
                   children: [
                     Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Text('Today $_todayDate',
                             style: FontsTheme.hindBold_20()),
                         const SizedBox(width: 10),
-                        Chip(
-                          label: Text(_weekday,
-                              style: const TextStyle(
-                                  color: Colors.white, fontSize: 12)),
-                          backgroundColor: Colors.orange,
-                        ),
+                        // Chip(
+                        //   label: Text(_weekday,
+                        //       style: const TextStyle(
+                        //           color: Colors.white, fontSize: 12)),
+                        //   backgroundColor: Colors.orange,
+                        // ),
                       ],
                     ),
                     // Row(
@@ -303,6 +304,9 @@ class _OrganizationState extends State<organization> {
                                     label: stat.date,
                                     wastePercent: stat.wastePercent,
                                     consumePercent: stat.consumePercent,
+                                    total: stat.total,
+                                    consume: stat.consume,
+                                    waste: stat.waste,
                                   );
                                 }).toList();
 

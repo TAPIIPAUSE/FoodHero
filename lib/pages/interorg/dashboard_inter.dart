@@ -338,6 +338,9 @@ class _InterDashboardState extends State<InterDashboard> {
                   label: stat.date,
                   wastePercent: stat.wastePercent,
                   consumePercent: stat.consumePercent,
+                  total: stat.total,
+                  consume: stat.consume,
+                  waste: stat.waste,
                 );
               }).toList();
 

@@ -23,6 +23,7 @@ class HouseholdFoodSaved {
 class WeekData {
   final String date;
   final int consume;
+  final int waste;
   final int total;
   final double consumePercent;
   final double wastePercent;
@@ -30,6 +31,7 @@ class WeekData {
   WeekData({
     required this.date,
     required this.consume,
+    required this.waste,
     required this.total,
     required this.consumePercent,
     required this.wastePercent,
@@ -48,11 +50,12 @@ class WeekData {
   factory WeekData.fromJson(Map<String, dynamic> json) {
     return WeekData(
       date: json['Date'] as String,
-      consume: json['Consume'] as int,
-      total: json['Total'] as int,
-      consumePercent: (json['consumePercent'] as num).toDouble(),
-      wastePercent: (json['wastePercent'] as num).toDouble(),
+      consume: json['Consume'] ?? 0,
+      waste: json['Wasted'] ?? 0,
+      total: json['Total'] ?? 0,
+      consumePercent: (json['consumePercent'] as num?)?.toDouble() ?? 0.0,
+      wastePercent: (json['wastePercent'] as num?)?.toDouble() ??
+          0.0, // Default to 0.0 if null
     );
   }
 }
-

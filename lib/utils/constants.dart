@@ -60,7 +60,7 @@ const reson = [
   oth,
 ];
 
-const myip = "10.250.79.113";
+const myip = "192.168.183.89";
 
 //Pause
 //mac
