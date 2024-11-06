@@ -337,7 +337,7 @@ export async function preprocess_house_heatmap(hID){
       var waste_acc = 0
       var total = 0
       item.items.map( i => {
-          waste_acc = waste_acc + Number(i.Consume)
+          waste_acc = waste_acc + Number(i.Waste)
           total = total + Number(i.Consume) + Number(i.Waste)
       })
 
@@ -398,7 +398,7 @@ export async function preprocess_Org_heatmap(orgID){
       var waste_acc = 0
       var total = 0
       item.items.map( i => {
-          waste_acc = waste_acc + Number(i.Consume)
+          waste_acc = waste_acc + Number(i.Waste)
           total = total + Number(i.Consume) + Number(i.Waste)
       })
 
