@@ -101,17 +101,11 @@ class _WasteBarChartContentState extends State<WasteBarChartContent> {
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              Text("Total Consumption: $total g.",
-                  style: const TextStyle(fontSize: 16)),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  Text("Consumed: $consumed g.",
-                      style: const TextStyle(fontSize: 12)),
-                  Text("Wasted: $wasted g.",
-                      style: const TextStyle(fontSize: 12)),
-                ],
-              ),
+              Text("Total Consumption", style: const TextStyle(fontSize: 14)),
+              Text("$total g.", style: const TextStyle(fontSize: 14)),
+              Text("Consumed: $consumed g.",
+                  style: const TextStyle(fontSize: 12)),
+              Text("Wasted: $wasted g.", style: const TextStyle(fontSize: 12)),
             ],
           ),
         );

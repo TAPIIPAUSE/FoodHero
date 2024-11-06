@@ -1,5 +1,6 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:flutter/material.dart';
+import 'package:foodhero/fonts.dart';
 import 'package:foodhero/pages/api/consumedfood_api.dart';
 import 'package:intl/intl.dart';
 import 'package:percent_indicator/percent_indicator.dart';
@@ -139,46 +140,75 @@ class _FoodDetail extends StatelessWidget {
             children: [
               Text(
                 foodname,
-                style: const TextStyle(
-                  fontWeight: FontWeight.w500,
-                  fontSize: 14.0,
+                style: FontsTheme.mouseMemoirs_30Black()
+                    .copyWith(letterSpacing: 1),
+              ),
+              // Container(
+              // margin: const EdgeInsets.only(left: 5.0),
+              // child:
+              // ),
+            ],
+          ),
+          Row(
+            // mainAxisAlignment: MainAxisAlignment.end,
+            // crossAxisAlignment: CrossAxisAlignment.end,
+            children: [
+              const Text(
+                'Remaining',
+                style: TextStyle(
+                  color: Colors.black,
+                  fontSize: 12.0,
                 ),
               ),
               Container(
-                margin: const EdgeInsets.only(left: 5.0),
-                child: Row(
-                  // mainAxisAlignment: MainAxisAlignment.end,
-                  // crossAxisAlignment: CrossAxisAlignment.end,
-                  children: [
-                    const Text(
-                      'Remaining',
-                      style: TextStyle(
-                        color: Colors.black,
-                        fontSize: 12.0,
-                      ),
-                    ),
-                    Container(
-                      margin: const EdgeInsets.only(left: 10.0),
-                      padding: const EdgeInsets.all(5.0),
-                      decoration: BoxDecoration(
-                        color: AppTheme.softGreen,
-                        borderRadius: BorderRadius.circular(10.0),
-                      ),
-                      child: Text(
-                        remaining.toString(),
-                        style: const TextStyle(
-                          color: Colors.black,
-                          fontSize: 12.0,
-                        ),
-                      ),
-                    ),
-                  ],
+                margin: const EdgeInsets.only(left: 10.0),
+                padding: const EdgeInsets.all(5.0),
+                decoration: BoxDecoration(
+                  color: AppTheme.softGreen,
+                  borderRadius: BorderRadius.circular(10.0),
                 ),
-              )
+                child: Text(
+                  remaining.toString(),
+                  style: const TextStyle(
+                    color: Colors.black,
+                    fontSize: 12.0,
+                  ),
+                ),
+              ),
             ],
           ),
           const Padding(
             padding: EdgeInsets.symmetric(vertical: 1.0),
+          ),
+          Row(
+            children: [
+              const Text(
+                'Consuming',
+                style: TextStyle(
+                  color: Colors.black,
+                  fontSize: 12.0,
+                ),
+              ),
+              Container(
+                margin: const EdgeInsets.only(left: 10.0),
+                padding: const EdgeInsets.all(5.0),
+                decoration: BoxDecoration(
+                  color: AppTheme.softRed,
+                  borderRadius: BorderRadius.circular(10.0),
+                ),
+                child: Column(
+                  children: [
+                    Text(
+                      consumeing.toString(),
+                      style: const TextStyle(
+                        color: Colors.black,
+                        fontSize: 12.0,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ],
           ),
           Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -189,48 +219,22 @@ class _FoodDetail extends StatelessWidget {
                   children: [
                     const Padding(padding: EdgeInsets.symmetric(vertical: 2.0)),
                     Text(
-                      DateFormat('dd/MM/yyyy').format(expiry),
-                      style: const TextStyle(fontSize: 10.0),
+                      "Expired ${DateFormat('dd/MM/yyyy').format(expiry)}",
+                      style: const TextStyle(fontSize: 12.0),
                     ),
-                    LinearPercentIndicator(
-                      padding: const EdgeInsets.only(left: 0),
-                      width: MediaQuery.of(context).size.width * 0.3,
-                      animation: true,
-                      lineHeight: 20.0,
-                      animationDuration: 2000,
-                      percent: progessbar / 100,
-                      center: Text('${progessbar.toString()}%'),
-                      barRadius: const Radius.circular(10.0),
-                      progressColor: AppTheme.softOrange,
-                      backgroundColor: Colors.white,
-                    ),
+                    // LinearPercentIndicator(
+                    //   padding: const EdgeInsets.only(left: 0),
+                    //   width: MediaQuery.of(context).size.width * 0.3,
+                    //   animation: true,
+                    //   lineHeight: 20.0,
+                    //   animationDuration: 2000,
+                    //   percent: progessbar / 100,
+                    //   center: Text('${progessbar.toString()}%'),
+                    //   barRadius: const Radius.circular(10.0),
+                    //   progressColor: AppTheme.softOrange,
+                    //   backgroundColor: Colors.white,
+                    // ),
                   ],
-                ),
-                Container(
-                  margin: const EdgeInsets.only(left: 10.0),
-                  padding: const EdgeInsets.all(5.0),
-                  decoration: BoxDecoration(
-                    color: AppTheme.softRed,
-                    borderRadius: BorderRadius.circular(10.0),
-                  ),
-                  child: Column(
-                    children: [
-                      const Text(
-                        'Consuming',
-                        style: TextStyle(
-                          color: Colors.black,
-                          fontSize: 12.0,
-                        ),
-                      ),
-                      Text(
-                        consumeing.toString(),
-                        style: const TextStyle(
-                          color: Colors.black,
-                          fontSize: 12.0,
-                        ),
-                      ),
-                    ],
-                  ),
                 ),
               ]),
         ],
