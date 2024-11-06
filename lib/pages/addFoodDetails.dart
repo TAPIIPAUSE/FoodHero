@@ -36,6 +36,7 @@ class _AddFoodDetailsPageState extends State<addFoodDetails> {
   TextEditingController quantityController = TextEditingController();
   int sendQuantity = 0;
   double weightDouble = 1; // in grams
+  int weightInt = 1;
   String weight = ''; //make it proper for the decimals
   TextEditingController weightController = TextEditingController();
   int sendWeight = 0;
@@ -208,6 +209,7 @@ class _AddFoodDetailsPageState extends State<addFoodDetails> {
     loginColor = selectedColor;
     signInColor = normalColor;
     quantity = quantity;
+    weight = weight;
     weightController.text = weight.toString();
     selectedQuantityUnit = selectedQuantityUnit;
   }
@@ -1174,19 +1176,20 @@ class _AddFoodDetailsPageState extends State<addFoodDetails> {
   }
 
   Widget buildWeightUnit(String value) {
-    String gram = "gram";
-    String kilogram = "kilogram";
-    String milliliter = "milliliter";
-    if (weight == 1) {
-      gram = "gram";
-      kilogram = "kilogram";
-      milliliter = "milliliter";
-    } else if (weightDouble > 1) {
-      gram = "grams";
-      kilogram = "kilograms";
-      milliliter = "milliliters";
-    }
-    List<String> items = [gram, kilogram, milliliter];
+    String gram = weightDouble == 1 ? "Gram" : "Grams";
+    String kilogram = weightDouble == 1 ? "Kilogram" : "Kilograms";
+    String milliliter = weightDouble == 1 ? "Milliliter" : "Milliliters";
+    String liter = weightDouble == 1 ? "Liter" : "Liters";
+    // if (weightDouble == 1.0) {
+    //   gram = "Gram";
+    //   kilogram = "Kilogram";
+    //   milliliter = "Milliliter";
+    // } else if (weightDouble > 1.0) {
+    //   gram = "Grams";
+    //   kilogram = "Kilograms";
+    //   milliliter = "Milliliters";
+    // }
+    List<String> items = [gram, kilogram, milliliter, liter];
     String selectedValue = items[0];
     return StatefulBuilder(
         builder: (BuildContext context, StateSetter setState) {

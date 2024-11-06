@@ -66,7 +66,9 @@ class _FoodDetailsPageState extends State<foodDetails> {
   DateTime reminderDate = DateTime(2024);
   String remindString = '';
   String remindDate = '';
+  //String apiQuantity = '';
   int showQuantity = 0;
+  String apiPackage = '';
   String showPackage = '';
   double weightCountable = 0;
   String showUnit = '';
@@ -754,11 +756,13 @@ class _FoodDetailsPageState extends State<foodDetails> {
                                     addToConsumed(context);
 
                                     int fID = foodID;
-                                    SomeConsume addSomeConsume =
-                                        SomeConsume(
-                                      fID: fID,
-                                      //consume values
-                                    );
+                                    SomeConsume addSomeConsume = SomeConsume(
+                                        fID: fID,
+                                        retrievedQuantity:
+                                            consumeQuantity.toInt(),
+                                        retrievedAmount: consumeQuantity.toInt()
+                                        //consume values
+                                        );
                                     try {
                                       await APIConsume.someConsume(
                                           addSomeConsume);
@@ -897,35 +901,37 @@ class _FoodDetailsPageState extends State<foodDetails> {
                                       ),
                                       SizedBox(
                                         child: InteractiveSlider(
-                                          focusedHeight: 20,
-                                          backgroundColor: AppTheme.softRed,
-                                          startIcon: const Icon(
-                                            Icons.remove_circle_rounded,
-                                            color: Colors.black,
-                                          ),
-                                          endIcon: const Icon(
-                                            Icons.add_circle_rounded,
-                                            color: Colors.black,
-                                          ),
-                                          min: 1,
-                                          max: showQuantity.toDouble(),
-                                          onChanged:
-                                              (double valueConsumeOption) 
-                                                {  setState(() {
-                                            //Countable
-                                            consumeQuantity =
-                                                valueConsumeOption;
+                                            focusedHeight: 20,
+                                            backgroundColor: AppTheme.softRed,
+                                            startIcon: const Icon(
+                                              Icons.remove_circle_rounded,
+                                              color: Colors.black,
+                                            ),
+                                            endIcon: const Icon(
+                                              Icons.add_circle_rounded,
+                                              color: Colors.black,
+                                            ),
+                                            min: 1,
+                                            max: showQuantity.toDouble(),
+                                            onChanged:
+                                                (double valueConsumeOption) {
+                                              setState(
+                                                () {
+                                                  //Countable
+                                                  consumeQuantity =
+                                                      valueConsumeOption;
 
-                                            consumeOptionUnit =
-                                                _getConsumeOptionUnit(
-                                                    consumeQuantity,
-                                                    showConsumeOptUnit);
-                                            selectedConsumeQuantityModal =
-                                                consumeQuantity.toInt();
+                                                  consumeOptionUnit =
+                                                      _getConsumeOptionUnit(
+                                                          consumeQuantity,
+                                                          showConsumeOptUnit);
+                                                  selectedConsumeQuantityModal =
+                                                      consumeQuantity.toInt();
 
-                                            //weightConsumeOption.toStringAsFixed(0);
-                                          },);}
-                                        ),
+                                                  //weightConsumeOption.toStringAsFixed(0);
+                                                },
+                                              );
+                                            }),
                                       ),
                                     ],
                                   ),
@@ -1977,11 +1983,52 @@ class _FoodDetailsPageState extends State<foodDetails> {
     );
   }
 
+  String _getQuantityPackage(int showQuantity, String package) {
+    if (showQuantity == 0 || showQuantity <= 1) {
+      return package; // Singular form
+    } else {
+      // Pluralize based on the unit
+      switch (package) {
+        case 'Piece':
+          return 'Pieces';
+        case 'Box':
+          return 'Boxes';
+        case 'Bottle':
+          return 'Bottles';
+        default:
+          return package; // Fallback to original unit if no match
+      }
+    }
+  }
+
+  String _getWeightUnit(int weightCountable, String unit) {
+    if (weightCountable == 0 || weightCountable <= 1) {
+      return unit; // Singular form
+    } else {
+      // Pluralize based on the unit
+      switch (unit) {
+        case 'Gram':
+          return 'Grams';
+        case 'Kilogram':
+          return 'Kilograms';
+        case 'Milliliter':
+          return 'Milliliters';
+        case 'Liter':
+          return 'Liters';
+        default:
+          return unit; // Fallback to original unit if no match
+      }
+    }
+  }
+
   bool showQuantityField = true;
   Widget buildQuantityWeight() {
     showQuantityField = isCountable;
-    showPackage = showQuantity == 1 ? showPackage : "${showPackage}s";
-    showUnit = weightCountable == 1 ? showUnit : "${showUnit}s";
+    // showPackage = showQuantity == 1 ? showPackage : "${showPackage}s";
+    // showUnit = weightCountable == 1 ? showUnit : "${showUnit}s";
+
+    showPackage = _getQuantityPackage(showQuantity, showPackage);
+    showUnit = _getWeightUnit(weightCountable.toInt(), showUnit);
 
     String boxLabel = quantity == 1 ? "Box" : "Boxes";
     return Padding(
