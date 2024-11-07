@@ -667,6 +667,19 @@ class _FoodDetailsPageState extends State<foodDetails> {
     }
   }
 
+  bool _howMuchConsumedVisible = false; 
+  void _showHowMuchConsumed() {
+    setState(() {
+      _howMuchConsumedVisible = true;
+    });
+
+    Future.delayed(Duration(seconds: 3), () {
+      setState(() {
+        _howMuchConsumedVisible = false;
+      });
+    });
+  }
+
   void _consumeOption(BuildContext context, int getQuantity, double getWeight) {
     Widget buildConsumedQuantityUnit(String value) {
       String pieceLabel = quantity == 1 ? "Piece" : "Pieces";
@@ -716,6 +729,8 @@ class _FoodDetailsPageState extends State<foodDetails> {
     double consumeWeight = getWeight;
     //double consumeQuantity = 5;
     String weightConsumeOptionString = "";
+
+    SizedBox(width: _howMuchConsumedVisible ? 60 : 0);
     showDialog(
         context: context,
         builder: (BuildContext contetxt) {
@@ -724,10 +739,10 @@ class _FoodDetailsPageState extends State<foodDetails> {
               Navigator.of(context)
                   .pop(); // Close the dialog when tapping outside
             },
-            child: AlertDialog(
+            child: Dialog(
               insetPadding: EdgeInsets.zero,
               backgroundColor: Colors.transparent,
-              content: SizedBox(
+              child: SizedBox(
                 width: MediaQuery.of(context).size.width,
                 child: GestureDetector(
                   onTap: () {
@@ -770,7 +785,9 @@ class _FoodDetailsPageState extends State<foodDetails> {
                                           .showSnackBar(
                                         SnackBar(
                                           behavior: SnackBarBehavior.floating,
+                                          //width:screen - 20,
                                           margin: EdgeInsets.only(bottom: 500),
+                                          padding: EdgeInsets.all(20),
                                           content: Text(
                                             "$selectedConsumeQuantityModal $foodname Consumed!",
                                             style: FontsTheme.hindBold_20(),
@@ -778,6 +795,11 @@ class _FoodDetailsPageState extends State<foodDetails> {
                                           duration: const Duration(seconds: 6),
                                           backgroundColor:
                                               AppTheme.greenMainTheme,
+                                          shape: RoundedRectangleBorder(
+                                            //side: BorderSide(color: Colors.red, width: 1),
+                                            borderRadius:
+                                                BorderRadius.circular(24),
+                                          ),
                                         ),
                                       );
                                     } catch (e) {
@@ -1057,18 +1079,8 @@ class _FoodDetailsPageState extends State<foodDetails> {
                             try {
                               await APICompleteConsume.completeConsume(
                                   addCompleteConsume);
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                SnackBar(
-                                  behavior: SnackBarBehavior.floating,
-                                  margin: EdgeInsets.only(bottom: 300),
-                                  content: Text(
-                                    "All $foodname Consumed!",
-                                    style: FontsTheme.hindBold_20(),
-                                  ),
-                                  duration: const Duration(seconds: 2),
-                                  backgroundColor: AppTheme.greenMainTheme,
-                                ),
-                              );
+                              Navigator.of(context).pop();
+                              _showHowMuchConsumed();
                             } catch (e) {
                               ScaffoldMessenger.of(context)
                                   .showSnackBar(SnackBar(
@@ -1121,6 +1133,22 @@ class _FoodDetailsPageState extends State<foodDetails> {
             ),
           );
         });
+
+        if (_howMuchConsumedVisible) {
+          Positioned(
+              top: 0,
+              left: 20, // Padding from the left
+              right: 20, // Padding from the right
+              child: Container(
+                padding: EdgeInsets.all(16),
+                color: Colors.blue,
+                child: Text(
+                  'This is your custom SnackBar!',
+                  style: TextStyle(color: Colors.white),
+                ),
+              ),
+            );
+        }
   }
 
   List<ConsumedListItem> consumedItems = [];
@@ -2013,8 +2041,8 @@ class _FoodDetailsPageState extends State<foodDetails> {
           return 'Kilograms';
         case 'Milliliter':
           return 'Milliliters';
-        case 'Liter':
-          return 'Liters';
+        case 'Litre':
+          return 'Litres';
         default:
           return unit; // Fallback to original unit if no match
       }
@@ -2059,7 +2087,7 @@ class _FoodDetailsPageState extends State<foodDetails> {
                           Column(
                             children: [
                               Container(
-                                width: 150,
+                                width: 180,
                                 padding: EdgeInsets.symmetric(
                                     horizontal: 12, vertical: 8),
                                 decoration: BoxDecoration(
@@ -2072,6 +2100,7 @@ class _FoodDetailsPageState extends State<foodDetails> {
                                   children: [
                                     Text(showQuantity.toString(),
                                         style: FontsTheme.hindBold_20()),
+                                          SizedBox(width: 10,),
                                     Text(
                                       showPackage,
                                       style: FontsTheme.hindBold_20(),
@@ -2152,7 +2181,7 @@ class _FoodDetailsPageState extends State<foodDetails> {
                         Column(
                           children: [
                             Container(
-                              width: 150,
+                              width: 180,
                               padding: EdgeInsets.symmetric(
                                   horizontal: 12, vertical: 8),
                               decoration: BoxDecoration(
@@ -2165,6 +2194,7 @@ class _FoodDetailsPageState extends State<foodDetails> {
                                 children: [
                                   Text(weightCountable.toString(),
                                       style: FontsTheme.hindBold_20()),
+                                      SizedBox(width: 10,),
                                   Text(showUnit.toString(),
                                       style: FontsTheme.hindBold_20()),
                                   // buildWeightUnit('')

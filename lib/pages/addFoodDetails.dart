@@ -573,11 +573,11 @@ class _AddFoodDetailsPageState extends State<addFoodDetails> {
   }
 
   List<String> itemCategory = [
-    "Cooked food",
-    "Fresh food",
-    "Frozen food",
-    "Dried food",
-    "Instant food"
+    "Cooked Food",
+    "Fresh Ingredients",
+    "Frozen Food",
+    "Dried Ingredients",
+    "Instant Food"
   ];
 
   Widget buildCategoriesField(String label, String value, IconData icon) {
@@ -1118,9 +1118,9 @@ class _AddFoodDetailsPageState extends State<addFoodDetails> {
   }
 
   Widget buildQuantityUnit(String value) {
-    String pieceLabel = quantity == 1 ? "piece" : "pieces";
-    String boxLabel = quantity == 1 ? "box" : "boxes";
-    String bottleLabel = quantity == 1 ? "bottle" : "bottles";
+    String pieceLabel = quantity == 1 ? "Piece" : "Pieces";
+    String boxLabel = quantity == 1 ? "Box" : "Boxes";
+    String bottleLabel = quantity == 1 ? "Bottle" : "Bottles";
     List<String> items = [pieceLabel, boxLabel, bottleLabel];
     String selectedValue = items[0];
     return StatefulBuilder(
@@ -1340,10 +1340,11 @@ class _AddFoodDetailsPageState extends State<addFoodDetails> {
                               child: Row(
                                 children: [
                                   SizedBox(
-                                      width: 50,
+                                      width: 60,
                                       child: TextField(
                                           decoration: const InputDecoration(
                                             labelText: 'Weight',
+                                            border: InputBorder.none,
                                           ),
                                           keyboardType: TextInputType.number,
                                           onChanged: (value) {
@@ -1378,10 +1379,11 @@ class _AddFoodDetailsPageState extends State<addFoodDetails> {
                                 child: Row(
                                   children: [
                                     SizedBox(
-                                        width: 80,
+                                        width: 60,
                                         child: TextField(
                                             decoration: const InputDecoration(
                                               labelText: 'Cost',
+                                              border: InputBorder.none,
                                             ),
                                             keyboardType: TextInputType.number,
                                             onChanged: (value) {
