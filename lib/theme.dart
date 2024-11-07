@@ -15,4 +15,5 @@ class AppTheme {
   static const Color softRed = Color.fromRGBO(243, 203, 186, 1.0);
   static const Color softYellow = Color.fromRGBO(255, 246, 163, 1.0);
   static const Color softRedBrown = Color.fromRGBO(241, 228, 221, 1.0);
+  static const Color pastelSoftBlue = Color.fromRGBO(170, 238, 252, 1.0);
 }

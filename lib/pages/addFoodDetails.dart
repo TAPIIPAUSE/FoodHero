@@ -2,15 +2,36 @@ import 'dart:convert';
 import 'dart:io';
 import 'dart:async';
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
 import 'package:foodhero/models/addfood_model.dart';
 import 'package:foodhero/pages/api/ApiUserFood.dart';
 import 'package:foodhero/pages/inventory/inventory.dart';
 import 'package:foodhero/theme.dart';
 import 'package:foodhero/fonts.dart';
+import 'package:foodhero/widgets/cameraScreen.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:camera/camera.dart';
+import 'package:file_picker/file_picker.dart';
 import 'package:interactive_slider/interactive_slider.dart';
 //import 'package:intl/intl.dart';
+
+List<CameraDescription> cameras = [];
+// Check if the list is not empty before accessing
+
+Future<void> main() async {
+  try {
+    cameras = await availableCameras(); //get available caameras
+    if (cameras.isEmpty) {
+      print('No cameras available');
+      return; // Exit if no cameras are found
+    }
+  } catch (e) {
+    print('Error retrieving cameras: $e');
+    return; // Handle error appropriately
+  }
+  runApp(addFoodDetails());
+}
 
 class addFoodDetails extends StatefulWidget {
   @override
@@ -77,6 +98,17 @@ class _AddFoodDetailsPageState extends State<addFoodDetails> {
     }
   }
 
+  void _pickFile() async {
+    FilePickerResult? result = await FilePicker.platform.pickFiles();
+    if (result != null) {
+      // Process the selected file
+      print('File selected: ${result.files.single.name}');
+    } else {
+      // User canceled the picker
+      print('No file selected');
+    }
+  }
+
   void _toggleImageOption() {
     setState(() {
       _showImageOption = !_showImageOption;
@@ -88,92 +120,121 @@ class _AddFoodDetailsPageState extends State<addFoodDetails> {
       context: context,
       builder: (BuildContext context) {
         return Transform.translate(
-          offset: Offset(10, 10), // Adjust the offset to change the position
-          child: AlertDialog(
-            contentPadding: EdgeInsets.zero,
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(10),
-            ),
-            content: Container(
-              margin:
-                  const EdgeInsets.only(left: 4, right: 4, top: 4, bottom: 4),
-              width: 340,
-              height: 120,
-              decoration: BoxDecoration(
-                color: AppTheme.mainBlue,
-                borderRadius: BorderRadius.circular(10),
+          offset: Offset(0, 0), // Adjust the offset to change the position
+          child: Center(
+            child: Stack(alignment: Alignment.center, children: [
+              Container(
+                width: MediaQuery.of(context).size.width * 0.9,
+                height: MediaQuery.of(context).size.width * 0.45,
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(10),
+                ),
               ),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  TextButton(
-                    onPressed: () {},
-                    child: Column(
-                      children: [
-                        Image.asset('assets/images/Photo.png'),
-                        Text(
-                          'Take\nPhoto',
-                          style: FontsTheme.hindBold_20(),
-                        ),
-                      ],
-                    ),
-                    style: TextButton.styleFrom(
-                      backgroundColor: AppTheme.softBlue,
-                      fixedSize: Size(100, 100),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.only(
-                          topLeft: Radius.circular(10),
-                          bottomLeft: Radius.circular(10),
-                        ),
-                      ),
-                    ),
-                  ),
-                  SizedBox(width: 10), // Add spacing between buttons
-                  TextButton(
-                    onPressed: _pickImage,
-                    child: Column(
-                      children: [
-                        Image.asset('assets/images/Photo.png'),
-                        Text(
-                          'Choose\nPhoto',
-                          style: FontsTheme.hindBold_20(),
-                        ),
-                      ],
-                    ),
-                    style: TextButton.styleFrom(
-                      backgroundColor: AppTheme.softBlue,
-                      fixedSize: Size(100, 100),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(0),
-                      ),
-                    ),
-                  ),
-                  SizedBox(width: 10), // Add spacing between buttons
-                  TextButton(
-                    onPressed: () {},
-                    child: Column(
-                      children: [
-                        Image.asset('assets/images/Photo.png'),
-                        Text(
-                          'Choose\nFile',
-                          style: FontsTheme.hindBold_20(),
-                        ),
-                      ],
-                    ),
-                    style: TextButton.styleFrom(
-                      backgroundColor: AppTheme.softBlue,
-                      fixedSize: Size(100, 100),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.only(
-                          topRight: Radius.circular(10),
-                          bottomRight: Radius.circular(10),
+              Container(
+                width: MediaQuery.of(context).size.width * 0.85,
+                height: MediaQuery.of(context).size.width * 0.4,
+                padding: EdgeInsets.all(5),
+                decoration: BoxDecoration(
+                  color: AppTheme.mainBlue,
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    TextButton(
+                      onPressed: () async {
+                        await Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => CameraScreen()),
+                        );
+                      },
+                      style: TextButton.styleFrom(
+                        backgroundColor: AppTheme.softBlue,
+                        fixedSize: Size(100, 130),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.only(
+                            topLeft: Radius.circular(10),
+                            bottomLeft: Radius.circular(10),
+                          ),
                         ),
                       ),
+                      child: Column(
+                        children: [
+                          SizedBox(height: 5),
+                          Image.asset('assets/images/CaameraaIcon.png'),
+                          SizedBox(height: 20),
+                          Text(
+                            'Take',
+                            style: FontsTheme.hindBold_20(),
+                          ),
+                          Text(
+                            'Photo',
+                            style: FontsTheme.hindBold_20(),
+                          ),
+                        ],
+                      ),
                     ),
-                  ),
-                ],
+                    SizedBox(width: 10), // Add spacing between buttons
+                    TextButton(
+                      onPressed: _pickImage,
+                      style: TextButton.styleFrom(
+                        backgroundColor: AppTheme.softBlue,
+                        fixedSize: Size(100, 130),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(0),
+                        ),
+                      ),
+                      child: Column(
+                        children: [
+                          SizedBox(height: 5),
+                          Image.asset('assets/images/Photo.png'),
+                          SizedBox(height: 20),
+                          Text(
+                            'Choose',
+                            style: FontsTheme.hindBold_20(),
+                          ),
+                          Text(
+                            'Photo',
+                            style: FontsTheme.hindBold_20(),
+                          ),
+                        ],
+                      ),
+                    ),
+                    SizedBox(width: 10), // Add spacing between buttons
+                    TextButton(
+                      onPressed: _pickFile,
+                      style: TextButton.styleFrom(
+                        backgroundColor: AppTheme.softBlue,
+                        fixedSize: Size(100, 130),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.only(
+                            topRight: Radius.circular(10),
+                            bottomRight: Radius.circular(10),
+                          ),
+                        ),
+                      ),
+                      child: Column(
+                        children: [
+                          SizedBox(height: 5),
+                          Image.asset('assets/images/FileIcon.png'),
+                          SizedBox(height: 20),
+                          Text(
+                            'Choose',
+                            style: FontsTheme.hindBold_20(),
+                          ),
+                          Text(
+                            'File',
+                            style: FontsTheme.hindBold_20(),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
               ),
-            ),
+            ]),
           ),
         );
       },
@@ -269,7 +330,11 @@ class _AddFoodDetailsPageState extends State<addFoodDetails> {
                                   borderRadius: BorderRadius.circular(10),
                                 ),
                                 child: _image == null
-                                    ? Center(child: Icon(Icons.add_a_photo))
+                                    ? Center(
+                                        child: Icon(
+                                        Icons.add_a_photo,
+                                        color: Colors.white,
+                                      ))
                                     : _isLoading
                                         ? Center(
                                             child: CircularProgressIndicator())
@@ -593,7 +658,7 @@ class _AddFoodDetailsPageState extends State<addFoodDetails> {
                 padding: EdgeInsets.symmetric(horizontal: 10),
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(10),
-                  color: Colors.white,
+                  color: AppTheme.pastelSoftBlue,
                 ),
                 height: 60,
                 child: Row(
@@ -618,6 +683,7 @@ class _AddFoodDetailsPageState extends State<addFoodDetails> {
                         child: Container(
                           padding: EdgeInsets.symmetric(horizontal: 10.0),
                           decoration: BoxDecoration(
+                            color: Colors.white,
                             borderRadius: BorderRadius.circular(5.0),
                             border: Border.all(
                                 color: AppTheme.greenMainTheme,
@@ -676,7 +742,7 @@ class _AddFoodDetailsPageState extends State<addFoodDetails> {
                 padding: EdgeInsets.symmetric(horizontal: 10),
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(10),
-                  color: Colors.white,
+                  color: AppTheme.pastelSoftBlue,
                 ),
                 height: 60,
                 child: Row(
@@ -701,6 +767,7 @@ class _AddFoodDetailsPageState extends State<addFoodDetails> {
                         child: Container(
                           padding: EdgeInsets.symmetric(horizontal: 10.0),
                           decoration: BoxDecoration(
+                            color: Colors.white,
                             borderRadius: BorderRadius.circular(5.0),
                             border: Border.all(
                                 color: AppTheme.mainBlue,
@@ -752,7 +819,7 @@ class _AddFoodDetailsPageState extends State<addFoodDetails> {
             padding: EdgeInsets.symmetric(horizontal: 12, vertical: 8),
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(10),
-              color: Colors.white,
+              color: AppTheme.softRedBrown,
             ),
             child: Row(
               children: [
@@ -767,7 +834,7 @@ class _AddFoodDetailsPageState extends State<addFoodDetails> {
                   child: ListTile(
                     title: Text(
                         '${expirationDate.toLocal().toString().split(' ')[0]}',
-                        style: FontsTheme.hind_20()),
+                        style: FontsTheme.hindBold_20()),
                     trailing: Icon(Icons.calendar_month_rounded),
                     onTap: _selectExDate,
                   ),
@@ -789,24 +856,43 @@ class _AddFoodDetailsPageState extends State<addFoodDetails> {
             padding: EdgeInsets.all(8),
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(10),
-              color: Colors.white,
+              color: AppTheme.softRed,
             ),
             child: Row(
               children: [
-                Icon(Icons.notifications, color: Colors.red),
-                SizedBox(
-                  width: 10,
-                ),
                 Expanded(
                   child: Text('Remind on',
                       style: FontsTheme.mouseMemoirs_30Black()),
+                ),
+                Stack(
+                  children: [
+                    Container(
+                      height: 50,
+                      width: 50,
+                      decoration: BoxDecoration(
+                        color: AppTheme.softRedCancleWasted,
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                    ),
+                    SizedBox(
+                      height: 50,
+                      width: 50,
+                      child: ImageIcon(
+                        AssetImage("assets/images/Alarm.png"),
+                        color: Colors.white,
+                      ),
+                    ),
+                  ],
+                ),
+                SizedBox(
+                  width: 10,
                 ),
                 SizedBox(
                   width: 200,
                   child: ListTile(
                     title: Text(
                         '${reminderDate.toLocal().toString().split(' ')[0]}',
-                        style: FontsTheme.hind_20()),
+                        style: FontsTheme.hindBold_20()),
                     trailing: Icon(Icons.calendar_month_rounded),
                     onTap: _selectReDate,
                   ),
@@ -1255,7 +1341,7 @@ class _AddFoodDetailsPageState extends State<addFoodDetails> {
                   padding: EdgeInsets.all(8),
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(10),
-                    color: Colors.white,
+                    color: AppTheme.softBlue,
                   ),
                   child: Column(
                     children: [
@@ -1281,9 +1367,6 @@ class _AddFoodDetailsPageState extends State<addFoodDetails> {
                                     SizedBox(
                                       width: 100,
                                       child: TextField(
-                                          decoration: InputDecoration(
-                                            labelText: 'All Cost',
-                                          ),
                                           keyboardType: TextInputType.number,
                                           onChanged: (value) {
                                             setState(() {
@@ -1335,15 +1418,16 @@ class _AddFoodDetailsPageState extends State<addFoodDetails> {
                                   horizontal: 12, vertical: 8),
                               decoration: BoxDecoration(
                                 borderRadius: BorderRadius.circular(10),
-                                color: Colors.white,
                               ),
                               child: Row(
                                 children: [
                                   SizedBox(
                                       width: 60,
                                       child: TextField(
-                                          decoration: const InputDecoration(
+                                          decoration: InputDecoration(
                                             labelText: 'Weight',
+                                            labelStyle:
+                                                FontsTheme.hindBold_20(),
                                             border: InputBorder.none,
                                           ),
                                           keyboardType: TextInputType.number,
@@ -1363,26 +1447,33 @@ class _AddFoodDetailsPageState extends State<addFoodDetails> {
 
                                           style: FontsTheme.hindBold_15())),
                                   Text(
-                                    'gram',
+                                    'grams',
                                     style: FontsTheme.hindBold_15(),
                                   )
                                 ],
                               ),
                             ),
                             Container(
+                              height: 50,
+                              width: 2,
+                              decoration:
+                                  BoxDecoration(color: AppTheme.greenMainTheme),
+                            ),
+                            Container(
                                 padding: const EdgeInsets.symmetric(
                                     horizontal: 12, vertical: 8),
                                 decoration: BoxDecoration(
                                   borderRadius: BorderRadius.circular(10),
-                                  color: Colors.white,
                                 ),
                                 child: Row(
                                   children: [
                                     SizedBox(
                                         width: 60,
                                         child: TextField(
-                                            decoration: const InputDecoration(
+                                            decoration: InputDecoration(
                                               labelText: 'Cost',
+                                              labelStyle:
+                                                  FontsTheme.hindBold_20(),
                                               border: InputBorder.none,
                                             ),
                                             keyboardType: TextInputType.number,
