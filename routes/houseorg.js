@@ -101,7 +101,8 @@ router.get("/household/getHouseName", authenticateToken, async (req, res) => {
     console.log(house)
     return res.status(200).send({
       "Messages": "Successfully Get House Name",
-      "House_Name": house.house_name
+      "House_Name": house.house_name,
+      "hID": house.assigned_ID
     });
   } catch (error) {
     return res.status(400).send(`Error when retrieving household score: ${error}`);
@@ -119,7 +120,8 @@ router.get("/organization/getOrgName", authenticateToken, async (req, res) => {
     
     return res.status(200).send({
       "Messages": "Successfully Get Organization Name",
-      "Organiazation_Name": organization.org_name
+      "Organiazation_Name": organization.org_name,
+      "orgID": organization.assigned_ID
     });
   } catch (error) {
     return res.status(400).send(`Error when retrieving household score: ${error}`);
