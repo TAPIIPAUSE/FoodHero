@@ -124,7 +124,10 @@ router.post('/login', async (req, res) => {
       { expiresIn: '4h' }
     );
     console.log("Token received for signing:", token);
-    return res.status(200).json({ success: true,message: 'Logged in successfully', token , hID: hID});
+    return res.status(200).json({ success: true,
+      message: 'Logged in successfully', 
+      token ,
+       hID: hID});
   }catch(error){
     return res.status(400).json({ success: false,message: 'Logged in failed', Error: `${error}`});
   }
@@ -243,15 +246,30 @@ router.post('/join_org',authenticateToken,async (req, res) => {
   console.log("Organization Joined");
 })
 
-router.get('/test_jwt',async (req, res) => {
 
-  var user = await get_user_from_db(req,res)
-  console.log("User info:", user)
-  var hID = await get_houseID(user)
-  console.log("House ID:", hID)
-  var house = await get_house_from_db(hID)
 
-  console.log("House info:", house)
+router.get('/firstLogin',authenticateToken,async (req, res) => {
+
+  try{
+    
+    var user = await get_user_from_db(req,res)
+  
+  
+
+  return res.status(200).send({
+    hID: user.hID,
+    orgID: user.orgID
+  })
+  } catch (error){
+    return res.status(400).send({
+      error: error
+    })
+  }
+
+
+  
+
+  
 });
 
 

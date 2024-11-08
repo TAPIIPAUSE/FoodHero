@@ -6,6 +6,7 @@ import Organization from "../schema/user_module/organizationSchema.js";
 
 export async function get_user_from_db(req, res) {
   try {
+    console.log(req.user.username)
     const target_user = req.user.username;
     
     // JWT verify method is used for verify the token the take two arguments one is token string value,
