@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:foodhero/fonts.dart';
 import 'package:foodhero/pages/House&Orga/join.dart';
 import 'package:foodhero/pages/api/ApiClient.dart';
+import 'package:foodhero/pages/login.dart';
 import 'package:foodhero/pages/login_regis.dart';
 import 'package:foodhero/theme.dart';
 import 'package:go_router/go_router.dart';
@@ -73,7 +74,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
               // Navigate to join page
               Navigator.pushReplacement(
                 context,
-                MaterialPageRoute(builder: (context) => join()),
+                MaterialPageRoute(builder: (context) => LoginScreen()),
               );
             });
             return AlertDialog(
@@ -95,11 +96,11 @@ class _RegisterScreenState extends State<RegisterScreen> {
 
         // Navigator.of(context).pop(); // Close the success dialog
 
-        // Navigate to join page
-        Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(builder: (context) => join()),
-        );
+        // ? Navigate to join page
+        // Navigator.pushReplacement(
+        //   context,
+        //   MaterialPageRoute(builder: (context) => LoginScreen()),
+        // );
       } else {
         // Show error
         ScaffoldMessenger.of(context).showSnackBar(
