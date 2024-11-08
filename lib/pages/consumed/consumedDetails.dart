@@ -9,13 +9,12 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 class ConsumedDetails extends StatefulWidget {
   final int cID;
-  final String foodname;
-  final bool isCountable;
+  // final String foodname;
+  //final bool isCountable;
   const ConsumedDetails({
-    super.key,
-    required this.foodname,
+    //required this.foodname,
     required this.cID,
-    required this.isCountable,
+    //required this.isCountable,
   });
 
   //  final InventoryListItem item;
@@ -40,9 +39,9 @@ class _ConsumedDetailsState extends State<ConsumedDetails> {
       final prefs = await SharedPreferences.getInstance();
       final hID = prefs.getInt('hID');
       // final cID = prefs.getInt('consume_ID');
-      final foodname = widget.foodname;
+      //final foodname = widget.foodname;
       final cID = widget.cID;
-      final isCountable = widget.isCountable;
+      //final isCountable = widget.isCountable;
       // if (hID == null) {
       //   throw Exception('hID not found in SharedPreferences');
       // }
@@ -64,8 +63,6 @@ class _ConsumedDetailsState extends State<ConsumedDetails> {
   void initState() {
     super.initState();
     _loadConsumedFoodByID();
-    foodname = widget.foodname;
-    isCountable = widget.isCountable;
   }
 
   @override
@@ -131,7 +128,7 @@ class _ConsumedDetailsState extends State<ConsumedDetails> {
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   children: [
                                     Text(
-                                      foodname,
+                                      "foodname",
                                       style: FontsTheme.mouseMemoirs_50Black(),
                                       textAlign: TextAlign.center,
                                     ),

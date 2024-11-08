@@ -18,7 +18,7 @@ class ConsumedListItem extends StatefulWidget {
       required this.consuming,
       required this.remaining,
       required this.cID,
-      required this.isCountable});
+      required this.isCountable, required int foodID});
 
   final String thumbnail;
   final String foodname;
@@ -55,9 +55,10 @@ class _ConsumedListItemState extends State<ConsumedListItem> {
           context,
           MaterialPageRoute(
             builder: (context) => ConsumedDetails(
-                foodname: widget.foodname,
+                //foodname: widget.foodname,
                 cID: widget.cID,
-                isCountable: widget.isCountable),
+               // isCountable: widget.isCountable
+              ),
           ),
         );
       },

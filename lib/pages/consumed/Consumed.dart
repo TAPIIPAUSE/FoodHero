@@ -78,7 +78,7 @@ class _ConsumedState extends State<Consumed> {
                   itemBuilder: (context, index) {
                     final item = snapshot.data!.food[index];
                     return ConsumedListItem(
-                      cID: item.consumeId,
+                      foodID: item.consumeId,
                       thumbnail: item.url,
                       foodname: item.foodName,
                       expiry: item.expired,
@@ -86,7 +86,7 @@ class _ConsumedState extends State<Consumed> {
                           10, // You might want to calculate this based on item data
                       consuming: item.consuming,
                       remaining: item.remaining,
-                      isCountable: item.isCountable,
+                      isCountable: item.isCountable, cID: item.consumeId,
                     );
                   },
                 );
