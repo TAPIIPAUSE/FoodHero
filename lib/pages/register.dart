@@ -1,11 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:foodhero/fonts.dart';
+import 'package:foodhero/pages/House&Orga/join.dart';
 import 'package:foodhero/pages/api/ApiClient.dart';
 import 'package:foodhero/pages/login_regis.dart';
 import 'package:foodhero/theme.dart';
-
+import 'package:go_router/go_router.dart';
 
 class RegisterScreen extends StatefulWidget {
+  const RegisterScreen({super.key});
+
   @override
   _RegisterScreenState createState() => _RegisterScreenState();
 }
@@ -19,12 +22,29 @@ class _RegisterScreenState extends State<RegisterScreen> {
   // late String _password;
   // late String _name;
 
+  bool _isRegisted = false;
+
   void _register() async {
+    if (_isRegisted) return; // Prevents multiple submissions
+    _isRegisted = true;
+
     String username = _usernameController.text;
     String email = _emailController.text;
     String password = _passwordController.text;
 
+    if (username.isEmpty || email.isEmpty || password.isEmpty) {
+      // Show error message if any field is empty
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+            content: Text('All fields are required to create an account')),
+      );
+      _isRegisted = false;
+      return;
+    }
+
     print("Attempting login with Username: $username, Password: $password");
+
+    // Show loading dialog
     showDialog(
       context: context,
       barrierDismissible: false,
@@ -34,21 +54,71 @@ class _RegisterScreenState extends State<RegisterScreen> {
     );
 
     print("Username: $username");
+    print("Email: $email");
     print("Password: $password");
-    bool success = await _authService.register(username, email, password);
-    print("Registered: $username");
-    if (success) {
-      // Navigate to login or dashboard page
-      Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(builder: (context) => login_regis()),
-      );
-    } else {
+
+    try {
+      bool success = await _authService.register(username, email, password);
+
+      Navigator.of(context).pop(); // Close the loading dialog
+      if (success) {
+        print("Registered: $username");
+        // Show success dialog and wait for 2 seconds
+        await showDialog(
+          barrierDismissible: false,
+          context: context,
+          builder: (BuildContext context) {
+            Future.delayed(Duration(seconds: 2), () {
+              Navigator.of(context).pop();
+              // Navigate to join page
+              Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(builder: (context) => join()),
+              );
+            });
+            return AlertDialog(
+              title: Text("Success"),
+              titleTextStyle: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  color: Colors.black,
+                  fontSize: 20),
+              backgroundColor: Colors.greenAccent,
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.all(Radius.circular(20))),
+              content: Text("Registration successfully!"),
+            );
+          },
+        );
+
+        // Delay before navigating to join page
+        // await Future.delayed(Duration(seconds: 2));
+
+        // Navigator.of(context).pop(); // Close the success dialog
+
+        // Navigate to join page
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(builder: (context) => join()),
+        );
+      } else {
+        // Show error
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+              content: Text(
+                  'Registration failed: Username or email already exists')),
+        );
+      }
+    } catch (e) {
+      // Remove loading indicator if error occurs
+      Navigator.of(context).pop(); // Close the loading dialog
+      print("Error: $e");
       // Show error
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Registration failed')),
+        SnackBar(content: Text('Registration failed: $e')),
       );
     }
+
+    _isRegisted = false;
   }
 
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
@@ -376,7 +446,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                     _formKey.currentState?.save();
                                     _register();
                                     print(_emailController);
-                                    print('ddd');
+                                    print('click create account');
                                   },
                                   style: TextButton.styleFrom(
                                       backgroundColor: AppTheme.greenMainTheme),
@@ -391,19 +461,19 @@ class _RegisterScreenState extends State<RegisterScreen> {
                             // Add
                             SizedBox(height: 10),
 
-                            InkWell(
-                                onTap: () {
-                                  // Navigate to another page (replace 'AnotherPage' with your actual page name)
-                                  Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (context) => login_regis()),
-                                  );
-                                },
-                                child: Text(
-                                  'Forgot account',
-                                  style: FontsTheme.hind_15(),
-                                )),
+                            // InkWell(
+                            //     onTap: () {
+                            //       // Navigate to another page (replace 'AnotherPage' with your actual page name)
+                            //       Navigator.push(
+                            //         context,
+                            //         MaterialPageRoute(
+                            //             builder: (context) => login_regis()),
+                            //       );
+                            //     },
+                            //     child: Text(
+                            //       'Forgot account',
+                            //       style: FontsTheme.hind_15(),
+                            //     )),
 
                             const SizedBox(height: 10),
                             InkWell(

@@ -42,30 +42,47 @@ class AuthService {
 
   // Register method
   Future<bool> register(String username, String email, String password) async {
-    final response = await http.post(
-      Uri.parse('$myip/api/v1/users/register'),
-      headers: <String, String>{
-        'Content-Type': 'application/json; charset=UTF-8',
-      },
-      body: jsonEncode(<String, String>{
-        'username': username,
-        'email': email,
-        'password': password
-      }),
-    );
+    try {
+      final response = await http.post(
+        Uri.parse('$myip/api/v1/users/register'),
+        headers: <String, String>{
+          'Content-Type': 'application/json; charset=UTF-8',
+        },
+        body: jsonEncode(<String, String>{
+          'username': username,
+          'email': email,
+          'password': password
+        }),
+      );
 
-    print('Response status: ${response.statusCode}');
-    print('Response body: ${response.body}');
+      print('Response status: ${response.statusCode}');
+      print('Response body: ${response.body}');
 
-    if (response.statusCode == 201) {
-      String token = jsonDecode(response.body)['token'];
-      print('Token received: $token');
-      // Save token in SharedPreferences
-      SharedPreferences prefs = await SharedPreferences.getInstance();
-      await prefs.setString('user_token', token);
-      return true;
+      if (response.statusCode == 201 || response.statusCode == 200) {
+        // String token = jsonDecode(response.body)['token'];
+        // print('Token received: $token');
+        // Save token in SharedPreferences
+        // SharedPreferences prefs = await SharedPreferences.getInstance();
+        // await prefs.setString('user_token', token);
+        // return true;
+        try {
+          print("User reegistered successfully");
+          return true;
+        } catch (e) {
+          print("Error during user registration: $e");
+          return false;
+        }
+      } else {
+        print(
+            "Failed to register user with status code: ${response.statusCode}");
+        return false;
+      }
+    } catch (e) {
+      print("Error during user registration: $e");
+      return false;
     }
-    return await register(username, email, password);
+
+    // return await register(username, email, password);
   }
 
   // Logout method (removes token)
