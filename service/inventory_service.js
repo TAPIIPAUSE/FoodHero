@@ -78,7 +78,9 @@ export async function getFoodDetailForFoodInventory(fID) {
       "Consuming": consume_msg,
       "Remaining": remain_msg,
       "URL": food.img,
-      "isCountable": food.isCountable
+      "isCountable": food.isCountable,
+      "category": food.food_category,
+      "location": food.location
     };
 
 
