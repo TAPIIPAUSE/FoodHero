@@ -75,17 +75,21 @@ class ConsumedFood {
   }
 
   //get
-  Future<List<IdconsumedfoodModel>> getConsumedfoodById(int cID) async {
-    print('cID $cID');
+  Future<IdconsumedfoodModel?> getConsumedfoodById(int? cID) async {
+    print('cID: $cID');
+
+    if (cID == null) {
+      throw ArgumentError('cID cannot be null');
+    }
+
     try {
       SharedPreferences prefs = await SharedPreferences.getInstance();
       final token = prefs.getString('user_token');
-      // print('token $token');
+      if (token == null) {
+        throw Exception('User token is null');
+      }
 
-      // Create the JSON body
-      final body = jsonEncode({
-        'cID': cID,
-      });
+      print('Getting food consumed details for cID: $cID with token: $token');
 
       final res = await dio.get(
         "$baseurl/getConsumeById",
@@ -95,31 +99,28 @@ class ConsumedFood {
             'Authorization': 'Bearer $token',
           },
         ),
-        data: body,
+        data: {'cID': cID},
       );
 
       print("Response status: ${res.statusCode}");
       print("Response body: ${res.data}");
 
-      if (res.statusCode == 200) {
-        if (res.data is List) {
-          return (res.data as List)
-              .map((e) =>
-                  IdconsumedfoodModel.fromJson(e as Map<String, dynamic>))
-              .toList();
-        } else if (res.data is Map<String, dynamic>) {
-          // Handle single object response
-          return [IdconsumedfoodModel.fromJson(res.data)];
-        } else {
-          throw Exception(
-              'Unexpected response format: ${res.data.runtimeType}');
+      if (res.statusCode == 200 && res.data != null) {
+        try {
+          final consumedFoodDetail = IdconsumedfoodModel.fromJson(res.data);
+          print("Parsed food detail data: ${consumedFoodDetail.foodName}");
+          return consumedFoodDetail;
+        } catch (e) {
+          print("Error parsing JSON to model: $e");
+          return null;
         }
       } else {
-        throw Exception('Failed to load consumed food data');
+        print("Failed to load consumed food details: Status ${res.statusCode}");
+        return null; // Handle accordingly
       }
-    } catch (e) {
-      print('Error fetching consumed food by ID: ${e.toString()}');
-      return [];
+    } catch (error) {
+      print("Error during consumed food detail request: $error");
+      return null;
     }
   }
 }

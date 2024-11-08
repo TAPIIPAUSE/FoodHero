@@ -9,10 +9,12 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 class ConsumedDetails extends StatefulWidget {
   final int cID;
+  final int FoodID;
   // final String foodname;
   //final bool isCountable;
   const ConsumedDetails({
     //required this.foodname,
+    required this.FoodID,
     required this.cID,
     //required this.isCountable,
   });
@@ -30,29 +32,45 @@ class _ConsumedDetailsState extends State<ConsumedDetails> {
   String weightReduced = ''; //make it proper for the decimals
   int consume = 1;
   int waste = 1;
-  late final String foodname;
+  //late final
+  String foodname = '';
   int consumeQuantity = 0;
-  late bool isCountable;
+  //late
+  bool isCountable = true;
 
-  Future<List<IdconsumedfoodModel>> _loadConsumedFoodByID() async {
+  Future<IdconsumedfoodModel?> _loadConsumedFoodByID() async {
     try {
-      final prefs = await SharedPreferences.getInstance();
-      final hID = prefs.getInt('hID');
+      // final prefs = await SharedPreferences.getInstance();
       // final cID = prefs.getInt('consume_ID');
       //final foodname = widget.foodname;
-      final cID = widget.cID;
+      // final cID = widget.cID;
       //final isCountable = widget.isCountable;
       // if (hID == null) {
       //   throw Exception('hID not found in SharedPreferences');
       // }
       print('foodname from SharedPreferences: $foodname'); // Debug print
-      print('hID from SharedPreferences: $hID'); // Debug print
-      print('cID from SharedPreferences: $cID'); // Debug print
+
+      // print('Consume_ID from SharedPreferences: $cID'); // Debug print
       print('isCountable: $isCountable');
-      final data = await ConsumedFood().getConsumedfoodById(cID);
+      print('Loading Consumed food details for ID: ${widget.cID}');
+
+      final data = await ConsumedFood().getConsumedfoodById(widget.cID);
+
+      if (widget.cID == null) {
+        print('widget.cID is null');
+        return null; // or handle accordingly
+      }
       print('Fetched consumed food data by ID: $data'); // Debug print
       // print('Fetched data: ${data.map((item) => item.toString())}');
-      return data;
+      print(data);
+      if (data != null) {
+        print(
+            'Successfully loaded Consumed food details: ${data.foodName}'); // Debug log
+        return data;
+      } else {
+        print('No Consumed food details found'); // Debug log
+        return null;
+      }
     } catch (e) {
       print('Error loading consumed food by ID: $e'); // Debug print
       rethrow;
@@ -99,7 +117,7 @@ class _ConsumedDetailsState extends State<ConsumedDetails> {
                 ),
               ],
             ),
-            body: FutureBuilder<List<IdconsumedfoodModel>>(
+            body: FutureBuilder<IdconsumedfoodModel?>(
                 future: _loadConsumedFoodByID(),
                 builder: (context, snapshot) {
                   if (snapshot.connectionState == ConnectionState.waiting) {
@@ -110,12 +128,14 @@ class _ConsumedDetailsState extends State<ConsumedDetails> {
                     return Center(
                       child: Text('Error: ${snapshot.error}'),
                     );
-                  } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
+                  } else if (!snapshot.hasData || snapshot.data == null) {
                     return const Center(
                       child: Text('No consumed food data available'),
                     );
                   } else {
-                    final data = snapshot.data!;
+                    final consumedFoodDetail = snapshot.data!;
+
+                    foodname = consumedFoodDetail.foodName;
                     return SingleChildScrollView(
                       padding: const EdgeInsets.all(16),
                       child: Center(
@@ -128,7 +148,7 @@ class _ConsumedDetailsState extends State<ConsumedDetails> {
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   children: [
                                     Text(
-                                      "foodname",
+                                      foodname,
                                       style: FontsTheme.mouseMemoirs_50Black(),
                                       textAlign: TextAlign.center,
                                     ),

@@ -396,47 +396,48 @@ class _FoodDetailsPageState extends State<foodDetails> {
               return Center(child: Text('No food details available'));
             }
 
-            final food = snapshot.data!;
-            print('Rendering food details for: ${food.FoodName}'); // Debug log
-            foodID = food.Food_ID;
-            foodname = food.FoodName;
-            category = food.Category;
-            location = food.Location;
-            isCountable = food.isCountable;
-            expireString = food.Expired.toString();
+            final foodDetail = snapshot.data!;
+            print(
+                'Rendering foodDetail details for: ${foodDetail.FoodName}'); // Debug log
+            foodID = foodDetail.Food_ID;
+            foodname = foodDetail.FoodName;
+            category = foodDetail.Category;
+            location = foodDetail.Location;
+            isCountable = foodDetail.isCountable;
+            expireString = foodDetail.Expired.toString();
             DateTime expire = DateTime.parse(expireString);
             expireDate = DateFormat('dd-MM-yyyy').format(expire);
-            remindString = food.Remind.toString();
+            remindString = foodDetail.Remind.toString();
             DateTime remind = DateTime.parse(remindString);
             remindDate = DateFormat('dd-MM-yyyy').format(remind);
-            showQuantity = food.QuantityCountable;
-            showPackage = food.Package;
+            showQuantity = foodDetail.QuantityCountable;
+            showPackage = foodDetail.Package;
             //intQuantity = int.tryParse(quantityString.split(' ')[0]);
-            weightCountable = food
-                .WeightUncountable; //food.Remaining_amount(String) //Only double food.WeightCountable;
-            weightUncountable = food.WeightUncountable;
-            showUnit = food.Unit;
-            eachPieceWeight = food.IndividualWeight;
-            eachPieceCost = food.IndividualCost;
+            weightCountable = foodDetail
+                .WeightUncountable; //foodDetail.Remaining_amount(String) //Only double food.WeightCountable;
+            weightUncountable = foodDetail.WeightUncountable;
+            showUnit = foodDetail.Unit;
+            eachPieceWeight = foodDetail.IndividualWeight;
+            eachPieceCost = foodDetail.IndividualCost;
             if (isCountable == true) {
-              showConsumeOptUnit = food.Package;
+              showConsumeOptUnit = foodDetail.Package;
             } else {
-              showConsumeOptUnit = food.Unit;
+              showConsumeOptUnit = foodDetail.Unit;
             }
 
             // if (isCountable == false) {
-            //   weightCountable = food.total_amount;
+            //   weightCountable = foodDetail.total_amount;
             // }
-            allCostString = food.TotalCost;
-            // weightUnit = food.;
+            allCostString = foodDetail.TotalCost;
+            // weightUnit = foodDetail.;
 
-            //allCostString = food.total_price.toString();
+            //allCostString = foodDetail.total_price.toString();
 
-            foodNameModal = food.FoodName;
-            consumeQuantityModal = food.Remaining;
-            //  score = food.scoreGained;
-            //  save = food.save;
-            double screenHeight = food.isCountable ? 1000 : 900;
+            foodNameModal = foodDetail.FoodName;
+            consumeQuantityModal = foodDetail.Remaining;
+            //  score = foodDetail.scoreGained;
+            //  save = foodDetail.save;
+            double screenHeight = foodDetail.isCountable ? 1000 : 900;
 
             print('this is iscountable: $isCountable');
             return Stack(
@@ -533,7 +534,7 @@ class _FoodDetailsPageState extends State<foodDetails> {
                                         style:
                                             FontsTheme.mouseMemoirs_50Black(),
                                         textAlign: TextAlign.center,
-                                        food.FoodName,
+                                        foodDetail.FoodName,
                                       ),
                                     ),
                                   ],
@@ -667,7 +668,7 @@ class _FoodDetailsPageState extends State<foodDetails> {
     }
   }
 
-  bool _howMuchConsumedVisible = false; 
+  bool _howMuchConsumedVisible = false;
   void _showHowMuchConsumed() {
     setState(() {
       _howMuchConsumedVisible = true;
@@ -1134,21 +1135,21 @@ class _FoodDetailsPageState extends State<foodDetails> {
           );
         });
 
-        if (_howMuchConsumedVisible) {
-          Positioned(
-              top: 0,
-              left: 20, // Padding from the left
-              right: 20, // Padding from the right
-              child: Container(
-                padding: EdgeInsets.all(16),
-                color: Colors.blue,
-                child: Text(
-                  'This is your custom SnackBar!',
-                  style: TextStyle(color: Colors.white),
-                ),
-              ),
-            );
-        }
+    if (_howMuchConsumedVisible) {
+      Positioned(
+        top: 0,
+        left: 20, // Padding from the left
+        right: 20, // Padding from the right
+        child: Container(
+          padding: EdgeInsets.all(16),
+          color: Colors.blue,
+          child: Text(
+            'This is your custom SnackBar!',
+            style: TextStyle(color: Colors.white),
+          ),
+        ),
+      );
+    }
   }
 
   List<ConsumedListItem> consumedItems = [];
@@ -2100,7 +2101,9 @@ class _FoodDetailsPageState extends State<foodDetails> {
                                   children: [
                                     Text(showQuantity.toString(),
                                         style: FontsTheme.hindBold_20()),
-                                          SizedBox(width: 10,),
+                                    SizedBox(
+                                      width: 10,
+                                    ),
                                     Text(
                                       showPackage,
                                       style: FontsTheme.hindBold_20(),
@@ -2194,7 +2197,9 @@ class _FoodDetailsPageState extends State<foodDetails> {
                                 children: [
                                   Text(weightCountable.toString(),
                                       style: FontsTheme.hindBold_20()),
-                                      SizedBox(width: 10,),
+                                  SizedBox(
+                                    width: 10,
+                                  ),
                                   Text(showUnit.toString(),
                                       style: FontsTheme.hindBold_20()),
                                   // buildWeightUnit('')

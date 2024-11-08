@@ -1,5 +1,9 @@
 class IdconsumedfoodModel {
-  final int cID;
+  // final int cID;
+  final String foodName;
+  final String quantityMessage;
+  final String package;
+  final String location;
   // final int food_ID; // food_ID is an integer
   // final int userID; // user_ID is an integer
   // final int hID; // h_ID is an integer
@@ -14,7 +18,11 @@ class IdconsumedfoodModel {
   // final int assignedID; // assigned_ID as integer
 
   IdconsumedfoodModel({
-    required this.cID,
+    // required this.cID,
+    required this.foodName,
+    required this.quantityMessage,
+    required this.package,
+    required this.location,
     // required this.food_ID,
     // required this.userID,
     // required this.hID,
@@ -32,9 +40,9 @@ class IdconsumedfoodModel {
   // Convert Food instance to a Map
   Map<String, dynamic> toJson() {
     return {
-      'cID': cID,
+      // 'cID': cID,
       //'food_ID': food_ID,
-      // 'FoodName': FoodName,
+      'foodName': foodName,
       // 'Category': Category,
       // 'Location': Location,
       // 'Expired': Expired.toIso8601String(),
@@ -55,8 +63,13 @@ class IdconsumedfoodModel {
   }
 
   factory IdconsumedfoodModel.fromJson(Map<String, dynamic> json) {
+    final message = json['message'] ?? {};
     return IdconsumedfoodModel(
-      cID: json['cID'] as int,
+      //cID: json['cID'] as int,
+      foodName: message['FoodName'] ?? 'Unknown',
+      quantityMessage: message['QuantityMessage'] ?? 'Unknown',
+      package: message['Package'] ?? 'Unknown',
+      location: message['Location'] ?? 'Unknown',
       // food_ID: json['food_ID'] as int,
       // userID: json['user_ID'] as int,
       // hID: json['h_ID'] as int,
@@ -84,6 +97,7 @@ class IdconsumedfoodModel {
 
   IdconsumedfoodModel copyWith({
     int? cID,
+    String? FoodName,
     // int? food_ID,
     // String? FoodName,
     // String? Category,
@@ -109,37 +123,41 @@ class IdconsumedfoodModel {
     // int? total_price
   }) {
     return IdconsumedfoodModel(
-      cID: cID ?? this.cID,
-        //food_ID: food_ID ?? this.food_ID,
-        // FoodName: FoodName ?? this.FoodName,
-        // Category: Category ?? this.Category,
-        // Location: Location ?? this.Location,
-        // Expired: Expired ?? this.Expired,
-        // Remind: Remind ?? this.Remind,
-        // QuantityCountable: QuantityCountable ?? this.QuantityCountable,
-        // Package: Package ?? this.Package,
-        // WeightCountable: WeightCountable ?? this.WeightCountable,
-        // WeightUncountable: WeightUncountable ?? this.WeightUncountable,
-        // Unit: Unit ?? this.Unit,
-        // TotalCost: TotalCost ?? this.TotalCost,
-        // IndividualWeight: IndividualWeight ?? this.IndividualWeight,
-        // IndividualCost: IndividualCost ?? this.IndividualCost,
-        // Remaining: Remaining ?? this.Remaining,
-        // Remaining_amount: Remaining_amount ?? this.Remaining_amount,
-        // URL: URL ?? this.URL,
-        // isCountable: isCountable ?? this.isCountable,
-        // scoreGained: scoreGained ?? this.scoreGained,
-        // save: save ?? this.save,
-        // total_amount: total_amount ?? this.total_amount
-        // current_quantity: current_quantity ?? this.current_quantity
-        //  total_price: total_price ?? this.total_price
-        );
+      // cID: cID ?? this.cID,
+      foodName: foodName ?? this.foodName,
+      quantityMessage: quantityMessage ?? this.quantityMessage,
+      package: package ?? this.package,
+      location: location ?? this.location,
+      //food_ID: food_ID ?? this.food_ID,
+      // FoodName: FoodName ?? this.FoodName,
+      // Category: Category ?? this.Category,
+      // Location: Location ?? this.Location,
+      // Expired: Expired ?? this.Expired,
+      // Remind: Remind ?? this.Remind,
+      // QuantityCountable: QuantityCountable ?? this.QuantityCountable,
+      // Package: Package ?? this.Package,
+      // WeightCountable: WeightCountable ?? this.WeightCountable,
+      // WeightUncountable: WeightUncountable ?? this.WeightUncountable,
+      // Unit: Unit ?? this.Unit,
+      // TotalCost: TotalCost ?? this.TotalCost,
+      // IndividualWeight: IndividualWeight ?? this.IndividualWeight,
+      // IndividualCost: IndividualCost ?? this.IndividualCost,
+      // Remaining: Remaining ?? this.Remaining,
+      // Remaining_amount: Remaining_amount ?? this.Remaining_amount,
+      // URL: URL ?? this.URL,
+      // isCountable: isCountable ?? this.isCountable,
+      // scoreGained: scoreGained ?? this.scoreGained,
+      // save: save ?? this.save,
+      // total_amount: total_amount ?? this.total_amount
+      // current_quantity: current_quantity ?? this.current_quantity
+      //  total_price: total_price ?? this.total_price
+    );
   }
 
   @override
   String toString() {
-    return 'IdconsumedfoodModel(cID: $cID)';
-       }
+    return 'IdconsumedfoodModel( foodName: $foodName)';
+  }
 }
     // food_ID: $food_ID, userID: $userID, hID: $hID, '
        // 'currentAmount: $currentAmount, currentQuantity: $currentQuantity, '
