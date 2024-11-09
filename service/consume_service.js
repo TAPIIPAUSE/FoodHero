@@ -5,7 +5,7 @@ import PackageUnitType from "../schema/inventory_module/packageTypeSchema.js";
 import UnitType from "../schema/inventory_module/unitTypeSchema.js";
 import HouseholdScore from "../schema/score_module/HouseholdScoreSchema.js";
 import OrganizationScore from "../schema/score_module/OrganizationScoreSchema.js"
-
+import { individualWeightandPrice } from "./inventory_service.js";
 
 export async function getFoodDetailForConsumeInventory(fID, cID) {
 
@@ -71,25 +71,40 @@ export async function getFoodDetailForConsumeDetail(fID,cID){
     var food_name = food.food_name
     var location = location.location
  
-    if(food.isCountable){
+    
       var package_id = food.package_type
       var package_type = await mapPackageType(package_id)
 
-      return {
-        FoodName: food_name,
-        QuantityMessage: `${consumed_food.current_quantity} ${package_type}${consumed_food.current_quantity > 1 ? "s" : ""}`,
-        Package: package_type,
-        Location: location
-      }
-    }else{
+      const {
+        individual_weight: ind_w,
+        individual_price: ind_p,
+      } = await individualWeightandPrice(food)
 
       return {
-        FoodName: food_name,
-        AmountMessage: `${consumed_food.current_amount} ${unit.type}${consumed_food.current_amount > 1 ? "s" : ""}`,
-        Unit: unit,
-        Location: location
+        "FoodName": food.food_name,
+        "TotalCost": Number(food.total_price.toString()),
+        "IndividualWeight": ind_w,
+        "IndividualCost": ind_p,
+        "URL": food.img,
+        "isCountable": food.isCountable,
+        "weightCountable": Number(consumed_food.current_amount.toString()),
+        "quantityCountable": Number(consumed_food.current_quantity.toString()),
+        "weightUncountable": Number(consumed_food.current_amount.toString()),
+        "unit": unit.type,
+        "package": package_type
       }
-    }
+    
+
+      // "Food_ID": fID,
+      // "FoodName": food.food_name,
+      // "Expired": food.bestByDate,
+      // "Consuming": consume_msg,
+      // "Remaining": remain_msg,
+      // "URL": food.img,
+      // "isCountable": food.isCountable,
+      // "category": food.food_category,
+      // "location": food.location
+    
 
   }catch(error){
     throw error
