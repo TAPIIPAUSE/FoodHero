@@ -258,7 +258,9 @@ router.get('/firstLogin',authenticateToken,async (req, res) => {
 
   return res.status(200).send({
     hID: user.hID,
-    orgID: user.orgID
+    orgID: user.orgID,
+    isFamilyLead: user.isFamilyLead,
+    isOrgLead: user.isOrgLead,
   })
   } catch (error){
     return res.status(400).send({
