@@ -5,6 +5,7 @@ import 'package:foodhero/models/idconsumedfood_model.dart';
 import 'package:foodhero/pages/api/consumedfood_api.dart';
 import 'package:foodhero/pages/consumed/Consumed.dart';
 import 'package:foodhero/theme.dart';
+import 'package:interactive_slider/interactive_slider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class ConsumedDetails extends StatefulWidget {
@@ -27,6 +28,7 @@ class ConsumedDetails extends StatefulWidget {
 }
 
 class _ConsumedDetailsState extends State<ConsumedDetails> {
+  late Future<IdconsumedfoodModel?> _consumedFoodFuture;
   int quantity = 1;
   double weight = 1; // in grams
   String weightReduced = ''; //make it proper for the decimals
@@ -34,9 +36,23 @@ class _ConsumedDetailsState extends State<ConsumedDetails> {
   int waste = 1;
   //late final
   String foodname = '';
+  FileImage? _image;
   int consumeQuantity = 0;
   //late
   bool isCountable = true;
+
+  String location = '';
+  int showQuantity = 0;
+  String showPackage = '';
+  double weightUncountable = 0;
+  String showUnit = '';
+
+  double showNumofConsume = 0;
+  double showConsumePercent = 0;
+  double calculatedNumofConsume = 0;
+  String showConsumePackage = '';
+  String showConsumeUnit = '';
+  String showPackageOrUnit = '';
 
   Future<IdconsumedfoodModel?> _loadConsumedFoodByID() async {
     try {
@@ -80,7 +96,7 @@ class _ConsumedDetailsState extends State<ConsumedDetails> {
   @override
   void initState() {
     super.initState();
-    _loadConsumedFoodByID();
+    _consumedFoodFuture = _loadConsumedFoodByID();
   }
 
   @override
@@ -118,7 +134,7 @@ class _ConsumedDetailsState extends State<ConsumedDetails> {
               ],
             ),
             body: FutureBuilder<IdconsumedfoodModel?>(
-                future: _loadConsumedFoodByID(),
+                future: _consumedFoodFuture,
                 builder: (context, snapshot) {
                   if (snapshot.connectionState == ConnectionState.waiting) {
                     return const Center(
@@ -136,35 +152,65 @@ class _ConsumedDetailsState extends State<ConsumedDetails> {
                     final consumedFoodDetail = snapshot.data!;
 
                     foodname = consumedFoodDetail.foodName;
-                    return SingleChildScrollView(
-                      padding: const EdgeInsets.all(16),
-                      child: Center(
-                        child: Stack(
-                          children: [
-                            Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Row(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    Text(
-                                      foodname,
-                                      style: FontsTheme.mouseMemoirs_50Black(),
-                                      textAlign: TextAlign.center,
-                                    ),
-                                  ],
-                                ),
+                    isCountable = consumedFoodDetail.isCountable;
+                    showQuantity = consumedFoodDetail.quantityCountable;
+                    showPackage = consumedFoodDetail.packageType;
+                    weightUncountable = consumedFoodDetail.weightUncountable;
+                    showUnit = consumedFoodDetail.unit;
 
-                                SizedBox(height: 16),
-                                //buildDropdownField('Categories', "value", Icons.local_dining),
-                                buildCategoriesField("Categories", "value",
-                                    Icons.arrow_drop_down),
-                                buildWhereField('In', 'value', Icons.kitchen),
-                                buildQuantityWeight(),
-                                buildConsumed(),
-                                buildWasted(),
-                                //buildCostField(),
-                                SizedBox(height: 16),
+                    //Consumed Field
+                    showConsumePackage = consumedFoodDetail.packageType;
+                    showConsumeUnit = consumedFoodDetail.unit;
+
+                    return Stack(
+                      children: [
+                        SingleChildScrollView(
+                          padding: const EdgeInsets.all(16),
+                          child: SizedBox(
+                            height: 2000,
+                            child: Center(
+                              child: Stack(
+                                children: [
+                                  Column(
+                                    children: [
+                                      Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                        children: [
+                                          Text(
+                                            foodname,
+                                            style: FontsTheme
+                                                .mouseMemoirs_50Black(),
+                                            textAlign: TextAlign.center,
+                                          ),
+                                        ],
+                                      ),
+
+                                      // SizedBox(height: 16),
+                                      // //buildDropdownField('Categories', "value", Icons.local_dining),
+                                      //buildCategoriesField("Categories",
+                                      //    "value", Icons.arrow_drop_down),
+                                      //buildWhereField(
+                                      //   'In', 'value', Icons.kitchen),
+                                      buildQuantityWeight(),
+                                      buildConsumed(),
+                                      // buildWasted(),
+                                      buildCostField(),
+                                    ],
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                        ),
+                        Align(
+                          alignment: Alignment.bottomCenter,
+                          child: Container(
+                            width: double.infinity,
+                            height: 180,
+                            color: AppTheme.lightGreenBackground,
+                            child: Column(
+                              children: [
                                 Row(
                                   mainAxisAlignment:
                                       MainAxisAlignment.spaceEvenly,
@@ -213,9 +259,9 @@ class _ConsumedDetailsState extends State<ConsumedDetails> {
                                 ),
                               ],
                             ),
-                          ],
+                          ),
                         ),
-                      ),
+                      ],
                     );
                   }
                 }));
@@ -309,64 +355,126 @@ class _ConsumedDetailsState extends State<ConsumedDetails> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Container(
-                padding: const EdgeInsets.symmetric(horizontal: 10),
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(10),
-                  color: Colors.white,
-                ),
-                child: Row(
-                  children: [
-                    Expanded(
-                      flex: 5,
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        children: [
-                          Container(
-                            width: 120,
-                            child: Text(
-                              label,
-                              style: FontsTheme.mouseMemoirs_30Black(),
-                            ),
-                          )
-                        ],
-                      ),
+            Stack(
+              children: [
+                Container(
+                    padding: const EdgeInsets.symmetric(horizontal: 10),
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(10),
+                      color: Colors.white,
                     ),
-                    SizedBox(
-                      width: 215,
-                      child: DropdownButtonHideUnderline(
-                        child: DropdownButton<String>(
-                          value: selectedValue,
-                          isExpanded: true,
-                          icon: Icon(icon),
-                          items: items.map((String item) {
-                            return DropdownMenuItem<String>(
-                              value: item,
-                              child: Text(
-                                item,
-                                style: FontsTheme.mouseMemoirs_30Black(),
-                              ),
-                            );
-                          }).toList(),
-                          onChanged: (String? newValue) {
-                            if (newValue != null) {
-                              setState(() {
-                                selectedValue = newValue;
-                              });
-                            }
-                          },
+                    height: 60,
+                    child: Row(
+                      children: [
+                        Expanded(
+                          flex: 5,
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            children: [
+                              Container(
+                                width: 120,
+                                child: Text(
+                                  label,
+                                  style: FontsTheme.mouseMemoirs_30Black(),
+                                ),
+                              )
+                            ],
+                          ),
                         ),
-                      ),
-                    )
-                  ],
-                ))
+                        SizedBox(
+                          width: 215,
+                          child: Container(
+                              padding: EdgeInsets.symmetric(horizontal: 10.0),
+                              decoration: BoxDecoration(
+                                color: Colors.white,
+                                borderRadius: BorderRadius.circular(5.0),
+                                border: Border.all(
+                                    color: AppTheme.mainBlue,
+                                    width: 2.0), // Set border color and width
+                              ),
+                              child: Text(
+                                location,
+                                style: FontsTheme.mouseMemoirs_30Black(),
+                              )
+
+                              // child: DropdownButtonHideUnderline(
+                              //   child: DropdownButton<String>(
+                              //     value: selectedValue,
+                              //     isExpanded: true,
+                              //     icon: Icon(icon),
+                              //     items: items.map((String item) {
+                              //       return DropdownMenuItem<String>(
+                              //         value: item,
+                              //         child: Text(
+                              //           item,
+                              //           style: FontsTheme.mouseMemoirs_30Black(),
+                              //         ),
+                              //       );
+                              //     }).toList(),
+                              //     onChanged: (String? newValue) {
+                              //       if (newValue != null) {
+                              //         setState(() {
+                              //           selectedValue = newValue;
+                              //         });
+                              //       }
+                              //     },
+                              //   ),
+                              //
+                              ),
+                        )
+                      ],
+                    )),
+              ],
+            )
           ],
         ),
       );
     });
   }
 
+  String _getQuantityPackage(double showQuantity, String package) {
+    if (showQuantity == 0 || showQuantity <= 1.99) {
+      return package; // Singular form
+    } else {
+      // Pluralize based on the unit
+      switch (package) {
+        case 'Piece':
+          return 'Pieces';
+        case 'Box':
+          return 'Boxes';
+        case 'Bottle':
+          return 'Bottles';
+        default:
+          return package; // Fallback to original unit if no match
+      }
+    }
+  }
+
+  String _getWeightUnit(double weightUncountable, String unit) {
+    if (weightUncountable == 0 || weightUncountable <= 1) {
+      return unit; // Singular form
+    } else {
+      // Pluralize based on the unit
+      switch (unit) {
+        case 'Gram':
+          return 'Grams';
+        case 'Kilogram':
+          return 'Kilograms';
+        case 'Milliliter':
+          return 'Milliliters';
+        case 'Litre':
+          return 'Litres';
+        default:
+          return unit; // Fallback to original unit if no match
+      }
+    }
+  }
+
+  bool showQuantityField = true;
   Widget buildQuantityWeight() {
+    showQuantityField = isCountable;
+    showPackage = _getQuantityPackage(showQuantity.toDouble(), showPackage);
+    showUnit = _getWeightUnit(weightUncountable, showUnit);
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 8),
       child: Column(
@@ -383,9 +491,6 @@ class _ConsumedDetailsState extends State<ConsumedDetails> {
                 ),
                 child: Column(
                   children: [
-                    SizedBox(
-                      height: 10,
-                    ),
                     Visibility(
                       visible: isCountable,
                       child: Row(
@@ -398,7 +503,7 @@ class _ConsumedDetailsState extends State<ConsumedDetails> {
                           Column(
                             children: [
                               Container(
-                                width: 200,
+                                width: 180,
                                 padding: EdgeInsets.symmetric(
                                     horizontal: 12, vertical: 8),
                                 decoration: BoxDecoration(
@@ -409,37 +514,19 @@ class _ConsumedDetailsState extends State<ConsumedDetails> {
                                   mainAxisAlignment:
                                       MainAxisAlignment.spaceBetween,
                                   children: [
-                                    Text('$quantity ',
+                                    Text(showQuantity.toString(),
                                         style: FontsTheme.hindBold_20()),
-                                    buildQuantityUnit('')
+                                    SizedBox(
+                                      width: 10,
+                                    ),
+                                    Text(
+                                      showPackage,
+                                      style: FontsTheme.hindBold_20(),
+                                    )
+                                    //buildQuantityUnit('')
                                   ],
                                 ),
                               ),
-                              // SliderTheme(
-                              //   data: SliderTheme.of(context).copyWith(
-                              //     trackHeight: 10.0,
-                              //     thumbShape: SliderComponentShape.noThumb,
-                              //     overlayShape: RoundSliderOverlayShape(
-                              //         overlayRadius: 24.0),
-                              //     activeTrackColor: Colors.orange,
-                              //     inactiveTrackColor: Colors.orange[100],
-                              //     thumbColor: Colors.white,
-                              //     overlayColor: Colors.orange.withAlpha(32),
-                              //   ),
-                              //   child: Slider(
-                              //     value: quantity.toDouble(),
-                              //     min: 1,
-                              //     max: 100,
-                              //     divisions: 100,
-                              //     onChanged: (value) {
-                              //       setState(() {
-                              //         quantity = value.toInt();
-                              //         //_updateAllCost();
-                              //         consumeQuantity = quantity;
-                              //       });
-                              //     },
-                              //   ),
-                              // ),
                             ],
                           ),
                         ],
@@ -458,7 +545,7 @@ class _ConsumedDetailsState extends State<ConsumedDetails> {
                           Column(
                             children: [
                               Container(
-                                width: 200,
+                                width: 180,
                                 padding: EdgeInsets.symmetric(
                                     horizontal: 12, vertical: 8),
                                 decoration: BoxDecoration(
@@ -469,35 +556,11 @@ class _ConsumedDetailsState extends State<ConsumedDetails> {
                                   mainAxisAlignment:
                                       MainAxisAlignment.spaceBetween,
                                   children: [
-                                    Text('$weightReduced ',
+                                    Text(weightUncountable.toString(),
                                         style: FontsTheme.hindBold_20()),
-                                    buildWeightUnit('')
+                                    Text(showUnit.toString(),
+                                        style: FontsTheme.hindBold_20()),
                                   ],
-                                ),
-                              ),
-                              SliderTheme(
-                                data: SliderTheme.of(context).copyWith(
-                                  trackHeight: 10.0,
-                                  thumbShape: SliderComponentShape.noThumb,
-                                  overlayShape: RoundSliderOverlayShape(
-                                      overlayRadius: 24.0),
-                                  activeTrackColor: Colors.orange,
-                                  inactiveTrackColor: Colors.orange[100],
-                                  thumbColor: Colors.white,
-                                  overlayColor: Colors.orange.withAlpha(32),
-                                ),
-                                child: Slider(
-                                  value: weight,
-                                  min: 1,
-                                  max: 10000,
-                                  divisions: 10000,
-                                  onChanged: (value) {
-                                    setState(() {
-                                      weight = value;
-
-                                      weightReduced = weight.toStringAsFixed(0);
-                                    });
-                                  },
                                 ),
                               ),
                             ],
@@ -637,18 +700,22 @@ class _ConsumedDetailsState extends State<ConsumedDetails> {
   }
 
   Widget buildConsumed() {
-    String Piece = "Piece";
-    if (quantity == 1) {
-      Piece = "Piece";
-    } else if (quantity > 1) {
-      Piece = "Pieces";
+    if (isCountable == true) {
+      showNumofConsume = showQuantity.toDouble();
+    } else {
+      showNumofConsume = weightUncountable;
     }
-    String Gram = "Gram";
-    if (weight == 1) {
-      Gram = "Gram";
-    } else if (weight > 1) {
-      Gram = "Grams";
+    calculatedNumofConsume = (showConsumePercent / 100) * showNumofConsume;
+    showConsumePackage = _getQuantityPackage(
+        calculatedNumofConsume.toDouble(), showConsumePackage);
+    showConsumeUnit = _getWeightUnit(calculatedNumofConsume, showConsumeUnit);
+
+    if (isCountable == true) {
+      showPackageOrUnit = showConsumePackage;
+    } else {
+      showPackageOrUnit = showConsumeUnit;
     }
+
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 8),
       child: Column(
@@ -665,57 +732,69 @@ class _ConsumedDetailsState extends State<ConsumedDetails> {
                 ),
                 child: Column(
                   children: [
-                    Row(
+                    Align(
+                      alignment: Alignment.centerLeft,
+                      child: Text(
+                        'Consumed',
+                        style: FontsTheme.mouseMemoirs_30Black(),
+                      ),
+                    ),
+
+                    Column(
                       children: [
-                        Text('Consumed',
-                            style: FontsTheme.mouseMemoirs_30Black()),
-                        Column(
-                          children: [
-                            Container(
-                              width: 120,
-                              padding: const EdgeInsets.symmetric(
-                                  horizontal: 12, vertical: 8),
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(10),
-                                color: Colors.white,
-                              ),
-                              child: Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: [
-                                  Text('$consume ',
-                                      style: FontsTheme.hindBold_20()),
-                                  Text(Piece, style: FontsTheme.hindBold_20()),
-                                ],
-                              ),
+                        Text(
+                          "${showConsumePercent.toStringAsFixed(0)}%",
+                          style: FontsTheme.mouseMemoirs_30Black(),
+                        ),
+                        SizedBox(
+                          child: InteractiveSlider(
+                            focusedHeight: 20,
+                            backgroundColor: AppTheme.softRed,
+                            startIcon: const Icon(
+                              Icons.remove_circle_rounded,
+                              color: Colors.black,
                             ),
-                            SliderTheme(
-                              data: SliderTheme.of(context).copyWith(
-                                trackHeight: 10.0,
-                                thumbShape: SliderComponentShape.noThumb,
-                                overlayShape: const RoundSliderOverlayShape(
-                                    overlayRadius: 24.0),
-                                activeTrackColor: Colors.orange,
-                                inactiveTrackColor: Colors.orange[100],
-                                thumbColor: Colors.white,
-                                overlayColor: Colors.orange.withAlpha(32),
-                              ),
-                              child: Slider(
-                                value: consume.toDouble(),
-                                min: 1,
-                                max: 100,
-                                divisions: 100,
-                                onChanged: (value) {
-                                  setState(() {
-                                    consume = value.toInt();
-                                  });
-                                },
-                              ),
+                            endIcon: const Icon(
+                              Icons.add_circle_rounded,
+                              color: Colors.black,
                             ),
-                          ],
+                            min: 1,
+                            max: 100,
+                            onChanged: (percent) => setState(() {
+                              showConsumePercent = percent;
+                              // _updateAllCost();
+                              // consumeQuantity = quantity;
+                              // updateQuantityfromSlider();
+                            }),
+                          ),
+                        ),
+                        Container(
+                          width: 150,
+                          padding:
+                              EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                          decoration: BoxDecoration(
+                            color: AppTheme.softRed,
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text(
+                                calculatedNumofConsume.toStringAsFixed(0),
+                                style: FontsTheme.hindBold_20(),
+                              ),
+                              SizedBox(
+                                width: 10,
+                              ),
+                              Text(
+                                showPackageOrUnit,
+                                style: FontsTheme.hindBold_20(),
+                              ),
+                            ],
+                          ),
                         ),
                       ],
-                    ),
+                    )
 
                     //Weight
                   ],
@@ -728,19 +807,7 @@ class _ConsumedDetailsState extends State<ConsumedDetails> {
     );
   }
 
-  Widget buildWasted() {
-    String Piece = "Piece";
-    if (quantity == 1) {
-      Piece = "Piece";
-    } else if (quantity > 1) {
-      Piece = "Pieces";
-    }
-    String Gram = "Gram";
-    if (weight == 1) {
-      Gram = "Gram";
-    } else if (weight > 1) {
-      Gram = "Grams";
-    }
+  Widget buildCostField() {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 8),
       child: Column(
@@ -759,56 +826,34 @@ class _ConsumedDetailsState extends State<ConsumedDetails> {
                   children: [
                     Row(
                       children: [
-                        Text('Waste', style: FontsTheme.mouseMemoirs_30Black()),
-                        Column(
-                          children: [
-                            Container(
-                              width: 120,
-                              padding: const EdgeInsets.symmetric(
-                                  horizontal: 12, vertical: 8),
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(10),
-                                color: Colors.white,
-                              ),
-                              child: Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: [
-                                  Text('$waste ',
-                                      style: FontsTheme.hindBold_20()),
-                                  Text(Piece, style: FontsTheme.hindBold_20()),
-                                ],
-                              ),
-                            ),
-                            SliderTheme(
-                              data: SliderTheme.of(context).copyWith(
-                                trackHeight: 10.0,
-                                thumbShape: SliderComponentShape.noThumb,
-                                overlayShape: const RoundSliderOverlayShape(
-                                    overlayRadius: 24.0),
-                                activeTrackColor: Colors.orange,
-                                inactiveTrackColor: Colors.orange[100],
-                                thumbColor: Colors.white,
-                                overlayColor: Colors.orange.withAlpha(32),
-                              ),
-                              child: Slider(
-                                value: waste.toDouble(),
-                                min: 1,
-                                max: 100,
-                                divisions: 100,
-                                onChanged: (value) {
-                                  setState(() {
-                                    waste = value.toInt();
-                                  });
-                                },
-                              ),
-                            ),
-                          ],
+                        Align(
+                          alignment: Alignment.centerLeft,
+                          child: Text(
+                            'Saved : ',
+                            style: FontsTheme.mouseMemoirs_30Black(),
+                          ),
                         ),
+                        Text(
+                          '+1000 ',
+                          style: FontsTheme.hindBold_20(),
+                        )
                       ],
                     ),
-
-                    //Weight
+                    Row(
+                      children: [
+                        Align(
+                          alignment: Alignment.centerLeft,
+                          child: Text(
+                            'Lost : ',
+                            style: FontsTheme.mouseMemoirs_30Black(),
+                          ),
+                        ),
+                        Text(
+                          '+50 ',
+                          style: FontsTheme.hindBold_20(),
+                        )
+                      ],
+                    ),
                   ],
                 ),
               ),

@@ -1412,7 +1412,9 @@ class _AddFoodDetailsPageState extends State<addFoodDetails> {
                             //buildQuantityButton(Icons.remove),
                             Text('Each piece',
                                 style: FontsTheme.mouseMemoirs_30Black()),
-
+                            SizedBox(
+                              width: 20,
+                            ),
                             Container(
                               padding: EdgeInsets.symmetric(
                                   horizontal: 12, vertical: 8),
@@ -1446,10 +1448,10 @@ class _AddFoodDetailsPageState extends State<addFoodDetails> {
                                                   .toString()), // Set initial text
 
                                           style: FontsTheme.hindBold_15())),
-                                  Text(
-                                    'grams',
-                                    style: FontsTheme.hindBold_15(),
-                                  )
+                                  // Text(
+                                  //   'grams',
+                                  //   style: FontsTheme.hindBold_15(),
+                                  // )
                                 ],
                               ),
                             ),

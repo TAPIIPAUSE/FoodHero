@@ -60,6 +60,7 @@ class _FoodDetailsPageState extends State<foodDetails> {
   bool _showImageOption = false;
   //From API
   int foodID = 0;
+  String imageURL = '';
   DateTime expirationDate = DateTime(2024);
   String expireString = '';
   String expireDate = '';
@@ -92,8 +93,8 @@ class _FoodDetailsPageState extends State<foodDetails> {
   double consumeQuantity = 0;
   int selectedConsumeQuantityModal = 0;
   late String foodname = '';
-  late String category;
-  late String location;
+  String category = '';
+  String location = '';
   late bool isCountable;
   int weightConsumeOption = 1;
   String consumeOptionUnit = '';
@@ -383,7 +384,10 @@ class _FoodDetailsPageState extends State<foodDetails> {
           future: _loadFoodDetail(),
           builder: (context, snapshot) {
             if (snapshot.connectionState == ConnectionState.waiting) {
-              return Center(child: CircularProgressIndicator());
+              return Center(
+                  child: CircularProgressIndicator(
+                color: AppTheme.greenMainTheme,
+              ));
             }
 
             if (snapshot.hasError) {
@@ -401,6 +405,7 @@ class _FoodDetailsPageState extends State<foodDetails> {
                 'Rendering foodDetail details for: ${foodDetail.FoodName}'); // Debug log
             foodID = foodDetail.Food_ID;
             foodname = foodDetail.FoodName;
+            imageURL = foodDetail.URL;
             category = foodDetail.Category;
             location = foodDetail.Location;
             isCountable = foodDetail.isCountable;
@@ -505,24 +510,50 @@ class _FoodDetailsPageState extends State<foodDetails> {
                                           borderRadius:
                                               BorderRadius.circular(10),
                                         ),
-                                        child: _image == null
+                                        child: imageURL.isEmpty
                                             ? const Center(
                                                 child: Icon(
                                                 Icons.add_a_photo,
                                                 color: Colors.white,
                                               ))
-                                            : _isLoading
-                                                ? const Center(
-                                                    child:
-                                                        CircularProgressIndicator())
-                                                : ClipRRect(
-                                                    borderRadius:
-                                                        BorderRadius.circular(
-                                                            8.0),
-                                                    child: Image(
-                                                        image: _image!,
-                                                        fit: BoxFit.cover),
-                                                  ),
+                                            : ClipRRect(
+                                                borderRadius:
+                                                    BorderRadius.circular(8.0),
+                                                child: Image.network(
+                                                  imageURL,
+                                                  fit: BoxFit.cover,
+                                                  loadingBuilder:
+                                                      (BuildContext context,
+                                                          Widget child,
+                                                          ImageChunkEvent?
+                                                              loadingProgress) {
+                                                    if (loadingProgress == null)
+                                                      return child;
+                                                    return Center(
+                                                      child:
+                                                          CircularProgressIndicator(
+                                                        value: loadingProgress
+                                                                    .expectedTotalBytes !=
+                                                                null
+                                                            ? loadingProgress
+                                                                    .cumulativeBytesLoaded /
+                                                                (loadingProgress
+                                                                        .expectedTotalBytes ??
+                                                                    1)
+                                                            : null,
+                                                      ),
+                                                    );
+                                                  },
+                                                  errorBuilder: (BuildContext
+                                                          context,
+                                                      Object error,
+                                                      StackTrace? stackTrace) {
+                                                    return const Center(
+                                                        child: Icon(Icons.error,
+                                                            color: Colors.red));
+                                                  },
+                                                ),
+                                              ),
                                       ),
                                     ),
                                     const SizedBox(
@@ -643,7 +674,7 @@ class _FoodDetailsPageState extends State<foodDetails> {
 
   // Function to handle pluralization
   String _getConsumeOptionUnit(double consumeUnit, String unit) {
-    if (consumeUnit == 0 || consumeUnit <= 1) {
+    if (consumeUnit == 0 || consumeUnit <= 1.99) {
       return unit; // Singular form
     } else {
       // Pluralize based on the unit
@@ -1812,7 +1843,7 @@ class _FoodDetailsPageState extends State<foodDetails> {
                 padding: EdgeInsets.symmetric(horizontal: 10),
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(10),
-                  color: Colors.white,
+                  color: AppTheme.pastelSoftBlue,
                 ),
                 height: 60,
                 child: Row(
@@ -1837,6 +1868,7 @@ class _FoodDetailsPageState extends State<foodDetails> {
                         child: Container(
                           padding: EdgeInsets.symmetric(horizontal: 10.0),
                           decoration: BoxDecoration(
+                            color: Colors.white,
                             borderRadius: BorderRadius.circular(5.0),
                             border: Border.all(
                                 color: AppTheme.greenMainTheme,
@@ -1872,7 +1904,7 @@ class _FoodDetailsPageState extends State<foodDetails> {
                 padding: EdgeInsets.symmetric(horizontal: 10),
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(10),
-                  color: Colors.white,
+                  color: AppTheme.pastelSoftBlue,
                 ),
                 height: 60,
                 child: Row(
@@ -1897,6 +1929,7 @@ class _FoodDetailsPageState extends State<foodDetails> {
                         child: Container(
                             padding: EdgeInsets.symmetric(horizontal: 10.0),
                             decoration: BoxDecoration(
+                              color: Colors.white,
                               borderRadius: BorderRadius.circular(5.0),
                               border: Border.all(
                                   color: AppTheme.mainBlue,
@@ -1949,7 +1982,7 @@ class _FoodDetailsPageState extends State<foodDetails> {
             padding: EdgeInsets.symmetric(horizontal: 12, vertical: 8),
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(10),
-              color: Colors.white,
+              color: AppTheme.softRedBrown,
             ),
             child: Row(
               children: [
@@ -1984,17 +2017,36 @@ class _FoodDetailsPageState extends State<foodDetails> {
             padding: EdgeInsets.all(8),
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(10),
-              color: AppTheme.softBlue,
+              color: AppTheme.softRed,
             ),
             child: Row(
               children: [
-                Icon(Icons.notifications, color: Colors.red),
-                SizedBox(
-                  width: 10,
-                ),
                 Expanded(
                   child: Text('Remind on',
                       style: FontsTheme.mouseMemoirs_30Black()),
+                ),
+                Stack(
+                  children: [
+                    Container(
+                      height: 50,
+                      width: 50,
+                      decoration: BoxDecoration(
+                        color: AppTheme.softRedCancleWasted,
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                    ),
+                    SizedBox(
+                      height: 50,
+                      width: 50,
+                      child: ImageIcon(
+                        AssetImage("assets/images/Alarm.png"),
+                        color: Colors.white,
+                      ),
+                    ),
+                  ],
+                ),
+                SizedBox(
+                  width: 10,
                 ),
                 SizedBox(
                   width: 200,
@@ -2013,7 +2065,7 @@ class _FoodDetailsPageState extends State<foodDetails> {
   }
 
   String _getQuantityPackage(int showQuantity, String package) {
-    if (showQuantity == 0 || showQuantity <= 1) {
+    if (showQuantity == 0 || showQuantity <= 1.99) {
       return package; // Singular form
     } else {
       // Pluralize based on the unit
@@ -2031,7 +2083,7 @@ class _FoodDetailsPageState extends State<foodDetails> {
   }
 
   String _getWeightUnit(int weightCountable, String unit) {
-    if (weightCountable == 0 || weightCountable <= 1) {
+    if (weightCountable == 0 || weightCountable <= 1.99) {
       return unit; // Singular form
     } else {
       // Pluralize based on the unit
@@ -2407,7 +2459,7 @@ class _FoodDetailsPageState extends State<foodDetails> {
                   padding: EdgeInsets.all(8),
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(10),
-                    color: Colors.white,
+                    color: AppTheme.softBlue,
                   ),
                   child: Column(
                     children: [
@@ -2426,26 +2478,18 @@ class _FoodDetailsPageState extends State<foodDetails> {
                                 child: Row(
                                   mainAxisAlignment: MainAxisAlignment.start,
                                   children: [
-                                    Text('All Cost',
-                                        style:
-                                            FontsTheme.mouseMemoirs_30Black()),
+                                    Text(
+                                      'All Cost',
+                                      style: FontsTheme.mouseMemoirs_30Black(),
+                                    ),
                                     const SizedBox(width: 20),
                                     SizedBox(
                                       width: 100,
-                                      child: TextField(
-                                          decoration: InputDecoration(
-                                            labelText: allCostString.toString(),
-                                          ),
-                                          keyboardType: TextInputType.number,
-                                          onChanged: (value) {
-                                            setState(() {
-                                              allCost =
-                                                  double.tryParse(value) ??
-                                                      allCost;
-                                              _updateAllCost();
-                                            });
-                                          },
-                                          style: FontsTheme.hindBold_15()),
+                                      child: Text(
+                                        allCostString.toString(),
+                                        style: FontsTheme.hindBold_20(),
+                                        textAlign: TextAlign.center,
+                                      ),
                                     ),
                                     Text(
                                       '฿',
@@ -2479,20 +2523,21 @@ class _FoodDetailsPageState extends State<foodDetails> {
                             //buildQuantityButton(Icons.remove),
                             Text('Each piece',
                                 style: FontsTheme.mouseMemoirs_30Black()),
-
+                            SizedBox(
+                              width: 20,
+                            ),
                             Container(
                               padding: EdgeInsets.symmetric(
                                   horizontal: 12, vertical: 8),
                               decoration: BoxDecoration(
                                 borderRadius: BorderRadius.circular(10),
-                                color: Colors.white,
                               ),
                               child: SizedBox(
-                                  width: 80,
+                                  width: 60,
                                   child: TextField(
                                       decoration: const InputDecoration(
-                                        labelText: 'Weight',
-                                      ),
+                                          labelText: 'Weight',
+                                          border: InputBorder.none),
                                       keyboardType: TextInputType.number,
                                       onChanged: (value) {
                                         if (value.isNotEmpty) {
@@ -2513,20 +2558,25 @@ class _FoodDetailsPageState extends State<foodDetails> {
                                       style: FontsTheme.hindBold_15())),
                             ),
                             Container(
+                              height: 50,
+                              width: 2,
+                              decoration:
+                                  BoxDecoration(color: AppTheme.greenMainTheme),
+                            ),
+                            Container(
                                 padding: const EdgeInsets.symmetric(
                                     horizontal: 12, vertical: 8),
                                 decoration: BoxDecoration(
                                   borderRadius: BorderRadius.circular(10),
-                                  color: Colors.white,
                                 ),
                                 child: Row(
                                   children: [
                                     SizedBox(
-                                        width: 80,
+                                        width: 60,
                                         child: TextField(
                                             decoration: const InputDecoration(
-                                              labelText: 'Cost',
-                                            ),
+                                                labelText: 'Cost',
+                                                border: InputBorder.none),
                                             keyboardType: TextInputType.number,
                                             onChanged: (value) {
                                               if (value.isNotEmpty) {

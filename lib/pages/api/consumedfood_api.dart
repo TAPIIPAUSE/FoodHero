@@ -16,7 +16,7 @@ class ConsumedFood {
       SharedPreferences prefs = await SharedPreferences.getInstance();
       final token = prefs.getString('user_token');
 
-      print('login success $token');
+      print('success token consumed food  $token');
 
       final res = await dio.get(
         "$baseurl/showConsumedFood",
