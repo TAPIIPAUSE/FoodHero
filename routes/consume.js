@@ -50,10 +50,11 @@ router.get("/getConsumeById", authenticateToken, async (req, res) => {
 
   try {
     // search foods by the food ID
+    console.log("This is cID",cID)
     const assigned_ID = cID;
     const consumedFood = await ConsumedFood.findOne({ assigned_ID });
     const fID = consumedFood.food_ID
-
+    console.log("This is Consume", consumedFood)
     const response = await getFoodDetailForConsumeDetail(fID, cID)
 
     return res.status(200).send({message: response});

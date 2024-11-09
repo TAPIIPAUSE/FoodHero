@@ -93,18 +93,7 @@ export async function getFoodDetailForConsumeDetail(fID,cID){
         "unit": unit.type,
         "package": package_type
       }
-    
 
-      // "Food_ID": fID,
-      // "FoodName": food.food_name,
-      // "Expired": food.bestByDate,
-      // "Consuming": consume_msg,
-      // "Remaining": remain_msg,
-      // "URL": food.img,
-      // "isCountable": food.isCountable,
-      // "category": food.food_category,
-      // "location": food.location
-    
 
   }catch(error){
     throw error
