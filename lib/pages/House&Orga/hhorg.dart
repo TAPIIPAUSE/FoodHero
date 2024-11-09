@@ -28,7 +28,7 @@ class _HHOrgState extends State<HHOrg> {
           backgroundColor: AppTheme.greenMainTheme,
           toolbarHeight: 90,
           centerTitle: true,
-          title: const Text('Join'),
+          title: const Text('House & Org'),
           titleTextStyle: FontsTheme.mouseMemoirs_64Black(),
           leading: IconButton(
             icon: const Icon(Icons.person),

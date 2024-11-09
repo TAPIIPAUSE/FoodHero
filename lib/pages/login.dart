@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:foodhero/models/hhorginfo_model.dart';
 import 'package:foodhero/models/loginresult.dart';
+import 'package:foodhero/pages/House&Orga/Join.dart';
 import 'package:foodhero/pages/api/ApiClient.dart';
 import 'package:foodhero/pages/inventory/inventory.dart';
 import 'package:foodhero/pages/login_regis.dart';
@@ -20,6 +22,25 @@ class _loginState extends State<LoginScreen> {
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
   final AuthService _authService = AuthService();
+
+  late Future<HHOrgInfo?> _hhOrgInfoFuture;
+
+  @override
+  void initState() {
+    super.initState();
+    _hhOrgInfoFuture = _getHHOrgInfo();
+  }
+
+  Future<HHOrgInfo?> _getHHOrgInfo() async {
+    try {
+      final data = await AuthService().getHHOrgInfo();
+      print("Fetching HHOrgInfo");
+      return data;
+    } catch (e) {
+      print('Error fetching HHOrgInfo: $e');
+      rethrow; // Return the error message
+    }
+  }
 
   void _login() async {
     print("Login button tapped"); // Should show in console when you tap
@@ -61,13 +82,27 @@ class _loginState extends State<LoginScreen> {
     if (result.success) {
       // context.push('/consumed');
       // Navigate to inventory
-      Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(
-            builder: (context) => Inventory(
-                  initialFoodCategory: 'all food',
-                )),
-      );
+
+      _hhOrgInfoFuture.then((hhOrgInfo) {
+        if (hhOrgInfo?.hId == 0 || hhOrgInfo?.orgId == 0) {
+          // Navigate to inventory
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(
+              builder: (context) => Join(),
+            ),
+          );
+        } else {
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(
+                builder: (context) => Inventory(
+                      initialFoodCategory: 'all food',
+                    )),
+          );
+        }
+      });
+
       print('login succesful');
     } else {
       // Show error

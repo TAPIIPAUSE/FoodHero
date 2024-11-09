@@ -1,20 +1,18 @@
 import 'dart:math';
-import 'package:fl_chart/fl_chart.dart';
+
+import 'package:carousel_slider/carousel_slider.dart' as cs;
 import 'package:flutter/material.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
+import 'package:foodhero/fonts.dart';
 import 'package:foodhero/main.dart';
 import 'package:foodhero/models/chart/bar/hhbar_model.dart';
 import 'package:foodhero/models/hhname_model.dart';
 import 'package:foodhero/models/score/housescore_model.dart';
-import 'package:foodhero/pages/House&Orga/Household/houseStatistics.dart';
 import 'package:foodhero/pages/api/houseorg_api.dart';
 import 'package:foodhero/theme.dart';
-import 'package:foodhero/fonts.dart';
-import 'package:carousel_slider/carousel_slider.dart' as cs;
 import 'package:foodhero/widgets/interorg/barchart.dart';
 import 'package:foodhero/widgets/interorg/org_listscore.dart';
 import 'package:go_router/go_router.dart';
-import 'package:percent_indicator/percent_indicator.dart';
 import 'package:intl/intl.dart';
 
 class household extends StatefulWidget {

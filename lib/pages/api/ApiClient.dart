@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:foodhero/models/hhorginfo_model.dart';
 import 'package:foodhero/models/loginresult.dart';
 import 'package:foodhero/utils/constants.dart';
 import 'package:http/http.dart' as http;
@@ -109,5 +110,39 @@ class AuthService {
     int currentTime = DateTime.now().microsecondsSinceEpoch;
     int timeDifference = currentTime - loginTime;
     return timeDifference > tokenExpirationTime;
+  }
+
+  
+  // get hh/org info
+  Future<HHOrgInfo?> getHHOrgInfo() async{
+    try{
+      print("===HHOrgInfo===");
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      final token = prefs.getString('user_token');
+      // print('token: $token');
+      
+      final res = await dio.get(
+        '$myip/api/v1/users/firstLogin',
+        options: Options(
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer $token',
+          },
+        ),
+      );
+
+      print("Response status: ${res.statusCode}");
+      print("Response body: ${res.data}");
+      
+      if (res.statusCode == 200) {
+        HHOrgInfo data = HHOrgInfo.fromJson(res.data);
+        return data;
+      } else {
+        throw Exception('Invalid response format: ${res.data.runtimeType}');
+      }
+    } catch (e) {
+      print('Error: $e');
+      throw Exception('Failed to fetch HHOrgInfo: ${e.toString()}');
+    }
   }
 }

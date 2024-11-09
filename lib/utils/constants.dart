@@ -60,7 +60,8 @@ const reson = [
   oth,
 ];
 
-const myip = "https://lizard-flowing-opossum.ngrok-free.app";
+const myip = "https://neat-stingray-terribly.ngrok-free.app";
+// ngrok http --domain=neat-stingray-terribly.ngrok-free.app localhost:3000
 
 //Pause
 //mac
