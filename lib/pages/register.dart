@@ -1,11 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:foodhero/fonts.dart';
-import 'package:foodhero/pages/House&Orga/join.dart';
 import 'package:foodhero/pages/api/ApiClient.dart';
 import 'package:foodhero/pages/login.dart';
 import 'package:foodhero/pages/login_regis.dart';
 import 'package:foodhero/theme.dart';
-import 'package:go_router/go_router.dart';
 
 class RegisterScreen extends StatefulWidget {
   const RegisterScreen({super.key});

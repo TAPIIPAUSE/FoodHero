@@ -20,6 +20,7 @@ class _HHOrgState extends State<HHOrg> {
   @override
   Widget build(BuildContext context) {
     final screenWidth = MediaQuery.of(context).size.width;
+    final screenHeight = MediaQuery.of(context).size.height;
     return MainScaffold(
       selectedRouteIndex: 3,
       child: Scaffold(
@@ -41,191 +42,123 @@ class _HHOrgState extends State<HHOrg> {
             ),
           ],
         ),
-        body: SingleChildScrollView(
-          child: Center(
-            child: Column(
-              // mainAxisAlignment: MainAxisAlignment.center,
-              // crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                const SizedBox(
-                  height: 10,
-                ),
-                Container(
-                  width: screenWidth * 0.95,
-                  padding: EdgeInsets.symmetric(vertical: 25),
-                  decoration: const BoxDecoration(
-                    color: AppTheme.softYellow,
-                    borderRadius: BorderRadius.all(Radius.circular(20)),
-                    border: Border(
-                      bottom: BorderSide(
-                        color: AppTheme.softBrightGreen,
-                        width: 2,
-                      ),
-                      top: BorderSide(
-                        color: AppTheme.softBrightGreen,
-                        width: 2,
-                      ),
-                      left: BorderSide(
-                        color: AppTheme.softBrightGreen,
-                        width: 2,
-                      ),
-                      right: BorderSide(
-                        color: AppTheme.softBrightGreen,
-                        width: 2,
-                      ),
+        body: Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            // crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              // const SizedBox(
+              //   height: 10,
+              // ),
+              Container(
+                width: screenWidth * 0.95,
+                height: screenHeight * 0.3,
+                padding: EdgeInsets.symmetric(vertical: 25),
+                decoration: const BoxDecoration(
+                  color: AppTheme.softYellow,
+                  borderRadius: BorderRadius.all(Radius.circular(20)),
+                  border: Border(
+                    bottom: BorderSide(
+                      color: AppTheme.softBrightGreen,
+                      width: 2,
+                    ),
+                    top: BorderSide(
+                      color: AppTheme.softBrightGreen,
+                      width: 2,
+                    ),
+                    left: BorderSide(
+                      color: AppTheme.softBrightGreen,
+                      width: 2,
+                    ),
+                    right: BorderSide(
+                      color: AppTheme.softBrightGreen,
+                      width: 2,
                     ),
                   ),
-                  child: Column(
-                    children: [
-                      Text(
-                        "🏡",
-                        style: TextStyle(fontSize: 64),
-                      ),
-                      Text(
-                        "Household",
-                        style: FontsTheme.mouseMemoirs_40(),
-                      ),
-                      TextButton(
-                        style: TextButton.styleFrom(
-                          backgroundColor: AppTheme.mainBlue,
-                          foregroundColor: Colors.white,
-                          minimumSize: Size(100, 50), // Set width and height
-                        ),
-                        onPressed: () {
-                          Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => const household()));
-                        },
-                        child: const Text(
-                          "Open",
-                        ),
-                      ),
-                    ],
-                  ),
                 ),
-
-                // Row(
-                // children: [
-                // SizedBox(
-                //   width: 100,
-                //   height: 50,
-                //   child: TextButton(
-                //     onPressed: () => CreateHouse(context),
-                //     style: TextButton.styleFrom(
-                //         backgroundColor: AppTheme.greenMainTheme,
-                //         foregroundColor: Colors.white),
-                //     child: const Text('Create'),
-                //   ),
-                // ),
-                // const SizedBox(
-                //   width: 50,
-                // ),
-                // SizedBox(
-                //   width: 100,
-                //   height: 50,
-                //   child: TextButton(
-                //     onPressed: () => JoinHouse(context),
-                //     style: TextButton.styleFrom(
-                //         backgroundColor: AppTheme.mainBlue,
-                //         foregroundColor: Colors.white),
-                //     child: const Text(
-                //       'Join',
-                //     ),
-                //   ),
-                // ),
-                // ],
-                // ),
-
-                const SizedBox(
-                  height: 10,
-                ),
-                Container(
-                  width: screenWidth * 0.95,
-                  padding: EdgeInsets.symmetric(vertical: 25),
-                  decoration: const BoxDecoration(
-                    color: AppTheme.softYellow,
-                    borderRadius: BorderRadius.all(Radius.circular(20)),
-                    border: Border(
-                      bottom: BorderSide(
-                        color: AppTheme.softBrightGreen,
-                        width: 2,
+                child: Column(
+                  children: [
+                    Text(
+                      "🏡",
+                      style: TextStyle(fontSize: 64),
+                    ),
+                    Text(
+                      "Household",
+                      style: FontsTheme.mouseMemoirs_40(),
+                    ),
+                    TextButton(
+                      style: TextButton.styleFrom(
+                        backgroundColor: AppTheme.mainBlue,
+                        foregroundColor: Colors.white,
+                        minimumSize: Size(100, 50), // Set width and height
                       ),
-                      top: BorderSide(
-                        color: AppTheme.softBrightGreen,
-                        width: 2,
-                      ),
-                      left: BorderSide(
-                        color: AppTheme.softBrightGreen,
-                        width: 2,
-                      ),
-                      right: BorderSide(
-                        color: AppTheme.softBrightGreen,
-                        width: 2,
+                      onPressed: () {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => const household()));
+                      },
+                      child: const Text(
+                        "Open",
                       ),
                     ),
-                  ),
-                  child: Column(
-                    children: [
-                      Text(
-                        "🏢",
-                        style: TextStyle(fontSize: 64),
-                      ),
-                      Text(
-                        "Organization",
-                        style: FontsTheme.mouseMemoirs_40(),
-                      ),
-                      TextButton(
-                        style: TextButton.styleFrom(
-                          backgroundColor: AppTheme.mainBlue,
-                          foregroundColor: Colors.white,
-                          minimumSize: Size(100, 50), // Set width and height
-                        ),
-                        onPressed: () {
-                          Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => const organization()));
-                        },
-                        child: const Text("Open"),
-                      ),
-                    ],
+                  ],
+                ),
+              ),
+              Container(
+                width: screenWidth * 0.95,
+                height: screenHeight * 0.3,
+                padding: EdgeInsets.symmetric(vertical: 25),
+                decoration: const BoxDecoration(
+                  color: AppTheme.softYellow,
+                  borderRadius: BorderRadius.all(Radius.circular(20)),
+                  border: Border(
+                    bottom: BorderSide(
+                      color: AppTheme.softBrightGreen,
+                      width: 2,
+                    ),
+                    top: BorderSide(
+                      color: AppTheme.softBrightGreen,
+                      width: 2,
+                    ),
+                    left: BorderSide(
+                      color: AppTheme.softBrightGreen,
+                      width: 2,
+                    ),
+                    right: BorderSide(
+                      color: AppTheme.softBrightGreen,
+                      width: 2,
+                    ),
                   ),
                 ),
-
-                // Row(
-                //   children: [
-                //     SizedBox(
-                //       width: 100,
-                //       height: 50,
-                //       child: TextButton(
-                //         onPressed: () => CreateOrga(context),
-                //         style: TextButton.styleFrom(
-                //             backgroundColor: AppTheme.greenMainTheme,
-                //             foregroundColor: Colors.white),
-                //         child: const Text('Create'),
-                //       ),
-                //     ),
-                //     const SizedBox(
-                //       width: 50,
-                //     ),
-                //     SizedBox(
-                //       width: 100,
-                //       height: 50,
-                //       child: TextButton(
-                //         onPressed: () => JoinOrga(context),
-                //         style: TextButton.styleFrom(
-                //             backgroundColor: AppTheme.mainBlue,
-                //             foregroundColor: Colors.white),
-                //         child: const Text('Join'),
-                //       ),
-                //     ),
-                //   ],
-                // )
-
-                // Members section
-              ],
-            ),
+                child: Column(
+                  children: [
+                    Text(
+                      "🏢",
+                      style: TextStyle(fontSize: 64),
+                    ),
+                    Text(
+                      "Organization",
+                      style: FontsTheme.mouseMemoirs_40(),
+                    ),
+                    TextButton(
+                      style: TextButton.styleFrom(
+                        backgroundColor: AppTheme.mainBlue,
+                        foregroundColor: Colors.white,
+                        minimumSize: Size(100, 50), // Set width and height
+                      ),
+                      onPressed: () {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => const organization()));
+                      },
+                      child: const Text("Open"),
+                    ),
+                  ],
+                ),
+              ),
+            ],
           ),
         ),
       ),

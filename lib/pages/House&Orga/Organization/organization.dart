@@ -1,7 +1,6 @@
 import 'dart:math';
 
 import 'package:carousel_slider/carousel_slider.dart' as cs;
-import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
 import 'package:foodhero/fonts.dart';
@@ -9,14 +8,13 @@ import 'package:foodhero/main.dart';
 import 'package:foodhero/models/chart/bar/orgbar_model.dart';
 import 'package:foodhero/models/orgname_mode.dart';
 import 'package:foodhero/models/score/orgscore_model.dart';
-import 'package:foodhero/pages/House&Orga/Organization/orgaStatistics.dart';
+import 'package:foodhero/pages/House&Orga/Join_org.dart';
 import 'package:foodhero/pages/api/houseorg_api.dart';
 import 'package:foodhero/theme.dart';
 import 'package:foodhero/widgets/interorg/barchart.dart';
 import 'package:foodhero/widgets/interorg/org_listscore.dart';
 import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
-import 'package:percent_indicator/percent_indicator.dart';
 
 class organization extends StatefulWidget {
   const organization({super.key});
@@ -195,7 +193,10 @@ class _OrganizationState extends State<organization> {
                         color: Colors.white,
                       );
                     } else if (snapshot.hasError) {
-                      return Text('Error: ${snapshot.error}');
+                      return Text(
+                        'You are not part of any organization',
+                        style: TextStyle(fontSize: 18),
+                      );
                     } else if (!snapshot.hasData) {
                       return Text('No organization name');
                     } else {
@@ -223,52 +224,12 @@ class _OrganizationState extends State<organization> {
             padding: const EdgeInsets.all(8.0),
             child: Column(
               children: [
-                // GestureDetector(
-                // onTap:
-                // () {
-                //   Navigator.push(
-                //     context,
-                //     MaterialPageRoute(
-                //       builder: (context) => orgaStatistics(),
-                //     ),
-                //   );
-                // },
-                // child:
                 Column(
                   children: [
                     Text('Today $_todayDate', style: FontsTheme.hindBold_20()),
-                    // Text(_todayDate, style: FontsTheme.hindBold_20()),
-                    // Row(
-                    // mainAxisAlignment: MainAxisAlignment.center,
-                    // children: [
 
-                    // const SizedBox(width: 10),
-                    // Chip(
-                    //   label: Text(_weekday,
-                    //       style: const TextStyle(
-                    //           color: Colors.white, fontSize: 12)),
-                    //   backgroundColor: Colors.orange,
-                    // ),
-                    // ],
-                    // ),
-                    // Row(
-                    //   children: [
                     const SizedBox(height: 10),
-                    // cs.CarouselSlider(
-                    //   items: generateCharts(),
-                    //   carouselController: _controller,
-                    //   options: cs.CarouselOptions(
-                    //     height: 150,
-                    //     enlargeCenterPage: true,
-                    //     onPageChanged: (index, reason) {
-                    //       setState(() {
-                    //         _current = index;
-                    //       });
-                    //     },
-                    //   ),
-                    // ),
-                    //   ],
-                    // ),
+
                     Container(
                       margin: const EdgeInsets.all(10),
                       padding: const EdgeInsets.all(10),
@@ -311,7 +272,6 @@ class _OrganizationState extends State<organization> {
                                   );
                                 }).toList();
 
-                                // Parse and sort the data by date
                                 data.sort((a, b) {
                                   DateTime dateA = DateFormat('EEE MMM dd yyyy')
                                       .parse(a.label);
@@ -500,10 +460,12 @@ class _OrganizationState extends State<organization> {
                               child: CircularProgressIndicator(
                                   color: Colors.white),
                             );
-                          } else if (snapshot.hasError) {
-                            return Text('Error: ${snapshot.error}');
+                          } else if (snapshot.hasError ||
+                              snapshot.data == null) {
+                            return const JoinOrg();
                           } else if (!snapshot.hasData) {
-                            return const Text('No house score available');
+                            return const Text(
+                                'No oraganization score available');
                           } else {
                             final orgScore = snapshot.data!;
                             return SizedBox(
