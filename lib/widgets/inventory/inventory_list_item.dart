@@ -13,7 +13,8 @@ class InventoryListItem extends StatelessWidget {
   final int foodid;
   final String foodname;
   final String img;
-  //  final String location;
+  // final int location;
+  // final int category;
   // // final String food_category;
   //  final bool isCountable;
   // final String weight_type;
@@ -47,7 +48,8 @@ class InventoryListItem extends StatelessWidget {
     required this.foodid,
     required this.foodname,
     required this.img,
-    //  required this.location,
+    // required this.location,
+    // required this.category,
     //   // required this.food_category,
     //    required this.isCountable,
     // required this.weight_type,
@@ -129,7 +131,7 @@ class InventoryListItem extends StatelessWidget {
                               errorBuilder: (context, error, stackTrace) {
                                 return Image.network(
                                     //"https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcTKrjn08eRggR5MYJ-xIoB_bIv0Rlb8PjpKKZal_Vw6y7Yb-Ayz&usqp=CAU"
-                                      img);
+                                    img);
                               },
                             ),
                           ),

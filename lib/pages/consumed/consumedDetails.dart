@@ -1,12 +1,13 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:flutter/material.dart';
 import 'package:foodhero/fonts.dart';
+import 'package:foodhero/models/completeconsumedetail_model.dart';
 import 'package:foodhero/models/idconsumedfood_model.dart';
+import 'package:foodhero/pages/api/consumeFromConsumeDetail.dart';
 import 'package:foodhero/pages/api/consumedfood_api.dart';
 import 'package:foodhero/pages/consumed/Consumed.dart';
 import 'package:foodhero/theme.dart';
 import 'package:interactive_slider/interactive_slider.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 class ConsumedDetails extends StatefulWidget {
   final int cID;
@@ -53,6 +54,9 @@ class _ConsumedDetailsState extends State<ConsumedDetails> {
   String showConsumePackage = '';
   String showConsumeUnit = '';
   String showPackageOrUnit = '';
+
+  final Consumefromconsumedetail APICompleteConsume =
+      Consumefromconsumedetail();
 
   Future<IdconsumedfoodModel?> _loadConsumedFoodByID() async {
     try {
@@ -167,7 +171,7 @@ class _ConsumedDetailsState extends State<ConsumedDetails> {
                         SingleChildScrollView(
                           padding: const EdgeInsets.all(16),
                           child: SizedBox(
-                            height: 2000,
+                            height: 800,
                             child: Center(
                               child: Stack(
                                 children: [
@@ -216,9 +220,27 @@ class _ConsumedDetailsState extends State<ConsumedDetails> {
                                       MainAxisAlignment.spaceEvenly,
                                   children: [
                                     ElevatedButton(
-                                      onPressed: () => _consumeOption(context),
+                                      onPressed: () async {
+                                        // _completeConsume(context);
+                                        // int cID = cID;
+                                        // int Percent = showConsumePercent as int;
+                                        // CompleteConsumeDetail
+                                        //     addCompleteConsumeDetail =
+                                        //     CompleteConsumeDetail(
+                                        //         cID: cID,
+                                        //         Percent: Percent);
+                                        // try {
+                                        //   await APICompleteConsume.completeConsumeDetail(
+                                        //           addCompleteConsumeDetail);
+                                        //   Navigator.of(context).pop();
+                                        //   _showHowMuchConsumed();
+                                        // } catch (e) {
+
+                                        // }
+                                      },
                                       style: ElevatedButton.styleFrom(
-                                        backgroundColor: Color(0xFFF4A261),
+                                        backgroundColor:
+                                            AppTheme.consumedOrange,
                                         shape: RoundedRectangleBorder(
                                             borderRadius:
                                                 BorderRadius.circular(10)),
@@ -728,6 +750,7 @@ class _ConsumedDetailsState extends State<ConsumedDetails> {
                 padding: const EdgeInsets.all(8),
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(15),
+                  border: Border.all(color: AppTheme.consumedOrange, width: 5),
                   color: AppTheme.softBlue,
                 ),
                 child: Column(
@@ -739,7 +762,10 @@ class _ConsumedDetailsState extends State<ConsumedDetails> {
                         style: FontsTheme.mouseMemoirs_30Black(),
                       ),
                     ),
-
+                    Text(
+                      'What percentage have you consumed?',
+                      style: FontsTheme.hind_15(),
+                    ),
                     Column(
                       children: [
                         Text(
@@ -864,98 +890,99 @@ class _ConsumedDetailsState extends State<ConsumedDetails> {
     );
   }
 
-  void _consumeOption(BuildContext context) {
-    showDialog(
-        context: context,
-        builder: (BuildContext contetxt) {
-          return Transform.translate(
-            offset: const Offset(0, 0),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              mainAxisAlignment: MainAxisAlignment.end,
-              children: [
-                Center(
-                  child: Stack(
-                    children: [
-                      Container(
-                        height: 200,
-                        width: 375,
-                        padding: const EdgeInsets.all(10),
-                        decoration: BoxDecoration(
-                          color: AppTheme.softRed,
-                          borderRadius: BorderRadius.circular(30),
-                        ),
-                        child: Container(
-                          alignment: Alignment.bottomCenter,
-                          child: TextButton(
-                            onPressed: () {},
-                            style: TextButton.styleFrom(
-                              backgroundColor: AppTheme.softRed,
-                              fixedSize: const Size(350, 50),
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(10),
-                              ),
-                            ),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Text(
-                                  'Consume',
-                                  style: FontsTheme.mouseMemoirs_30Black()
-                                      .copyWith(color: Colors.black),
-                                  textAlign: TextAlign.center,
-                                ),
-                              ],
-                            ),
-                          ),
-                        ),
-                      ),
-                      Container(
-                        alignment: Alignment.topCenter,
-                        height: 120,
-                        width: 355,
-                        margin: const EdgeInsets.all(10),
-                        foregroundDecoration: BoxDecoration(
-                          color: AppTheme.softBlue,
-                          borderRadius: BorderRadius.circular(30),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-                const SizedBox(height: 10),
-                ElevatedButton(
-                  onPressed: () {},
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: const Color(0xFFF4A261),
-                    shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(10)),
-                  ),
-                  child: Text(
-                    'Complete Consume',
-                    style: FontsTheme.mouseMemoirs_30Black()
-                        .copyWith(color: Colors.black),
-                  ),
-                ),
-                const SizedBox(height: 20),
-                ElevatedButton(
-                  onPressed: () {
-                    Navigator.pop(context);
-                  },
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: const Color(0xFFE76F51),
-                    shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(10)),
-                  ),
-                  child: Text(
-                    'Cancle',
-                    style: FontsTheme.hind_20().copyWith(color: Colors.black),
-                  ),
-                ),
-                const SizedBox(height: 10),
-              ],
-            ),
-          );
-        });
-  }
+  void _completeConsume(BuildContext context) {}
+  // void _consumeOption(BuildContext context) {
+  //   showDialog(
+  //       context: context,
+  //       builder: (BuildContext contetxt) {
+  //         return Transform.translate(
+  //           offset: const Offset(0, 0),
+  //           child: Column(
+  //             crossAxisAlignment: CrossAxisAlignment.center,
+  //             mainAxisAlignment: MainAxisAlignment.end,
+  //             children: [
+  //               Center(
+  //                 child: Stack(
+  //                   children: [
+  //                     Container(
+  //                       height: 200,
+  //                       width: 375,
+  //                       padding: const EdgeInsets.all(10),
+  //                       decoration: BoxDecoration(
+  //                         color: AppTheme.softRed,
+  //                         borderRadius: BorderRadius.circular(30),
+  //                       ),
+  //                       child: Container(
+  //                         alignment: Alignment.bottomCenter,
+  //                         child: TextButton(
+  //                           onPressed: () {},
+  //                           style: TextButton.styleFrom(
+  //                             backgroundColor: AppTheme.softRed,
+  //                             fixedSize: const Size(350, 50),
+  //                             shape: RoundedRectangleBorder(
+  //                               borderRadius: BorderRadius.circular(10),
+  //                             ),
+  //                           ),
+  //                           child: Row(
+  //                             mainAxisAlignment: MainAxisAlignment.center,
+  //                             children: [
+  //                               Text(
+  //                                 'Consume',
+  //                                 style: FontsTheme.mouseMemoirs_30Black()
+  //                                     .copyWith(color: Colors.black),
+  //                                 textAlign: TextAlign.center,
+  //                               ),
+  //                             ],
+  //                           ),
+  //                         ),
+  //                       ),
+  //                     ),
+  //                     Container(
+  //                       alignment: Alignment.topCenter,
+  //                       height: 120,
+  //                       width: 355,
+  //                       margin: const EdgeInsets.all(10),
+  //                       foregroundDecoration: BoxDecoration(
+  //                         color: AppTheme.softBlue,
+  //                         borderRadius: BorderRadius.circular(30),
+  //                       ),
+  //                     ),
+  //                   ],
+  //                 ),
+  //               ),
+  //               const SizedBox(height: 10),
+  //               ElevatedButton(
+  //                 onPressed: () {},
+  //                 style: ElevatedButton.styleFrom(
+  //                   backgroundColor: const Color(0xFFF4A261),
+  //                   shape: RoundedRectangleBorder(
+  //                       borderRadius: BorderRadius.circular(10)),
+  //                 ),
+  //                 child: Text(
+  //                   'Complete Consume',
+  //                   style: FontsTheme.mouseMemoirs_30Black()
+  //                       .copyWith(color: Colors.black),
+  //                 ),
+  //               ),
+  //               const SizedBox(height: 20),
+  //               ElevatedButton(
+  //                 onPressed: () {
+  //                   Navigator.pop(context);
+  //                 },
+  //                 style: ElevatedButton.styleFrom(
+  //                   backgroundColor: const Color(0xFFE76F51),
+  //                   shape: RoundedRectangleBorder(
+  //                       borderRadius: BorderRadius.circular(10)),
+  //                 ),
+  //                 child: Text(
+  //                   'Cancle',
+  //                   style: FontsTheme.hind_20().copyWith(color: Colors.black),
+  //                 ),
+  //               ),
+  //               const SizedBox(height: 10),
+  //             ],
+  //           ),
+  //         );
+  //       });
+  // }
 }

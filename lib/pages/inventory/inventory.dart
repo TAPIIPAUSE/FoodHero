@@ -272,75 +272,70 @@ class _InventoryState extends State<Inventory> {
                           ),
                           child: Column(
                             children: [
-                              Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: <Widget>[
-                                  Padding(
-                                      padding:
-                                          EdgeInsets.only(right: 8, left: 8),
-                                      child: Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.spaceBetween,
-                                        children: <Widget>[
-                                          InventoryDropdownMenu(),
-                                          Container(
-                                            margin: const EdgeInsets.only(
-                                                left: 5.0),
-                                            padding: const EdgeInsets.all(5.0),
-                                            decoration: BoxDecoration(
-                                              color: AppTheme.softGreen,
-                                              borderRadius:
-                                                  BorderRadius.circular(10.0),
-                                            ),
-                                            child: GestureDetector(
-                                              onTap: () {
-                                                context.push('/category');
-                                              },
-                                              child: Container(
-                                                width: 130,
-                                                height: 30,
-                                                child: Row(
-                                                  mainAxisAlignment:
-                                                      MainAxisAlignment.center,
-                                                  children: [
-                                                    Text(
-                                                      foodCategory,
-                                                      style: FontsTheme
-                                                              .mouseMemoirs_20()
-                                                          .copyWith(
-                                                              letterSpacing: 1),
-                                                    ),
-                                                    IconButton(
-                                                      onPressed: () => context
-                                                          .go('/category'),
-                                                      icon: const Icon(Icons
-                                                          .arrow_drop_down_circle_rounded),
-                                                    ),
-                                                  ],
+                              Padding(
+                                  padding: EdgeInsets.only(right: 8, left: 8),
+                                  child: Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: <Widget>[
+                                      //Location
+                                      InventoryDropdownMenu(),
+                                      //Category
+                                      Container(
+                                        margin:
+                                            const EdgeInsets.only(left: 5.0),
+                                        padding: const EdgeInsets.all(5.0),
+                                        decoration: BoxDecoration(
+                                          color: AppTheme.softGreen,
+                                          borderRadius:
+                                              BorderRadius.circular(10.0),
+                                        ),
+                                        child: GestureDetector(
+                                          onTap: () {
+                                            context.push('/category');
+                                          },
+                                          child: Container(
+                                            width: 130,
+                                            height: 30,
+                                            child: Row(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.center,
+                                              children: [
+                                                Text(
+                                                  foodCategory,
+                                                  style: FontsTheme
+                                                          .mouseMemoirs_20()
+                                                      .copyWith(
+                                                          letterSpacing: 1),
                                                 ),
-                                              ),
+                                                IconButton(
+                                                  onPressed: () =>
+                                                      context.go('/category'),
+                                                  icon: const Icon(Icons
+                                                      .arrow_drop_down_circle_rounded),
+                                                ),
+                                              ],
                                             ),
-                                            // Row(
-                                            //   children: [
-                                            //     IconButton(
-                                            //       onPressed: () => context.go('/category'),
-                                            //       icon: const Icon(Icons.swipe_down_alt),
-                                            //     ),
-                                            //     IconButton(
-                                            //       onPressed: () => context.go('/inventory'),
-                                            //       icon: const Icon(Icons.circle_outlined),
-                                            //     ),
-                                            //     IconButton(
-                                            //         onPressed: () => context.go('/inventory'),
-                                            //         icon: const Icon(Icons.swipe_up_alt)),
-                                            //   ],
-                                            // )
                                           ),
-                                        ],
-                                      ))
-                                ],
-                              ),
+                                        ),
+                                        // Row(
+                                        //   children: [
+                                        //     IconButton(
+                                        //       onPressed: () => context.go('/category'),
+                                        //       icon: const Icon(Icons.swipe_down_alt),
+                                        //     ),
+                                        //     IconButton(
+                                        //       onPressed: () => context.go('/inventory'),
+                                        //       icon: const Icon(Icons.circle_outlined),
+                                        //     ),
+                                        //     IconButton(
+                                        //         onPressed: () => context.go('/inventory'),
+                                        //         icon: const Icon(Icons.swipe_up_alt)),
+                                        //   ],
+                                        // )
+                                      ),
+                                    ],
+                                  )),
                               const SizedBox(
                                 height: 10,
                               ),
@@ -422,6 +417,8 @@ class _InventoryState extends State<Inventory> {
                                                     .foodId, // Use 'foodId' from model
                                                 expired: foodItem
                                                     .expired, // Use 'expired' from model
+                                                // location: foodItem.location,
+                                                // category: foodItem.category,
                                                 // Uncomment and use additional properties if needed
                                                 // remind: foodItem.remind,
                                                 // isCountable: foodItem.isCountable,

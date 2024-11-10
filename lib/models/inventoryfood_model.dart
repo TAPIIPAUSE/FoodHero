@@ -31,16 +31,20 @@ class Food {
   String remaining;
   String url;
   bool isCountable;
+  // int location;
+  // int category;
 
-  Food({
-    required this.foodId,
-    required this.foodName,
-    required this.expired,
-    required this.consuming,
-    required this.remaining,
-    required this.url,
-    required this.isCountable,
-  });
+  Food(
+      {required this.foodId,
+      required this.foodName,
+      required this.expired,
+      required this.consuming,
+      required this.remaining,
+      required this.url,
+      required this.isCountable,
+      // required this.location,
+      // required this.category
+      });
 
   factory Food.fromJson(Map<String, dynamic> json) {
     return Food(
@@ -51,6 +55,8 @@ class Food {
       remaining: json['Remaining'],
       url: json['URL'],
       isCountable: json['isCountable'],
+      // location: json['location;'] as int,
+      // category: json['category'] as int,
     );
   }
 
@@ -63,6 +69,8 @@ class Food {
       'Remaining': remaining,
       'URL': url,
       'isCountable': isCountable,
+      // 'location': location,
+      // 'category': category
     };
   }
 }
