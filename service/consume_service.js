@@ -81,6 +81,7 @@ export async function getFoodDetailForConsumeDetail(fID,cID){
       } = await individualWeightandPrice(food)
 
       return {
+        "cID": cID,
         "FoodName": food.food_name,
         "TotalCost": Number(food.total_price.toString()),
         "IndividualWeight": ind_w,
