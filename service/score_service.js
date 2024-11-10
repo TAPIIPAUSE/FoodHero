@@ -127,6 +127,8 @@ export async function calculateSaveLostForConsume(food, consume, percent) {
 }
 
 export async function preprocess_House_Score(user) {
+
+  
   const house_member = await User.find({ hID: user.hID })
 
   var processed_h_member = house_member.map(member => member.assigned_ID)

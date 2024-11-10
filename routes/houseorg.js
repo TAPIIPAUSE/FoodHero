@@ -15,13 +15,18 @@ router.get("/household/score", authenticateToken, async (req, res) => {
     try {
       var user = await get_user_from_db(req, res);
       // We get Score Array from this Function
-      const processed_score_array = await preprocess_House_Score(user)
+      if(user.hID){
+        const processed_score_array = await preprocess_House_Score(user)
 
-      
-      return res.status(200).send({
-        "Messages": "Successfully Retrieved House Score",
-        "Score_List": processed_score_array
-      });
+        return res.status(200).send({
+          "Messages": "Successfully Retrieved House Score",
+          "Score_List": processed_score_array
+        });
+      }else{
+        return res.status(400).send({
+          Message: "No household registered for this user"
+        });
+      }
     } catch (error) {
       return res.status(400).send(`Error when retrieving household score: ${error}`);
     }
@@ -34,13 +39,19 @@ router.get("/organization/score", authenticateToken, async (req, res) => {
     try {
       var user = await get_user_from_db(req, res);
       // We get Score Array from this Function
-      const processed_score_array = await preprocess_Org_Score(user)
+      if(user.orgID){
+        const processed_score_array = await preprocess_Org_Score(user)
   
       
-      return res.status(200).send({
-        "Messages": "Successfully Retrieved Organization Score",
-        "Score_List": processed_score_array
-      });
+        return res.status(200).send({
+          "Messages": "Successfully Retrieved Organization Score",
+          "Score_List": processed_score_array
+        });
+      }else{
+        return res.status(400).send({
+          Message: "No Organization registered for this user"
+        });
+      }
     } catch (error) {
       return res.status(400).send(`Error when retrieving organization score: ${error}`);
     }
