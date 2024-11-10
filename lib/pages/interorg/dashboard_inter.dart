@@ -189,7 +189,13 @@ class _InterDashboardState extends State<InterDashboard> {
                   child: CircularProgressIndicator(),
                 );
               } else if (snapshot.hasError) {
-                return Text('Error: ${snapshot.error}');
+                // return Text('Error: ${snapshot.error}');
+                return Container(
+                    decoration: const BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.all(Radius.circular(20)),
+                    ),
+                    child: Center(child: Text('No data available')));
               } else if (!snapshot.hasData || snapshot.data == null) {
                 return Center(child: const Text('No data available'));
               } else {

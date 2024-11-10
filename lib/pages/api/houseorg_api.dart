@@ -12,7 +12,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 class HouseOrgApi {
   final Dio dio = Dio();
-  final String baseurl = '$myip/api/v1/houseorg';
+  final String baseurl = 'http://$myip:3000/api/v1/houseorg';
   final authService = AuthService();
 
   // get house score

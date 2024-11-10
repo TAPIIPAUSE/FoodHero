@@ -21,7 +21,7 @@ class CreateAndJoinHousehold {
       //  print('token: $token');
 
       final response = await dio.post(
-        '$myip/api/v1/users/create_house',
+        'http://$myip:3000/api/v1/users/create_house',
         options: Options(
           headers: {
             'Content-Type': 'application/json',
@@ -67,7 +67,7 @@ class CreateAndJoinHousehold {
       //  print('token: $token');
 
       final response = await dio.post(
-        '$myip/api/v1/users/join_house',
+        'http://$myip:3000/api/v1/users/join_house',
         options: Options(
           headers: {
             'Content-Type': 'application/json',
@@ -114,7 +114,7 @@ class CreateAndJoinHousehold {
       // print('token: $token');
 
       final response = await dio.post(
-        '$myip/api/v1/users/create_org',
+        'http://$myip:3000/api/v1/users/create_org',
         options: Options(
           headers: {
             'Content-Type': 'application/json',
@@ -159,7 +159,7 @@ class CreateAndJoinHousehold {
       // print('token: $token');
 
       final response = await dio.post(
-        '$myip/api/v1/users/join_org',
+        'http://$myip:3000/api/v1/users/join_org',
         options: Options(
           headers: {
             'Content-Type': 'application/json',

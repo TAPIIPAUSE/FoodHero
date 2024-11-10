@@ -59,20 +59,25 @@ class _loginState extends State<LoginScreen> {
       return;
     }
 
-    // showDialog(
-    //   context: context,
-    //   barrierDismissible: false,
-    //   builder: (BuildContext context) {
-    //     return const Center(child: CircularProgressIndicator());
-    //   },
-    // );
+     // Add loading indicator dialog
+  showDialog(
+    context: context,
+    barrierDismissible: false,
+    builder: (BuildContext context) {
+      return const Center(
+        child: CircularProgressIndicator(
+          valueColor: AlwaysStoppedAnimation<Color>(AppTheme.greenMainTheme),
+        ),
+      );
+    },
+  );
 
     print("Login button tapped");
     print("Username: $username");
     print("Password: $password");
     Loginresult? result = await _authService.login(username, password);
 
-    // Navigator.of(context).pop(); // Remove loading indicator
+    Navigator.of(context).pop(); // Remove loading indicator
 
     if (result == null) {
       ScaffoldMessenger.of(context).showSnackBar(

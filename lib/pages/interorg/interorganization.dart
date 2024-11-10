@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
 import 'package:foodhero/fonts.dart';
@@ -376,7 +377,11 @@ class _InterOrganizationState extends State<InterOrganization> {
                                   color: Colors.white),
                             );
                           } else if (snapshot.hasError) {
-                            return Text('Error: ${snapshot.error}');
+                            // return Text('Error: ${snapshot.error}');
+                            return Text(
+                              "You're not in any an organization",
+                              style: TextStyle(color: Colors.white),
+                            );
                           } else if (!snapshot.hasData) {
                             return const Text('No inter score available');
                           } else {
@@ -1032,7 +1037,11 @@ class _InterOrganizationState extends State<InterOrganization> {
                                   color: Colors.white),
                             );
                           } else if (snapshot.hasError) {
-                            return Text('Error: ${snapshot.error}');
+                            // return Text('Error: ${snapshot.error}');
+                            return Text(
+                              "You're not in any organization",
+                              style: TextStyle(color: Colors.white),
+                            );
                           } else if (!snapshot.hasData) {
                             return const Text(
                                 'No organization score available');

@@ -7,7 +7,7 @@ import 'package:dio/dio.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class ConsumedFood {
-  static String baseurl = "$myip/api/v1/consume";
+  static String baseurl = "http://$myip:3000/api/v1/consume";
   final authService = AuthService();
   final dio = Dio();
   //get

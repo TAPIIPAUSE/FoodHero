@@ -22,7 +22,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 class DashboardApi {
   final Dio dio = Dio();
-  final String baseurl = '$myip/api/v1/dashboard';
+  final String baseurl = 'http://$myip:3000/api/v1/dashboard';
   final authService = AuthService();
 
   // get house score

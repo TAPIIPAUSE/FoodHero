@@ -60,7 +60,7 @@ const reson = [
   oth,
 ];
 
-const myip = "https://neat-stingray-terribly.ngrok-free.app";
+const myip = "192.168.182.7";
 // ngrok http --domain=neat-stingray-terribly.ngrok-free.app localhost:3000
 
 //Pause

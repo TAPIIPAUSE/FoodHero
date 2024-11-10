@@ -14,7 +14,7 @@ class AuthService {
     try {
       print(
           "Attempting to log in with username: $username, password: $password");
-      final response = await dio.post('$myip/api/v1/users/login',
+      final response = await dio.post('http://$myip:3000/api/v1/users/login',
           data: {'username': username, 'password': password});
 
       if (response.statusCode == 200) {
@@ -45,7 +45,7 @@ class AuthService {
   Future<bool> register(String username, String email, String password) async {
     try {
       final response = await http.post(
-        Uri.parse('$myip/api/v1/users/register'),
+        Uri.parse('http://$myip:3000/api/v1/users/register'),
         headers: <String, String>{
           'Content-Type': 'application/json; charset=UTF-8',
         },
@@ -122,7 +122,7 @@ class AuthService {
       // print('token: $token');
       
       final res = await dio.get(
-        '$myip/api/v1/users/firstLogin',
+        'http://$myip:3000/api/v1/users/firstLogin',
         options: Options(
           headers: {
             'Content-Type': 'application/json',

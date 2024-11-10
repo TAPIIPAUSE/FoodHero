@@ -460,9 +460,8 @@ class _OrganizationState extends State<organization> {
                               child: CircularProgressIndicator(
                                   color: Colors.white),
                             );
-                          } else if (snapshot.hasError ||
-                              snapshot.data == null) {
-                            return const JoinOrg();
+                          } else if (snapshot.hasError) {
+                            return const Text("You're not in any organization");
                           } else if (!snapshot.hasData) {
                             return const Text(
                                 'No oraganization score available');
