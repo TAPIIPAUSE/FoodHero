@@ -32,7 +32,13 @@ class _loginState extends State<LoginScreen> {
 
     if (username.isEmpty || password.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Please enter both email and password')),
+        SnackBar(
+          content: Text(
+            'Please enter both username or email and password',
+            style: FontsTheme.hind_15().copyWith(color: Colors.black),
+          ),
+          backgroundColor: AppTheme.greenMainTheme,
+        ),
       );
       return;
     }

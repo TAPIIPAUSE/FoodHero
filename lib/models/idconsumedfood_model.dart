@@ -1,5 +1,5 @@
 class IdconsumedfoodModel {
-  // final int cID;
+   final int cID;
   final String foodName;
   // final String quantityMessage;
   // final String package;
@@ -16,7 +16,7 @@ class IdconsumedfoodModel {
   final String packageType;
 
   IdconsumedfoodModel({
-    // required this.cID,
+     required this.cID,
     required this.foodName,
     // required this.quantityMessage,
     // required this.package,
@@ -36,7 +36,7 @@ class IdconsumedfoodModel {
   // Convert Food instance to a Map
   Map<String, dynamic> toJson() {
     return {
-      // 'cID': cID,
+       'cID': cID,
       //'food_ID': food_ID,
       'foodName': foodName,
       'TotalCost': totalCost,
@@ -59,6 +59,7 @@ class IdconsumedfoodModel {
       parsedUrl = 'https://example.com/default_image.png'; // Fallback image URL
     }
     return IdconsumedfoodModel(
+      cID: message['cID'] ?? 'Unknown',
       foodName: message['FoodName'] ?? 'Unknown',
       totalCost: _getDecimalValue(message['TotalCost']),
       individualWeight: _getDecimalValue(message['IndividualWeight']),
@@ -93,7 +94,7 @@ class IdconsumedfoodModel {
     String? FoodName,
   }) {
     return IdconsumedfoodModel(
-      // cID: cID ?? this.cID,
+       cID: cID ?? this.cID,
       foodName: foodName ?? this.foodName,
       // quantityMessage: quantityMessage ?? this.quantityMessage,
       // package: package ?? this.package,
@@ -136,7 +137,7 @@ class IdconsumedfoodModel {
 
   @override
   String toString() {
-    return 'IdconsumedfoodModel( foodName: $foodName)';
+    return 'IdconsumedfoodModel(cID: $cID, foodName: $foodName)';
   }
 }
     // food_ID: $food_ID, userID: $userID, hID: $hID, '

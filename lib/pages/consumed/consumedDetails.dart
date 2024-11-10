@@ -1,6 +1,7 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:flutter/material.dart';
 import 'package:foodhero/fonts.dart';
+
 import 'package:foodhero/models/completeconsumedetail_model.dart';
 import 'package:foodhero/models/idconsumedfood_model.dart';
 import 'package:foodhero/pages/api/consumeFromConsumeDetail.dart';
@@ -30,6 +31,7 @@ class ConsumedDetails extends StatefulWidget {
 
 class _ConsumedDetailsState extends State<ConsumedDetails> {
   late Future<IdconsumedfoodModel?> _consumedFoodFuture;
+  int cID = 0;
   int quantity = 1;
   double weight = 1; // in grams
   String weightReduced = ''; //make it proper for the decimals
@@ -47,6 +49,13 @@ class _ConsumedDetailsState extends State<ConsumedDetails> {
   String showPackage = '';
   double weightUncountable = 0;
   String showUnit = '';
+  double individualCost = 0;
+  int IndividualWeight = 0;
+  int quantityCountable = 0;
+  int weightCountable = 0;
+  int saved = 0;
+  int lost = 0;
+  int quantityOrweight = 0; // countable = quantity , uncountable = weight
 
   double showNumofConsume = 0;
   double showConsumePercent = 0;
@@ -55,8 +64,7 @@ class _ConsumedDetailsState extends State<ConsumedDetails> {
   String showConsumeUnit = '';
   String showPackageOrUnit = '';
 
-  final Consumefromconsumedetail APICompleteConsume =
-      Consumefromconsumedetail();
+  final Consumefromconsumedetail APIConfirmConsume = Consumefromconsumedetail();
 
   Future<IdconsumedfoodModel?> _loadConsumedFoodByID() async {
     try {
@@ -154,7 +162,7 @@ class _ConsumedDetailsState extends State<ConsumedDetails> {
                     );
                   } else {
                     final consumedFoodDetail = snapshot.data!;
-
+                    cID = consumedFoodDetail.cID;
                     foodname = consumedFoodDetail.foodName;
                     isCountable = consumedFoodDetail.isCountable;
                     showQuantity = consumedFoodDetail.quantityCountable;
@@ -165,6 +173,11 @@ class _ConsumedDetailsState extends State<ConsumedDetails> {
                     //Consumed Field
                     showConsumePackage = consumedFoodDetail.packageType;
                     showConsumeUnit = consumedFoodDetail.unit;
+
+                    individualCost = consumedFoodDetail.individualCost;
+                    IndividualWeight =
+                        consumedFoodDetail.individualWeight.toInt();
+                    quantityCountable = consumedFoodDetail.quantityCountable;
 
                     return Stack(
                       children: [
@@ -221,22 +234,22 @@ class _ConsumedDetailsState extends State<ConsumedDetails> {
                                   children: [
                                     ElevatedButton(
                                       onPressed: () async {
-                                        // _completeConsume(context);
-                                        // int cID = cID;
-                                        // int Percent = showConsumePercent as int;
-                                        // CompleteConsumeDetail
-                                        //     addCompleteConsumeDetail =
-                                        //     CompleteConsumeDetail(
-                                        //         cID: cID,
-                                        //         Percent: Percent);
-                                        // try {
-                                        //   await APICompleteConsume.completeConsumeDetail(
-                                        //           addCompleteConsumeDetail);
-                                        //   Navigator.of(context).pop();
-                                        //   _showHowMuchConsumed();
-                                        // } catch (e) {
-
-                                        // }
+                                        _confirmConsume(context);
+                                        cID = cID;
+                                        int intshowConsumePercent =
+                                            showConsumePercent.toInt();
+                                        int Percent = intshowConsumePercent;
+                                        ConfirmConsumeDetail
+                                            addConfirmConsumeDetail =
+                                            ConfirmConsumeDetail(
+                                                cID: cID, Percent: Percent);
+                                        try {
+                                          await APIConfirmConsume
+                                              .confirmConsumeDetail(
+                                                  addConfirmConsumeDetail);
+                                          Navigator.of(context).pop();
+                                          // _showHowMuchConsumed();
+                                        } catch (e) {}
                                       },
                                       style: ElevatedButton.styleFrom(
                                         backgroundColor:
@@ -784,7 +797,7 @@ class _ConsumedDetailsState extends State<ConsumedDetails> {
                               Icons.add_circle_rounded,
                               color: Colors.black,
                             ),
-                            min: 1,
+                            min: 0,
                             max: 100,
                             onChanged: (percent) => setState(() {
                               showConsumePercent = percent;
@@ -834,6 +847,28 @@ class _ConsumedDetailsState extends State<ConsumedDetails> {
   }
 
   Widget buildCostField() {
+    if (isCountable == true) {
+      saved = (individualCost *
+              (showConsumePercent.toInt() / 100) *
+              quantityCountable)
+          .toInt();
+
+      lost = (individualCost *
+              ((100 - showConsumePercent.toInt()) / 100) *
+              quantityCountable)
+          .toInt();
+    } else {
+      saved =
+          (((showConsumePercent.toInt() / 100) * weightUncountable.toInt()) *
+                  (individualCost.toInt() / IndividualWeight))
+              .toInt();
+
+      lost = ((((100 - showConsumePercent.toInt()) / 100) *
+                  weightUncountable.toInt()) *
+              (individualCost.toInt() / IndividualWeight))
+          .toInt();
+    }
+
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 8),
       child: Column(
@@ -855,14 +890,10 @@ class _ConsumedDetailsState extends State<ConsumedDetails> {
                         Align(
                           alignment: Alignment.centerLeft,
                           child: Text(
-                            'Saved : ',
+                            'Saved : $saved',
                             style: FontsTheme.mouseMemoirs_30Black(),
                           ),
                         ),
-                        Text(
-                          '+1000 ',
-                          style: FontsTheme.hindBold_20(),
-                        )
                       ],
                     ),
                     Row(
@@ -870,14 +901,10 @@ class _ConsumedDetailsState extends State<ConsumedDetails> {
                         Align(
                           alignment: Alignment.centerLeft,
                           child: Text(
-                            'Lost : ',
+                            'Lost : $lost ',
                             style: FontsTheme.mouseMemoirs_30Black(),
                           ),
                         ),
-                        Text(
-                          '+50 ',
-                          style: FontsTheme.hindBold_20(),
-                        )
                       ],
                     ),
                   ],
@@ -890,7 +917,7 @@ class _ConsumedDetailsState extends State<ConsumedDetails> {
     );
   }
 
-  void _completeConsume(BuildContext context) {}
+  void _confirmConsume(BuildContext context) {}
   // void _consumeOption(BuildContext context) {
   //   showDialog(
   //       context: context,

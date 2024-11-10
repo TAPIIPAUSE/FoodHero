@@ -1,8 +1,8 @@
-class CompleteConsumeDetail {
+class ConfirmConsumeDetail {
   int cID;
   int Percent;
 
-  CompleteConsumeDetail({
+  ConfirmConsumeDetail({
     required this.cID,
     required this.Percent
   });
@@ -14,5 +14,5 @@ class CompleteConsumeDetail {
     };
   }
 
-  static completeConsume(CompleteConsumeDetail addCompleteConsumeDetail) {}
+  static completeConsume(ConfirmConsumeDetail addCompleteConsumeDetail) {}
 }

@@ -1,4 +1,5 @@
 import 'package:dio/dio.dart';
+import 'package:foodhero/models/completeconsumedetail_model.dart';
 import 'package:foodhero/utils/constants.dart';
 import 'package:foodhero/models/completeconsume_model.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -6,7 +7,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 class Consumefromconsumedetail {
   static String baseurl = "http://$myip:3000/api/v1/consume";
   final dio = Dio();
-  Future<void> completeConsumeDetail(CompleteConsume food) async {
+  Future<void> confirmConsumeDetail(ConfirmConsumeDetail food) async {
     try {
       SharedPreferences prefs = await SharedPreferences.getInstance();
       final token = prefs.getString('user_token');
