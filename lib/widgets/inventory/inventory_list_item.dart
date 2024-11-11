@@ -129,9 +129,9 @@ class InventoryListItem extends StatelessWidget {
                               width: MediaQuery.of(context).size.width * 0.1,
                               height: MediaQuery.of(context).size.height * 0.12,
                               errorBuilder: (context, error, stackTrace) {
-                                return Image.network(
-                                    //"https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcTKrjn08eRggR5MYJ-xIoB_bIv0Rlb8PjpKKZal_Vw6y7Yb-Ayz&usqp=CAU"
-                                    img);
+                                return Image.asset(
+                              "assets/images/Image_not_available.png",
+                                    );
                               },
                             ),
                           ),
