@@ -136,11 +136,11 @@ class _InterDashboardState extends State<InterDashboard> {
       case 2:
         return foodTypeFresh;
       case 3:
-        return foodTypeDry;
-      case 4:
-        return foodTypeInstant;
-      case 5:
         return foodTypeFrozen;
+      case 4:
+        return foodTypeDry;
+      case 5:
+        return foodTypeInstant;
       default:
         return 'Unknown';
     }
