@@ -29,7 +29,7 @@ class _HHOrgState extends State<HHOrg> {
           backgroundColor: AppTheme.greenMainTheme,
           toolbarHeight: 90,
           centerTitle: true,
-          title: const Text('House & Org'),
+          title: const Text('HouseOrg'),
           titleTextStyle: FontsTheme.mouseMemoirs_64Black(),
           leading: IconButton(
             icon: const Icon(Icons.person),
@@ -53,7 +53,7 @@ class _HHOrgState extends State<HHOrg> {
               Container(
                 width: screenWidth * 0.95,
                 height: screenHeight * 0.3,
-                padding: EdgeInsets.symmetric(vertical: 25),
+                // padding: EdgeInsets.symmetric(vertical: screenHeight * 0.02),
                 decoration: const BoxDecoration(
                   color: AppTheme.softYellow,
                   borderRadius: BorderRadius.all(Radius.circular(20)),
@@ -80,7 +80,7 @@ class _HHOrgState extends State<HHOrg> {
                   children: [
                     Text(
                       "🏡",
-                      style: TextStyle(fontSize: 64),
+                      style: TextStyle(fontSize: 60),
                     ),
                     Text(
                       "Household",
@@ -108,7 +108,7 @@ class _HHOrgState extends State<HHOrg> {
               Container(
                 width: screenWidth * 0.95,
                 height: screenHeight * 0.3,
-                padding: EdgeInsets.symmetric(vertical: 25),
+                // padding: EdgeInsets.symmetric(vertical: 25),
                 decoration: const BoxDecoration(
                   color: AppTheme.softYellow,
                   borderRadius: BorderRadius.all(Radius.circular(20)),
@@ -135,7 +135,7 @@ class _HHOrgState extends State<HHOrg> {
                   children: [
                     Text(
                       "🏢",
-                      style: TextStyle(fontSize: 64),
+                      style: TextStyle(fontSize: 60),
                     ),
                     Text(
                       "Organization",

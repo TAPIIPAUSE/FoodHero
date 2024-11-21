@@ -149,11 +149,11 @@ class _InterOrganizationState extends State<InterOrganization> {
         return foodTypeCooked;
       case 2:
         return foodTypeFresh;
-      case 3:
-        return foodTypeDry;
       case 4:
-        return foodTypeInstant;
+        return foodTypeDry;
       case 5:
+        return foodTypeInstant;
+      case 3:
         return foodTypeFrozen;
       default:
         return 'Unknown';
@@ -166,11 +166,11 @@ class _InterOrganizationState extends State<InterOrganization> {
         return Colors.deepOrange.shade300;
       case 2:
         return Colors.lightGreen.shade400;
-      case 3:
-        return Colors.blueGrey.shade300;
       case 4:
-        return Colors.amber.shade300;
+        return Colors.blueGrey.shade300;
       case 5:
+        return Colors.amber.shade300;
+      case 3:
         return Colors.blue.shade300;
       default:
         return Colors.grey;
