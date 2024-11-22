@@ -114,7 +114,7 @@ class InventoryListItem extends StatelessWidget {
                   ),
                   child: Padding(
                     padding: const EdgeInsets.symmetric(vertical: 5.0),
-                    child: Column(
+                    child: Row(
                       // mainAxisAlignment: MainAxisAlignment.start,
                       crossAxisAlignment: CrossAxisAlignment.start,
                       mainAxisAlignment: MainAxisAlignment.center,
@@ -131,48 +131,21 @@ class InventoryListItem extends StatelessWidget {
                               height: MediaQuery.of(context).size.height * 0.12,
                               errorBuilder: (context, error, stackTrace) {
                                 return Image.asset(
-                              "assets/images/Image_not_available.png",
-                                    );
+                                  "assets/images/Image_not_available.png",
+                                );
                               },
                             ),
                           ),
                         ),
-                        Row(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: <Widget>[
-                            Expanded(
-                              flex: 2,
-                              child: ClipRRect(
-                                borderRadius: BorderRadius.circular(
-                                    10.0), // Adjust the value as needed
-                                child: Image.network(
-                                  img.toString(),
-                                  fit: BoxFit.cover,
-                                  width:
-                                      MediaQuery.of(context).size.width * 0.1,
-                                  height:
-                                      MediaQuery.of(context).size.height * 0.12,
-                                  errorBuilder: (context, error, stackTrace) {
-                                    return Image.asset(
-                                      "assets/images/Image_not_available.png",
-                                      // img
-                                    );
-                                  },
-                                ),
-                              ),
-                            ),
-                            Expanded(
-                              flex: 3,
-                              child: _FoodDetail(
-                                foodname: foodname,
-                                expiry: expired,
-                                progessbar: 10,
-                                consumeing: consuming,
-                                remaining: remaining,
-                              ),
-                            ),
-                          ],
+                        Expanded(
+                          flex: 3,
+                          child: _FoodDetail(
+                            foodname: foodname,
+                            expiry: expired,
+                            progessbar: 10,
+                            consumeing: consuming,
+                            remaining: remaining,
+                          ),
                         ),
                       ],
                     ),
@@ -214,6 +187,9 @@ class _FoodDetail extends StatelessWidget {
               const Padding(
                 padding: EdgeInsets.symmetric(vertical: 1.0),
               ),
+              Text(foodname,
+                  style: FontsTheme.mouseMemoirs_30Black()
+                      .copyWith(letterSpacing: 1)),
               Column(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -279,18 +255,18 @@ class _FoodDetail extends StatelessWidget {
                           // expiry,
                           style: FontsTheme.hind_15(),
                         ),
-                        // LinearPercentIndicator(
-                        //   padding: const EdgeInsets.only(left: 0),
-                        //   width: MediaQuery.of(context).size.width * 0.5,
-                        //   animation: true,
-                        //   lineHeight: 20.0,
-                        //   animationDuration: 2000,
-                        //   percent: progessbar / 100,
-                        //   center: Text('${progessbar.toString()}%'),
-                        //   barRadius: const Radius.circular(10.0),
-                        //   progressColor: AppTheme.softOrange,
-                        //   backgroundColor: Colors.white,
-                        // ),
+                        LinearPercentIndicator(
+                          padding: const EdgeInsets.only(left: 0),
+                          width: MediaQuery.of(context).size.width * 0.5,
+                          animation: true,
+                          lineHeight: 20.0,
+                          animationDuration: 2000,
+                          percent: progessbar / 100,
+                          center: Text('${progessbar.toString()}%'),
+                          barRadius: const Radius.circular(10.0),
+                          progressColor: AppTheme.softOrange,
+                          backgroundColor: Colors.white,
+                        ),
                       ],
                     ),
                   ]),

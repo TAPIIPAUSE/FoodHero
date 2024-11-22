@@ -228,15 +228,8 @@ class _InventoryState extends State<Inventory> {
                               borderRadius:
                                   BorderRadius.all(Radius.circular(20)),
                             ),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text('Today $_todayDate',
-                                    style: FontsTheme.mouseMemoirs_30White()
-                                        .copyWith(color: Colors.white)),
-                              ],
-                            ),
-                          ),
+                           
+                    
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
@@ -393,6 +386,7 @@ class _InventoryState extends State<Inventory> {
                                         return !foodItem.remaining
                                             .startsWith("0 ");
                                       }).toList();
+                                       return ListView.builder(
                                         shrinkWrap: true,
                                         controller: foodList,
                                         itemCount: filteredFoodItems.length,
@@ -466,18 +460,156 @@ class _InventoryState extends State<Inventory> {
                               //   // IndividualWeight: 100,
                               //   // IndividualCost: 10,
                               // ),
-                              const SizedBox(
+                               const SizedBox(
                                 height: 55,
                               )
                             ],
                           ),
-                                        //     ),
-                                      return ListView.builder(
                         ),
+                        SizedBox(
+                          height: 10,
+                        )
+                      ],
+                    ),
+                  )),
+              Stack(
+                children: [
+                  Align(
+                    alignment: Alignment.bottomCenter,
+                    child: Padding(
+                      padding: const EdgeInsets.only(bottom: 16.0),
+                      child: FloatingActionButton(
+                        onPressed: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => addFoodDetails(),
+                            ),
+                          );
+                        },
+                        shape: const CircleBorder(),
+                        backgroundColor: AppTheme.greenMainTheme,
+                        foregroundColor: Colors.white,
+                        child: const Icon(Icons.add),
                       ),
                     ),
-                  ],
-                ),
+                  ),
+                  Align(
+                    alignment: Alignment.bottomRight,
+                    child: Padding(
+                      padding: const EdgeInsets.only(right: 16.0, bottom: 16.0),
+                      child: SpeedDial(
+                        animatedIcon: AnimatedIcons.menu_close,
+                        backgroundColor: AppTheme.greenMainTheme,
+                        foregroundColor: Colors.white,
+                        children: [
+                          SpeedDialChild(
+                              child: const Icon(Icons.search_rounded),
+                              backgroundColor: AppTheme.greenMainTheme,
+                              foregroundColor: Colors.white,
+                              onTap: () {
+                                context.push('/searchitem');
+                              }),
+                          SpeedDialChild(
+                              child: const Icon(Icons.filter_alt_rounded),
+                              backgroundColor: AppTheme.greenMainTheme,
+                              foregroundColor: Colors.white,
+                              onTap: () {
+                                showModalBottomSheet(
+                                  context: context,
+                                  builder: (context) {
+                                    return SingleChildScrollView(
+                                      padding: const EdgeInsets.all(20),
+                                      child: Column(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          const Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.spaceBetween,
+                                            children: [
+                                              Text('Date added'),
+                                              SortDropdownMenu(sortlist: [
+                                                'Ascending',
+                                                'Descending'
+                                              ]),
+                                            ],
+                                          ),
+                                          const Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.spaceBetween,
+                                            children: [
+                                              Text('Expiration date'),
+                                              SortDropdownMenu(sortlist: [
+                                                'Ascending',
+                                                'Descending'
+                                              ]),
+                                            ],
+                                          ),
+                                          const Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.spaceBetween,
+                                            children: [
+                                              Text('Remaining'),
+                                              SortDropdownMenu(sortlist: [
+                                                'Ascending',
+                                                'Descending'
+                                              ]),
+                                            ],
+                                          ),
+                                          const Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.spaceBetween,
+                                            children: [
+                                              Text('Alphabet'),
+                                              SortDropdownMenu(sortlist: [
+                                                'Ascending',
+                                                'Descending'
+                                              ]),
+                                            ],
+                                          ),
+                                          const Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.spaceBetween,
+                                            children: [
+                                              Text('Quantity'),
+                                              SortDropdownMenu(sortlist: [
+                                                'Ascending',
+                                                'Descending'
+                                              ]),
+                                            ],
+                                          ),
+                                          ElevatedButton(
+                                              onPressed: () {
+                                                context.push(
+                                                    '/inventory/All food');
+                                              },
+                                              child: const Text("search")),
+                                        ],
+                                      ),
+                                    );
+                                  },
+                                );
+                                // context.go('');
+                              }),
+                          SpeedDialChild(
+                              child: const Icon(Icons.history_rounded),
+                              backgroundColor: AppTheme.greenMainTheme,
+                              foregroundColor: Colors.white,
+                              onTap: () {
+                                print("history");
+                              }),
+                        ],
+                        // onPressed: () {
+                        //   // Add your onPressed code here!
+                        // },
+                        // child: const Icon(Icons.edit),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+
                 if (_isButtonVisible)
                   Positioned(
                     bottom: 16,
