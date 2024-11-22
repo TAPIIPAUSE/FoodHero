@@ -1,11 +1,11 @@
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:foodhero/firebase_options.dart';
-import 'package:foodhero/pages/House&Orga/join.dart';
+import 'package:foodhero/pages/House&Orga/hhorg.dart';
 import 'package:foodhero/pages/consumed/Consumed.dart';
 import 'package:foodhero/pages/consumed/consumedItemsProvider.dart';
 import 'package:foodhero/pages/interorg/dashboard_inter.dart';
 import 'package:foodhero/pages/interorg/interorganization.dart';
-import 'package:foodhero/pages/interorg/waste_chart.dart';
 import 'package:foodhero/pages/inventory/category.dart';
 import 'package:foodhero/pages/inventory/inventory.dart';
 import 'package:foodhero/pages/inventory/search/search_item.dart';
@@ -16,7 +16,6 @@ import 'package:foodhero/theme.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:firebase_core/firebase_core.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -96,7 +95,7 @@ final GoRouter _router = GoRouter(
         GoRoute(
           path: 'HouseOrga',
           builder: (BuildContext context, GoRouterState state) {
-            return join();
+            return HHOrg();
           },
         ),
         GoRoute(

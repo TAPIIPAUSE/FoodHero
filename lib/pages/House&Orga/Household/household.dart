@@ -1,20 +1,18 @@
 import 'dart:math';
-import 'package:fl_chart/fl_chart.dart';
+
+import 'package:carousel_slider/carousel_slider.dart' as cs;
 import 'package:flutter/material.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
+import 'package:foodhero/fonts.dart';
 import 'package:foodhero/main.dart';
 import 'package:foodhero/models/chart/bar/hhbar_model.dart';
 import 'package:foodhero/models/hhname_model.dart';
 import 'package:foodhero/models/score/housescore_model.dart';
-import 'package:foodhero/pages/House&Orga/Household/houseStatistics.dart';
 import 'package:foodhero/pages/api/houseorg_api.dart';
 import 'package:foodhero/theme.dart';
-import 'package:foodhero/fonts.dart';
-import 'package:carousel_slider/carousel_slider.dart' as cs;
 import 'package:foodhero/widgets/interorg/barchart.dart';
 import 'package:foodhero/widgets/interorg/org_listscore.dart';
 import 'package:go_router/go_router.dart';
-import 'package:percent_indicator/percent_indicator.dart';
 import 'package:intl/intl.dart';
 
 class household extends StatefulWidget {
@@ -199,13 +197,13 @@ class _HouseholdState extends State<household> {
                         return Text('No house name');
                       } else {
                         final name = snapshot.data!.name;
-                        return Text(name,
+                        return Text("🏡 $name 🏡",
                             style: FontsTheme.mouseMemoirs_30Black());
                       }
                     })
               ],
             ),
-            titleTextStyle: FontsTheme.mouseMemoirs_64Black(),
+            titleTextStyle: FontsTheme.mouseMemoirs_50Black(),
             leading: IconButton(
               icon: const Icon(Icons.person),
               onPressed: () {},
@@ -223,19 +221,20 @@ class _HouseholdState extends State<household> {
               child: Column(children: [
                 Column(
                   children: [
-                    Row(
-                      children: [
-                        Text('Today $_todayDate',
-                            style: FontsTheme.hindBold_20()),
-                        const SizedBox(width: 10),
-                        Chip(
-                          label: Text(_weekday,
-                              style: const TextStyle(
-                                  color: Colors.white, fontSize: 12)),
-                          backgroundColor: Colors.orange,
-                        ),
-                      ],
-                    ),
+                    Text('Today $_todayDate', style: FontsTheme.hindBold_20()),
+                    // Row(
+                    //   mainAxisAlignment: MainAxisAlignment.center,
+                    //   children: [
+
+                    //     const SizedBox(width: 10),
+                    // Chip(
+                    //   label: Text(_weekday,
+                    //       style: const TextStyle(
+                    //           color: Colors.white, fontSize: 12)),
+                    //   backgroundColor: Colors.orange,
+                    // ),
+                    // ],
+                    // ),
                     const SizedBox(height: 10),
                     Container(
                       margin: const EdgeInsets.all(10),
@@ -273,6 +272,9 @@ class _HouseholdState extends State<household> {
                                     label: stat.date,
                                     wastePercent: stat.wastePercent,
                                     consumePercent: stat.consumePercent,
+                                    total: stat.total,
+                                    consume: stat.consume,
+                                    waste: stat.waste,
                                   );
                                 }).toList();
 

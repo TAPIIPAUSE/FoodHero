@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:foodhero/models/hhorginfo_model.dart';
 import 'package:foodhero/models/loginresult.dart';
 import 'package:foodhero/utils/constants.dart';
 import 'package:http/http.dart' as http;
@@ -42,30 +43,47 @@ class AuthService {
 
   // Register method
   Future<bool> register(String username, String email, String password) async {
-    final response = await http.post(
-      Uri.parse('http://$myip:3000/api/v1/users/register'),
-      headers: <String, String>{
-        'Content-Type': 'application/json; charset=UTF-8',
-      },
-      body: jsonEncode(<String, String>{
-        'username': username,
-        'email': email,
-        'password': password
-      }),
-    );
+    try {
+      final response = await http.post(
+        Uri.parse('http://$myip:3000/api/v1/users/register'),
+        headers: <String, String>{
+          'Content-Type': 'application/json; charset=UTF-8',
+        },
+        body: jsonEncode(<String, String>{
+          'username': username,
+          'email': email,
+          'password': password
+        }),
+      );
 
-    print('Response status: ${response.statusCode}');
-    print('Response body: ${response.body}');
+      print('Response status: ${response.statusCode}');
+      print('Response body: ${response.body}');
 
-    if (response.statusCode == 201) {
-      String token = jsonDecode(response.body)['token'];
-      print('Token received: $token');
-      // Save token in SharedPreferences
-      SharedPreferences prefs = await SharedPreferences.getInstance();
-      await prefs.setString('user_token', token);
-      return true;
+      if (response.statusCode == 201 || response.statusCode == 200) {
+        // String token = jsonDecode(response.body)['token'];
+        // print('Token received: $token');
+        // Save token in SharedPreferences
+        // SharedPreferences prefs = await SharedPreferences.getInstance();
+        // await prefs.setString('user_token', token);
+        // return true;
+        try {
+          print("User reegistered successfully");
+          return true;
+        } catch (e) {
+          print("Error during user registration: $e");
+          return false;
+        }
+      } else {
+        print(
+            "Failed to register user with status code: ${response.statusCode}");
+        return false;
+      }
+    } catch (e) {
+      print("Error during user registration: $e");
+      return false;
     }
-    return await register(username, email, password);
+
+    // return await register(username, email, password);
   }
 
   // Logout method (removes token)
@@ -92,5 +110,39 @@ class AuthService {
     int currentTime = DateTime.now().microsecondsSinceEpoch;
     int timeDifference = currentTime - loginTime;
     return timeDifference > tokenExpirationTime;
+  }
+
+  
+  // get hh/org info
+  Future<HHOrgInfo?> getHHOrgInfo() async{
+    try{
+      print("===HHOrgInfo===");
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      final token = prefs.getString('user_token');
+      // print('token: $token');
+      
+      final res = await dio.get(
+        'http://$myip:3000/api/v1/users/firstLogin',
+        options: Options(
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer $token',
+          },
+        ),
+      );
+
+      print("Response status: ${res.statusCode}");
+      print("Response body: ${res.data}");
+      
+      if (res.statusCode == 200) {
+        HHOrgInfo data = HHOrgInfo.fromJson(res.data);
+        return data;
+      } else {
+        throw Exception('Invalid response format: ${res.data.runtimeType}');
+      }
+    } catch (e) {
+      print('Error: $e');
+      throw Exception('Failed to fetch HHOrgInfo: ${e.toString()}');
+    }
   }
 }

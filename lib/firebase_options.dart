@@ -83,4 +83,5 @@ class DefaultFirebaseOptions {
     authDomain: 'foodhero-2291b.firebaseapp.com',
     storageBucket: 'foodhero-2291b.appspot.com',
   );
+
 }

@@ -2,6 +2,7 @@ import 'package:dio/dio.dart';
 import 'package:foodhero/models/chart/bar/hhbar_model.dart';
 import 'package:foodhero/models/chart/bar/orgbar_model.dart';
 import 'package:foodhero/models/hhname_model.dart';
+import 'package:foodhero/models/hhorginfo_model.dart';
 import 'package:foodhero/models/orgname_mode.dart';
 import 'package:foodhero/models/score/housescore_model.dart';
 import 'package:foodhero/models/score/orgscore_model.dart';

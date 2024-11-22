@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:foodhero/models/hhorginfo_model.dart';
 import 'package:foodhero/models/loginresult.dart';
+import 'package:foodhero/pages/House&Orga/Join_hh.dart';
+import 'package:foodhero/pages/House&Orga/Join_org.dart';
 import 'package:foodhero/pages/api/ApiClient.dart';
 import 'package:foodhero/pages/inventory/inventory.dart';
 import 'package:foodhero/pages/login_regis.dart';
@@ -20,6 +23,25 @@ class _loginState extends State<LoginScreen> {
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
   final AuthService _authService = AuthService();
+
+  // late Future<HHOrgInfo?> _hhOrgInfoFuture;
+
+  // @override
+  // void initState() {
+  //   super.initState();
+  //   _hhOrgInfoFuture = _getHHOrgInfo();
+  // }
+
+  // Future<HHOrgInfo?> _getHHOrgInfo() async {
+  //   try {
+  //     final data = await AuthService().getHHOrgInfo();
+  //     print("Fetching HHOrgInfo");
+  //     return data;
+  //   } catch (e) {
+  //     print('Error fetching HHOrgInfo: $e');
+  //     rethrow; // Return the error message
+  //   }
+  // }
 
   void _login() async {
     print("Login button tapped"); // Should show in console when you tap
@@ -43,20 +65,25 @@ class _loginState extends State<LoginScreen> {
       return;
     }
 
-    // showDialog(
-    //   context: context,
-    //   barrierDismissible: false,
-    //   builder: (BuildContext context) {
-    //     return const Center(child: CircularProgressIndicator());
-    //   },
-    // );
+     // Add loading indicator dialog
+  showDialog(
+    context: context,
+    barrierDismissible: false,
+    builder: (BuildContext context) {
+      return const Center(
+        child: CircularProgressIndicator(
+          valueColor: AlwaysStoppedAnimation<Color>(AppTheme.greenMainTheme),
+        ),
+      );
+    },
+  );
 
     print("Login button tapped");
     print("Username: $username");
     print("Password: $password");
     Loginresult? result = await _authService.login(username, password);
 
-    // Navigator.of(context).pop(); // Remove loading indicator
+    Navigator.of(context).pop(); // Remove loading indicator
 
     if (result == null) {
       ScaffoldMessenger.of(context).showSnackBar(
@@ -67,13 +94,34 @@ class _loginState extends State<LoginScreen> {
     if (result.success) {
       // context.push('/consumed');
       // Navigate to inventory
-      Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(
-            builder: (context) => Inventory(
-                  initialFoodCategory: 'all food',
-                )),
-      );
+
+      final data = await AuthService().getHHOrgInfo();
+      // _hhOrgInfoFuture.then((hhOrgInfo) {
+      if (data?.hId == 0) {
+        // Navigate to inventory
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(
+            builder: (context) => JoinHH(),
+          ),
+        );
+      } else if (data?.orgId == 0 && data?.isFamilyLead == true) {
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(builder: (context) => JoinOrg()),
+        );
+      } else {
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(
+              builder: (context) => Inventory(
+                    initialFoodCategory: 'all food',
+                  )),
+        );
+      }
+      // }
+      // );
+
       print('login succesful');
     } else {
       // Show error

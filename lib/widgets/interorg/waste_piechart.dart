@@ -190,7 +190,7 @@ class _WastePiechartState extends State<WastePiechart> {
       final isTouched = index == touchedIndex;
       final data = chartData[index];
       final double fontSize = isTouched ? 24 : 16;
-      final double radius = isTouched ? 120 : 100;
+      final double radius = isTouched ? 100 : 80;
 
       return PieChartSectionData(
         color: data.color,

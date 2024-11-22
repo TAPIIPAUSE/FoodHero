@@ -316,18 +316,34 @@ class _AddFoodDetailsPageState extends State<addFoodDetails> {
                           Icons.arrow_upward_rounded,
                           size: 50,
                         ),
-                        Row(
-                          children: [
-                            GestureDetector(
-                              //add photo
-                              onTap: () => _chooseAddImageOption(context),
-                              child: Container(
-                                width: 100,
-                                height: 68,
-                                decoration: BoxDecoration(
-                                  color: AppTheme.mainBlue,
-                                  border: Border.all(color: Colors.black),
-                                  borderRadius: BorderRadius.circular(10),
+                        SingleChildScrollView(
+                          scrollDirection: Axis.horizontal,
+                          child: Row(
+                            children: [
+                              GestureDetector(
+                                //add photo
+                                onTap: () => _chooseAddImageOption(context),
+                                child: Container(
+                                  width: 100,
+                                  height: 68,
+                                  decoration: BoxDecoration(
+                                    color: AppTheme.mainBlue,
+                                    border: Border.all(color: Colors.black),
+                                    borderRadius: BorderRadius.circular(10),
+                                  ),
+                                  child: _image == null
+                                      ? Center(child: Icon(Icons.add_a_photo))
+                                      : _isLoading
+                                          ? Center(
+                                              child:
+                                                  CircularProgressIndicator())
+                                          : ClipRRect(
+                                              borderRadius:
+                                                  BorderRadius.circular(8.0),
+                                              child: Image(
+                                                  image: _image!,
+                                                  fit: BoxFit.cover),
+                                            ),
                                 ),
                                 child: _image == null
                                     ? Center(
@@ -346,27 +362,27 @@ class _AddFoodDetailsPageState extends State<addFoodDetails> {
                                                 fit: BoxFit.cover),
                                           ),
                               ),
-                            ),
-                            const SizedBox(
-                              width: 10,
-                            ),
-                            SizedBox(
-                              //itemName
-                              width: 250,
-                              child: TextField(
-                                controller: foodname,
-                                style: FontsTheme.mouseMemoirs_50Black(),
-                                textAlign: TextAlign.center,
-                                inputFormatters: [
-                                  LengthLimitingTextInputFormatter(12)
-                                ],
-                                decoration: InputDecoration(
-                                    hintStyle:
-                                        FontsTheme.mouseMemoirs_50Black(),
-                                    hintText: 'Food name'),
+                              const SizedBox(
+                                width: 10,
                               ),
-                            ),
-                          ],
+                              SizedBox(
+                                //itemName
+                                width: 250,
+                                child: TextField(
+                                  controller: foodname,
+                                  style: FontsTheme.mouseMemoirs_50Black(),
+                                  textAlign: TextAlign.center,
+                                  inputFormatters: [
+                                    LengthLimitingTextInputFormatter(12)
+                                  ],
+                                  decoration: InputDecoration(
+                                      hintStyle:
+                                          FontsTheme.mouseMemoirs_50Black(),
+                                      hintText: 'Food name'),
+                                ),
+                              ),
+                            ],
+                          ),
                         ),
                         SizedBox(height: 16),
                         //buildDropdownField('Categories', "value", Icons.local_dining),
@@ -665,17 +681,20 @@ class _AddFoodDetailsPageState extends State<addFoodDetails> {
                   children: [
                     Expanded(
                       flex: 5,
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        children: [
-                          Container(
-                            width: 120,
-                            child: Text(
-                              label,
-                              style: FontsTheme.mouseMemoirs_30Black(),
-                            ),
-                          )
-                        ],
+                      child: SingleChildScrollView(
+                        scrollDirection: Axis.horizontal,
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          children: [
+                            Container(
+                              width: 120,
+                              child: Text(
+                                label,
+                                style: FontsTheme.mouseMemoirs_30Black(),
+                              ),
+                            )
+                          ],
+                        ),
                       ),
                     ),
                     SizedBox(
@@ -749,21 +768,24 @@ class _AddFoodDetailsPageState extends State<addFoodDetails> {
                   children: [
                     Expanded(
                       flex: 5,
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        children: [
-                          Container(
-                            width: 120,
-                            child: Text(
-                              label,
-                              style: FontsTheme.mouseMemoirs_30Black(),
-                            ),
-                          )
-                        ],
+                      child: SingleChildScrollView(
+                        scrollDirection: Axis.horizontal,
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          children: [
+                            Container(
+                              width: 120,
+                              child: Text(
+                                label,
+                                style: FontsTheme.mouseMemoirs_30Black(),
+                              ),
+                            )
+                          ],
+                        ),
                       ),
                     ),
                     SizedBox(
-                        width: 215,
+                        width: MediaQuery.of(context).size.width * 0.65,
                         child: Container(
                           padding: EdgeInsets.symmetric(horizontal: 10.0),
                           decoration: BoxDecoration(
@@ -1016,34 +1038,39 @@ class _AddFoodDetailsPageState extends State<addFoodDetails> {
                                 Text('Quantity',
                                     style: FontsTheme.mouseMemoirs_30Black()),
                                 SizedBox(
-                                  width: 40,
+                                  width: 10,
                                 ),
                                 Column(
                                   children: [
                                     Container(
-                                      width: 245,
+                                      width: MediaQuery.of(context).size.width *
+                                          0.6,
                                       padding: EdgeInsets.symmetric(
                                           horizontal: 12, vertical: 8),
                                       decoration: BoxDecoration(
                                         borderRadius: BorderRadius.circular(10),
                                         color: Colors.white,
                                       ),
-                                      child: Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.spaceBetween,
-                                        children: [
-                                          SizedBox(
-                                            width: 80,
-                                            child: TextField(
-                                                keyboardType:
-                                                    const TextInputType
-                                                        .numberWithOptions(),
-                                                controller: quantityController,
-                                                style:
-                                                    FontsTheme.hindBold_20()),
-                                          ),
-                                          buildQuantityUnit('')
-                                        ],
+                                      child: SingleChildScrollView(
+                                        scrollDirection: Axis.horizontal,
+                                        child: Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceBetween,
+                                          children: [
+                                            SizedBox(
+                                              width: 80,
+                                              child: TextField(
+                                                  keyboardType:
+                                                      const TextInputType
+                                                          .numberWithOptions(),
+                                                  controller:
+                                                      quantityController,
+                                                  style:
+                                                      FontsTheme.hindBold_20()),
+                                            ),
+                                            buildQuantityUnit('')
+                                          ],
+                                        ),
                                       ),
                                     ),
                                     // SliderTheme(
@@ -1112,32 +1139,36 @@ class _AddFoodDetailsPageState extends State<addFoodDetails> {
                             Text('Weight',
                                 style: FontsTheme.mouseMemoirs_30Black()),
                             SizedBox(
-                              width: 55,
+                              width: 10,
                             ),
                             Column(
                               children: [
                                 Container(
-                                  width: 245,
+                                  width:
+                                      MediaQuery.of(context).size.width * 0.65,
                                   padding: EdgeInsets.symmetric(
                                       horizontal: 12, vertical: 8),
                                   decoration: BoxDecoration(
                                     borderRadius: BorderRadius.circular(10),
                                     color: Colors.white,
                                   ),
-                                  child: Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      SizedBox(
-                                        width: 80,
-                                        child: TextField(
-                                            keyboardType: const TextInputType
-                                                .numberWithOptions(),
-                                            controller: weightController,
-                                            style: FontsTheme.hindBold_20()),
-                                      ),
-                                      buildWeightUnit('')
-                                    ],
+                                  child: SingleChildScrollView(
+                                    scrollDirection: Axis.horizontal,
+                                    child: Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        SizedBox(
+                                          width: 80,
+                                          child: TextField(
+                                              keyboardType: const TextInputType
+                                                  .numberWithOptions(),
+                                              controller: weightController,
+                                              style: FontsTheme.hindBold_20()),
+                                        ),
+                                        buildWeightUnit('')
+                                      ],
+                                    ),
                                   ),
                                 ),
                                 // SliderTheme(
@@ -1225,7 +1256,7 @@ class _AddFoodDetailsPageState extends State<addFoodDetails> {
                 child: Row(
                   children: [
                     SizedBox(
-                      width: 120,
+                      width: 100,
                       height: 30,
                       child: DropdownButtonHideUnderline(
                         child: DropdownButton<String>(
@@ -1389,7 +1420,7 @@ class _AddFoodDetailsPageState extends State<addFoodDetails> {
                                     // Icon(Icons.monetization_on_sharp,
                                     //     color: Colors.green),
                                     const SizedBox(
-                                      width: 50,
+                                      width: 10,
                                     ),
                                     IconButton(
                                       onPressed: () {},
@@ -1485,34 +1516,76 @@ class _AddFoodDetailsPageState extends State<addFoodDetails> {
                                                   costPerPiece =
                                                       double.tryParse(value) ??
                                                           costPerPiece;
-                                                  _updateCost();
+                                                  _updateAllCost();
                                                 });
                                               }
-                                              // Text(
-                                              //     '\$${updateWeight.toStringAsFixed(2)}');
-                                              // costPerPiece =
-                                              //     double.tryParse(value) ??
-                                              //         costPerPiece;
-                                              // _updateCost();
-                                              // );
                                             },
                                             controller: TextEditingController(
-                                                text: _updateCost().toString()),
-                                            style: FontsTheme.hindBold_15())),
+                                                text: _updateWeight()
+                                                    .toString()), // Set initial text
 
+                                            style: FontsTheme.hindBold_15())),
                                     Text(
-                                      '฿',
-                                      style: FontsTheme.mouseMemoirs_25(),
-                                    ),
-                                    Text(
-                                      'TH ',
-                                      style: FontsTheme.hindBold_20(),
-                                    ),
-                                    // Icon(Icons.attach_money,
-                                    //     color: Colors.green),
+                                      'gram',
+                                      style: FontsTheme.hindBold_15(),
+                                    )
                                   ],
-                                )),
-                          ],
+                                ),
+                              ),
+                              Container(
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 12, vertical: 8),
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(10),
+                                    color: Colors.white,
+                                  ),
+                                  child: Row(
+                                    children: [
+                                      SizedBox(
+                                          width: 80,
+                                          child: TextField(
+                                              decoration: const InputDecoration(
+                                                labelText: 'Cost',
+                                              ),
+                                              keyboardType:
+                                                  TextInputType.number,
+                                              onChanged: (value) {
+                                                if (value.isNotEmpty) {
+                                                  setState(() {
+                                                    costPerPiece =
+                                                        double.tryParse(
+                                                                value) ??
+                                                            costPerPiece;
+                                                    _updateCost();
+                                                  });
+                                                }
+                                                // Text(
+                                                //     '\$${updateWeight.toStringAsFixed(2)}');
+                                                // costPerPiece =
+                                                //     double.tryParse(value) ??
+                                                //         costPerPiece;
+                                                // _updateCost();
+                                                // );
+                                              },
+                                              controller: TextEditingController(
+                                                  text:
+                                                      _updateCost().toString()),
+                                              style: FontsTheme.hindBold_15())),
+
+                                      Text(
+                                        '฿',
+                                        style: FontsTheme.mouseMemoirs_25(),
+                                      ),
+                                      // Text(
+                                      //   'TH ',
+                                      //   style: FontsTheme.hindBold_20(),
+                                      // ),
+                                      // Icon(Icons.attach_money,
+                                      //     color: Colors.green),
+                                    ],
+                                  )),
+                            ],
+                          ),
                         ),
                       ),
                     ],
