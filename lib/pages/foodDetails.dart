@@ -2378,7 +2378,7 @@ class _FoodDetailsPageState extends State<foodDetails> {
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                             //buildQuantityButton(Icons.remove),
-                            Text('Each piece',
+                            Text('Each',
                                 style: FontsTheme.mouseMemoirs_30Black()),
                             SizedBox(
                               width: 20,
