@@ -1,5 +1,8 @@
 # FoodHero
 
+## Installation
+```flutter pub get```
+
 ## Change IP address
 open lib/utils/constants.dart
 
