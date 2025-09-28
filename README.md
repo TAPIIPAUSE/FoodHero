@@ -1,6 +1,6 @@
 # FoodHero
 
-#UI
+# UI
 https://www.figma.com/proto/nDZjNCxcGv9aowtlGmzY0O/Food-Hero---Wireframe?node-id=696-977&starting-point-node-id=1151%3A6884&t=RtLmseHrWivQ9vYy-1
 
 ## Installation
