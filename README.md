@@ -3,7 +3,7 @@
 [Food Hero project.pdf](https://github.com/user-attachments/files/22580359/Food.Hero.project.pdf)
 
 ## UI
-https://www.figma.com/proto/nDZjNCxcGv9aowtlGmzY0O/Food-Hero---Wireframe?node-id=696-977&starting-point-node-id=1151%3A6884&t=RtLmseHrWivQ9vYy-1
+https://www.figma.com/proto/nDZjNCxcGv9aowtlGmzY0O/Food-Hero---Wireframe?node-id=1151-6884&p=f&t=HwAXyLi98qp24g5A-1&scaling=scale-down&content-scaling=fixed&page-id=0%3A1&starting-point-node-id=1151%3A6884&show-proto-sidebar=1
 
 ## Installation
 ```flutter pub get```
